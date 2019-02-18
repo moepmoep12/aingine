@@ -65,4 +65,4 @@ assign_source_group("${CMAKE_CURRENT_SOURCE_DIR}" ${SHADERS})
 assign_source_group("${CMAKE_CURRENT_SOURCE_DIR}" ${CONFIG}) 
 assign_source_group("${CMAKE_CURRENT_SOURCE_DIR}" ${BMP}) 
 
-set_target_properties (Assets PROPERTIES FOLDER Intellgine) 
+set_target_properties (Assets PROPERTIES FOLDER AIngine) 

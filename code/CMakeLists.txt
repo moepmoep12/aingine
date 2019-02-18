@@ -1,11 +1,21 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
-project(Intellgine VERSION 1.0 LANGUAGES CXX)
+project(AIngine VERSION 1.0 LANGUAGES CXX)
 
 #
 # --- CMake additional resources
 #
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
+#
+# --- Output Configuration
+#
+
+set(GL3_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/out")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${GL3_OUTPUT_DIR}/lib")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${GL3_OUTPUT_DIR}/lib")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${GL3_OUTPUT_DIR}/bin")
+
 
 #
 # --- Dependencies
@@ -18,7 +28,7 @@ add_subdirectory(thirdParty)
 #
 
 add_subdirectory(assets) 
-add_subdirectory(Intellgine) 
+add_subdirectory(AIngine) 
 add_subdirectory(game) 
 
 
