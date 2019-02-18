@@ -12,5 +12,6 @@ namespace AIngine {
 
 	};
 
+	// to be defined by the actual Application
 	Application* CreateApplication();
 }
