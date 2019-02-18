@@ -45,6 +45,7 @@ add_subdirectory("${THIRD_PARTY_DIR}/glad/")
 add_subdirectory("${THIRD_PARTY_DIR}/glfw/") 
 add_subdirectory("${THIRD_PARTY_DIR}/glm/")
 add_subdirectory("${THIRD_PARTY_DIR}/tinyobjloader/")
+#add_subdirectory("${THIRD_PARTY_DIR}/spdlog/")
 
 #
 # --- Nothings/STB header-only libs (manual)
@@ -54,3 +55,6 @@ set(STB_INCLUDE_DIR ${THIRD_PARTY_DIR}/stb/)
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE ${STB_INCLUDE_DIR}) 
 
+#set(SPDLOG_INCLUDE_DIR ${THIRD_PARTY_DIR}/spdlog/include/)
+#add_library(spdlog INTERFACE)
+#target_include_directories(spdlog INTERFACE ${SPDLOG_INCLUDE_DIR}) 

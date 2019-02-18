@@ -21,6 +21,7 @@ set(AINGINE_HEADER
 		include/public/mesh.h
 		include/public/meshloader.h
 		include/public/texture.h
+		include/public/log.h
 		include/private/gl_error.h
 		include/private/readfile.h
 	)
@@ -35,6 +36,7 @@ set(AINGINE_SRC
 		src/mesh.cxx
 		src/meshloader.cxx
 		src/texture.cxx
+		src/log.cxx
 	)
 	
 
@@ -49,10 +51,13 @@ add_library(Engine STATIC ${AINGINE_HEADER} ${AINGINE_SRC})
 set_target_properties(Engine PROPERTIES
         CXX_STANDARD 17
         CXX_EXTENSIONS OFF)
-			
+		
+set(THIRD_PARTY_DIR "${CMAKE_SOURCE_DIR}/thirdParty")
 
-target_include_directories(Engine PUBLIC include/public)
+
+target_include_directories(Engine PUBLIC include/public ${THIRD_PARTY_DIR}/spdlog/include/)
 target_include_directories(Engine PRIVATE include/private)
+
 
 target_link_libraries(Engine
         glad
