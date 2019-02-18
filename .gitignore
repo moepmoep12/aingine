@@ -1,18 +1,8 @@
-# ============ #
-# OS generated #
-# ============ #
-
-*.DS_Store
-*.DS_Store?
-*._*
-*.Spotlight-V100
-*.Trashes
-*.ehthumbs.db
-*Thumbs.db
-
-
-# PowerPoint
-**/~$*.pptx*
-
-# Vim
+# Ignore vim files
 *.swp
+
+# CLion 
+/.idea/
+/cmake-build-*/
+/build_gl3_project/
+/out/
