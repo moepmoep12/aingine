@@ -21,6 +21,9 @@ set(AINGINE_HEADER
 		include/public/mesh.h
 		include/public/meshloader.h
 		include/public/texture.h
+		include/public/Event.h
+		include/public/ApplicationEvents.h
+		include/public/InputEvents.h
 		include/public/log.h
 		include/private/gl_error.h
 		include/private/readfile.h

@@ -17,7 +17,7 @@ public:
     unsigned char *GetData() const;
 
 private:
-    int width, height, channels;
-    unsigned char *data;
+    int m_width, m_height, m_channels;
+    unsigned char* m_data;
 };
 

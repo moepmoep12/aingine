@@ -2,6 +2,7 @@
 
 #include "spdlog/spdlog.h"
 #include "spdlog/logger.h"
+#include "spdlog/fmt/ostr.h"
 
 namespace  AIngine {
 
