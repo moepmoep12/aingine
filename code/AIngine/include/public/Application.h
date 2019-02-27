@@ -4,6 +4,8 @@
 #include "Window.h"
 #include "Events/Event.h"
 #include "Events/ApplicationEvents.h"
+//#include "Layer.h"
+#include "LayerStack.h"
 
 namespace AIngine {
 
@@ -15,6 +17,8 @@ namespace AIngine {
 
 		void Run();
 		void OnEvent(AIngine::Events::Event& e);
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* overlay);
 		float GetDeltaTime();
 
 	private:
@@ -23,6 +27,7 @@ namespace AIngine {
 	private:
 		std::unique_ptr<Window> m_window;
 		bool m_isRunning = false;
+		LayerStack m_layerStack;
 
 	};
 

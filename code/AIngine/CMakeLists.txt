@@ -17,6 +17,8 @@ set(AINGINE_HEADER
 		include/public/memory.h
 		include/public/log.h
 		include/public/Window.h
+		include/public/Layer.h
+		include/public/LayerStack.h
 		include/public/Rendering/shader.h
 		include/public/Rendering/mvp.h
 		include/public/Rendering/bitmap.h
@@ -35,6 +37,8 @@ set(AINGINE_SRC
         src/Application.cxx
 		src/gl_error.cxx
 		src/Window.cxx
+		src/Layer.cxx
+		src/LayerStack.cxx
 		src/Rendering/shader.cxx
 		src/Rendering/mvp.cxx
 		src/Rendering/bitmap.cxx
