@@ -1,4 +1,4 @@
-#include "bitmap.h"
+#include "Rendering/bitmap.h"
 
 // See stb_image.h
 #define STB_IMAGE_IMPLEMENTATION

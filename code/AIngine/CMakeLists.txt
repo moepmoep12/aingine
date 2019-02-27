@@ -14,17 +14,18 @@ set(AINGINE_HEADER
 		include/public/Core.h
 		include/public/Application.h
 		include/public/Entrypoint.h
-		include/public/shader.h
-		include/public/mvp.h
 		include/public/memory.h
-		include/public/bitmap.h
-		include/public/mesh.h
-		include/public/meshloader.h
-		include/public/texture.h
-		include/public/Event.h
-		include/public/ApplicationEvents.h
-		include/public/InputEvents.h
 		include/public/log.h
+		include/public/Window.h
+		include/public/Rendering/shader.h
+		include/public/Rendering/mvp.h
+		include/public/Rendering/bitmap.h
+		include/public/Rendering/mesh.h
+		include/public/Rendering/meshloader.h
+		include/public/Rendering/texture.h
+		include/public/Events/Event.h
+		include/public/Events/ApplicationEvents.h
+		include/public/Events/InputEvents.h	
 		include/private/gl_error.h
 		include/private/readfile.h
 	)
@@ -32,13 +33,14 @@ set(AINGINE_HEADER
 # source files	
 set(AINGINE_SRC
         src/Application.cxx
-		src/shader.cxx
-		src/mvp.cxx
-		src/bitmap.cxx
 		src/gl_error.cxx
-		src/mesh.cxx
-		src/meshloader.cxx
-		src/texture.cxx
+		src/Window.cxx
+		src/Rendering/shader.cxx
+		src/Rendering/mvp.cxx
+		src/Rendering/bitmap.cxx
+		src/Rendering/mesh.cxx
+		src/Rendering/meshloader.cxx
+		src/Rendering/texture.cxx
 		src/log.cxx
 	)
 	
