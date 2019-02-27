@@ -28,6 +28,7 @@ set(AINGINE_HEADER
 		include/public/Events/Event.h
 		include/public/Events/ApplicationEvents.h
 		include/public/Events/InputEvents.h	
+		include/public/UI/ImGuiLayer.h	
 		include/private/gl_error.h
 		include/private/readfile.h
 	)
@@ -45,6 +46,7 @@ set(AINGINE_SRC
 		src/Rendering/mesh.cxx
 		src/Rendering/meshloader.cxx
 		src/Rendering/texture.cxx
+		src/UI/ImGuiLayer.cxx
 		src/log.cxx
 	)
 	
@@ -63,7 +65,7 @@ set_target_properties(Engine PROPERTIES
 		
 set(THIRD_PARTY_DIR "${CMAKE_SOURCE_DIR}/thirdParty")
 
-
+########################################################## dirty spdlog include, TODO: Change ############
 target_include_directories(Engine PUBLIC include/public ${THIRD_PARTY_DIR}/spdlog/include/)
 target_include_directories(Engine PRIVATE include/private)
 
@@ -75,6 +77,7 @@ target_link_libraries(Engine
         glm
         tinyobjloader
         stb
+		imgui
         )
 
 #

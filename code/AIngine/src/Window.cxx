@@ -3,6 +3,7 @@
 #include "Events/ApplicationEvents.h"
 #include "Events/InputEvents.h"
 
+
 AIngine::Window::Window(const WindowConfig & config)
 {
 	m_config.Title = config.Title;
@@ -24,6 +25,11 @@ AIngine::Window::Window(const WindowConfig & config)
 	glfwMakeContextCurrent(m_window);
 	glfwSetWindowUserPointer(m_window, &m_windowData);
 	SetVSync(true);
+
+	// Load GLAD
+	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+
+	ASSERT(gladLoadGL(), "Could not load GLAD");
 
 	SetGLFWCallbacks();
 }

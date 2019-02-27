@@ -45,6 +45,7 @@ add_subdirectory("${THIRD_PARTY_DIR}/glad/")
 add_subdirectory("${THIRD_PARTY_DIR}/glfw/") 
 add_subdirectory("${THIRD_PARTY_DIR}/glm/")
 add_subdirectory("${THIRD_PARTY_DIR}/tinyobjloader/")
+add_subdirectory("${THIRD_PARTY_DIR}/imgui/")
 #add_subdirectory("${THIRD_PARTY_DIR}/spdlog/")
 
 #
