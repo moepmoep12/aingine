@@ -17,6 +17,8 @@ AIngine::Window::Window(const WindowConfig & config)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	// Windowed Fullscreen
+	glfwWindowHint(GLFW_MAXIMIZED, 1);
 
 	m_window = glfwCreateWindow((int)m_config.Width, (int)m_config.Height, m_config.Title.c_str(), nullptr, nullptr);
 
@@ -43,8 +45,8 @@ AIngine::Window::~Window()
 
 void AIngine::Window::OnUpdate()
 {
-	glClearColor(0.5, 0.1, 1, 1);
-	glClear(GL_COLOR_BUFFER_BIT);
+	//glClearColor(0.5, 0.1, 1, 1);
+	//glClear(GL_COLOR_BUFFER_BIT);
 	glfwPollEvents();
 	glfwSwapBuffers(m_window);
 }
@@ -118,6 +120,14 @@ void AIngine::Window::SetGLFWCallbacks()
 			break;
 		}
 		}
+	});
+
+	glfwSetCharCallback(m_window, [](GLFWwindow* window, unsigned int keycode)
+	{
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+		AIngine::Events::KeyTypedEvent event(keycode);
+		data.EventCallback(event);
 	});
 
 	glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods)

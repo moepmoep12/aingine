@@ -19,6 +19,7 @@ set(AINGINE_HEADER
 		include/public/Window.h
 		include/public/Layer.h
 		include/public/LayerStack.h
+		include/public/Input.h
 		include/public/Rendering/shader.h
 		include/public/Rendering/mvp.h
 		include/public/Rendering/bitmap.h
@@ -29,6 +30,7 @@ set(AINGINE_HEADER
 		include/public/Events/ApplicationEvents.h
 		include/public/Events/InputEvents.h	
 		include/public/UI/ImGuiLayer.h	
+		include/public/UI/imgui_impl_opengl3.h	
 		include/private/gl_error.h
 		include/private/readfile.h
 	)
@@ -40,6 +42,7 @@ set(AINGINE_SRC
 		src/Window.cxx
 		src/Layer.cxx
 		src/LayerStack.cxx
+		src/Input.cxx
 		src/Rendering/shader.cxx
 		src/Rendering/mvp.cxx
 		src/Rendering/bitmap.cxx
@@ -47,6 +50,7 @@ set(AINGINE_SRC
 		src/Rendering/meshloader.cxx
 		src/Rendering/texture.cxx
 		src/UI/ImGuiLayer.cxx
+		src/UI/imgui_impl_opengl3.cpp	
 		src/log.cxx
 	)
 	

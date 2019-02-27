@@ -21,6 +21,9 @@ namespace AIngine {
 		void PushOverlay(Layer* overlay);
 		float GetDeltaTime();
 
+		inline static Application& Get() { return *s_instance; }
+		inline const Window& GetWindow() const { return *m_window; }
+
 	private:
 		bool OnWindowClose(AIngine::Events::WindowCloseEvent& e);
 
@@ -28,6 +31,7 @@ namespace AIngine {
 		std::unique_ptr<Window> m_window;
 		bool m_isRunning = false;
 		LayerStack m_layerStack;
+		static Application* s_instance;
 
 	};
 

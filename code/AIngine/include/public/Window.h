@@ -37,9 +37,10 @@ namespace AIngine {
 		void SetVSync(bool active);
 		bool IsVSyncActive() const;
 
-		inline unsigned int GetWidth() { return m_config.Width; }
-		inline unsigned int GetHeight() { return m_config.Height; }
-		inline bool IsWindowActive() { return !glfwWindowShouldClose(m_window); }
+		inline unsigned int GetWidth() const { return m_windowData.Width; }
+		inline unsigned int GetHeight() const { return m_windowData.Height; }
+		inline bool IsWindowActive() const { return !glfwWindowShouldClose(m_window); }
+		virtual void* GetNativeWindow() const { return m_window; }
 
 		static Window* Create(const WindowConfig& config = WindowConfig());
 
