@@ -45,7 +45,6 @@ add_subdirectory("${THIRD_PARTY_DIR}/glad/")
 add_subdirectory("${THIRD_PARTY_DIR}/glfw/") 
 add_subdirectory("${THIRD_PARTY_DIR}/glm/")
 add_subdirectory("${THIRD_PARTY_DIR}/tinyobjloader/")
-add_subdirectory("${THIRD_PARTY_DIR}/imgui/")
 #add_subdirectory("${THIRD_PARTY_DIR}/spdlog/")
 
 #
@@ -53,9 +52,37 @@ add_subdirectory("${THIRD_PARTY_DIR}/imgui/")
 #
 
 set(STB_INCLUDE_DIR ${THIRD_PARTY_DIR}/stb/)
-add_library(stb INTERFACE)
-target_include_directories(stb INTERFACE ${STB_INCLUDE_DIR}) 
+#add_library(stb INTERFACE)
+#target_include_directories(stb INTERFACE ${STB_INCLUDE_DIR}) 
 
-#set(SPDLOG_INCLUDE_DIR ${THIRD_PARTY_DIR}/spdlog/include/)
-#add_library(spdlog INTERFACE)
-#target_include_directories(spdlog INTERFACE ${SPDLOG_INCLUDE_DIR}) 
+file(GLOB STD_SRC STB_INCLUDE_DIR/*.cpp STB_INCLUDE_DIR/*.cxx)
+file(GLOB STD_INLINE STB_INCLUDE_DIR/*.inl)
+file(GLOB STD_HEADER STB_INCLUDE_DIR/*.h)
+
+add_library(stb INTERFACE 
+						${STD_SRC}
+						${STD_INLINE}
+						${STD_HEADER}
+						)
+include_directories(stb PUBLIC ${STB_INCLUDE_DIR})
+target_include_directories(stb INTERFACE ${STB_INCLUDE_DIR})					
+
+#
+# --- IMGUI
+#
+
+set(IMGUI_INCLUDE_DIR ${THIRD_PARTY_DIR}/imgui/)
+add_library(imgui STATIC 
+							${IMGUI_INCLUDE_DIR}/imconfig.h
+							${IMGUI_INCLUDE_DIR}/imgui.cpp
+							${IMGUI_INCLUDE_DIR}/imgui.h
+							${IMGUI_INCLUDE_DIR}/imgui_demo.cpp
+							${IMGUI_INCLUDE_DIR}/imgui_draw.cpp
+							${IMGUI_INCLUDE_DIR}/imgui_internal.h
+							${IMGUI_INCLUDE_DIR}/imgui_widgets.cpp
+							${IMGUI_INCLUDE_DIR}/imstb_rectpack.h
+							${IMGUI_INCLUDE_DIR}/imstb_textedit.h
+							${IMGUI_INCLUDE_DIR}/imstb_truetype.h
+							)
+include_directories(imgui PUBLIC ${IMGUI_INCLUDE_DIR})							
+target_include_directories(imgui INTERFACE ${IMGUI_INCLUDE_DIR}) 
