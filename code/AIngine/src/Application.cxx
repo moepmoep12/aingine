@@ -11,6 +11,8 @@ namespace AIngine {
 
 	Application::Application()
 	{
+		CORE_INFO("Starting Application...");
+
 		ASSERT(!s_instance, "Application already running");
 		s_instance = this;
 
@@ -20,11 +22,13 @@ namespace AIngine {
 
 	Application::~Application()
 	{
-		CORE_INFO("Core Application Destructor");
+		CORE_INFO("Destructor Application");
 	}
 
 	void Application::Run()
 	{
+		CORE_INFO("App is running!");
+
 		m_isRunning = true;
 
 		glfwSetTime(0);
@@ -40,10 +44,9 @@ namespace AIngine {
 			m_window->OnUpdate();
 
 			glfwSetTime(0);
-
-			if (Input::IsMouseButtonPressed(0))
-				DEBUG_INFO("Mouse button pressed");
 		}
+
+		CORE_INFO("Shutting App down...");
 
 		// destroy our window
 		m_window = NULL;

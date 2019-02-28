@@ -6,6 +6,8 @@
 
 AIngine::Window::Window(const WindowConfig & config)
 {
+	CORE_INFO("Creating Window...");
+
 	m_config.Title = config.Title;
 	m_config.Height = config.Height;
 	m_config.Width = config.Width;
@@ -34,12 +36,14 @@ AIngine::Window::Window(const WindowConfig & config)
 	ASSERT(gladLoadGL(), "Could not load GLAD");
 
 	SetGLFWCallbacks();
+
+	CORE_INFO("Window created");
 }
 
 
 AIngine::Window::~Window()
 {
-	CORE_INFO("Destroying the window");
+	CORE_INFO("Destructor Window");
 	glfwDestroyWindow(m_window);
 }
 

@@ -69,7 +69,7 @@ set_target_properties(Engine PROPERTIES
 		
 set(THIRD_PARTY_DIR "${CMAKE_SOURCE_DIR}/thirdParty")
 
-########################################################## dirty spdlog include, TODO: Change ############
+
 target_include_directories(Engine PUBLIC include/public)
 target_include_directories(Engine PRIVATE include/private)
 
@@ -92,4 +92,14 @@ target_link_libraries(Engine
 assign_source_group(${AINGINE_HEADER} ${AINGINE_SRC})
 
 set_target_properties(Engine PROPERTIES FOLDER AIngine)
+
+
+#
+# --- Options
+#
+
+option(AINGINE_LOG_TO_FILE "Should the log be written to a file?" ON)
+if(AINGINE_LOG_TO_FILE)
+	add_definitions(-DLOG_TO_FILE)
+endif()
 	

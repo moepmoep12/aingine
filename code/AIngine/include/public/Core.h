@@ -1,6 +1,6 @@
 #pragma once
 
-// this heaeder is to be included by Applications created with AIngine
+// this header is to be included by Applications created with AIngine
 
 #include "Application.h"
 #include "Events/Event.h"

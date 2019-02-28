@@ -1,6 +1,5 @@
 #pragma once
 #include "game.h"
-#include <iostream>
 #include "UI/ImGuiLayer.h"
 
 AIngine::Application* AIngine::CreateApplication() {
@@ -9,12 +8,11 @@ AIngine::Application* AIngine::CreateApplication() {
 
 Game::Game()
 {
+	DEBUG_WARN("Creating Game...");
 	PushOverlay(new AIngine::UI::ImGuiLayer());
 }
 
 Game::~Game()
 {
-	std::cout << "destructor game \n";
-	int x;
-	std::cin >> x;
+	DEBUG_WARN("Destructor Game");
 }
