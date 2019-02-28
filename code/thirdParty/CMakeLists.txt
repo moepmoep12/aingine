@@ -45,16 +45,13 @@ add_subdirectory("${THIRD_PARTY_DIR}/glad/")
 add_subdirectory("${THIRD_PARTY_DIR}/glfw/") 
 add_subdirectory("${THIRD_PARTY_DIR}/glm/")
 add_subdirectory("${THIRD_PARTY_DIR}/tinyobjloader/")
-#add_subdirectory("${THIRD_PARTY_DIR}/spdlog/")
+add_subdirectory("${THIRD_PARTY_DIR}/spdlog/")
 
 #
-# --- Nothings/STB header-only libs (manual)
+# --- Nothings/STB header-only libs (manual) --- ##################
 #
 
 set(STB_INCLUDE_DIR ${THIRD_PARTY_DIR}/stb/)
-#add_library(stb INTERFACE)
-#target_include_directories(stb INTERFACE ${STB_INCLUDE_DIR}) 
-
 file(GLOB STD_SRC STB_INCLUDE_DIR/*.cpp STB_INCLUDE_DIR/*.cxx)
 file(GLOB STD_INLINE STB_INCLUDE_DIR/*.inl)
 file(GLOB STD_HEADER STB_INCLUDE_DIR/*.h)
@@ -68,7 +65,7 @@ include_directories(stb PUBLIC ${STB_INCLUDE_DIR})
 target_include_directories(stb INTERFACE ${STB_INCLUDE_DIR})					
 
 #
-# --- IMGUI
+# --- IMGUI --- ###############################################
 #
 
 set(IMGUI_INCLUDE_DIR ${THIRD_PARTY_DIR}/imgui/)

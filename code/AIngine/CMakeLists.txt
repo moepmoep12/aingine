@@ -70,7 +70,7 @@ set_target_properties(Engine PROPERTIES
 set(THIRD_PARTY_DIR "${CMAKE_SOURCE_DIR}/thirdParty")
 
 ########################################################## dirty spdlog include, TODO: Change ############
-target_include_directories(Engine PUBLIC include/public ${THIRD_PARTY_DIR}/spdlog/include/)
+target_include_directories(Engine PUBLIC include/public)
 target_include_directories(Engine PRIVATE include/private)
 
 
@@ -82,6 +82,7 @@ target_link_libraries(Engine
         tinyobjloader
         stb
 		imgui
+		spdlog
         )
 
 #
