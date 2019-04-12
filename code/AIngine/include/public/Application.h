@@ -4,7 +4,7 @@
 #include "Window.h"
 #include "Events/Event.h"
 #include "Events/ApplicationEvents.h"
-//#include "Layer.h"
+#include "UI/ImGuiLayer.h"
 #include "LayerStack.h"
 
 namespace AIngine {
@@ -31,6 +31,7 @@ namespace AIngine {
 		std::unique_ptr<Window> m_window;
 		bool m_isRunning = false;
 		LayerStack m_layerStack;
+		AIngine::UI::ImGuiLayer* m_imGuiLayer;
 		static Application* s_instance;
 
 	};

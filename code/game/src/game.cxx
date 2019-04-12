@@ -1,18 +1,36 @@
 #pragma once
 #include "game.h"
-#include "UI/ImGuiLayer.h"
+#include "Layer.h"
+#include "Core.h"
 
 AIngine::Application* AIngine::CreateApplication() {
 	return new Game();
 }
 
+
+class ExampleLayer :public  AIngine::Layer {
+
+
+public:
+	ExampleLayer() : Layer("ExampleLayer") {
+
+	}
+
+	virtual void OnEvent(AIngine::Events::Event& e) override
+	{
+		//DEBUG_INFO(e.ToString().c_str());
+	}
+
+};
+
 Game::Game()
 {
 	DEBUG_WARN("Creating Game...");
-	PushOverlay(new AIngine::UI::ImGuiLayer());
+	PushLayer(new ExampleLayer());
 }
 
 Game::~Game()
 {
 	DEBUG_WARN("Destructor Game");
 }
+

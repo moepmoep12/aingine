@@ -18,6 +18,9 @@ namespace AIngine {
 
 		m_window = std::unique_ptr<Window>(Window::Create());
 		m_window->SetEventCallbackFunction(BIND_EVENT_TO_FN(Application::OnEvent));
+
+		m_imGuiLayer = new AIngine::UI::ImGuiLayer();
+		PushOverlay(m_imGuiLayer);
 	}
 
 	Application::~Application()
@@ -41,9 +44,14 @@ namespace AIngine {
 			for (Layer* layer : m_layerStack)
 				layer->OnUpdate();
 
+			m_imGuiLayer->OnBegin();
+			for (Layer* layer : m_layerStack)
+				layer->OnImGuiRender();
+			m_imGuiLayer->OnEnd();
+
 			m_window->OnUpdate();
 
-			glfwSetTime(0);
+			//glfwSetTime(0);
 		}
 
 		CORE_INFO("Shutting App down...");
@@ -85,7 +93,8 @@ namespace AIngine {
 
 	float Application::GetDeltaTime()
 	{
-		return (float)glfwGetTime();
+		return (1.0f / 60.0f);
+		//return (float)glfwGetTime();
 	}
 
 	bool Application::OnWindowClose(AIngine::Events::WindowCloseEvent & e)
