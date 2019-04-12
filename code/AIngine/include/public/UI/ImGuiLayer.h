@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Layer.h"
-#include "Events/ApplicationEvents.h"
-#include "Events/InputEvents.h"
+#include "LogWidget.h"
 
 namespace AIngine::UI {
 
@@ -14,18 +13,14 @@ namespace AIngine::UI {
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
-		virtual void OnUpdate() override;
-		virtual void OnEvent(AIngine::Events::Event& e) override;
+		virtual void OnImGuiRender() override;
+
+		void OnBegin();
+		void OnEnd();
+
+		static LogWidget s_logWidget;
 
 	private:
-		bool OnMouseButtonPressedEvent(AIngine::Events::MouseButtonPressedEvent& e);
-		bool OnMouseButtonReleasedEvent(AIngine::Events::MouseButtonReleasedEvent& e);
-		bool OnMouseMovedEvent(AIngine::Events::MouseMovedEvent& e);
-		bool OnMouseScrolledEvent(AIngine::Events::MouseScrolledEvent& e);
-		bool OnKeyPressedEvent(AIngine::Events::KeyPressedEvent& e);
-		bool OnKeyReleasedEvent(AIngine::Events::KeyReleasedEvent& e);
-		bool OnKeyTypedEvent(AIngine::Events::KeyTypedEvent& e);
-		bool OnWindowResizeEvent(AIngine::Events::WindowResizeEvent& e);
-
+		void CreateDockSpace(const bool show);
 	};
 }

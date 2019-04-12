@@ -16,11 +16,16 @@ namespace AIngine {
 	{
 		spdlog::set_pattern("%^[%T] %n: %v%$");
 
+		auto logSink = (spdlog::sink_ptr) std::make_shared<LogWidgetSink_st>();
+
 		s_coreLogger = spdlog::stdout_color_mt("Core");
 		s_coreLogger->set_level(spdlog::level::trace);
 		
 		s_clientLogger = spdlog::stdout_color_mt("App");
 		s_clientLogger->set_level(spdlog::level::trace);
+
+		s_coreLogger->sinks().push_back(logSink);
+		s_clientLogger->sinks().push_back(logSink);
 
 
 #ifdef LOG_TO_FILE

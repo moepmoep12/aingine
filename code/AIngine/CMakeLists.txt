@@ -31,7 +31,7 @@ set(AINGINE_HEADER
 		include/public/Events/ApplicationEvents.h
 		include/public/Events/InputEvents.h	
 		include/public/UI/ImGuiLayer.h	
-		include/public/UI/imgui_impl_opengl3.h	
+		include/public/UI/LogWidget.h
 		include/private/gl_error.h
 		include/private/readfile.h
 	)
@@ -51,7 +51,6 @@ set(AINGINE_SRC
 		src/Rendering/meshloader.cxx
 		src/Rendering/texture.cxx
 		src/UI/ImGuiLayer.cxx
-		src/UI/imgui_impl_opengl3.cpp	
 		src/log.cxx
 	)
 	

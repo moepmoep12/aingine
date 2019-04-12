@@ -1,166 +1,153 @@
 #include "UI/ImGuiLayer.h"
-#include "imgui.h"
-#include "UI/imgui_impl_opengl3.h"
 #include "Application.h"
 #include "KeyCodes.h"
+#include "log.h"
+
+#define IMGUI_IMPL_OPENGL_LOADER_GLAD
+#include "examples/imgui_impl_opengl3.cpp"
+#include "examples/imgui_impl_glfw.cpp"
 
 namespace AIngine::UI {
 
 #define BIND_EVENT_TO_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
+	LogWidget ImGuiLayer::s_logWidget;
+
 	ImGuiLayer::ImGuiLayer() : Layer("ImGui Layer")
 	{
-		
+		CORE_INFO("Creating ImGuiLayer");
 	}
 
 	ImGuiLayer::~ImGuiLayer()
 	{
+		OnDetach();
+		CORE_INFO("Destructor ImGuiLayer");
 	}
 
 	void ImGuiLayer::OnAttach()
 	{
+		// Setup Dear ImGui context
+		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+		//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
+		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
+
+		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
+		//ImGui::StyleColorsClassic();
 
-		ImGuiIO& io = ImGui::GetIO();
-		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
+		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+		ImGuiStyle& style = ImGui::GetStyle();
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			style.WindowRounding = 0.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		}
 
-		io.KeyMap[ImGuiKey_Tab] = KeyCodes::TAB;
-		io.KeyMap[ImGuiKey_LeftArrow] = KeyCodes::LEFT;
-		io.KeyMap[ImGuiKey_RightArrow] = KeyCodes::RIGHT;
-		io.KeyMap[ImGuiKey_UpArrow] = KeyCodes::UP;
-		io.KeyMap[ImGuiKey_DownArrow] = KeyCodes::DOWN;
-		io.KeyMap[ImGuiKey_PageUp] = KeyCodes::PAGE_UP;
-		io.KeyMap[ImGuiKey_PageDown] = KeyCodes::PAGE_DOWN;
-		io.KeyMap[ImGuiKey_Home] = KeyCodes::HOME;
-		io.KeyMap[ImGuiKey_End] = KeyCodes::END;
-		io.KeyMap[ImGuiKey_Insert] = KeyCodes::INSERT;
-		io.KeyMap[ImGuiKey_Delete] = KeyCodes::DEL;
-		io.KeyMap[ImGuiKey_Backspace] = KeyCodes::BACKSPACE;
-		io.KeyMap[ImGuiKey_Space] = KeyCodes::SPACE;
-		io.KeyMap[ImGuiKey_Enter] = KeyCodes::ENTER;
-		io.KeyMap[ImGuiKey_Escape] = KeyCodes::ESCAPE;
-		io.KeyMap[ImGuiKey_A] = KeyCodes::A;
-		io.KeyMap[ImGuiKey_C] = KeyCodes::C;
-		io.KeyMap[ImGuiKey_V] = KeyCodes::V;
-		io.KeyMap[ImGuiKey_X] = KeyCodes::X;
-		io.KeyMap[ImGuiKey_Y] = KeyCodes::Y;
-		io.KeyMap[ImGuiKey_Z] = KeyCodes::Z;
+		Application& app = Application::Get();
+		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
+		// Setup Platform/Renderer bindings
+		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
 	void ImGuiLayer::OnDetach()
 	{
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::OnUpdate()
+	void ImGuiLayer::OnBegin()
+	{
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+	}
+
+	void ImGuiLayer::OnEnd()
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
-		
-		float time = app.GetDeltaTime();
-		io.DeltaTime = time > 0.0f ? time : (1.0f / 60.0f);
 
-		//CORE_INFO("Updating ImGuiLayer. DisplaySize {0}x{1} , Time {2}ms ", app.GetWindow().GetWidth(), app.GetWindow().GetHeight(), time);
-
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui::NewFrame();
-
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
-
+		// Rendering
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			GLFWwindow* backup_current_context = glfwGetCurrentContext();
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+			glfwMakeContextCurrent(backup_current_context);
+		}
 	}
 
-	void ImGuiLayer::OnEvent(AIngine::Events::Event & e)
-	{
-		using namespace AIngine::Events;
-		EventDispatcher dispatcher(e);
 
-		dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_EVENT_TO_FN(ImGuiLayer::OnMouseButtonPressedEvent));
-		dispatcher.Dispatch<MouseButtonReleasedEvent>(BIND_EVENT_TO_FN(ImGuiLayer::OnMouseButtonReleasedEvent));
-		dispatcher.Dispatch<MouseMovedEvent>(BIND_EVENT_TO_FN(ImGuiLayer::OnMouseMovedEvent));
-		dispatcher.Dispatch<MouseScrolledEvent>(BIND_EVENT_TO_FN(ImGuiLayer::OnMouseScrolledEvent));
-		dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_TO_FN(ImGuiLayer::OnKeyPressedEvent));
-		dispatcher.Dispatch<KeyTypedEvent>(BIND_EVENT_TO_FN(ImGuiLayer::OnKeyTypedEvent));
-		dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_TO_FN(ImGuiLayer::OnKeyReleasedEvent));
-		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_TO_FN(ImGuiLayer::OnWindowResizeEvent));
+	void ImGuiLayer::OnImGuiRender()
+	{
+		//static bool show = true;
+		//ImGui::ShowDemoWindow(&show);
+		//CreateDockSpace(true);
+		s_logWidget.Draw("Log");
 	}
 
-	bool ImGuiLayer::OnMouseButtonPressedEvent(AIngine::Events::MouseButtonPressedEvent & e)
+
+	void ImGuiLayer::CreateDockSpace(const bool show)
 	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MouseDown[e.GetMouseButton()] = true;
+		if (!show) return;
 
-		return false;;
-	}
+		//static bool opt_fullscreen_persistant = true;
+		//bool opt_fullscreen = opt_fullscreen_persistant;
+		//static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
-	bool ImGuiLayer::OnMouseButtonReleasedEvent(AIngine::Events::MouseButtonReleasedEvent & e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MouseDown[e.GetMouseButton()] = false;
+		//// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+		//// because it would be confusing to have two docking targets within each others.
+		//ImGuiWindowFlags window_flags =/* ImGuiWindowFlags_MenuBar |*/ ImGuiWindowFlags_NoDocking;
+		//if (opt_fullscreen)
+		//{
+		//	ImGuiViewport* viewport = ImGui::GetMainViewport();
+		//	ImGui::SetNextWindowPos(viewport->Pos);
+		//	ImGui::SetNextWindowSize(viewport->Size);
+		//	ImGui::SetNextWindowViewport(viewport->ID);
+		//	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		//	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		//	window_flags |= /*ImGuiWindowFlags_NoTitleBar |*/ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+		//	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+		//}
 
-		return false;
-	}
+		//// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
+		//if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+		//	window_flags |= ImGuiWindowFlags_NoBackground;
 
-	bool ImGuiLayer::OnMouseMovedEvent(AIngine::Events::MouseMovedEvent & e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MousePos = ImVec2(e.GetX(), e.GetY());
+		//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		//ImGui::Begin("DockSpace", &opt_fullscreen, window_flags);
+		//ImGui::PopStyleVar();
 
-		return false;
-	}
+		//if (opt_fullscreen)
+		//	ImGui::PopStyleVar(2);
 
-	bool ImGuiLayer::OnMouseScrolledEvent(AIngine::Events::MouseScrolledEvent & e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MouseWheelH += e.GetXOffset();
-		io.MouseWheel += e.GetYOffset();
+		//// DockSpace
+		//ImGuiIO& io = ImGui::GetIO();
+		//if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+		//{
+		//	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+		//	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+		//}
+		//ImGui::End();
 
-		return false;
-	}
+		ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode; 
+		if (ImGui::IsMouseDragging())
+			dockspace_flags = ImGuiDockNodeFlags_None;
 
-	bool ImGuiLayer::OnKeyPressedEvent(AIngine::Events::KeyPressedEvent & e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.KeysDown[e.GetKeyCode()] = true;
-
-		io.KeyCtrl = io.KeysDown[KeyCodes::LEFT_CONTROL] || io.KeysDown[KeyCodes::RIGHT_CONTROL];
-		io.KeyShift = io.KeysDown[KeyCodes::LEFT_SHIFT] || io.KeysDown[KeyCodes::RIGHT_SHIFT];
-		io.KeyAlt = io.KeysDown[KeyCodes::LEFT_ALT] || io.KeysDown[KeyCodes::RIGHT_ALT];
-		io.KeySuper = io.KeysDown[KeyCodes::LEFT_SUPER] || io.KeysDown[KeyCodes::RIGHT_SUPER];
-		return false;
-	}
-
-	bool ImGuiLayer::OnKeyReleasedEvent(AIngine::Events::KeyReleasedEvent & e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.KeysDown[e.GetKeyCode()] = false;
-
-		return false;
-	}
-
-	bool ImGuiLayer::OnKeyTypedEvent(AIngine::Events::KeyTypedEvent & e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		int keycode = e.GetKeyCode();
-		if (keycode > 0 && keycode < 0x10000)
-			io.AddInputCharacter((unsigned short)keycode);
-
-		return false;
-	}
-
-	bool ImGuiLayer::OnWindowResizeEvent(AIngine::Events::WindowResizeEvent & e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.DisplaySize = ImVec2(e.GetWidth(), e.GetHeight());
-		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
-		glViewport(0, 0, e.GetWidth(), e.GetHeight());
-
-		return false;
+		ImGui::DockSpaceOverViewport(viewport,dockspace_flags);
 	}
 }
