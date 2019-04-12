@@ -20,6 +20,7 @@ set(AINGINE_HEADER
 		include/public/Layer.h
 		include/public/LayerStack.h
 		include/public/Input.h
+		include/public/KeyCodes.h
 		include/public/Rendering/shader.h
 		include/public/Rendering/mvp.h
 		include/public/Rendering/bitmap.h
