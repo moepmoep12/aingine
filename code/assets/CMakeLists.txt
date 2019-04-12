@@ -4,7 +4,7 @@
 
 include(assign_source_group)
  
-set(ASSET_DIR "${CMAKE_CURRENT_SOURCE_DIR}/assets")
+set(ASSET_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Note: If no executable/library target is present, these files will not show up in VS/XCode
 # To be fixed...
