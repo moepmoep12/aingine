@@ -13,6 +13,7 @@ include (assign_source_group)
 set(AINGINE_HEADER
 		include/public/Core.h
 		include/public/Application.h
+		include/public/Assets.h
 		include/public/Entrypoint.h
 		include/public/memory.h
 		include/public/log.h
@@ -39,6 +40,7 @@ set(AINGINE_HEADER
 # source files	
 set(AINGINE_SRC
         src/Application.cxx
+        src/Assets.cxx
 		src/gl_error.cxx
 		src/Window.cxx
 		src/Layer.cxx

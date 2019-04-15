@@ -6,6 +6,7 @@
 #include "Events/ApplicationEvents.h"
 #include "UI/ImGuiLayer.h"
 #include "LayerStack.h"
+#include "Assets.h"
 
 namespace AIngine {
 
@@ -32,6 +33,7 @@ namespace AIngine {
 		bool m_isRunning = false;
 		LayerStack m_layerStack;
 		AIngine::UI::ImGuiLayer* m_imGuiLayer;
+		AIngine::Assets::AssetRegistry m_assetRegistry;
 		static Application* s_instance;
 
 	};

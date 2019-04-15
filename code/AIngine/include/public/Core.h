@@ -7,7 +7,7 @@
 #include "log.h"
 #include "Input.h"
 #include "KeyCodes.h"
-
+#include "Assets.h"
 
 // EntryPoint
 #include "EntryPoint.h"
