@@ -39,6 +39,9 @@ GLShaderProgram::GLShaderProgram(std::string const &vertexPath, std::string cons
     glAttachShader(ID, fragment.GetID());
     glLinkProgram(ID);
 
+	glDeleteShader(vertex.GetID());
+	glDeleteShader(fragment.GetID());
+
     CheckError(ID, _TYPE::PROGRAM);
 }
 
@@ -50,9 +53,59 @@ void GLShaderProgram::Use() {
     glUseProgram(ID);
 }
 
-void GLShaderProgram::SetFloat4x4(std::string const &name, glm::mat4x4 value) {
-    GLint attrLocation = glGetUniformLocation(ID, name.c_str());
-    glUniformMatrix4fv(attrLocation, 1, GL_FALSE, glm::value_ptr(value));
+void GLShaderProgram::SetFloat(const GLchar *name, GLfloat value, GLboolean useShader)
+{
+	if (useShader)
+		this->Use();
+	glUniform1f(glGetUniformLocation(this->ID, name), value);
+}
+void GLShaderProgram::SetInteger(const GLchar *name, GLint value, GLboolean useShader)
+{
+	if (useShader)
+		this->Use();
+	glUniform1i(glGetUniformLocation(this->ID, name), value);
+}
+void GLShaderProgram::SetVector2f(const GLchar *name, GLfloat x, GLfloat y, GLboolean useShader)
+{
+	if (useShader)
+		this->Use();
+	glUniform2f(glGetUniformLocation(this->ID, name), x, y);
+}
+void GLShaderProgram::SetVector2f(const GLchar *name, const glm::vec2 &value, GLboolean useShader)
+{
+	if (useShader)
+		this->Use();
+	glUniform2f(glGetUniformLocation(this->ID, name), value.x, value.y);
+}
+void GLShaderProgram::SetVector3f(const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLboolean useShader)
+{
+	if (useShader)
+		this->Use();
+	glUniform3f(glGetUniformLocation(this->ID, name), x, y, z);
+}
+void GLShaderProgram::SetVector3f(const GLchar *name, const glm::vec3 &value, GLboolean useShader)
+{
+	if (useShader)
+		this->Use();
+	glUniform3f(glGetUniformLocation(this->ID, name), value.x, value.y, value.z);
+}
+void GLShaderProgram::SetVector4f(const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w, GLboolean useShader)
+{
+	if (useShader)
+		this->Use();
+	glUniform4f(glGetUniformLocation(this->ID, name), x, y, z, w);
+}
+void GLShaderProgram::SetVector4f(const GLchar *name, const glm::vec4 &value, GLboolean useShader)
+{
+	if (useShader)
+		this->Use();
+	glUniform4f(glGetUniformLocation(this->ID, name), value.x, value.y, value.z, value.w);
+}
+void GLShaderProgram::SetMatrix4(const GLchar *name, const glm::mat4 &matrix, GLboolean useShader)
+{
+	if (useShader)
+		this->Use();
+	glUniformMatrix4fv(glGetUniformLocation(this->ID, name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 GLuint GLShaderProgram::GetID() {
