@@ -4,7 +4,11 @@
 
 namespace AIngine {
 
-	Input* Input::s_Instance = new WindowsInput();
+	Input & AIngine::Input::getInstance()
+	{
+		static WindowsInput instance;
+		return instance;
+	}
 
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{
