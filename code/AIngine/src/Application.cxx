@@ -2,6 +2,7 @@
 #include "Events/ApplicationEvents.h"
 #include "log.h"
 #include "Input.h"
+#include <memory>
 
 #define BIND_EVENT_TO_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
@@ -21,6 +22,24 @@ namespace AIngine {
 
 		m_imGuiLayer = new AIngine::UI::ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
+
+		{
+			using namespace AIngine::Assets;
+
+			m_assetRegistry.RegisterFactory<ShaderAsset>(
+				std::move(
+					std::unique_ptr<ShaderAssetFactory>(
+						new ShaderAssetFactory()
+					)
+				)
+				);
+
+			m_assetRegistry.RegisterFactory<BitmapAsset>(
+				std::move(std::unique_ptr<BitmapAssetFactory>(
+					new BitmapAssetFactory()
+					))
+				);
+		}
 	}
 
 	Application::~Application()
@@ -30,6 +49,8 @@ namespace AIngine {
 
 	void Application::Run()
 	{
+		OnAppStartUp();
+
 		CORE_INFO("App is running!");
 
 		m_isRunning = true;
@@ -42,7 +63,7 @@ namespace AIngine {
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_layerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(GetDeltaTime());
 
 			m_imGuiLayer->OnBegin();
 			for (Layer* layer : m_layerStack)
@@ -55,6 +76,8 @@ namespace AIngine {
 		}
 
 		CORE_INFO("Shutting App down...");
+
+		OnAppShutDown();
 
 		// destroy our window
 		m_window = NULL;
@@ -93,8 +116,8 @@ namespace AIngine {
 
 	float Application::GetDeltaTime()
 	{
-		return (1.0f / 60.0f);
-		//return (float)glfwGetTime();
+		//return (1.0f / 60.0f);
+		return (float)glfwGetTime();
 	}
 
 	bool Application::OnWindowClose(AIngine::Events::WindowCloseEvent & e)

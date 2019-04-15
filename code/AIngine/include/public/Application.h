@@ -24,6 +24,11 @@ namespace AIngine {
 
 		inline static Application& Get() { return *s_instance; }
 		inline const Window& GetWindow() const { return *m_window; }
+		inline  AIngine::Assets::AssetRegistry& GetAssetRegistry() { return m_assetRegistry; }
+
+	protected:
+		virtual void OnAppStartUp() = 0;
+		virtual void OnAppShutDown() = 0;
 
 	private:
 		bool OnWindowClose(AIngine::Events::WindowCloseEvent& e);
