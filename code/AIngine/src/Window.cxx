@@ -12,7 +12,10 @@ AIngine::Window::Window(const WindowConfig & config)
 	m_config.Height = config.Height;
 	m_config.Width = config.Width;
 
-	ASSERT(glfwInit(), "Could not init glfw");
+	int success = -1;
+	success = glfwInit();
+
+	ASSERT(success, "Could not init glfw");
 
 	// Request an OpenGL Context 4.1 Core Profile
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
