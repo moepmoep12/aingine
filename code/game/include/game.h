@@ -7,4 +7,8 @@ public:
 	Game();
 
 	~Game();
+
+	// Inherited via Application
+	virtual void OnAppStartUp() override;
+	virtual void OnAppShutDown() override;
 };

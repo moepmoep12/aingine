@@ -3,8 +3,10 @@
 #include <functional>
 #include <string>
 #include <typeindex>
+#include <vector>
 
 #include "Rendering/bitmap.h"
+#include "Rendering/shader.h"
 
 namespace AIngine::Assets {
 
@@ -36,6 +38,106 @@ namespace AIngine::Assets {
 	public:
 		virtual ~AssetFactory() {};
 	};
+
+
+	/******************************** BitMap *********************************************/
+
+	class BitmapAsset : public AssetBase
+	{
+		friend class BitmapAssetFactory;
+
+	public:
+		Bitmap & GetBitmap() {
+			return bitmap;
+		}
+		virtual ~BitmapAsset() {};
+
+	private:
+		Bitmap bitmap;
+
+	protected:
+		BitmapAsset(std::string const & path) :
+			AssetBase(path),
+			bitmap(path) {}
+
+	};
+
+	class BitmapAssetFactory : public AssetFactory
+	{
+		friend class AssetRegistry;
+
+	public :
+		virtual ~BitmapAssetFactory() {}
+
+	protected:
+
+		virtual std::unique_ptr<AssetBase> LoadAsset(std::string const & path) override
+		{
+			return std::unique_ptr<BitmapAsset>(new BitmapAsset(path));
+		};
+	};
+
+
+	/********************************** ShaderAsset ******************************************/
+
+	class ShaderAsset :public AssetBase
+	{
+		friend class ShaderAssetFactory;
+
+	public:
+		GLShaderProgram& GetShader() {
+			return m_shader;
+		}
+
+		virtual ~ShaderAsset() {};
+
+	private:
+		GLShaderProgram m_shader;
+
+		inline std::string& GetPath(std::string const &vertexPath, std::string const &fragmentPath) const {
+			static std::string result;
+			result.append(vertexPath);
+			result.append(";");
+			result.append(fragmentPath);
+			return result;
+		}
+
+	protected:
+		ShaderAsset(std::string const &vertexPath, std::string const &fragmentPath) 
+			: AssetBase(GetPath(vertexPath,fragmentPath)), m_shader(vertexPath, fragmentPath) {}
+	};
+
+	class ShaderAssetFactory : public AssetFactory {
+
+		friend class AssetRegistry;
+
+	public:
+		virtual ~ShaderAssetFactory() {}
+
+	protected : 
+		virtual std::unique_ptr<AssetBase> LoadAsset(std::string const & path) override 
+		{
+			std::vector<std::string> paths;
+			split(path, ';', paths);
+			return std::unique_ptr<ShaderAsset>(new ShaderAsset(paths[0], paths[1]));
+		}
+
+		void split(const std::string& s, char c,
+			std::vector<std::string>& v) {
+			std::string::size_type i = 0;
+			std::string::size_type j = s.find(c);
+
+			while (j != std::string::npos) {
+				v.push_back(s.substr(i, j - i));
+				i = ++j;
+				j = s.find(c, j);
+
+				if (j == std::string::npos)
+					v.push_back(s.substr(i, s.length()));
+			}
+		}
+	};
+
 
 	class AssetRegistry
 	{
@@ -86,40 +188,5 @@ namespace AIngine::Assets {
 	private:
 		AssetMap assets;
 		FactoryMap factories;
-	};
-
-
-	class BitmapAsset : public AssetBase
-	{
-		friend class BitmapAssetFactory;
-
-	public:
-		Bitmap & GetBitmap() {
-			return bitmap;
-		}
-		virtual ~BitmapAsset() {};
-
-	private:
-		Bitmap bitmap;
-
-	protected:
-		BitmapAsset(std::string const & path) :
-			AssetBase(path),
-			bitmap(path) {}
-
-	};
-
-	class BitmapAssetFactory : public AssetFactory 
-	{
-		friend class AssetRegistry;
-
-		virtual ~BitmapAssetFactory() {}
-
-	protected:
-
-		virtual std::unique_ptr<AssetBase> LoadAsset(std::string const & path) 
-		{
-			return std::unique_ptr<BitmapAsset>(new BitmapAsset(path));
-		};
 	};
 }
