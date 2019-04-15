@@ -18,7 +18,11 @@ public:
 
 	virtual void OnEvent(AIngine::Events::Event& e) override
 	{
-		//DEBUG_INFO(e.ToString().c_str());
+		DEBUG_INFO(e.ToString().c_str());
+	}
+
+	~ExampleLayer() {
+		DEBUG_INFO("Destructor ExampleLayer");
 	}
 
 };

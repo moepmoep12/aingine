@@ -20,6 +20,11 @@ namespace AIngine::UI {
 			Clear();
 		}
 
+		~LogWidget()
+		{
+			Clear();
+		}
+
 		void    Clear()
 		{
 			Buf.clear();

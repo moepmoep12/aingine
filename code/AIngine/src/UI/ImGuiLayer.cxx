@@ -22,6 +22,7 @@ namespace AIngine::UI {
 	{
 		OnDetach();
 		CORE_INFO("Destructor ImGuiLayer");
+		s_logWidget.Clear();
 	}
 
 	void ImGuiLayer::OnAttach()
