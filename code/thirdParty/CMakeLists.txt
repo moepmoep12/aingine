@@ -46,6 +46,7 @@ add_subdirectory("${THIRD_PARTY_DIR}/glfw/")
 add_subdirectory("${THIRD_PARTY_DIR}/glm/")
 add_subdirectory("${THIRD_PARTY_DIR}/tinyobjloader/")
 add_subdirectory("${THIRD_PARTY_DIR}/spdlog/")
+add_subdirectory("${THIRD_PARTY_DIR}/Box2D-cmake/")
 
 #
 # --- Nothings/STB header-only libs (manual) --- ##################
@@ -83,3 +84,11 @@ add_library(imgui STATIC
 							)
 include_directories(imgui PUBLIC ${IMGUI_INCLUDE_DIR})							
 target_include_directories(imgui INTERFACE ${IMGUI_INCLUDE_DIR}) 
+
+#
+# --- Box2D -- #####################
+#
+
+#target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+#target_link_libraries(${PROJECT_NAME} TG::Box2D)
+

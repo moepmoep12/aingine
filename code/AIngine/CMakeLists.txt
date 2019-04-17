@@ -85,6 +85,7 @@ target_link_libraries(Engine
         stb
 		imgui
 		spdlog
+		Box2D-cmake
         )
 
 #
