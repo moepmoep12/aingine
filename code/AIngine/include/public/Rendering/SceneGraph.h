@@ -5,7 +5,7 @@
 #include <vector>
 
 namespace AIngine::Rendering {
-	class SceneGraph : public AIngine::Layer{
+	class SceneGraph : public AIngine::Layer {
 	public:
 
 		SceneGraph();
@@ -29,6 +29,16 @@ namespace AIngine::Rendering {
 
 	};
 
+	class ImguiTreeTraverser : public Traverser {
+	public:
+		ImguiTreeTraverser(SceneNode* root);
+
+		// Inherited via Traverser
+		virtual bool Enter(GroupNode & node) override;
+		virtual bool Leave(GroupNode & node) override;
+		virtual bool Visit(ShapeNode & node) override;
+
+	};
 
 	class DeleteTraverser : public Traverser {
 

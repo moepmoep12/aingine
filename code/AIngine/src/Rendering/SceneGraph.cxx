@@ -80,6 +80,26 @@ namespace AIngine::Rendering {
 		ImGui::End();
 	}
 
+	/********************************** IMGUI TREE TRAVERSER ****************************************/
+
+
+	ImguiTreeTraverser::ImguiTreeTraverser(SceneNode * root)
+	{
+		root->Accept(*this);
+	}
+	bool ImguiTreeTraverser::Enter(GroupNode & node)
+	{
+		return false;
+	}
+	bool ImguiTreeTraverser::Leave(GroupNode & node)
+	{
+		return false;
+	}
+	bool ImguiTreeTraverser::Visit(ShapeNode & node)
+	{
+		return false;
+	}
+
 	/********************************** DELETE TRAVERSER ****************************************/
 
 	DeleteTraverser::DeleteTraverser(SceneNode * node, AIngine::Memory::Pool<ShapeNode>& shapeNodePool, AIngine::Memory::Pool<GroupNode>& GroupNodePool)
@@ -131,4 +151,5 @@ namespace AIngine::Rendering {
 		m_shapeNodesToDelete.push_back(&node);
 		return true;
 	}
+
 }
