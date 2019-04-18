@@ -15,6 +15,8 @@ int main(int argc, char** argv)
 	app->Run();
 	delete app;
 
+	spdlog::drop_all();
+	spdlog::shutdown();
 
 	return 0;
 }
