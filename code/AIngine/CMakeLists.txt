@@ -28,6 +28,10 @@ set(AINGINE_HEADER
 		include/public/Rendering/mesh.h
 		include/public/Rendering/meshloader.h
 		include/public/Rendering/texture.h
+		include/public/Rendering/SceneGraph.h
+		include/public/Rendering/Traverser.h
+		include/public/Rendering/SceneNode.h
+		include/public/Rendering/Renderer.h
 		include/public/Events/Event.h
 		include/public/Events/ApplicationEvents.h
 		include/public/Events/InputEvents.h	
@@ -52,6 +56,9 @@ set(AINGINE_SRC
 		src/Rendering/mesh.cxx
 		src/Rendering/meshloader.cxx
 		src/Rendering/texture.cxx
+		src/Rendering/SceneGraph.cxx
+		src/Rendering/SceneNodes.cxx
+		src/Rendering/Renderer.cxx
 		src/UI/ImGuiLayer.cxx
 		src/log.cxx
 	)

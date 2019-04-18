@@ -11,4 +11,8 @@ public:
 	// Inherited via Application
 	virtual void OnAppStartUp() override;
 	virtual void OnAppShutDown() override;
+	virtual void OnAppUpdate() override;
+
+
+	Texture2D* texture;
 };

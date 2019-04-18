@@ -4,6 +4,7 @@
 #include "Input.h"
 #include <memory>
 
+
 #define BIND_EVENT_TO_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
 namespace AIngine {
@@ -30,7 +31,7 @@ namespace AIngine {
 				std::move(
 					std::unique_ptr<ShaderAssetFactory>(
 						new ShaderAssetFactory()
-					)
+						)
 				)
 				);
 
@@ -40,6 +41,24 @@ namespace AIngine {
 					))
 				);
 		}
+
+		m_sceneGraph = new AIngine::Rendering::SceneGraph();
+
+
+		std::string vertexPath("assets/Intellgine/shader/screenshader/vertexScreen.glsl");
+		std::string fragPath("assets/Intellgine/shader//screenshader/fragmentScreen.glsl");
+		std::string path;
+		path.append(vertexPath);
+		path.append(";");
+		path.append(fragPath);
+
+		AIngine::Assets::ShaderAsset* shaderAsset = m_assetRegistry.Load<AIngine::Assets::ShaderAsset>(path);
+
+		CORE_INFO("Loaded ShaderProgram with {0} ", shaderAsset->GetShader().GetID());
+
+
+		m_renderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());
+
 	}
 
 	Application::~Application()
@@ -70,6 +89,8 @@ namespace AIngine {
 				layer->OnImGuiRender();
 			m_imGuiLayer->OnEnd();
 
+			m_renderer->Render(&m_sceneGraph->GetRoot());
+
 			m_window->OnUpdate();
 
 			//glfwSetTime(0);
@@ -81,7 +102,8 @@ namespace AIngine {
 
 		// destroy our window
 		m_window = NULL;
-
+		delete m_sceneGraph;
+		delete m_renderer;
 	}
 
 	void Application::OnEvent(AIngine::Events::Event & e)

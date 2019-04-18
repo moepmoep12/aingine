@@ -19,6 +19,7 @@ public:
 	virtual void OnEvent(AIngine::Events::Event& e) override
 	{
 		//DEBUG_INFO(e.ToString().c_str());
+
 	}
 
 	~ExampleLayer() {
@@ -32,7 +33,7 @@ Game::Game()
 	DEBUG_WARN("Creating Game...");
 	PushLayer(new ExampleLayer());
 
-	
+
 }
 
 Game::~Game()
@@ -43,29 +44,37 @@ Game::~Game()
 void Game::OnAppStartUp()
 {
 	DEBUG_INFO("OnAppStartUp");
+	Application& app = AIngine::Application::Get();
+	std::string path("assets/game/textures/awesomeface.bmp");
+	AIngine::Assets::BitmapAsset* bitmap = app.GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
 
-	AIngine::Application& app = AIngine::Application::Get();
+	texture = new Texture2D();
+	texture->Generate(bitmap->GetBitmap());
 
-	std::string vertexPath("assets/Intellgine/shader/unlit/vertex.glsl");
-	std::string fragPath("assets/Intellgine/shader/unlit/fragment.glsl");
-	std::string path;
-	path.append(vertexPath);
-	path.append(";");
-	path.append(fragPath);
+	//m_sceneGraph->AddShape(texture, nullptr);
+	{
+		using namespace AIngine::Rendering;
+		GroupNode* two = m_sceneGraph->AddGroup(nullptr);
+		SceneNode* three = m_sceneGraph->AddShape(texture, two);
+		GroupNode* four = m_sceneGraph->AddGroup(two);
+		GroupNode* five = m_sceneGraph->AddGroup(four);
+		ShapeNode* six = m_sceneGraph->AddShape(nullptr, five);
+		ShapeNode* seven = m_sceneGraph->AddShape(nullptr, five);
+		ShapeNode* eight = m_sceneGraph->AddShape(nullptr, four);
 
-	AIngine::Assets::ShaderAsset* shader = app.GetAssetRegistry().Load<AIngine::Assets::ShaderAsset>(path);
-	int uid = shader->uid;
-
-	DEBUG_INFO("Loaded ShaderProgram with {0} " , shader->GetShader().GetID());
-
-	AIngine::Assets::ShaderAsset* sameShader = app.GetAssetRegistry().Load<AIngine::Assets::ShaderAsset>(path);
-
-	DEBUG_INFO("Loaded the same ShaderProgram with ID {0} ", sameShader->GetShader().GetID());
+		m_sceneGraph->RemoveNode(five);
+		m_sceneGraph->RemoveNode(eight);
+	}
 
 }
 
 void Game::OnAppShutDown()
 {
 	DEBUG_INFO("OnAppShutdown");
+	delete texture;
+}
+
+void Game::OnAppUpdate()
+{
 }
 
