@@ -26,17 +26,29 @@ namespace AIngine::Rendering {
 		AIngine::Memory::Pool<ShapeNode> m_shapeNodePool = AIngine::Memory::Pool<ShapeNode>(1000);
 		AIngine::Memory::Pool<GroupNode> m_GroupNodePool = AIngine::Memory::Pool<GroupNode>(500);
 
+		void ShowSelectedNodeWidget(SceneNode* node);
 
 	};
 
 	class ImguiTreeTraverser : public Traverser {
 	public:
 		ImguiTreeTraverser(SceneNode* root);
+		~ImguiTreeTraverser();
 
 		// Inherited via Traverser
 		virtual bool Enter(GroupNode & node) override;
 		virtual bool Leave(GroupNode & node) override;
 		virtual bool Visit(ShapeNode & node) override;
+
+		void Traverse();
+
+	private:
+		SceneNode* m_root;
+
+		// we keep track which nodes are open in the editor 
+		// since we need to know when a subtree is finished in imgui
+		std::unordered_map<GroupNode*, bool> m_openNodesMap;
+
 
 	};
 

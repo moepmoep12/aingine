@@ -55,14 +55,18 @@ namespace AIngine::Rendering {
 		return true;
 	}
 
+	static SceneNode* s_selectedNode = nullptr;
+
 	void SceneGraph::OnImGuiRender()
 	{
-		unsigned int windowWidth = 400;
-		unsigned int windowHeight = AIngine::Application::Get().GetWindow().GetHeight;
+		static unsigned int windowWidth = 400;
+		unsigned int windowHeight = AIngine::Application::Get().GetWindow().GetHeight();
 		static bool p_open = true;
+		static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
 
 		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_FirstUseEver);
-		if (!ImGui::Begin("SceneGraph", &p_open))
+
+		if (!ImGui::Begin("SceneGraph", &p_open, windowFlags))
 		{
 			ImGui::End();
 			return;
@@ -72,33 +76,118 @@ namespace AIngine::Rendering {
 		ImGui::Columns(2);
 		ImGui::Separator();
 
-		// traverse tree and create tree nodes
+		// traverse tree and create tree with imgui
+		ImguiTreeTraverser traverser(m_Root);
+		traverser.Traverse();
 
 		ImGui::Columns(1);
 		ImGui::Separator();
 		ImGui::PopStyleVar();
+		ShowSelectedNodeWidget(s_selectedNode);
 		ImGui::End();
+
+	}
+
+
+	void SceneGraph::ShowSelectedNodeWidget(SceneNode * node)
+	{
+		if (!node) return;
+		ImGui::InputFloat("Position X", &node->GetPosition().x);
+		ImGui::InputFloat("Position Y", &node->GetPosition().y);
+		ImGui::InputFloat("Rotation", &node->GetRotation());
+		ImGui::InputFloat("Scale X", &node->GetScale().x);
+		ImGui::InputFloat("Scale Y", &node->GetScale().y);
 	}
 
 	/********************************** IMGUI TREE TRAVERSER ****************************************/
 
 
-	ImguiTreeTraverser::ImguiTreeTraverser(SceneNode * root)
+	ImguiTreeTraverser::ImguiTreeTraverser(SceneNode * root) : m_root(root)
 	{
-		root->Accept(*this);
+
 	}
+
+	ImguiTreeTraverser::~ImguiTreeTraverser()
+	{
+		m_openNodesMap.clear();
+	}
+
+
 	bool ImguiTreeTraverser::Enter(GroupNode & node)
 	{
-		return false;
+		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+		
+		// selected
+		if (s_selectedNode == &node)
+		{
+			node_flags |= ImGuiTreeNodeFlags_Selected;
+		}
+
+		// create a inner node with children
+		if (node.GetChildren().size() > 0)
+		{
+			bool node_open = ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
+
+			// check if selected
+			if (ImGui::IsItemClicked()) {
+				s_selectedNode = &node;
+			}
+
+			m_openNodesMap[&node] = node_open;
+
+			return node_open;
+		}
+
+		// create a leaf
+		else {
+			node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+			ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
+			if (ImGui::IsItemClicked()) {
+				s_selectedNode = &node;
+			}
+			return false;
+		}
+
 	}
+
 	bool ImguiTreeTraverser::Leave(GroupNode & node)
 	{
-		return false;
+		if (m_openNodesMap[&node]) {
+			ImGui::TreePop();
+		}
+		return true;
 	}
+
+	// Creates a leaf
 	bool ImguiTreeTraverser::Visit(ShapeNode & node)
 	{
-		return false;
+		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+		node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+				// selected
+		if (s_selectedNode == &node)
+		{
+			node_flags |= ImGuiTreeNodeFlags_Selected;
+		}
+
+		ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
+		if (ImGui::IsItemClicked()) {
+			s_selectedNode = &node;
+		}
+
+		return true;
 	}
+
+	void ImguiTreeTraverser::Traverse()
+	{
+		// root is always open
+		ImGui::SetNextTreeNodeOpen(true);
+
+		ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, ImGui::GetFontSize() * 2); // Increase spacing to differentiate leaves from expanded contents.
+		m_root->Accept(*this);
+		ImGui::PopStyleVar();
+	}
+
 
 	/********************************** DELETE TRAVERSER ****************************************/
 
