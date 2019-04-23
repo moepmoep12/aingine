@@ -16,3 +16,7 @@
 [submodule "code/thirdParty/imgui"]
 	path = code/thirdParty/imgui
 	url = https://github.com/ocornut/imgui.git
+	
+[submodule "code/thirdParty/Box2D-cmake"]
+	path = code/thirdParty/Box2D-cmake
+	url = https://github.com/tobanteGaming/Box2D-cmake.git
