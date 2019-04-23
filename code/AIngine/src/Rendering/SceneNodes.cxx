@@ -4,8 +4,8 @@
 
 namespace AIngine::Rendering {
 
-	ShapeNode::ShapeNode(Texture2D* texture, GroupNode* parent, const std::string& name, const glm::vec2& position, const glm::vec2& scale, const float rotation)
-		: m_texture(texture), SceneNode(parent,name)
+	ShapeNode::ShapeNode(Texture2D* texture, GroupNode* parent, const std::string& name, const glm::vec2& position, const glm::vec2& scale, const float rotation, const glm::vec3& color)
+		:  SceneNode(parent,name), m_texture(texture), m_spriteColor(color)
 	{
 		SetPosition(position);
 		SetScale(scale);

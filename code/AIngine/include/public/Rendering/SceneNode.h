@@ -13,14 +13,20 @@ namespace AIngine::Rendering {
 	public:
 
 		SceneNode() = delete;
-		SceneNode(SceneNode* parent, const std::string& name) 
+		SceneNode(SceneNode* parent, const std::string& name)
 			: m_parent(parent), m_name(name) {}
-		SceneNode(SceneNode* parent, const std::string& name, const glm::vec2& position) 
-			: m_parent(parent), m_name(name) { SetPosition(position); }
-		SceneNode(SceneNode* parent, const std::string& name, const glm::vec2& position, const glm::vec2& scale) 
-			: m_parent(parent), m_name(name) { SetPosition(position); SetScale(scale); }
-		SceneNode(SceneNode* parent, const std::string& name, const glm::vec2& position, const glm::vec2& scale, const float rotation) 
-			: m_parent(parent), m_name(name) { SetPosition(position); SetScale(scale); SetRotation(rotation); }
+		SceneNode(SceneNode* parent, const std::string& name, const glm::vec2& position)
+			: m_parent(parent), m_name(name) {
+			SetPosition(position);
+		}
+		SceneNode(SceneNode* parent, const std::string& name, const glm::vec2& position, const glm::vec2& scale)
+			: m_parent(parent), m_name(name) {
+			SetPosition(position); SetScale(scale);
+		}
+		SceneNode(SceneNode* parent, const std::string& name, const glm::vec2& position, const glm::vec2& scale, const float rotation)
+			: m_parent(parent), m_name(name) {
+			SetPosition(position); SetScale(scale); SetRotation(rotation);
+		}
 
 		virtual bool Accept(Traverser& traverser) = 0;
 
@@ -38,7 +44,7 @@ namespace AIngine::Rendering {
 		inline glm::vec2& GetScale() { return m_scale; }
 		inline void SetScale(const glm::vec2 scale) { m_scale = scale;/* glm::scale(m_transform, glm::vec3(m_scale, 1.0f)); */ }
 
-		inline float GetRotation() { return m_rotation; }
+		inline float& GetRotation() { return m_rotation; }
 		inline void SetRotation(float rot) { m_rotation = rot;/*  glm::rotate(m_transform, m_rotation, glm::vec3(0.0f, 0.0f, 1.0f));*/ }
 
 	protected:
@@ -77,7 +83,7 @@ namespace AIngine::Rendering {
 	public:
 
 		explicit ShapeNode(Texture2D* texture, GroupNode* parent, const std::string& name,
-			const glm::vec2& position = glm::vec2(0.0f), const glm::vec2& scale = glm::vec2(1.0f), const float rotation = 0.0f);
+			const glm::vec2& position = glm::vec2(0.0f), const glm::vec2& scale = glm::vec2(1.0f), const float rotation = 0.0f, const glm::vec3& color = glm::vec3(1.0f));
 		~ShapeNode();
 
 		virtual bool Accept(Traverser& traverser) override;
@@ -85,9 +91,13 @@ namespace AIngine::Rendering {
 		inline Texture2D& GetTexture() { return *m_texture; }
 		glm::vec2& GetSize();
 
+		inline glm::vec3& GetColor() { return m_spriteColor; }
+		inline void SetColor(const glm::vec3& color) { m_spriteColor = color; }
+
 
 	private:
 		Texture2D* m_texture;
 		glm::vec2 m_size;
+		glm::vec3 m_spriteColor;
 	};
 }
