@@ -57,7 +57,8 @@ Texture2D::Texture2D()
 	glGenTextures(1, &this->ID);
 }
 
-Texture2D::~Texture2D() {
+Texture2D::~Texture2D()
+{
 	glDeleteTextures(1, &this->ID);
 }
 
@@ -65,9 +66,20 @@ void Texture2D::Generate(Bitmap &texture)
 {
 	this->Width = texture.GetWidth();
 	this->Height = texture.GetHeight();
+	this->Image_Format = (texture.GetChannels() == 3) ? GL_RGB : GL_RGBA;
+	this->Internal_Format = (texture.GetChannels() == 3) ? GL_RGB : GL_RGBA;
 	// Create Texture
 	glBindTexture(GL_TEXTURE_2D, this->ID);
-	glTexImage2D(GL_TEXTURE_2D, 0, this->Internal_Format, Width, Height, 0, this->Image_Format, GL_UNSIGNED_BYTE, texture.GetData());
+	glTexImage2D(GL_TEXTURE_2D,
+		0,
+		this->Internal_Format,
+		Width,
+		Height,
+		0,
+		this->Image_Format,
+		GL_UNSIGNED_BYTE,
+		texture.GetData());
+
 	// Set Texture wrap and filter modes
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, this->Wrap_S);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, this->Wrap_T);
