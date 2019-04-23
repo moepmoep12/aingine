@@ -31,6 +31,7 @@ namespace AIngine::Rendering {
 		virtual bool Accept(Traverser& traverser) = 0;
 
 		inline virtual const std::string& GetName() const { return m_name; }
+		inline void SetName(const std::string& name) { m_name = name; }
 
 		inline SceneNode& GetParent() { return *m_parent; }
 		inline void SetParent(SceneNode* parent) { m_parent = parent; }
