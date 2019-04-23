@@ -11,6 +11,10 @@ AIngine::Window::Window(const WindowConfig & config)
 	m_config.Title = config.Title;
 	m_config.Height = config.Height;
 	m_config.Width = config.Width;
+	m_windowData.Height = config.Height;
+	m_windowData.Width = config.Width;
+	m_windowData.Title = config.Title;
+
 
 	int success = -1;
 	success = glfwInit();
@@ -57,12 +61,19 @@ AIngine::Window::~Window()
 	glfwDestroyWindow(m_window);
 }
 
+void AIngine::Window::PollInput()
+{
+	glfwPollEvents();
+
+}
+
 void AIngine::Window::OnUpdate()
 {
 	//glClearColor(0.5, 0.1, 1, 1);
 	//glClear(GL_COLOR_BUFFER_BIT);
-	glfwPollEvents();
 	glfwSwapBuffers(m_window);
+	glClearColor(0.5, 0.5, 1, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void AIngine::Window::SetEventCallbackFunction(const std::function<void(Events::Event&)>& callback)

@@ -31,6 +31,7 @@ namespace AIngine {
 		Window(const WindowConfig& config);
 		~Window();
 
+		void PollInput();
 		void OnUpdate();
 		void SetEventCallbackFunction(const std::function<void(Events::Event&)>& callback);
 
