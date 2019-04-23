@@ -18,12 +18,14 @@ namespace AIngine {
 		ASSERT(!s_instance, "Application already running");
 		s_instance = this;
 
+		// create window
 		m_window = std::unique_ptr<Window>(Window::Create());
 		m_window->SetEventCallbackFunction(BIND_EVENT_TO_FN(Application::OnEvent));
 
 		m_imGuiLayer = new AIngine::UI::ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
 
+		// create asset factories
 		{
 			using namespace AIngine::Assets;
 
@@ -42,11 +44,12 @@ namespace AIngine {
 				);
 		}
 
+		// create scenegraph
 		m_sceneGraph = new AIngine::Rendering::SceneGraph();
-
+		PushOverlay(m_sceneGraph);
 
 		std::string vertexPath("assets/Intellgine/shader/screenshader/vertexScreen.glsl");
-		std::string fragPath("assets/Intellgine/shader//screenshader/fragmentScreen.glsl");
+		std::string fragPath("assets/Intellgine/shader/screenshader/fragmentScreen.glsl");
 		std::string path;
 		path.append(vertexPath);
 		path.append(";");
@@ -56,7 +59,7 @@ namespace AIngine {
 
 		CORE_INFO("Loaded ShaderProgram with {0} ", shaderAsset->GetShader().GetID());
 
-
+		// create sprite renderer
 		m_renderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());
 
 	}
@@ -65,6 +68,9 @@ namespace AIngine {
 	{
 		CORE_INFO("Destructor Application");
 	}
+
+	static float s_currentFrame = 0.0f;
+	static float s_lastFrame = 0.0f;
 
 	void Application::Run()
 	{
@@ -76,24 +82,32 @@ namespace AIngine {
 
 		glfwSetTime(0);
 
+		// the game loop
 		while (m_isRunning)
 		{
-			glClearColor(0.5, 0.5, 1, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			// calc delta time
+			s_currentFrame = glfwGetTime();
+			m_deltaTime = s_currentFrame - s_lastFrame;
+			s_lastFrame = s_currentFrame;
 
+			// handle user input
+			m_window->PollInput();
+
+			// update logic
 			for (Layer* layer : m_layerStack)
 				layer->OnUpdate(GetDeltaTime());
 
+			// scene rendering
+			m_renderer->Render(&m_sceneGraph->GetRoot());
+
+			// ui rendering
 			m_imGuiLayer->OnBegin();
 			for (Layer* layer : m_layerStack)
 				layer->OnImGuiRender();
 			m_imGuiLayer->OnEnd();
 
-			m_renderer->Render(&m_sceneGraph->GetRoot());
-
+			// finish the frame
 			m_window->OnUpdate();
-
-			//glfwSetTime(0);
 		}
 
 		CORE_INFO("Shutting App down...");
@@ -102,7 +116,6 @@ namespace AIngine {
 
 		// destroy our window
 		m_window = NULL;
-		delete m_sceneGraph;
 		delete m_renderer;
 	}
 
@@ -138,13 +151,12 @@ namespace AIngine {
 
 	float Application::GetDeltaTime()
 	{
-		//return (1.0f / 60.0f);
-		return (float)glfwGetTime();
+		return m_deltaTime;
 	}
 
 	bool Application::OnWindowClose(AIngine::Events::WindowCloseEvent & e)
 	{
-		CORE_INFO("OnWindowClose");
+		CORE_INFO(e.ToString());
 
 		//stop running
 		m_isRunning = false;

@@ -47,6 +47,8 @@ namespace AIngine {
 		AIngine::Assets::AssetRegistry m_assetRegistry;
 		AIngine::Rendering::SpriteRenderer* m_renderer;
 		static Application* s_instance;
+		float m_deltaTime = 0.0f;
+		
 
 	};
 
