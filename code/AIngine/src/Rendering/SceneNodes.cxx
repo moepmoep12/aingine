@@ -23,7 +23,7 @@ namespace AIngine::Rendering {
 
 	glm::vec2 & ShapeNode::GetSize()
 	{
-		m_size = glm::vec2(m_texture->Width, m_texture->Height);
+		m_size = glm::vec2(m_texture->Width * m_scale.x, m_texture->Height * m_scale.y);
 		return m_size;
 	}
 
