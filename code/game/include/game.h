@@ -14,5 +14,5 @@ public:
 	virtual void OnAppUpdate() override;
 
 
-	Texture2D* texture;
+	//Texture2D* texture;
 };
