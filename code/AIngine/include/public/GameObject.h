@@ -83,6 +83,7 @@ namespace AIngine {
 		virtual bool Accept(Traverser& traverser);
 
 		GameObject() = delete;
+		GameObject(GameObject* parent, const std::string& name);
 		~GameObject();
 
 	private:
@@ -95,9 +96,9 @@ namespace AIngine {
 		GameObject* m_parent;
 
 
-		friend class SceneGraph;
 	protected:
-		GameObject(GameObject* parent, const std::string& name);
+		friend class SceneGraph;
+
 		//~GameObject();
 	};
 }

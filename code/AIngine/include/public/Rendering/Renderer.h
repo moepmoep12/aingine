@@ -10,14 +10,14 @@ namespace AIngine::Rendering {
 	public:
 
 		SpriteRenderer(GLShaderProgram* shader);
-		~SpriteRenderer();
+		virtual ~SpriteRenderer();
 
 		// Inherited via Traverser
+		virtual bool Traverse(GameObject* root) override;
+
 		virtual bool Enter(GameObject & node) override;
 		virtual bool Leave(GameObject & node) override;
 		virtual bool Visit(GameObject & node) override;
-
-		void Render(GameObject* root);
 
 	private:
 		std::vector<glm::mat4> m_matrixStack;

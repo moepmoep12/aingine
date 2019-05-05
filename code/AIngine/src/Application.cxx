@@ -74,6 +74,9 @@ namespace AIngine {
 
 	void Application::Run()
 	{
+		// create physics world
+		m_physicsWorld = new b2World(m_gravity);
+
 		OnAppStartUp();
 
 		CORE_INFO("App is running!");
@@ -100,7 +103,7 @@ namespace AIngine {
 				layer->OnUpdate(GetDeltaTime());
 
 			// scene rendering
-			m_renderer->Render(&m_sceneGraph->GetRoot());
+			m_renderer->Traverse(&m_sceneGraph->GetRoot());
 
 			// ui rendering
 			m_imGuiLayer->OnBegin();
@@ -118,7 +121,10 @@ namespace AIngine {
 
 		// destroy our window
 		m_window = NULL;
+		// destroy our renderer
 		delete m_renderer;
+		// destroy our physics world
+		delete m_physicsWorld;
 	}
 
 	void Application::OnEvent(AIngine::Events::Event & e)

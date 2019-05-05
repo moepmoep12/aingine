@@ -1,8 +1,11 @@
-#include "Rendering/SceneGraph.h"
+#include "SceneGraph.h"
 #include <sstream>
 #include "log.h"
 #include "imgui.h"
 #include "Application.h"
+#include "Component.h"
+#include "GameObject.h"
+
 
 namespace AIngine {
 
@@ -15,7 +18,8 @@ namespace AIngine {
 
 	SceneGraph::~SceneGraph()
 	{
-		DeleteTraverser deleteTreeTraverser(m_Root, m_gameObjectPool);
+		DeleteTraverser deleteTreeTraverser(m_gameObjectPool);
+		deleteTreeTraverser.Traverse(m_Root);
 	}
 
 	GameObject * const SceneGraph::SpawnObject(const std::string & name, GameObject * parent, const glm::vec2 & position, const glm::vec2 & scale, const float rotation)
@@ -33,9 +37,10 @@ namespace AIngine {
 		return newObject;
 	}
 
-	void SceneGraph::DestroyObject( GameObject & gameobject)
+	void SceneGraph::DestroyObject(GameObject & gameobject)
 	{
-		DeleteTraverser deleteTraverser(&gameobject, m_gameObjectPool);
+		DeleteTraverser deleteTraverser(m_gameObjectPool);
+		deleteTraverser.Traverse(&gameobject);
 	}
 
 	//bool SceneGraph::RemoveNode(SceneNode * node)
@@ -45,6 +50,12 @@ namespace AIngine {
 	//}
 
 	static GameObject* s_selectedNode = nullptr;
+
+	void SceneGraph::OnUpdate(float delta)
+	{
+		UpdateTraverser updateTraverser(delta);
+		updateTraverser.Traverse(m_Root);
+	}
 
 	void SceneGraph::OnImGuiRender()
 	{
@@ -66,8 +77,8 @@ namespace AIngine {
 		ImGui::Separator();
 
 		// traverse tree and create tree with imgui
-		AIngine::UI::ImguiTreeTraverser traverser(m_Root);
-		traverser.Traverse();
+		AIngine::UI::ImguiTreeTraverser traverser;
+		traverser.Traverse(m_Root);
 
 		ImGui::Columns(1);
 		ImGui::Separator();
@@ -92,7 +103,7 @@ namespace AIngine {
 
 	namespace UI {
 
-		ImguiTreeTraverser::ImguiTreeTraverser(GameObject * root) : m_root(root)
+		ImguiTreeTraverser::ImguiTreeTraverser()
 		{
 
 		}
@@ -100,6 +111,17 @@ namespace AIngine {
 		ImguiTreeTraverser::~ImguiTreeTraverser()
 		{
 			m_openNodesMap.clear();
+		}
+
+		bool ImguiTreeTraverser::Traverse(GameObject * root)
+		{
+			// root is always open
+			ImGui::SetNextTreeNodeOpen(true);
+
+			ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, ImGui::GetFontSize() * 2); // Increase spacing to differentiate leaves from expanded contents.
+			bool result = root->Accept(*this);
+			ImGui::PopStyleVar();
+			return result;
 		}
 
 		bool ImguiTreeTraverser::Enter(GameObject & node)
@@ -166,40 +188,36 @@ namespace AIngine {
 
 			return true;
 		}
-
-		void ImguiTreeTraverser::Traverse()
-		{
-			// root is always open
-			ImGui::SetNextTreeNodeOpen(true);
-
-			ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, ImGui::GetFontSize() * 2); // Increase spacing to differentiate leaves from expanded contents.
-			m_root->Accept(*this);
-			ImGui::PopStyleVar();
-		}
-
 	}
 	/********************************** DELETE TRAVERSER ****************************************/
 
-	DeleteTraverser::DeleteTraverser(GameObject* node, AIngine::Memory::Pool<GameObject>& gameObjectPool)
+	DeleteTraverser::DeleteTraverser(AIngine::Memory::Pool<GameObject>& gameObjectPool)
 		: m_gameObjectPool(&gameObjectPool)
 	{
-		GameObject* parent = &node->GetParent();
 
-		if (parent) {
-			parent->RemoveChild(node);
-		}
-
-		node->Accept(*this);
-
-		for (auto it = m_gameObjectsToDelete.begin(); it < m_gameObjectsToDelete.end(); it++) {
-			m_gameObjectPool->Free(*it);
-			(*it)->~GameObject();
-		}
 	}
 
 	DeleteTraverser::~DeleteTraverser()
 	{
 		m_gameObjectsToDelete.clear();
+	}
+
+	bool DeleteTraverser::Traverse(GameObject* root)
+	{
+		GameObject* parent = &root->GetParent();
+
+		if (parent) {
+			parent->RemoveChild(root);
+		}
+
+		bool result = root->Accept(*this);
+
+		for (auto it = m_gameObjectsToDelete.begin(); it < m_gameObjectsToDelete.end(); it++) {
+			m_gameObjectPool->Free(*it);
+			(*it)->~GameObject();
+		}
+
+		return result;
 	}
 
 	bool DeleteTraverser::Enter(GameObject & node)
@@ -215,6 +233,55 @@ namespace AIngine {
 	bool DeleteTraverser::Visit(GameObject & node)
 	{
 		m_gameObjectsToDelete.push_back(&node);
+		return true;
+	}
+
+	/********************************** UPDATE TRAVERSER ****************************************/
+
+
+	UpdateTraverser::UpdateTraverser(float deltaTime) : m_deltaTime(deltaTime)
+	{
+	}
+
+	UpdateTraverser::~UpdateTraverser()
+	{
+	}
+
+	bool UpdateTraverser::Traverse(GameObject * root)
+	{
+		return	root->Accept(*this);
+	}
+
+	bool UpdateTraverser::Enter(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+
+		while (it != node.GetComponents().end()) {
+			Component* comp = *it._Ptr;
+			if (comp->IsActive()) {
+				comp->OnUpdate(m_deltaTime);
+			}
+			it++;
+		}
+		return true;
+	}
+
+	bool UpdateTraverser::Leave(GameObject & node)
+	{
+		return true;
+	}
+
+	bool UpdateTraverser::Visit(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+
+		while (it != node.GetComponents().end()) {
+			Component* comp = *it._Ptr;
+			if (comp->IsActive()) {
+				comp->OnUpdate(m_deltaTime);
+			}
+			it++;
+		}
 		return true;
 	}
 

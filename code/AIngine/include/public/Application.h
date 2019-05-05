@@ -8,7 +8,8 @@
 #include "LayerStack.h"
 #include "Assets.h"
 #include "Rendering/Renderer.h"
-#include "Rendering/SceneGraph.h"
+#include "SceneGraph.h"
+#include "Box2D/Box2D.h"
 
 namespace AIngine {
 
@@ -31,6 +32,8 @@ namespace AIngine {
 	protected:
 
 		SceneGraph* m_sceneGraph;
+		b2World* m_physicsWorld;
+		b2Vec2 m_gravity;
 
 		virtual void OnAppStartUp() = 0;
 		virtual void OnAppShutDown() = 0;

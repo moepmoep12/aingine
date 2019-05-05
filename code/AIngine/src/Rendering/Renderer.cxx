@@ -42,16 +42,6 @@ namespace AIngine::Rendering {
 		m_shader->SetMatrix4("projection", projection);
 	}
 
-	void AIngine::Rendering::SpriteRenderer::Render(GameObject * root)
-	{
-		m_shader->Use();
-		m_matrixStack.clear();
-		//m_matrixStack.push_back(glm::mat4(1.0f));
-		m_modelViewMatrix = glm::mat4(1.0f);
-
-		root->Accept(*this);
-	}
-
 	SpriteRenderer::SpriteRenderer(GLShaderProgram* shader)
 	{
 		m_shader = shader;
@@ -61,6 +51,17 @@ namespace AIngine::Rendering {
 	SpriteRenderer::~SpriteRenderer()
 	{
 		glDeleteVertexArrays(1, &this->m_quadVAO);
+	}
+
+	bool SpriteRenderer::Traverse(GameObject * root)
+	{
+		m_shader->Use();
+		m_matrixStack.clear();
+		//m_matrixStack.push_back(glm::mat4(1.0f));
+		m_modelViewMatrix = glm::mat4(1.0f);
+
+		return root->Accept(*this);
+
 	}
 
 	bool SpriteRenderer::Enter(GameObject & node)

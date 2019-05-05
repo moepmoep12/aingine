@@ -13,6 +13,7 @@ namespace AIngine {
 
 		GameObject& GetRoot() { return *m_Root; }
 
+		virtual void OnUpdate(float delta) override;
 		virtual void OnImGuiRender() override;
 
 		GameObject* const SpawnObject(const std::string& name = std::string("GameObject"), GameObject* parent = nullptr, const glm::vec2& position = glm::vec2(0.0f), const glm::vec2& scale = glm::vec2(1.0f), const float rotation = 0.0f);
@@ -34,10 +35,13 @@ namespace AIngine {
 	class DeleteTraverser : public Traverser {
 
 	public:
-		DeleteTraverser(GameObject* node, AIngine::Memory::Pool<GameObject>& gameObjectPool);
-		~DeleteTraverser();
+		DeleteTraverser( AIngine::Memory::Pool<GameObject>& gameObjectPool);
+		virtual ~DeleteTraverser();
 
 		// Inherited via Traverser
+
+		virtual bool Traverse(GameObject* root) override;
+
 		virtual bool Enter(GameObject & node) override;
 		virtual bool Leave(GameObject & node) override;
 		virtual bool Visit(GameObject & node) override;
@@ -45,6 +49,24 @@ namespace AIngine {
 	private:
 		std::vector<GameObject*> m_gameObjectsToDelete;
 		AIngine::Memory::Pool<GameObject>* m_gameObjectPool;
+	};
+
+	class UpdateTraverser : public Traverser {
+	public:
+
+		UpdateTraverser(float deltaTime);
+		virtual ~UpdateTraverser();
+
+		// Inherited via Traverser
+
+		virtual bool Traverse(GameObject* root) override;
+
+		virtual bool Enter(GameObject & node) override;
+		virtual bool Leave(GameObject & node) override;
+		virtual bool Visit(GameObject & node) override;
+
+	private:
+		float m_deltaTime;
 	};
 
 
@@ -55,19 +77,17 @@ namespace AIngine::UI {
 	// Creates a GUI for the scenegraph
 	class ImguiTreeTraverser : public Traverser {
 	public:
-		ImguiTreeTraverser(GameObject* root);
-		~ImguiTreeTraverser();
+		ImguiTreeTraverser();
+		virtual ~ImguiTreeTraverser();
 
 		// Inherited via Traverser
+		virtual bool Traverse(GameObject* root) override;
+
 		virtual bool Enter(GameObject & node) override;
 		virtual bool Leave(GameObject & node) override;
 		virtual bool Visit(GameObject & node) override;
 
-		void Traverse();
-
 	private:
-		GameObject* m_root;
-
 		// we keep track which nodes are open in the editor 
 		// since we need to know when a subtree is finished in imgui
 		std::unordered_map<GameObject*, bool> m_openNodesMap;
