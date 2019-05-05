@@ -6,19 +6,18 @@
 
 namespace AIngine::Rendering {
 
-	class SpriteRenderer : public Traverser {
+	class SpriteRenderer : public AIngine::Traverser {
 	public:
 
 		SpriteRenderer(GLShaderProgram* shader);
 		~SpriteRenderer();
 
 		// Inherited via Traverser
-		virtual bool Enter(GroupNode & node) override;
-		virtual bool Leave(GroupNode & node) override;
-		//virtual bool Visit(SceneNode & node) override;
-		virtual bool Visit(ShapeNode & node) override;
+		virtual bool Enter(GameObject & node) override;
+		virtual bool Leave(GameObject & node) override;
+		virtual bool Visit(GameObject & node) override;
 
-		void Render(SceneNode* root);
+		void Render(GameObject* root);
 
 	private:
 		std::vector<glm::mat4> m_matrixStack;

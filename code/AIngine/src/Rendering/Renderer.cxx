@@ -1,5 +1,6 @@
 #include "Rendering/Renderer.h"
 #include "Application.h"
+#include "Rendering/texture.h"
 
 namespace AIngine::Rendering {
 
@@ -31,17 +32,17 @@ namespace AIngine::Rendering {
 		glBindVertexArray(0);
 
 		Application& app = AIngine::Application::Get();
-		GLfloat width = static_cast<GLfloat>( app.GetWindow().GetWidth());
+		GLfloat width = static_cast<GLfloat>(app.GetWindow().GetWidth());
 		GLfloat height = static_cast<GLfloat>(app.GetWindow().GetHeight());
 
-		glm::mat4 projection = glm::ortho(0.0f, width,height, 0.0f, -1.0f, 1.0f);
+		glm::mat4 projection = glm::ortho(0.0f, width, height, 0.0f, -1.0f, 1.0f);
 
 		// configure shader
 		m_shader->SetInteger("image", 0, true);
 		m_shader->SetMatrix4("projection", projection);
 	}
 
-	void AIngine::Rendering::SpriteRenderer::Render(SceneNode * root)
+	void AIngine::Rendering::SpriteRenderer::Render(GameObject * root)
 	{
 		m_shader->Use();
 		m_matrixStack.clear();
@@ -62,55 +63,56 @@ namespace AIngine::Rendering {
 		glDeleteVertexArrays(1, &this->m_quadVAO);
 	}
 
-	bool SpriteRenderer::Enter(GroupNode & node)
+	bool SpriteRenderer::Enter(GameObject & node)
 	{
 		m_matrixStack.push_back(m_modelViewMatrix);
-		m_modelViewMatrix *= node.GetTransform();
-		m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(node.GetPosition(), 0.0f));
-		m_modelViewMatrix = glm::rotate(m_modelViewMatrix, node.GetRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
-		m_modelViewMatrix = glm::scale(m_modelViewMatrix, glm::vec3(node.GetScale(), 1.0f));
-
+		//m_modelViewMatrix *= node.GetTransform();
+		m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(node.GetLocalPosition(), 0.0f));
+		m_modelViewMatrix = glm::rotate(m_modelViewMatrix, node.GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
+		m_modelViewMatrix = glm::scale(m_modelViewMatrix, glm::vec3(node.GetLocalScale(), 1.0f));
 		return true;
+
 	}
-	bool SpriteRenderer::Leave(GroupNode & node)
+	bool SpriteRenderer::Leave(GameObject & node)
 	{
 		m_modelViewMatrix = m_matrixStack.back();
 		m_matrixStack.pop_back();
 		return true;
 	}
-	//bool SpriteRenderer::Visit(SceneNode & node)
-	//{
-	//	/******************************* TO DO *************************/
-	//	return false;
-	//}
-	bool SpriteRenderer::Visit(ShapeNode & node)
+	bool SpriteRenderer::Visit(GameObject & node)
 	{
-		m_matrixStack.push_back(m_modelViewMatrix);
+		const Texture2D* textureComponent = node.GetComponent<Texture2D>();
 
-		m_modelViewMatrix *= node.GetTransform();
-		m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(node.GetPosition(), 0.0f));
+		if (textureComponent) {
+			m_matrixStack.push_back(m_modelViewMatrix);
 
-		m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(0.5f * node.GetSize().x, 0.5f * node.GetSize().y, 0.0f));
-		m_modelViewMatrix = glm::rotate(m_modelViewMatrix, node.GetRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
-		m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(-0.5f * node.GetSize().x, -0.5f * node.GetSize().y, 0.0f));
+			//m_modelViewMatrix *= node.GetTransform();
+			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(node.GetLocalPosition(), 0.0f));
 
-		m_modelViewMatrix = glm::scale(m_modelViewMatrix, glm::vec3(node.GetSize(), 1.0f));
+			glm::vec2 textureSize = glm::vec2(node.GetLocalScale().x * textureComponent->Width, node.GetLocalScale().y * textureComponent->Height);
 
-		m_shader->SetMatrix4("model", m_modelViewMatrix);
-		m_shader->SetVector3f("spriteColor", node.GetColor());
+			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(0.5f * textureSize.x, 0.5f * textureSize.y, 0.0f));
+			m_modelViewMatrix = glm::rotate(m_modelViewMatrix, node.GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
+			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(-0.5f * textureSize.x, -0.5f * textureSize.y, 0.0f));
 
+			m_modelViewMatrix = glm::scale(m_modelViewMatrix, glm::vec3(textureSize, 1.0f));
 
-		glActiveTexture(GL_TEXTURE0);
-		node.GetTexture().Bind();
+			m_shader->SetMatrix4("model", m_modelViewMatrix);
+			m_shader->SetVector3f("spriteColor", textureComponent->GetColor());
 
-		glBindVertexArray(m_quadVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		glBindVertexArray(0);
+			glActiveTexture(GL_TEXTURE0);
+			textureComponent->Bind();
 
-		m_modelViewMatrix = m_matrixStack.back();
-		m_matrixStack.pop_back();
+			glBindVertexArray(m_quadVAO);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+			glBindVertexArray(0);
 
-		return true;
+			m_modelViewMatrix = m_matrixStack.back();
+			m_matrixStack.pop_back();
+
+			return true;
+		}
+		else return false;
 	}
 }
 
