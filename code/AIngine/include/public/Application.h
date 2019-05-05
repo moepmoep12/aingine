@@ -30,7 +30,7 @@ namespace AIngine {
 
 	protected:
 
-		AIngine::Rendering::SceneGraph* m_sceneGraph;
+		SceneGraph* m_sceneGraph;
 
 		virtual void OnAppStartUp() = 0;
 		virtual void OnAppShutDown() = 0;

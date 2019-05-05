@@ -45,7 +45,7 @@ namespace AIngine {
 		}
 
 		// create scenegraph
-		m_sceneGraph = new AIngine::Rendering::SceneGraph();
+		m_sceneGraph = new SceneGraph();
 		PushOverlay(m_sceneGraph);
 
 		std::string vertexPath("assets/Intellgine/shader/screenshader/vertexScreen.glsl");
@@ -92,6 +92,8 @@ namespace AIngine {
 
 			// handle user input
 			m_window->PollInput();
+
+			OnAppUpdate();
 
 			// update logic
 			for (Layer* layer : m_layerStack)
