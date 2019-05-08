@@ -62,6 +62,9 @@ namespace AIngine {
 		// create sprite renderer
 		m_renderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());
 
+		// create camera
+		m_camera = new AIngine::Rendering::Camera();
+
 	}
 
 	Application::~Application()
@@ -125,6 +128,8 @@ namespace AIngine {
 		delete m_renderer;
 		// destroy our physics world
 		delete m_physicsWorld;
+		// destroy camera
+		delete m_camera;
 	}
 
 	void Application::OnEvent(AIngine::Events::Event & e)

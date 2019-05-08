@@ -31,7 +31,7 @@ namespace AIngine::Rendering {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 
-		Application& app = AIngine::Application::Get();
+		const Application& app = AIngine::Application::Get();
 		GLfloat width = static_cast<GLfloat>(app.GetWindow().GetWidth());
 		GLfloat height = static_cast<GLfloat>(app.GetWindow().GetHeight());
 
@@ -59,6 +59,7 @@ namespace AIngine::Rendering {
 		m_matrixStack.clear();
 		//m_matrixStack.push_back(glm::mat4(1.0f));
 		m_modelViewMatrix = glm::mat4(1.0f);
+		m_shader->SetMatrix4("view", AIngine::Application::Get().GetCamera().GetTransform());
 
 		return root->Accept(*this);
 
@@ -84,13 +85,13 @@ namespace AIngine::Rendering {
 	{
 		const Texture2D* textureComponent = node.GetComponent<Texture2D>();
 
-		if (textureComponent) {
+		if (textureComponent && textureComponent->IsActive()) {
 			m_matrixStack.push_back(m_modelViewMatrix);
 
 			//m_modelViewMatrix *= node.GetTransform();
 			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(node.GetLocalPosition(), 0.0f));
 
-			glm::vec2 textureSize = glm::vec2(node.GetLocalScale().x * textureComponent->Width, node.GetLocalScale().y * textureComponent->Height);
+			glm::vec2 textureSize = textureComponent->GetLocalSize(); //glm::vec2(node.GetLocalScale().x * textureComponent->Width, node.GetLocalScale().y * textureComponent->Height);
 
 			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(0.5f * textureSize.x, 0.5f * textureSize.y, 0.0f));
 			m_modelViewMatrix = glm::rotate(m_modelViewMatrix, node.GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));

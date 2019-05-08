@@ -1,4 +1,5 @@
 #include "Rendering/texture.h"
+#include "GameObject.h"
 
 namespace AIngine::Rendering {
 	Texture2D::Texture2D(GameObject* owner)
@@ -42,5 +43,10 @@ namespace AIngine::Rendering {
 	void Texture2D::Bind() const
 	{
 		glBindTexture(GL_TEXTURE_2D, this->ID);
+	}
+	const glm::vec2 & Texture2D::GetLocalSize() const
+	{
+		glm::vec2 textureSize = glm::vec2(m_owner->GetLocalScale().x * Width, m_owner->GetLocalScale().y * Height);
+		return textureSize;
 	}
 }

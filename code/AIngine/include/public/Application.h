@@ -10,6 +10,7 @@
 #include "Rendering/Renderer.h"
 #include "SceneGraph.h"
 #include "Box2D/Box2D.h"
+#include "Rendering/Camera.h"
 
 namespace AIngine {
 
@@ -27,6 +28,8 @@ namespace AIngine {
 
 		inline static Application& Get() { return *s_instance; }
 		inline const Window& GetWindow() const { return *m_window; }
+		inline const b2World& GetPhysicsWorld() const { return *m_physicsWorld; }
+		inline const AIngine::Rendering::Camera& GetCamera() const { return *m_camera; }
 		inline  AIngine::Assets::AssetRegistry& GetAssetRegistry() { return m_assetRegistry; }
 
 	protected:
@@ -34,6 +37,7 @@ namespace AIngine {
 		SceneGraph* m_sceneGraph;
 		b2World* m_physicsWorld;
 		b2Vec2 m_gravity;
+		AIngine::Rendering::Camera* m_camera;
 
 		virtual void OnAppStartUp() = 0;
 		virtual void OnAppShutDown() = 0;
@@ -51,7 +55,7 @@ namespace AIngine {
 		AIngine::Rendering::SpriteRenderer* m_renderer;
 		static Application* s_instance;
 		float m_deltaTime = 0.0f;
-		
+
 
 	};
 

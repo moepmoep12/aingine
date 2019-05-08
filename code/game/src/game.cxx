@@ -3,6 +3,7 @@
 #include "Layer.h"
 #include "Core.h"
 #include "Rendering/texture.h"
+#include <glm/glm.hpp>
 #include <random>
 
 AIngine::Application* AIngine::CreateApplication() {
@@ -87,6 +88,11 @@ void Game::OnAppStartUp()
 		//AIngine::GameObject* secondObject = m_sceneGraph->SpawnObject(std::string("SecondObejct"), firstObject);
 		//AIngine::Rendering::Texture2D* texture = secondObject->AddComponent<AIngine::Rendering::Texture2D>();
 		//texture->Generate(bitmap->GetBitmap());
+
+		//AIngine::GameObject* obj = m_sceneGraph->SpawnObject();
+		//AIngine::Rendering::Texture2D* texture = obj->AddComponent<AIngine::Rendering::Texture2D>();
+		//AIngine::Assets::BitmapAsset* bitmap = app.GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
+		//texture->Generate(bitmap->GetBitmap());
 	}
 
 }
@@ -99,9 +105,10 @@ void Game::OnAppShutDown()
 
 void Game::OnAppUpdate()
 {
+	Application& app = AIngine::Application::Get();
+
 	// spawning sprites with random shapes
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::SPACE)) {
-		Application& app = AIngine::Application::Get();
 		int width = app.GetWindow().GetWidth();
 		int height = app.GetWindow().GetHeight();
 		static float maxSizeX = 2.0;
@@ -114,25 +121,61 @@ void Game::OnAppUpdate()
 
 
 		AIngine::GameObject* obj = m_sceneGraph->SpawnObject();
-		float posX = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / width));
-		float posY = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / height));
-		obj->SetLocalPosition(glm::vec2(posX, posY));
+		AIngine::Rendering::Texture2D* texture = obj->AddComponent<AIngine::Rendering::Texture2D>();
+		AIngine::Assets::BitmapAsset* bitmap = app.GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
+		texture->Generate(bitmap->GetBitmap());
 
 		float sizeX = minSizeX + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxSizeX));
 		float sizeY = minSizeY + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxSizeY));
 		obj->SetLocalScale(glm::vec2(sizeX, sizeY));
 
+		glm::vec2 textureSize = glm::vec2(obj->GetLocalScale().x * texture->Width, obj->GetLocalScale().y * texture->Height);
+		float posX = static_cast <float> (rand() - textureSize.x) / (static_cast <float> (RAND_MAX / width));
+		float posY = static_cast <float> (rand() - textureSize.y) / (static_cast <float> (RAND_MAX / height));
+		obj->SetLocalPosition(glm::vec2(posX, posY));
+
 		float rot = minRot + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxRot));
 		obj->SetRotation(rot);
-
-		AIngine::Rendering::Texture2D* texture = obj->AddComponent<AIngine::Rendering::Texture2D>();
-		AIngine::Assets::BitmapAsset* bitmap = app.GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
-		texture->Generate(bitmap->GetBitmap());
 
 		float red = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		float green = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		float blue = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		obj->GetComponent<AIngine::Rendering::Texture2D>()->SetColor(glm::vec3(red, green, blue));
+	}
+
+	static float translationrate = 0.5;
+	static float rotationrate = 5;
+
+	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::A))
+	{
+		m_camera->Translate(glm::vec2(-translationrate, 0.0));
+	}
+
+	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::D))
+	{
+		m_camera->Translate(glm::vec2(translationrate, 0.0));
+	}
+
+
+	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::W))
+	{
+		m_camera->Translate(glm::vec2(0.0, translationrate));
+	}
+
+
+	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::S))
+	{
+		m_camera->Translate(glm::vec2(0.0, -translationrate));
+	}
+
+	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::E))
+	{
+		m_camera->Rotate(rotationrate *  D2R * GetDeltaTime());
+	}
+
+	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::Q))
+	{
+		m_camera->Rotate(-rotationrate *  D2R * GetDeltaTime());
 	}
 }
 

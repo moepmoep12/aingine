@@ -28,7 +28,7 @@ namespace AIngine::Rendering {
 
 		// Constructor (sets default texture modes)
 		Texture2D(GameObject* owner);
-		virtual ~Texture2D() ;
+		virtual ~Texture2D();
 
 		// Generates texture from a bitmap
 		void Generate(Bitmap &texture);
@@ -38,6 +38,8 @@ namespace AIngine::Rendering {
 
 		inline const glm::vec3& GetColor() const { return m_spriteColor; }
 		inline void SetColor(const glm::vec3& color) { m_spriteColor = color; }
+
+		const glm::vec2& GetLocalSize() const;
 
 	private:
 		glm::vec3 m_spriteColor;

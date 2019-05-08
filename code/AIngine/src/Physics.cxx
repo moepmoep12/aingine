@@ -1,13 +1,18 @@
 #include "Physics.h"
+#include "Application.h"
 
-AIngine::PhysicsComponent::PhysicsComponent(GameObject * owner) : Component(owner)
-{
-}
+namespace AIngine {
+	PhysicsComponent::PhysicsComponent(GameObject * owner) : Component(owner)
+	{
+		const Application& app = Application::Get();
+		const b2World& physWorld = app.GetPhysicsWorld();
+	}
 
-AIngine::PhysicsComponent::~PhysicsComponent()
-{
-}
+	PhysicsComponent::~PhysicsComponent()
+	{
+	}
 
-void AIngine::PhysicsComponent::OnUpdate(float deltatime)
-{
+	void PhysicsComponent::OnUpdate(float deltatime)
+	{
+	}
 }

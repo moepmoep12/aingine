@@ -50,7 +50,7 @@ namespace AIngine::UI {
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
-		Application& app = Application::Get();
+		const Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
 		// Setup Platform/Renderer bindings
@@ -75,7 +75,7 @@ namespace AIngine::UI {
 	void ImGuiLayer::OnEnd()
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::Get();
+		const Application& app = Application::Get();
 		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
 
 		// Rendering
