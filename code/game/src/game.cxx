@@ -34,8 +34,7 @@ Game::Game()
 {
 	DEBUG_WARN("Creating Game...");
 	PushLayer(new ExampleLayer());
-
-
+	m_gravity = (b2Vec2(0.0, -10.0));
 }
 
 Game::~Game()
