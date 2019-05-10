@@ -4,6 +4,16 @@
 #include "Component.h"
 
 namespace AIngine {
+	glm::vec2 GameObject::GetWorldPosition() const
+	{
+		GameObject* parent = m_parent;
+		glm::vec2 result = m_position;
+		while (parent) {
+			result += parent->m_position;
+			parent = parent->m_parent;
+		}
+		return result;
+	}
 	const glm::mat4 & GameObject::GetLocalTransform() const
 	{
 		glm::mat4 result = glm::mat4(1.0);

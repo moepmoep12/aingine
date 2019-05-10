@@ -67,6 +67,7 @@ namespace AIngine {
 		inline glm::vec2& GetLocalPosition() { return m_position; }
 		inline void SetLocalPosition(const glm::vec2 position) { m_position = position; }
 
+
 		inline glm::vec2& GetLocalScale() { return m_scale; }
 		inline void SetLocalScale(const glm::vec2 scale) { m_scale = scale; }
 
@@ -76,6 +77,7 @@ namespace AIngine {
 		inline const std::vector<GameObject*>& GetChildren() { return m_children; }
 
 		const glm::mat4& GetLocalTransform() const;
+		glm::vec2 GetWorldPosition() const;
 		void AddChild(GameObject* obj);
 		void RemoveChild(GameObject* obj);
 
