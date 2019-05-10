@@ -11,6 +11,7 @@
 #include "SceneGraph.h"
 #include "Box2D/Box2D.h"
 #include "Rendering/Camera.h"
+#include "Rendering/Viewport.h"
 
 namespace AIngine {
 
@@ -29,7 +30,8 @@ namespace AIngine {
 		inline static Application& Get() { return *s_instance; }
 		inline const Window& GetWindow() const { return *m_window; }
 		inline const b2World& GetPhysicsWorld() const { return *m_physicsWorld; }
-		inline const AIngine::Rendering::Camera& GetCamera() const { return *m_camera; }
+		inline  AIngine::Rendering::Camera& GetCamera() const { return *m_camera; }
+		inline const AIngine::Rendering::Viewport& GetViewport() const { return *m_viewport; }
 		inline  AIngine::Assets::AssetRegistry& GetAssetRegistry() { return m_assetRegistry; }
 
 	protected:
@@ -53,6 +55,7 @@ namespace AIngine {
 		AIngine::UI::ImGuiLayer* m_imGuiLayer;
 		AIngine::Assets::AssetRegistry m_assetRegistry;
 		AIngine::Rendering::SpriteRenderer* m_renderer;
+		AIngine::Rendering::Viewport* m_viewport;
 		static Application* s_instance;
 		float m_deltaTime = 0.0f;
 

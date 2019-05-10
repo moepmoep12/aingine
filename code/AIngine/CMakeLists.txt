@@ -35,6 +35,7 @@ set(AINGINE_HEADER
 		include/public/Rendering/texture.h
 		include/public/Rendering/Renderer.h
 		include/public/Rendering/Camera.h
+		include/public/Rendering/Viewport.h
 		include/public/Events/Event.h
 		include/public/Events/ApplicationEvents.h
 		include/public/Events/InputEvents.h	
@@ -65,6 +66,7 @@ set(AINGINE_SRC
 		src/Rendering/texture.cxx
 		src/Rendering/Renderer.cxx
 		src/Rendering/Camera.cxx
+		src/Rendering/Viewport.cxx
 		src/UI/ImGuiLayer.cxx
 		src/log.cxx
 	)

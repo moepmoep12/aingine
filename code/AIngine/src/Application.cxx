@@ -59,11 +59,12 @@ namespace AIngine {
 
 		CORE_INFO("Loaded ShaderProgram with {0} ", shaderAsset->GetShader().GetID());
 
+		m_viewport = new AIngine::Rendering::Viewport(1520, 840, 0, 0, *m_window.get());
+		// create camera
+		m_camera = new AIngine::Rendering::Camera(*m_viewport);
+
 		// create sprite renderer
 		m_renderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());
-
-		// create camera
-		m_camera = new AIngine::Rendering::Camera();
 
 	}
 
@@ -130,6 +131,8 @@ namespace AIngine {
 		delete m_physicsWorld;
 		// destroy camera
 		delete m_camera;
+
+		delete m_viewport;
 	}
 
 	void Application::OnEvent(AIngine::Events::Event & e)
