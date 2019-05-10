@@ -10,6 +10,11 @@ AIngine::Application* AIngine::CreateApplication() {
 	return new Game();
 }
 
+// cam settings
+static float translationrate = 5;
+static float rotationrate = 0.1;
+static float zoomSpeed = 5;
+
 
 class ExampleLayer :public  AIngine::Layer {
 
@@ -24,6 +29,53 @@ public:
 		//DEBUG_INFO(e.ToString().c_str());
 
 	}
+
+	virtual void OnImGuiRender() override
+	{
+		if (ImGui::Begin("Camera"))
+		{
+			AIngine::Application& app = AIngine::Application::Get();
+			AIngine::Rendering::Camera& cam = app.GetCamera();
+
+			// cam settings
+			static float dragspeed = 0.1f;
+			float camzoom = cam.GetZoom();
+			ImGui::DragFloat("Zoom", &camzoom, dragspeed, cam.GetZoomMin(), cam.GetZoomMax());
+			ImGui::DragFloat("MoveSpeed", &translationrate, dragspeed, 0.01f, 1000.0f);
+			ImGui::DragFloat("RotationSpeed", &rotationrate, dragspeed, 0.01f, 1000.0f);
+			cam.SetZoom(camzoom);
+
+			float pos[] = { cam.GetPosition().x, cam.GetPosition().y };
+			ImGui::DragFloat2("Cam Position", pos);
+
+			// mouse positions
+			glm::vec2 mouseScreenPos = glm::vec2(AIngine::Input::GetMouseX(), AIngine::Input::GetMouseY());
+			glm::vec2 mouseWorldPos = cam.ScreenToWorldPoint(mouseScreenPos);
+			glm::vec2 screentopoint = app.GetViewport().PointToScreen(mouseScreenPos);
+			ImGui::Text("Mouse screen Pos (%.1f | %.1f)", mouseScreenPos.x, mouseScreenPos.y);
+			ImGui::Text("ScreenToPoint (%.1f | %.1f)", screentopoint.x, screentopoint.y);
+			ImGui::Text("Mouse world Pos (%.1f | %.1f)", mouseWorldPos.x, mouseWorldPos.y);
+
+
+			// reset camera button
+			if (ImGui::Button("Reset")) {
+				cam.SetPosition(glm::vec2(0));
+				cam.SetZoom(1.0);
+				cam.SetRotation(0.0);
+			}
+
+			static glm::vec2 lookpos(0);
+			static float* lookposvalues[] = { &lookpos.x, &lookpos.y };
+
+			ImGui::DragFloat2("LookPositionX", *lookposvalues);
+			if (ImGui::Button("Look At")) {
+				cam.LookAt(lookpos);
+			}
+
+			ImGui::End();
+		}
+	}
+
 
 	~ExampleLayer() {
 		DEBUG_INFO("Destructor ExampleLayer");
@@ -111,12 +163,14 @@ void Game::OnAppUpdate()
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::SPACE)) {
 		int width = app.GetWindow().GetWidth();
 		int height = app.GetWindow().GetHeight();
-		static float maxSizeX = 2.0;
-		static float maxSizeY = 2.0;
-		static float minSizeX = 0.1;
-		static float minSizeY = 0.1;
+		static float maxSizeX = 700;
+		static float maxSizeY = 700;
+		static float minSizeX = 200;
+		static float minSizeY = 200;
 		static float minRot = -M_PI;
 		static float maxRot = M_PI;
+		static glm::vec2 minWorld(0, 0);
+		static glm::vec2 maxWorld(2000, 1000);
 		static std::string path("assets/game/textures/awesomeface.png");
 
 
@@ -125,26 +179,29 @@ void Game::OnAppUpdate()
 		AIngine::Assets::BitmapAsset* bitmap = app.GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
 		texture->Generate(bitmap->GetBitmap());
 
+		// sprite size
 		float sizeX = minSizeX + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxSizeX));
 		float sizeY = minSizeY + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxSizeY));
-		obj->SetLocalScale(glm::vec2(sizeX, sizeY));
+		texture->SetLocalWorldSize(glm::vec2(sizeX, sizeY));
 
-		glm::vec2 textureSize = glm::vec2(obj->GetLocalScale().x * texture->Width, obj->GetLocalScale().y * texture->Height);
-		float posX = static_cast <float> (rand() - textureSize.x) / (static_cast <float> (RAND_MAX / width));
-		float posY = static_cast <float> (rand() - textureSize.y) / (static_cast <float> (RAND_MAX / height));
+		// position
+		//glm::vec2 textureSize = glm::vec2(obj->GetLocalScale().x * texture->Width, obj->GetLocalScale().y * texture->Height);
+		float posX = minWorld.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxWorld.x));
+		float posY = minWorld.y + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxWorld.y));
 		obj->SetLocalPosition(glm::vec2(posX, posY));
 
+		// rotation
 		float rot = minRot + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxRot));
 		obj->SetRotation(rot);
 
+		// color
 		float red = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		float green = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		float blue = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-		obj->GetComponent<AIngine::Rendering::Texture2D>()->SetColor(glm::vec3(red, green, blue));
+		texture->SetColor(glm::vec3(red, green, blue));
 	}
 
-	static float translationrate = 0.5;
-	static float rotationrate = 5;
+
 
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::A))
 	{
@@ -175,7 +232,18 @@ void Game::OnAppUpdate()
 
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::Q))
 	{
-		m_camera->Rotate(-rotationrate *  D2R * GetDeltaTime());
+		m_camera->Rotate(-rotationrate * D2R * GetDeltaTime());
 	}
+
+	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::F))
+	{
+		m_camera->Zoom(zoomSpeed * GetDeltaTime());
+	}
+
+	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::G))
+	{
+		m_camera->Zoom(-zoomSpeed * GetDeltaTime());
+	}
+
 }
 
