@@ -8,7 +8,7 @@ namespace AIngine::Rendering {
 		glGenTextures(1, &this->ID);
 	}
 
-	Texture2D::~Texture2D() 
+	Texture2D::~Texture2D()
 	{
 		glDeleteTextures(1, &this->ID);
 	}
@@ -48,5 +48,9 @@ namespace AIngine::Rendering {
 	{
 		glm::vec2 textureSize = glm::vec2(m_owner->GetLocalScale().x * Width, m_owner->GetLocalScale().y * Height);
 		return textureSize;
+	}
+	glm::vec2 & Texture2D::GetLocalWorldSize() 
+	{
+		return m_localWorldSize;
 	}
 }

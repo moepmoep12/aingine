@@ -35,7 +35,12 @@ namespace AIngine::Rendering {
 		GLfloat width = static_cast<GLfloat>(app.GetWindow().GetWidth());
 		GLfloat height = static_cast<GLfloat>(app.GetWindow().GetHeight());
 
-		glm::mat4 projection = glm::ortho(0.0f, width, height, 0.0f, -1.0f, 1.0f);
+		Camera& cam = app.GetCamera();
+		const Viewport& viewport = app.GetViewport();
+
+		glViewport(viewport.GetTopLeftCornerPosition().x, height - viewport.GetViewportHeight(), viewport.GetViewportWidth(), viewport.GetViewportHeight());
+
+		glm::mat4 projection = glm::ortho(0.0f, (float)viewport.GetViewportWidth(), (float)viewport.GetViewportHeight(), 0.0f, -1.0f, 1.0f);
 
 		// configure shader
 		m_shader->SetInteger("image", 0, true);
@@ -59,7 +64,7 @@ namespace AIngine::Rendering {
 		m_matrixStack.clear();
 		//m_matrixStack.push_back(glm::mat4(1.0f));
 		m_modelViewMatrix = glm::mat4(1.0f);
-		m_shader->SetMatrix4("view", AIngine::Application::Get().GetCamera().GetTransform());
+		m_shader->SetMatrix4("view", AIngine::Application::Get().GetCamera().GetViewMatrix());
 
 		return root->Accept(*this);
 
@@ -83,7 +88,7 @@ namespace AIngine::Rendering {
 	}
 	bool SpriteRenderer::Visit(GameObject & node)
 	{
-		const Texture2D* textureComponent = node.GetComponent<Texture2D>();
+		Texture2D* textureComponent = node.GetComponent<Texture2D>();
 
 		if (textureComponent && textureComponent->IsActive()) {
 			m_matrixStack.push_back(m_modelViewMatrix);
@@ -91,7 +96,7 @@ namespace AIngine::Rendering {
 			//m_modelViewMatrix *= node.GetTransform();
 			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(node.GetLocalPosition(), 0.0f));
 
-			glm::vec2 textureSize = textureComponent->GetLocalSize(); //glm::vec2(node.GetLocalScale().x * textureComponent->Width, node.GetLocalScale().y * textureComponent->Height);
+			glm::vec2& textureSize = textureComponent->GetLocalWorldSize(); //glm::vec2(node.GetLocalScale().x * textureComponent->Width, node.GetLocalScale().y * textureComponent->Height);
 
 			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(0.5f * textureSize.x, 0.5f * textureSize.y, 0.0f));
 			m_modelViewMatrix = glm::rotate(m_modelViewMatrix, node.GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));

@@ -36,13 +36,17 @@ namespace AIngine::Rendering {
 		// Binds the texture as the current active GL_TEXTURE_2D texture object
 		void Bind() const;
 
-		inline const glm::vec3& GetColor() const { return m_spriteColor; }
+		inline  glm::vec3& GetColor() { return m_spriteColor; }
 		inline void SetColor(const glm::vec3& color) { m_spriteColor = color; }
 
 		const glm::vec2& GetLocalSize() const;
 
+		glm::vec2& GetLocalWorldSize();
+		inline void SetLocalWorldSize(const glm::vec2& size) { m_localWorldSize = size; }
+
 	private:
 		glm::vec3 m_spriteColor;
+		glm::vec2 m_localWorldSize = glm::vec2(0);
 
 	};
 }
