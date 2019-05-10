@@ -3,9 +3,9 @@
 #include "log.h"
 #include "imgui.h"
 #include "Application.h"
-#include "Component.h"
+#include"Rendering/texture.h"
+//#include "Component.h"
 #include "GameObject.h"
-
 
 namespace AIngine {
 
@@ -62,7 +62,7 @@ namespace AIngine {
 		static unsigned int windowWidth = 400;
 		unsigned int windowHeight = AIngine::Application::Get().GetWindow().GetHeight();
 		static bool p_open = true;
-		static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
+		static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse /*| ImGuiWindowFlags_NoMove*/;
 
 		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_FirstUseEver);
 
@@ -92,11 +92,25 @@ namespace AIngine {
 	void SceneGraph::ShowSelectedNodeWidget(GameObject * node)
 	{
 		if (!node) return;
-		ImGui::InputFloat("Position X", &node->GetLocalPosition().x);
-		ImGui::InputFloat("Position Y", &node->GetLocalPosition().y);
-		ImGui::InputFloat("Rotation", &node->GetLocalRotation());
-		ImGui::InputFloat("Scale X", &node->GetLocalScale().x);
-		ImGui::InputFloat("Scale Y", &node->GetLocalScale().y);
+
+		float* position[] = { &node->GetLocalPosition().x ,&node->GetLocalPosition().y };
+		float* scale[] = { &node->GetLocalScale().x , &node->GetLocalScale().y };
+		ImGui::Text("Transform");
+		ImGui::DragFloat2("Position", *position);
+		ImGui::DragFloat2("Scale", *scale);
+		ImGui::DragFloat("Rotation", &node->GetLocalRotation());
+
+		AIngine::Rendering::Texture2D* texture = node->GetComponent<AIngine::Rendering::Texture2D>();
+
+		if (texture) {
+			ImGui::Separator();
+			static float dragSpeed = 0.1f;
+			float* size[] = { &texture->GetLocalWorldSize().x ,&texture->GetLocalWorldSize().y };
+			float* color[] = { &texture->GetColor().x,&texture->GetColor().y ,&texture->GetColor().z };
+			ImGui::Text("Texture Component");
+			ImGui::DragFloat2("WorldSize", *size, dragSpeed, 0.0f, 1000.0f);
+			ImGui::DragFloat3("Color", *color, 0.02, 0.0f, 1.0f);
+		}
 	}
 
 	/********************************** IMGUI TREE TRAVERSER ****************************************/
