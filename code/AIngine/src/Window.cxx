@@ -59,6 +59,7 @@ AIngine::Window::~Window()
 {
 	CORE_INFO("Destructor Window");
 	glfwDestroyWindow(m_window);
+	glfwTerminate();
 }
 
 void AIngine::Window::PollInput()
