@@ -15,6 +15,8 @@ namespace AIngine::Rendering
 		inline glm::vec2 GetCenter() const { return glm::vec2(m_x + m_width * 0.5, m_y + m_height * 0.5); }
 		inline glm::vec2 GetTopLeftCornerPosition() const { return glm::vec2(m_x, m_y); }
 
+		unsigned int GetWindowWidth() const;
+		unsigned int GetWindowHeight() const;
 		glm::mat4 GetScaleMat() const;
 		glm::vec2 PointToScreen(const glm::vec2 viewpoint) const;
 

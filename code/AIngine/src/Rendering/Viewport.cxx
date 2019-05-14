@@ -3,6 +3,16 @@
 #include "Window.h"
 
 
+unsigned int AIngine::Rendering::Viewport::GetWindowWidth() const
+{
+	return m_window.GetWidth();
+}
+
+unsigned int AIngine::Rendering::Viewport::GetWindowHeight() const
+{
+	return m_window.GetHeight();
+}
+
 glm::mat4 AIngine::Rendering::Viewport::GetScaleMat() const
 {
 	glm::mat4 scalemat = glm::mat4(1.0);
