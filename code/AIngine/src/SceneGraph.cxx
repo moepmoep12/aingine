@@ -6,6 +6,8 @@
 #include"Rendering/texture.h"
 //#include "Component.h"
 #include "GameObject.h"
+#include "Events/InputEvents.h"
+#include "KeyCodes.h"
 
 namespace AIngine {
 
@@ -86,6 +88,18 @@ namespace AIngine {
 		ShowSelectedNodeWidget(s_selectedNode);
 		ImGui::End();
 
+	}
+
+	void SceneGraph::OnEvent(AIngine::Events::Event & e)
+	{
+		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent)) {
+			AIngine::Events::KeyPressedEvent keyevent = dynamic_cast<AIngine::Events::KeyPressedEvent&>(e);
+			if (s_selectedNode && keyevent.GetKeyCode() == AIngine::KeyCodes::DEL) {
+				DeleteTraverser deletetraverser(m_gameObjectPool);
+				deletetraverser.Traverse(s_selectedNode);
+				s_selectedNode = nullptr;
+			}
+		}
 	}
 
 
