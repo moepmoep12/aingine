@@ -52,9 +52,9 @@ public:
 			glm::vec2 mouseScreenPos = glm::vec2(AIngine::Input::GetMouseX(), AIngine::Input::GetMouseY());
 			glm::vec2 mouseWorldPos = cam.ScreenToWorldPoint(mouseScreenPos);
 			glm::vec2 screentopoint = app.GetViewport().PointToScreen(mouseScreenPos);
-			ImGui::Text("Mouse screen Pos (%.1f | %.1f)", mouseScreenPos.x, mouseScreenPos.y);
+			ImGui::Text("ScreenPosition (%.1f | %.1f)", mouseScreenPos.x, mouseScreenPos.y);
 			ImGui::Text("ScreenToPoint (%.1f | %.1f)", screentopoint.x, screentopoint.y);
-			ImGui::Text("Mouse world Pos (%.1f | %.1f)", mouseWorldPos.x, mouseWorldPos.y);
+			ImGui::Text("World Position (%.1f | %.1f)", mouseWorldPos.x, mouseWorldPos.y);
 
 
 			// reset camera button
@@ -67,7 +67,7 @@ public:
 			static glm::vec2 lookpos(0);
 			static float* lookposvalues[] = { &lookpos.x, &lookpos.y };
 
-			ImGui::DragFloat2("LookPositionX", *lookposvalues);
+			ImGui::DragFloat2("Look Position", *lookposvalues);
 			if (ImGui::Button("Look At")) {
 				cam.LookAt(lookpos);
 			}
@@ -88,6 +88,11 @@ Game::Game()
 	DEBUG_WARN("Creating Game...");
 	PushLayer(new ExampleLayer());
 	m_gravity = (b2Vec2(0.0, -10.0));
+	GLFWmonitor* primary = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(primary);
+	m_windowConfig.Height = mode->height;
+	m_windowConfig.Width = mode->width;
+	m_windowConfig.Title = std::string("AIngine");
 }
 
 Game::~Game()
@@ -163,14 +168,14 @@ void Game::OnAppUpdate()
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::SPACE)) {
 		int width = app.GetWindow().GetWidth();
 		int height = app.GetWindow().GetHeight();
-		static float maxSizeX = 700;
-		static float maxSizeY = 700;
-		static float minSizeX = 200;
-		static float minSizeY = 200;
+		static float maxSizeX = 1;
+		static float maxSizeY = 1;
+		static float minSizeX = 0.05;
+		static float minSizeY = 0.05;
 		static float minRot = -M_PI;
 		static float maxRot = M_PI;
 		static glm::vec2 minWorld(0, 0);
-		static glm::vec2 maxWorld(2000, 1000);
+		static glm::vec2 maxWorld(10, 10);
 		static std::string path("assets/game/textures/awesomeface.png");
 
 
