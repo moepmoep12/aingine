@@ -19,7 +19,7 @@ namespace AIngine {
 		s_instance = this;
 
 		// create window
-		m_window = std::unique_ptr<Window>(Window::Create());
+		m_window = std::unique_ptr<Window>(Window::Create(m_windowConfig));
 		m_window->SetEventCallbackFunction(BIND_EVENT_TO_FN(Application::OnEvent));
 
 		m_imGuiLayer = new AIngine::UI::ImGuiLayer();
@@ -59,9 +59,9 @@ namespace AIngine {
 
 		CORE_INFO("Loaded ShaderProgram with {0} ", shaderAsset->GetShader().GetID());
 
-		m_viewport = new AIngine::Rendering::Viewport(1520, 840, 0, 0, *m_window.get());
+		m_viewport = new AIngine::Rendering::Viewport(1508, 906, 0, 0, *m_window.get());
 		// create camera
-		m_camera = new AIngine::Rendering::Camera(*m_viewport);
+		m_camera = new AIngine::Rendering::Camera(*m_viewport, glm::vec2(10,10), glm::vec2(1,1));
 
 		// create sprite renderer
 		m_renderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());

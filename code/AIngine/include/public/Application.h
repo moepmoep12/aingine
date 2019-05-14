@@ -36,6 +36,7 @@ namespace AIngine {
 
 	protected:
 
+		WindowConfig m_windowConfig;
 		SceneGraph* m_sceneGraph;
 		b2World* m_physicsWorld;
 		b2Vec2 m_gravity;
