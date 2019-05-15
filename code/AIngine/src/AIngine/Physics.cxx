@@ -7,19 +7,17 @@ namespace AIngine {
 		//const Application& app = Application::Get();
 		//const b2World& physWorld = app.GetPhysicsWorld();
 
-		b2BodyDef bodydef;
-		bodydef.type = b2_dynamicBody;
-		glm::vec2 worldPos = owner->GetWorldPosition();
-		bodydef.position.Set(worldPos.x, worldPos.y);
-		m_body = AIngine::World::CreateBody(bodydef);
+		//b2BodyDef bodydef;
+		//bodydef.type = b2_dynamicBody;
 
-		b2CircleShape shape;
-		shape.m_radius = 1.0;
 
-		b2FixtureDef fixturedef;
-		fixturedef.shape = &shape;
-		fixturedef.density = 1.0;
-		m_body->CreateFixture(&fixturedef);
+		//b2CircleShape shape;
+		//shape.m_radius = 1.0;
+
+		//b2FixtureDef fixturedef;
+		//fixturedef.shape = &shape;
+		//fixturedef.density = 1.0;
+		//m_body->CreateFixture(&fixturedef);
 	}
 
 	PhysicsComponent::~PhysicsComponent()
@@ -28,10 +26,19 @@ namespace AIngine {
 
 	void PhysicsComponent::OnUpdate(float deltatime)
 	{
-		b2Vec2 pos = m_body->GetPosition();
-		float rot = m_body->GetAngle();
+		if (m_body) {
+			b2Vec2 pos = m_body->GetPosition();
+			float rot = m_body->GetAngle();
 
-		m_owner->SetLocalPosition(glm::vec2(pos.x, pos.y));
-		m_owner->SetRotation(rot);
+			m_owner->SetLocalPosition(glm::vec2(pos.x, pos.y));
+			m_owner->SetRotation(rot);
+		}
+	}
+	void PhysicsComponent::CreateBody(b2BodyDef & bodydef, b2FixtureDef& fixtureDef)
+	{
+		glm::vec2 worldPos = m_owner->GetWorldPosition();
+		bodydef.position.Set(worldPos.x, worldPos.y);
+		m_body = AIngine::World::CreateBody(bodydef);
+		m_body->CreateFixture(&fixtureDef);
 	}
 }

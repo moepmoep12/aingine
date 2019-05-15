@@ -64,9 +64,9 @@ Game::~Game()
 void Game::OnAppStartUp()
 {
 	DEBUG_INFO("OnAppStartUp");
-	Application& app = AIngine::Application::Get();
-	std::string path("assets/game/textures/awesomeface.png");
-	AIngine::Assets::BitmapAsset* bitmap = app.GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
+	//Application& app = AIngine::Application::Get();
+	//std::string path("assets/game/textures/awesomeface.png");
+	//AIngine::Assets::BitmapAsset* bitmap = app.GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
 
 	//texture = new Texture2D();
 	//texture->Generate(bitmap->GetBitmap());
@@ -113,6 +113,23 @@ void Game::OnAppStartUp()
 		//texture->Generate(bitmap->GetBitmap());
 	}
 
+	AIngine::Assets::BitmapAsset* bitmap = GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(std::string("assets/Intellgine/textures/White.png"));
+	AIngine::GameObject* ground = AIngine::World::SpawnObject();
+	AIngine::Rendering::Texture2D* texture = ground->AddComponent<AIngine::Rendering::Texture2D>();
+	texture->Generate(bitmap->GetBitmap());
+	texture->SetLocalWorldSize(glm::vec2(10, 0.5));
+	ground->SetLocalPosition(glm::vec2(5, -2));
+
+	AIngine::PhysicsComponent* phys = ground->AddComponent<AIngine::PhysicsComponent>();
+
+	b2BodyDef bodydef;
+	bodydef.type = b2_staticBody;
+	b2PolygonShape shape;
+	shape.SetAsBox(5, 0.25);
+	b2FixtureDef fixturedef;
+	fixturedef.shape = &shape;
+	fixturedef.density = 1.0;
+	phys->CreateBody(bodydef, fixturedef);
 }
 
 void Game::OnAppShutDown()
@@ -148,7 +165,7 @@ void Game::OnAppUpdate()
 		// sprite size
 		float sizeX = minSizeX + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxSizeX));
 		float sizeY = minSizeY + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxSizeY));
-		texture->SetLocalWorldSize(glm::vec2(sizeX, sizeY));
+		texture->SetLocalWorldSize(glm::vec2(sizeX, sizeX));
 
 		// position
 		//glm::vec2 textureSize = glm::vec2(obj->GetLocalScale().x * texture->Width, obj->GetLocalScale().y * texture->Height);
@@ -167,6 +184,16 @@ void Game::OnAppUpdate()
 		texture->SetColor(glm::vec3(red, green, blue));
 
 		AIngine::PhysicsComponent* phys = obj->AddComponent<AIngine::PhysicsComponent>();
+
+		b2BodyDef bodydef;
+		bodydef.type = b2_dynamicBody;
+		b2CircleShape shape;
+		shape.m_radius = texture->GetLocalWorldSize().x;
+		b2FixtureDef fixturedef;
+		fixturedef.shape = &shape;
+		fixturedef.density = 1.0;
+		phys->CreateBody(bodydef, fixturedef);
+
 	}
 
 

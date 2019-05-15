@@ -12,6 +12,8 @@ namespace AIngine {
 		// inherited via Component
 		virtual void OnUpdate(float deltatime) override;
 
+		void CreateBody( b2BodyDef& bodydef, b2FixtureDef& fixtureDef);
+
 	private:
 		b2Body* m_body;
 

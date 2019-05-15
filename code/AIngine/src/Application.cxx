@@ -63,6 +63,10 @@ namespace AIngine {
 		// create sprite renderer
 		m_renderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());
 
+		//load basic white texture
+		path = std::string("assets/Intellgine/textures/White.png");
+		AIngine::Assets::BitmapAsset* bitmap = GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
+
 	}
 
 	Application::~Application()
