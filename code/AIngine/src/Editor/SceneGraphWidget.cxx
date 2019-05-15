@@ -1,10 +1,15 @@
 #include "Editor/SceneGraphWidget.h"
 #include "imgui.h"
 #include "Application.h"
-#include "GameObject.h"
+#include "AIngine/GameObject.h"
 #include "Rendering/texture.h"
+#include "AIngine/Input.h"
+#include "AIngine/KeyCodes.h"
+#include "Events/InputEvents.h"
 
 namespace AIngine::Editor {
+
+	static GameObject* s_selectedNode = nullptr;
 
 	void AIngine::Editor::SceneGraphWidget::OnImGuiRender()
 	{
@@ -21,6 +26,8 @@ namespace AIngine::Editor {
 			return;
 		}
 
+		m_size = glm::vec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 2));
 		ImGui::Columns(2);
 		ImGui::Separator();
@@ -36,6 +43,19 @@ namespace AIngine::Editor {
 		ImGui::End();
 	}
 
+	void SceneGraphWidget::OnEvent(AIngine::Events::Event & e)
+	{
+		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent)) {
+			// delete event
+			AIngine::Events::KeyPressedEvent keyevent = dynamic_cast<AIngine::Events::KeyPressedEvent&>(e);
+			if (s_selectedNode && keyevent.GetKeyCode() == AIngine::KeyCodes::DEL) {
+				DeleteTraverser deletetraverser(m_sceneGraph.m_gameObjectPool);
+				deletetraverser.Traverse(s_selectedNode);
+				s_selectedNode = nullptr;
+			}
+		}
+	}
+
 
 	SceneGraphWidget::SceneGraphWidget(SceneGraph & sceneGraph)
 		: m_sceneGraph(sceneGraph)
@@ -44,6 +64,8 @@ namespace AIngine::Editor {
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
 	{
+		if (!node) return;
+
 		if (!node) return;
 
 		float* position[] = { &node->GetLocalPosition().x ,&node->GetLocalPosition().y };
@@ -69,7 +91,6 @@ namespace AIngine::Editor {
 	/*------------------------------------------- IMGUI TREE TRAVERSER -----------------------------------------------*/
 	/*----------------------------------------------------------------------------------------------------------------*/
 
-	static GameObject* s_selectedNode = nullptr;
 
 	SceneGraphWidget::ImguiTreeTraverser::ImguiTreeTraverser()
 	{

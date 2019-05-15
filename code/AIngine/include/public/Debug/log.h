@@ -2,12 +2,11 @@
 
 #include "spdlog/spdlog.h"
 #include "spdlog/logger.h"
-#include "spdlog/fmt/ostr.h"
-#include <mutex>
-#include "spdlog/details/null_mutex.h"
-#include "spdlog/sinks/base_sink.h"
+//#include "spdlog/fmt/ostr.h"
+//#include <mutex>
+//#include "spdlog/details/null_mutex.h"
+//#include "spdlog/sinks/base_sink.h"
 #include "UI/ImGuiLayer.h"
-#include "UI/LogWidget.h"
 
 namespace  AIngine {
 
@@ -27,26 +26,6 @@ namespace  AIngine {
 		static std::shared_ptr<spdlog::logger> s_clientLogger;
 
 	};
-
-	template<typename Mutex>
-	class LogWidgetSink : public spdlog::sinks::base_sink <Mutex>
-	{
-	protected:
-		void sink_it_(const spdlog::details::log_msg& msg) override
-		{
-			fmt::memory_buffer formatted;
-			sink::formatter_->format(msg, formatted);
-
-			AIngine::UI::ImGuiLayer::s_logWidget.AddLog(fmt::to_string(formatted).c_str());
-		}
-
-		void flush_() override {
-			AIngine::UI::ImGuiLayer::s_logWidget.Clear();
-		}
-	};
-
-	using LogWidgetSink_mt = LogWidgetSink<std::mutex>;
-	using LogWidgetSink_st = LogWidgetSink<spdlog::details::null_mutex>;
 }
 
 

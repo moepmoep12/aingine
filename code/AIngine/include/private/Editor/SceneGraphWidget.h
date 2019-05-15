@@ -1,5 +1,5 @@
 #include "Editor/ImGuiWidget.h"
-#include "Traverser.h"
+#include "Structures/Traverser.h"
 #include <unordered_map>
 
 namespace AIngine {
@@ -12,6 +12,7 @@ namespace AIngine::Editor {
 	public:
 		// Inherited via ImGuiWidget
 		virtual void OnImGuiRender() override;
+		virtual void OnEvent(AIngine::Events::Event& e) override;
 
 		SceneGraphWidget(SceneGraph& sceneGraph);
 

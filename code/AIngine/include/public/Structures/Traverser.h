@@ -1,5 +1,5 @@
-#pragma
-#include "GameObject.h"
+#pragma once
+#include "AIngine/GameObject.h"
 
 namespace AIngine {
 

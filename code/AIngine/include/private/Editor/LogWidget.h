@@ -1,18 +1,24 @@
 #pragma once
 
-#include "imgui.h"
+#include "Editor/Editor.h"
+#include "Editor/ImGuiWidget.h"
+#include "spdlog/fmt/ostr.h"
+#include <mutex>
+#include "spdlog/details/null_mutex.h"
+#include "spdlog/sinks/base_sink.h"
 
+namespace AIngine::Editor {
 
-namespace AIngine::UI {
-
-	struct LogWidget
+	class LogWidget : public ImGuiWidget
 	{
+	private:
 		ImGuiTextBuffer     Buf;
 		ImGuiTextFilter     Filter;
 		ImVector<int>       LineOffsets;        // Index to lines offset. We maintain this with AddLog() calls, allowing us to have a random access on lines
 		bool                AutoScroll;
 		bool                ScrollToBottom;
 
+	public:
 		LogWidget()
 		{
 			AutoScroll = true;
@@ -46,13 +52,19 @@ namespace AIngine::UI {
 				ScrollToBottom = true;
 		}
 
-		void    Draw(const char* title, bool* p_open = NULL)
+		virtual void OnImGuiRender() override
 		{
-			if (!ImGui::Begin(title, p_open))
+			static char const* title = "Log";
+			static bool p_open = true;
+
+			if (!ImGui::Begin(title, &p_open))
 			{
 				ImGui::End();
 				return;
 			}
+
+			m_size = glm::vec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+
 
 			// Options menu
 			if (ImGui::BeginPopup("Options"))
@@ -131,7 +143,7 @@ namespace AIngine::UI {
 			ImGui::End();
 		}
 
-
+	private:
 		ImVec4 GetColor(const std::string msg) {
 			ImVec4 color(1, 1, 1, 1);
 
@@ -141,7 +153,36 @@ namespace AIngine::UI {
 			if (msg.find("Error") != std::string::npos)
 				color = ImVec4(1, 0, 0, 1);
 
-				return color;
+			return color;
 		}
 	};
+
+
+	template<typename Mutex>
+	class LogWidgetSink : public spdlog::sinks::base_sink <Mutex>
+	{
+	protected:
+		void sink_it_(const spdlog::details::log_msg& msg) override
+		{
+			LogWidget* widget = dynamic_cast<LogWidget*>(AIngine::Editor::Editor::GetWidget<LogWidget>());
+			if (widget) {
+				fmt::memory_buffer formatted;
+				sink::formatter_->format(msg, formatted);
+
+				widget->AddLog(fmt::to_string(formatted).c_str());
+			}
+		}
+
+		void flush_() override {
+			LogWidget* widget = dynamic_cast<LogWidget*>(AIngine::Editor::Editor::GetWidget<LogWidget>());
+			if (widget) {
+				widget->Clear();
+			}
+		}
+
+	};
+
+	using LogWidgetSink_mt = LogWidgetSink<std::mutex>;
+	using LogWidgetSink_st = LogWidgetSink<spdlog::details::null_mutex>;
+
 }

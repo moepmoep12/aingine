@@ -1,5 +1,5 @@
 #include "Window.h"
-#include "log.h"
+#include "Debug/log.h"
 #include "Events/ApplicationEvents.h"
 #include "Events/InputEvents.h"
 

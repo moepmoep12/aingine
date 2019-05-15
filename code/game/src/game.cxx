@@ -1,10 +1,11 @@
 #pragma once
 #include "game.h"
-#include "Layer.h"
+#include "Structures/Layer.h"
 //#include "Core.h"
 #include "Rendering/texture.h"
 #include <glm/glm.hpp>
 #include <random>
+#include "imgui.h"
 
 AIngine::Application* AIngine::CreateApplication() {
 	return new Game();
@@ -27,53 +28,10 @@ public:
 	virtual void OnEvent(AIngine::Events::Event& e) override
 	{
 		//DEBUG_INFO(e.ToString().c_str());
-
 	}
 
 	virtual void OnImGuiRender() override
 	{
-		if (ImGui::Begin("Camera"))
-		{
-			AIngine::Application& app = AIngine::Application::Get();
-			AIngine::Rendering::Camera& cam = app.GetCamera();
-
-			// cam settings
-			static float dragspeed = 0.1f;
-			float camzoom = cam.GetZoom();
-			ImGui::DragFloat("Zoom", &camzoom, dragspeed, cam.GetZoomMin(), cam.GetZoomMax());
-			ImGui::DragFloat("MoveSpeed", &translationrate, dragspeed, 0.01f, 1000.0f);
-			ImGui::DragFloat("RotationSpeed", &rotationrate, dragspeed, 0.01f, 1000.0f);
-			cam.SetZoom(camzoom);
-
-			float pos[] = { cam.GetPosition().x, cam.GetPosition().y };
-			ImGui::DragFloat2("Cam Position", pos);
-
-			// mouse positions
-			glm::vec2 mouseScreenPos = glm::vec2(AIngine::Input::GetMouseX(), AIngine::Input::GetMouseY());
-			glm::vec2 mouseWorldPos = cam.ScreenToWorldPoint(mouseScreenPos);
-			glm::vec2 screentopoint = app.GetViewport().PointToScreen(mouseScreenPos);
-			ImGui::Text("ScreenPosition (%.1f | %.1f)", mouseScreenPos.x, mouseScreenPos.y);
-			ImGui::Text("ScreenToPoint (%.1f | %.1f)", screentopoint.x, screentopoint.y);
-			ImGui::Text("World Position (%.2f | %.2f)", mouseWorldPos.x, mouseWorldPos.y);
-
-
-			// reset camera button
-			if (ImGui::Button("Reset")) {
-				cam.SetPosition(glm::vec2(0));
-				cam.SetZoom(1.0);
-				cam.SetRotation(0.0);
-			}
-
-			static glm::vec2 lookpos(0);
-			static float* lookposvalues[] = { &lookpos.x, &lookpos.y };
-
-			ImGui::DragFloat2("Look Position", *lookposvalues);
-			if (ImGui::Button("Look At")) {
-				cam.LookAt(lookpos);
-			}
-
-			ImGui::End();
-		}
 	}
 
 
@@ -87,7 +45,10 @@ Game::Game()
 {
 	DEBUG_WARN("Creating Game...");
 	PushLayer(new ExampleLayer());
-	m_gravity = (b2Vec2(0.0, -1.0));
+
+	m_gravity = (glm::vec2(0.0, 1.0));
+	m_bounds = glm::vec4(0.0, 10.0, 10.0, 0.0);
+
 	GLFWmonitor* primary = glfwGetPrimaryMonitor();
 	const GLFWvidmode* mode = glfwGetVideoMode(primary);
 	m_windowConfig.Height = mode->height;
@@ -179,7 +140,7 @@ void Game::OnAppUpdate()
 		static std::string path("assets/game/textures/awesomeface.png");
 
 
-		AIngine::GameObject* obj = m_sceneGraph->SpawnObject();
+		AIngine::GameObject* obj = AIngine::World::SpawnObject();
 		AIngine::Rendering::Texture2D* texture = obj->AddComponent<AIngine::Rendering::Texture2D>();
 		AIngine::Assets::BitmapAsset* bitmap = app.GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
 		texture->Generate(bitmap->GetBitmap());
@@ -205,7 +166,7 @@ void Game::OnAppUpdate()
 		float blue = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		texture->SetColor(glm::vec3(red, green, blue));
 
-		//AIngine::PhysicsComponent* phys = obj->AddComponent<AIngine::PhysicsComponent>();
+		AIngine::PhysicsComponent* phys = obj->AddComponent<AIngine::PhysicsComponent>();
 	}
 
 

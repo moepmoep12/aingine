@@ -1,7 +1,11 @@
 #pragma once
 
-#include "Layer.h"
-#include "LogWidget.h"
+#include "Structures/Layer.h"
+
+
+//namespace AIngine::Editor {
+//	struct LogWidget;
+//}
 
 namespace AIngine::UI {
 
@@ -18,7 +22,7 @@ namespace AIngine::UI {
 		void OnBegin();
 		void OnEnd();
 
-		static LogWidget s_logWidget;
+		//static AIngine::Editor::LogWidget s_logWidget;
 
 	private:
 		void CreateDockSpace(const bool show);

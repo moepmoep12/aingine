@@ -11,36 +11,38 @@ include (assign_source_group)
 
 # header files
 set(AINGINE_HEADER
-		include/public/Core.h
 		include/public/Application.h
-		include/public/Assets.h
 		include/public/Entrypoint.h
-		include/public/memory.h
-		include/public/log.h
 		include/public/Window.h
-		include/public/Layer.h
-		include/public/LayerStack.h
-		include/public/Input.h
-		include/public/KeyCodes.h
-		include/public/GameObject.h
-		include/public/SceneGraph.h
-		include/public/Traverser.h
-		include/public/Component.h
-		include/public/Physics.h
-		include/public/Rendering/shader.h
-		include/public/Rendering/mvp.h
-		include/public/Rendering/bitmap.h
-		include/public/Rendering/mesh.h
-		include/public/Rendering/meshloader.h
-		include/public/Rendering/texture.h
-		include/public/Rendering/Renderer.h
-		include/public/Rendering/Camera.h
-		include/public/Rendering/Viewport.h
+		include/public/AIngine/Core.h
+		include/public/AIngine/Component.h
+		include/public/AIngine/GameObject.h
+		include/public/AIngine/Input.h
+		include/public/AIngine/KeyCodes.h
+		include/public/AIngine/Physics.h
+		include/public/AIngine/World.h
+		include/public/Assets/Assets.h
+		include/public/Debug/log.h
 		include/public/Events/Event.h
 		include/public/Events/ApplicationEvents.h
 		include/public/Events/InputEvents.h	
+		include/public/Rendering/bitmap.h
+		include/public/Rendering/Camera.h
+		include/public/Rendering/Renderer.h
+		include/public/Rendering/shader.h
+		include/public/Rendering/texture.h
+		include/public/Rendering/Viewport.h
+		include/public/Structures/Layer.h
+		include/public/Structures/LayerStack.h
+		include/public/Structures/memory.h
+		include/public/Structures/SceneGraph.h
+		include/public/Structures/Traverser.h
 		include/public/UI/ImGuiLayer.h	
-		include/public/UI/LogWidget.h
+		include/private/Editor/CameraWidget.h
+		include/private/Editor/Editor.h
+		include/private/Editor/ImGuiWidget.h
+		include/private/Editor/LogWidget.h
+		include/private/Editor/SceneGraphWidget.h
 		include/private/gl_error.h
 		include/private/readfile.h
 	)
@@ -48,27 +50,28 @@ set(AINGINE_HEADER
 # source files	
 set(AINGINE_SRC
         src/Application.cxx
-        src/Assets.cxx
-		src/gl_error.cxx
 		src/Window.cxx
-		src/Layer.cxx
-		src/LayerStack.cxx
-		src/Input.cxx
-		src/GameObject.cxx
-		src/SceneGraph.cxx
-		src/Component.cxx
-		src/Physics.cxx
-		src/Rendering/shader.cxx
-		src/Rendering/mvp.cxx
+		src/AIngine/Component.cxx
+		src/AIngine/GameObject.cxx
+		src/AIngine/Input.cxx
+		src/AIngine/Physics.cxx
+		src/AIngine/World.cxx
+        src/Assets/Assets.cxx
+		src/Debug/gl_error.cxx
+		src/Debug/log.cxx
+		src/Editor/CameraWidget.cxx
+		src/Editor/Editor.cxx
+		src/Editor/SceneGraphWidget.cxx
 		src/Rendering/bitmap.cxx
-		src/Rendering/mesh.cxx
-		src/Rendering/meshloader.cxx
-		src/Rendering/texture.cxx
-		src/Rendering/Renderer.cxx
 		src/Rendering/Camera.cxx
+		src/Rendering/Renderer.cxx
+		src/Rendering/shader.cxx
+		src/Rendering/texture.cxx
 		src/Rendering/Viewport.cxx
+		src/Structures/Layer.cxx
+		src/Structures/LayerStack.cxx
+		src/Structures/SceneGraph.cxx
 		src/UI/ImGuiLayer.cxx
-		src/log.cxx
 	)
 	
 

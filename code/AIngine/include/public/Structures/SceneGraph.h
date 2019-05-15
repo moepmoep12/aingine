@@ -1,11 +1,18 @@
 #pragma once
 #include "Rendering/Renderer.h"
 #include "memory.h"
-#include "Layer.h"
+#include "Structures/Layer.h"
 #include <vector>
+
+namespace AIngine::Editor {
+	class SceneGraphWidget;
+}
 
 namespace AIngine {
 	class SceneGraph : public AIngine::Layer {
+
+		friend class AIngine::Editor::SceneGraphWidget;
+
 	public:
 
 		SceneGraph();
@@ -14,12 +21,11 @@ namespace AIngine {
 		GameObject& GetRoot() { return *m_Root; }
 
 		virtual void OnUpdate(float delta) override;
-		virtual void OnImGuiRender() override;
+		//virtual void OnImGuiRender() override;
 		virtual void OnEvent(AIngine::Events::Event& e) override;
 
 
 		GameObject* const SpawnObject(const std::string& name = std::string("GameObject"), GameObject* parent = nullptr, const glm::vec2& position = glm::vec2(0.0f), const glm::vec2& scale = glm::vec2(1.0f), const float rotation = 0.0f);
-		//GameObject* const FindObject(const std::string& name);
 
 		// Destroys the gameObject and its children by removing it from the scenegraph and freeing its memory
 		void DestroyObject(GameObject& gameobject);
@@ -27,10 +33,6 @@ namespace AIngine {
 	private:
 		GameObject* m_Root;
 		AIngine::Memory::Pool<GameObject> m_gameObjectPool = AIngine::Memory::Pool<GameObject>(1000);
-
-	private:
-		void ShowSelectedNodeWidget(GameObject* node);
-
 	};
 
 	// traverses 

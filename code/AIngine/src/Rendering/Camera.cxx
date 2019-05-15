@@ -3,10 +3,21 @@
 #include "Rendering/Viewport.h"
 #include <algorithm>
 
-AIngine::Rendering::Camera::Camera(const Viewport & viewport)
+AIngine::Rendering::Camera::Camera(const Viewport & viewport, const glm::vec2& bounds, const glm::vec2& desiredScreenSizeInWorldUnits)
 	: m_viewport(viewport)
 {
 	m_origin = glm::vec2(viewport.GetViewportWidth() / 2.0, viewport.GetViewportHeight() / 2.0);
+	glm::vec2 screenSize;
+
+	if (desiredScreenSizeInWorldUnits == glm::vec2(0))
+	{
+		screenSize = bounds;
+	}
+	else {
+		screenSize = desiredScreenSizeInWorldUnits;
+	}
+
+	m_zoom = viewport.GetWindowWidth() / screenSize.x;
 }
 
 void AIngine::Rendering::Camera::Zoom(float amount)

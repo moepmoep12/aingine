@@ -1,7 +1,7 @@
-#include "GameObject.h"
-#include "Traverser.h"
-#include "log.h"
-#include "Component.h"
+#include "AIngine/GameObject.h"
+#include "AIngine/Component.h"
+#include "Structures/Traverser.h"
+#include "Debug/log.h"
 
 namespace AIngine {
 	glm::vec2 GameObject::GetWorldPosition() const
@@ -14,7 +14,7 @@ namespace AIngine {
 		}
 		return result;
 	}
-	const glm::mat4 & GameObject::GetLocalTransform() const
+	glm::mat4  GameObject::GetLocalTransform() const
 	{
 		glm::mat4 result = glm::mat4(1.0);
 		result = glm::translate(result, glm::vec3(m_position, 0.0));

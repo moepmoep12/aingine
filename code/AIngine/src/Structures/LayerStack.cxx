@@ -1,5 +1,5 @@
-#include "LayerStack.h"
-#include "log.h"
+#include "Structures/LayerStack.h"
+#include "Debug/log.h"
 
 AIngine::LayerStack::LayerStack()
 {

@@ -5,17 +5,25 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvents.h"
 #include "UI/ImGuiLayer.h"
-#include "LayerStack.h"
-#include "Assets.h"
+#include "Structures/LayerStack.h"
+#include "Assets/Assets.h"
 #include "Rendering/Renderer.h"
-#include "SceneGraph.h"
+//#include "Structures/SceneGraph.h"
 #include "Box2D/Box2D.h"
 #include "Rendering/Camera.h"
 #include "Rendering/Viewport.h"
+#include "AIngine/World.h"
+
+namespace AIngine::Editor {
+	class Editor;
+}
 
 namespace AIngine {
 
 	class Application {
+
+		friend class Editor::Editor;
+
 
 	public:
 		Application();
@@ -29,7 +37,6 @@ namespace AIngine {
 
 		inline static Application& Get() { return *s_instance; }
 		inline const Window& GetWindow() const { return *m_window; }
-		inline  b2World& GetPhysicsWorld() { return *m_physicsWorld; }
 		inline  AIngine::Rendering::Camera& GetCamera() const { return *m_camera; }
 		inline const AIngine::Rendering::Viewport& GetViewport() const { return *m_viewport; }
 		inline  AIngine::Assets::AssetRegistry& GetAssetRegistry() { return m_assetRegistry; }
@@ -37,10 +44,10 @@ namespace AIngine {
 	protected:
 
 		WindowConfig m_windowConfig;
-		SceneGraph* m_sceneGraph;
-		b2World* m_physicsWorld;
-		b2Vec2 m_gravity;
+		glm::vec2 m_gravity;
+		glm::vec4 m_bounds;
 		AIngine::Rendering::Camera* m_camera;
+		World* m_world;
 
 		virtual void OnAppStartUp() = 0;
 		virtual void OnAppShutDown() = 0;
@@ -51,6 +58,7 @@ namespace AIngine {
 
 	private:
 		std::unique_ptr<Window> m_window;
+		AIngine::Editor::Editor* m_editor;
 		bool m_isRunning = false;
 		LayerStack m_layerStack;
 		AIngine::UI::ImGuiLayer* m_imGuiLayer;

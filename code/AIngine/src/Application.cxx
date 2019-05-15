@@ -1,7 +1,8 @@
 #include "Application.h"
 #include "Events/ApplicationEvents.h"
-#include "log.h"
-#include "Input.h"
+#include "Debug/log.h"
+#include "AIngine/Input.h"
+#include "Editor/Editor.h"
 #include <memory>
 
 
@@ -44,10 +45,11 @@ namespace AIngine {
 				);
 		}
 
-		// create scenegraph
-		m_sceneGraph = new SceneGraph();
-		PushOverlay(m_sceneGraph);
+		//// create scenegraph
+		//m_sceneGraph = new SceneGraph();
+		//PushOverlay(m_sceneGraph);
 
+		// load shader
 		std::string vertexPath("assets/Intellgine/shader/screenshader/vertexScreen.glsl");
 		std::string fragPath("assets/Intellgine/shader/screenshader/fragmentScreen.glsl");
 		std::string path;
@@ -56,13 +58,8 @@ namespace AIngine {
 		path.append(fragPath);
 
 		AIngine::Assets::ShaderAsset* shaderAsset = m_assetRegistry.Load<AIngine::Assets::ShaderAsset>(path);
-
 		CORE_INFO("Loaded ShaderProgram with {0} ", shaderAsset->GetShader().GetID());
 
-		m_viewport = new AIngine::Rendering::Viewport(1508, 906, 0, 0, *m_window.get());
-		// create camera
-		m_camera = new AIngine::Rendering::Camera(*m_viewport/*, glm::vec2(10,10), glm::vec2(1,1));*/);
-		m_camera->SetZoom(192);
 		// create sprite renderer
 		m_renderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());
 
@@ -78,8 +75,22 @@ namespace AIngine {
 
 	void Application::Run()
 	{
-		// create physics world
-		m_physicsWorld = new b2World(m_gravity);
+		// create game world
+		m_world = new World(m_bounds, m_gravity);
+		PushLayer(m_world);
+
+		m_viewport = new AIngine::Rendering::Viewport(1508, 906, 0, 0, *m_window.get());
+
+		// create camera
+		m_camera = new AIngine::Rendering::Camera(*m_viewport, glm::vec2(m_bounds.y - m_bounds.x, m_bounds.z - m_bounds.w));
+
+
+#ifdef _DEBUG
+		m_editor = new AIngine::Editor::Editor();
+		PushOverlay(m_editor);
+#endif
+
+		m_renderer->initRenderData();
 
 		OnAppStartUp();
 
@@ -102,14 +113,14 @@ namespace AIngine {
 
 			OnAppUpdate();
 
-			m_physicsWorld->Step(1.0 / 60.0, 8, 3);
+			//m_physicsWorld->Step(1.0 / 60.0, 8, 3);
 
 			// update logic
 			for (Layer* layer : m_layerStack)
 				layer->OnUpdate(GetDeltaTime());
 
 			// scene rendering
-			m_renderer->Traverse(&m_sceneGraph->GetRoot());
+			m_renderer->Traverse(&m_world->m_sceneGraph->GetRoot());
 
 			// ui rendering
 			m_imGuiLayer->OnBegin();
@@ -130,11 +141,18 @@ namespace AIngine {
 		// destroy our renderer
 		delete m_renderer;
 		// destroy our physics world
-		delete m_physicsWorld;
+		//delete m_physicsWorld;
 		// destroy camera
 		delete m_camera;
 
 		delete m_viewport;
+
+
+#ifdef _DEBUG
+		m_layerStack.PopOverlay(m_editor);
+		delete m_editor;
+#endif
+
 	}
 
 	void Application::OnEvent(AIngine::Events::Event & e)

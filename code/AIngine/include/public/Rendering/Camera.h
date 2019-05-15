@@ -1,18 +1,27 @@
+#pragma once
 #include <glm/glm.hpp>
 #ifndef M_PI
 #define M_PI	3.14159265358979323846f
 #endif
+
+namespace AIngine::Editor {
+	class CameraWidget;
+}
+
 namespace AIngine::Rendering {
 
 	class Viewport;
 
 	class Camera {
+
+		friend class AIngine::Editor::CameraWidget;
+
 	public:
 		inline const glm::vec2& GetPosition() const { return m_position; }
 		inline void SetPosition(const glm::vec2 position) { m_position = position; }
 		inline void Translate(const glm::vec2 translation) { m_position += translation; }
 
-		inline float GetRotation() const { return m_rotation; }
+		inline const float& GetRotation() const { return m_rotation; }
 		inline void SetRotation(float rot) { m_rotation = rot; }
 
 		inline const float& GetZoom() const { return m_zoom; }
@@ -33,7 +42,7 @@ namespace AIngine::Rendering {
 		glm::vec2 ScreenToWorldPoint(const glm::vec2& screenpoint) const;
 		glm::vec2 WorldToScreenPoint(const glm::vec2& worldpoint) const;
 
-		Camera(const Viewport& viewport);
+		Camera(const Viewport& viewport,const glm::vec2& bounds, const glm::vec2& desiredScreenSizeInWorldUnits = glm::vec2(0));
 
 	private:
 		glm::mat4 GetVirtualViewMatrix(const glm::vec2& parallaxFactor) const;

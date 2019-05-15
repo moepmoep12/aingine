@@ -4,11 +4,13 @@
 
 #include "Application.h"
 #include "Events/Event.h"
-#include "log.h"
-#include "Input.h"
+#include "Debug/log.h"
+#include "AIngine/Input.h"
 #include "KeyCodes.h"
-#include "Assets.h"
-#include "GameObject.h"
+#include "Assets/Assets.h"
+#include "AIngine/GameObject.h"
+#include "AIngine/Physics.h"
+#include "World.h"
 
 // EntryPoint
 #include "EntryPoint.h"

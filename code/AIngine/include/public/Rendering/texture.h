@@ -2,9 +2,9 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-#include "shader.h"
-#include "bitmap.h"
-#include "Component.h"
+#include "Rendering/shader.h"
+#include "Rendering/bitmap.h"
+#include "AIngine/Component.h"
 
 namespace AIngine::Rendering {
 
@@ -38,8 +38,6 @@ namespace AIngine::Rendering {
 
 		inline  glm::vec3& GetColor() { return m_spriteColor; }
 		inline void SetColor(const glm::vec3& color) { m_spriteColor = color; }
-
-		const glm::vec2& GetLocalSize() const;
 
 		glm::vec2& GetLocalWorldSize();
 		inline void SetLocalWorldSize(const glm::vec2& size) { m_localWorldSize = size; }

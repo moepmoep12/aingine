@@ -76,7 +76,7 @@ namespace AIngine {
 
 		inline const std::vector<GameObject*>& GetChildren() { return m_children; }
 
-		const glm::mat4& GetLocalTransform() const;
+		glm::mat4 GetLocalTransform() const;
 		glm::vec2 GetWorldPosition() const;
 		void AddChild(GameObject* obj);
 		void RemoveChild(GameObject* obj);

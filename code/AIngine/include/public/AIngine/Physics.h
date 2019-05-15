@@ -1,4 +1,6 @@
-#include "Component.h"
+#pragma once
+#include "AIngine/Component.h"
+#include <Box2D/Box2D.h>
 
 namespace AIngine {
 
@@ -9,6 +11,9 @@ namespace AIngine {
 
 		// inherited via Component
 		virtual void OnUpdate(float deltatime) override;
+
+	private:
+		b2Body* m_body;
 
 	};
 }

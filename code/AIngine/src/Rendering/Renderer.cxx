@@ -50,7 +50,6 @@ namespace AIngine::Rendering {
 	SpriteRenderer::SpriteRenderer(GLShaderProgram* shader)
 	{
 		m_shader = shader;
-		initRenderData();
 	}
 
 	SpriteRenderer::~SpriteRenderer()

@@ -1,8 +1,8 @@
 #pragma once
-#include "shader.h"
+#include "Rendering/shader.h"
 #include <vector>
 #include <glm/glm.hpp>
-#include "Traverser.h"
+#include "Structures/Traverser.h"
 
 namespace AIngine::Rendering {
 
@@ -14,10 +14,11 @@ namespace AIngine::Rendering {
 
 		// Inherited via Traverser
 		virtual bool Traverse(GameObject* root) override;
-
 		virtual bool Enter(GameObject & node) override;
 		virtual bool Leave(GameObject & node) override;
 		virtual bool Visit(GameObject & node) override;
+
+		void initRenderData();
 
 	private:
 		std::vector<glm::mat4> m_matrixStack;
@@ -25,7 +26,6 @@ namespace AIngine::Rendering {
 		GLShaderProgram* m_shader;
 		GLuint m_quadVAO;
 
-		void initRenderData();
 	};
 
 }

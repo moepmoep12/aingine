@@ -1,17 +1,18 @@
 #include "UI/ImGuiLayer.h"
 #include "Application.h"
-#include "KeyCodes.h"
-#include "log.h"
+#include "AIngine/KeyCodes.h"
+#include "Debug/log.h"
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
 #include "examples/imgui_impl_opengl3.cpp"
 #include "examples/imgui_impl_glfw.cpp"
+//#include "Editor/LogWidget.h"
 
 namespace AIngine::UI {
 
 #define BIND_EVENT_TO_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
-	LogWidget ImGuiLayer::s_logWidget;
+	//AIngine::Editor::LogWidget ImGuiLayer::s_logWidget;
 
 	ImGuiLayer::ImGuiLayer() : Layer("ImGui Layer")
 	{
@@ -22,7 +23,7 @@ namespace AIngine::UI {
 	{
 		OnDetach();
 		CORE_INFO("Destructor ImGuiLayer");
-		s_logWidget.Clear();
+		//s_logWidget.Clear();
 	}
 
 	void ImGuiLayer::OnAttach()
@@ -97,7 +98,7 @@ namespace AIngine::UI {
 		//static bool show = true;
 		//ImGui::ShowDemoWindow(&show);
 		//CreateDockSpace(true);
-		s_logWidget.Draw("Log");
+		//s_logWidget.Draw("Log");
 	}
 
 
