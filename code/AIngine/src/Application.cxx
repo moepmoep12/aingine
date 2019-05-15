@@ -61,8 +61,8 @@ namespace AIngine {
 
 		m_viewport = new AIngine::Rendering::Viewport(1508, 906, 0, 0, *m_window.get());
 		// create camera
-		m_camera = new AIngine::Rendering::Camera(*m_viewport, glm::vec2(10,10), glm::vec2(1,1));
-
+		m_camera = new AIngine::Rendering::Camera(*m_viewport/*, glm::vec2(10,10), glm::vec2(1,1));*/);
+		m_camera->SetZoom(192);
 		// create sprite renderer
 		m_renderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());
 
@@ -101,6 +101,8 @@ namespace AIngine {
 			m_window->PollInput();
 
 			OnAppUpdate();
+
+			m_physicsWorld->Step(1.0 / 60.0, 8, 3);
 
 			// update logic
 			for (Layer* layer : m_layerStack)

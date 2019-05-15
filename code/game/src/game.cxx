@@ -1,7 +1,7 @@
 #pragma once
 #include "game.h"
 #include "Layer.h"
-#include "Core.h"
+//#include "Core.h"
 #include "Rendering/texture.h"
 #include <glm/glm.hpp>
 #include <random>
@@ -54,7 +54,7 @@ public:
 			glm::vec2 screentopoint = app.GetViewport().PointToScreen(mouseScreenPos);
 			ImGui::Text("ScreenPosition (%.1f | %.1f)", mouseScreenPos.x, mouseScreenPos.y);
 			ImGui::Text("ScreenToPoint (%.1f | %.1f)", screentopoint.x, screentopoint.y);
-			ImGui::Text("World Position (%.1f | %.1f)", mouseWorldPos.x, mouseWorldPos.y);
+			ImGui::Text("World Position (%.2f | %.2f)", mouseWorldPos.x, mouseWorldPos.y);
 
 
 			// reset camera button
@@ -87,7 +87,7 @@ Game::Game()
 {
 	DEBUG_WARN("Creating Game...");
 	PushLayer(new ExampleLayer());
-	m_gravity = (b2Vec2(0.0, -10.0));
+	m_gravity = (b2Vec2(0.0, -1.0));
 	GLFWmonitor* primary = glfwGetPrimaryMonitor();
 	const GLFWvidmode* mode = glfwGetVideoMode(primary);
 	m_windowConfig.Height = mode->height;
@@ -170,8 +170,8 @@ void Game::OnAppUpdate()
 		int height = app.GetWindow().GetHeight();
 		static float maxSizeX = 1;
 		static float maxSizeY = 1;
-		static float minSizeX = 0.05;
-		static float minSizeY = 0.05;
+		static float minSizeX = 1;
+		static float minSizeY = 1;
 		static float minRot = -M_PI;
 		static float maxRot = M_PI;
 		static glm::vec2 minWorld(0, 0);
@@ -204,6 +204,8 @@ void Game::OnAppUpdate()
 		float green = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		float blue = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		texture->SetColor(glm::vec3(red, green, blue));
+
+		//AIngine::PhysicsComponent* phys = obj->AddComponent<AIngine::PhysicsComponent>();
 	}
 
 
@@ -221,13 +223,13 @@ void Game::OnAppUpdate()
 
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::W))
 	{
-		m_camera->Translate(glm::vec2(0.0, translationrate));
+		m_camera->Translate(glm::vec2(0.0, -translationrate));
 	}
 
 
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::S))
 	{
-		m_camera->Translate(glm::vec2(0.0, -translationrate));
+		m_camera->Translate(glm::vec2(0.0, +translationrate));
 	}
 
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::E))

@@ -29,7 +29,7 @@ namespace AIngine {
 
 		inline static Application& Get() { return *s_instance; }
 		inline const Window& GetWindow() const { return *m_window; }
-		inline const b2World& GetPhysicsWorld() const { return *m_physicsWorld; }
+		inline  b2World& GetPhysicsWorld() { return *m_physicsWorld; }
 		inline  AIngine::Rendering::Camera& GetCamera() const { return *m_camera; }
 		inline const AIngine::Rendering::Viewport& GetViewport() const { return *m_viewport; }
 		inline  AIngine::Assets::AssetRegistry& GetAssetRegistry() { return m_assetRegistry; }
