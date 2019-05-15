@@ -98,9 +98,9 @@ namespace AIngine::Rendering {
 
 			glm::vec2& textureSize = textureComponent->GetLocalWorldSize(); //glm::vec2(node.GetLocalScale().x * textureComponent->Width, node.GetLocalScale().y * textureComponent->Height);
 
-			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(0.5f * textureSize.x, 0.5f * textureSize.y, 0.0f));
-			m_modelViewMatrix = glm::rotate(m_modelViewMatrix, node.GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
 			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(-0.5f * textureSize.x, -0.5f * textureSize.y, 0.0f));
+			m_modelViewMatrix = glm::rotate(m_modelViewMatrix, node.GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
+			//m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(-0.5f * textureSize.x, -0.5f * textureSize.y, 0.0f));
 
 			m_modelViewMatrix = glm::scale(m_modelViewMatrix, glm::vec3(textureSize, 1.0f));
 
