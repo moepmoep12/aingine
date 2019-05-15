@@ -26,7 +26,7 @@ namespace AIngine::Rendering {
 
 		void Zoom(float amount);
 		void Rotate(float amount);
-		void LookAt(const glm::vec2 pos);
+		void LookAt(const glm::vec2& pos);
 		glm::mat4 GetViewMatrix() const;
 		glm::mat4 GetViewMatrix(const glm::vec2& parallaxFactor) const;
 

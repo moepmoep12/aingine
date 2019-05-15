@@ -20,9 +20,9 @@ void AIngine::Rendering::Camera::Rotate(float amount)
 	m_rotation = std::fmod(m_rotation, M_PI);
 }
 
-void AIngine::Rendering::Camera::LookAt(const glm::vec2 pos)
+void AIngine::Rendering::Camera::LookAt(const glm::vec2& pos)
 {
-	m_position = pos - glm::vec2(m_viewport.GetViewportWidth() / 2.0, m_viewport.GetViewportHeight() / 2.0);
+	m_position = WorldToScreenPoint(pos) - glm::vec2(m_viewport.GetViewportWidth() / 2.0, m_viewport.GetViewportHeight() / 2.0);
 }
 
 glm::mat4  AIngine::Rendering::Camera::GetViewMatrix() const
@@ -39,26 +39,24 @@ glm::vec2 AIngine::Rendering::Camera::ScreenToWorldPoint(const glm::vec2 & scree
 {
 	glm::vec2 point = screenpoint - m_viewport.GetTopLeftCornerPosition();
 	glm::mat4 inverseView = glm::inverse(GetViewMatrix());
-	return glm::vec4(point, 0, 0) * inverseView;
+	return inverseView * glm::vec4(point, 0, 1);
 }
 
 glm::vec2 AIngine::Rendering::Camera::WorldToScreenPoint(const glm::vec2 & worldpoint) const
 {
-	glm::vec2 point = worldpoint + m_viewport.GetTopLeftCornerPosition();
-	return glm::vec4(point, 0, 0)  * GetViewMatrix();
+	glm::vec2 point = worldpoint /*+ m_viewport.GetTopLeftCornerPosition()*/;
+	return  GetViewMatrix() * glm::vec4(point, 0, 1);
 }
 
 
 glm::mat4 AIngine::Rendering::Camera::GetVirtualViewMatrix(const glm::vec2 & parallaxFactor) const
 {
 	glm::mat4 mat = glm::mat4(1.0);
-	glm::vec2 position(m_position);
-	position.x = -position.x;
-	mat = glm::translate(mat, glm::vec3(position * parallaxFactor, 0.0));
-	mat = glm::translate(mat, glm::vec3(-m_origin, 0.0));
+	mat = glm::translate(mat, glm::vec3(-m_position * parallaxFactor, 0.0));
+	//mat = glm::translate(mat, glm::vec3(-m_origin, 0.0));
 	mat = glm::rotate(mat, m_rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 	mat = glm::scale(mat, glm::vec3(m_zoom, m_zoom, 1.0));
-	mat = glm::translate(mat, glm::vec3(m_origin, 0.0));
+	//mat = glm::translate(mat, glm::vec3(m_origin, 0.0));
 
 	return mat;
 }
