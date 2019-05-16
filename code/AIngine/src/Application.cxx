@@ -67,6 +67,8 @@ namespace AIngine {
 		path = std::string("assets/Intellgine/textures/White.png");
 		AIngine::Assets::BitmapAsset* bitmap = GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
 
+
+
 	}
 
 	Application::~Application()
@@ -166,6 +168,8 @@ namespace AIngine {
 		// call the OnWindowClose function if its a windowclose event
 		dispatcher.Dispatch<AIngine::Events::WindowCloseEvent>(BIND_EVENT_TO_FN(Application::OnWindowClose));
 
+		// propagate it to the game
+		OnAppEvent(e);
 
 		// iterate through the layers to propagate the event
 		for (auto it = m_layerStack.end(); it != m_layerStack.begin(); )
@@ -192,6 +196,14 @@ namespace AIngine {
 	float Application::GetDeltaTime()
 	{
 		return m_deltaTime;
+	}
+
+	bool Application::IsAnyUiElementHovered() const
+	{
+		if (m_editor)
+			return m_editor->IsAnyUIElementHovered();
+		else
+			return false;
 	}
 
 	bool Application::OnWindowClose(AIngine::Events::WindowCloseEvent & e)

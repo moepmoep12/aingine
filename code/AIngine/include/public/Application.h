@@ -34,6 +34,8 @@ namespace AIngine {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
 		float GetDeltaTime();
+		bool IsAnyUiElementHovered() const;
+
 
 		inline static Application& Get() { return *s_instance; }
 		inline const Window& GetWindow() const { return *m_window; }
@@ -52,6 +54,7 @@ namespace AIngine {
 		virtual void OnAppStartUp() = 0;
 		virtual void OnAppShutDown() = 0;
 		virtual void OnAppUpdate() = 0;
+		virtual void OnAppEvent(AIngine::Events::Event& e) {}
 
 	private:
 		bool OnWindowClose(AIngine::Events::WindowCloseEvent& e);

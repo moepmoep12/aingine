@@ -63,6 +63,11 @@ namespace AIngine::Editor {
 		return glm::vec4();
 	}
 
+	bool Editor::IsAnyUIElementHovered()
+	{
+		return ImGui::IsAnyWindowHovered();
+	}
+
 	Editor::~Editor()
 	{
 		s_instance = nullptr;

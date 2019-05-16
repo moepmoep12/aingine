@@ -41,6 +41,8 @@ namespace AIngine::Editor {
 			return nullptr;
 		}
 
+		static bool IsAnyUIElementHovered();
+
 		glm::vec4 GetEditorBounds() const;
 
 		virtual ~Editor() override;
