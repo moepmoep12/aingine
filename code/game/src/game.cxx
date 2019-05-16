@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <random>
 #include "imgui.h"
+#include "Events/InputEvents.h"
 
 AIngine::Application* AIngine::CreateApplication() {
 	return new Game();
@@ -64,68 +65,21 @@ Game::~Game()
 void Game::OnAppStartUp()
 {
 	DEBUG_INFO("OnAppStartUp");
-	//Application& app = AIngine::Application::Get();
-	//std::string path("assets/game/textures/awesomeface.png");
-	//AIngine::Assets::BitmapAsset* bitmap = app.GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
 
-	//texture = new Texture2D();
-	//texture->Generate(bitmap->GetBitmap());
-
-	//m_sceneGraph->AddShape(texture, nullptr);
-	{
-		//using namespace AIngine::Rendering;
-		//GroupNode* two = m_sceneGraph->AddGroup(nullptr);
-		//SceneNode* three = m_sceneGraph->AddShape(texture, two);
-		//GroupNode* four = m_sceneGraph->AddGroup(two);
-		//GroupNode* five = m_sceneGraph->AddGroup(four);
-		//ShapeNode* six = m_sceneGraph->AddShape(nullptr, five);
-		//ShapeNode* seven = m_sceneGraph->AddShape(nullptr, five);
-		//ShapeNode* eight = m_sceneGraph->AddShape(nullptr, four);
-
-		//m_sceneGraph->RemoveNode(five);
-		//m_sceneGraph->RemoveNode(eight);
-
-		//GroupNode* two = m_sceneGraph->AddGroup(nullptr);
-		//GroupNode* three = m_sceneGraph->AddGroup(nullptr);
-		//ShapeNode* four = m_sceneGraph->AddShape(texture, two);
-
-
-		/*ShapeNode* sprite = m_sceneGraph->AddShape(texture);
-		sprite->SetColor(glm::vec3(0.0f, 1.0f, 0.0f));
-		sprite->SetName(std::string("GreenFace"));
-
-		GroupNode* groupTwo = m_sceneGraph->AddGroup(nullptr);
-		groupTwo->SetName(std::string("Parent"));
-
-		ShapeNode* secondSprite = m_sceneGraph->AddShape(texture,groupTwo);
-		secondSprite->SetColor(glm::vec3(1.0f, 0.0f, 0.0f));
-		secondSprite->SetPosition(glm::vec2(500, 300));
-		secondSprite->SetName("RedFace");*/
-
-		//AIngine::GameObject * firstObject = m_sceneGraph->SpawnObject(std::string("First Object"));
-		//AIngine::GameObject* secondObject = m_sceneGraph->SpawnObject(std::string("SecondObejct"), firstObject);
-		//AIngine::Rendering::Texture2D* texture = secondObject->AddComponent<AIngine::Rendering::Texture2D>();
-		//texture->Generate(bitmap->GetBitmap());
-
-		//AIngine::GameObject* obj = m_sceneGraph->SpawnObject();
-		//AIngine::Rendering::Texture2D* texture = obj->AddComponent<AIngine::Rendering::Texture2D>();
-		//AIngine::Assets::BitmapAsset* bitmap = app.GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
-		//texture->Generate(bitmap->GetBitmap());
-	}
-
+	// spawn ground
 	AIngine::Assets::BitmapAsset* bitmap = GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(std::string("assets/Intellgine/textures/White.png"));
 	AIngine::GameObject* ground = AIngine::World::SpawnObject();
 	AIngine::Rendering::Texture2D* texture = ground->AddComponent<AIngine::Rendering::Texture2D>();
 	texture->Generate(bitmap->GetBitmap());
-	texture->SetLocalWorldSize(glm::vec2(10, 0.5));
-	ground->SetLocalPosition(glm::vec2(5, -2));
+	texture->SetLocalWorldSize(glm::vec2(20, 0.5));
+	ground->SetLocalPosition(glm::vec2(10, 6));
 
 	AIngine::PhysicsComponent* phys = ground->AddComponent<AIngine::PhysicsComponent>();
 
 	b2BodyDef bodydef;
 	bodydef.type = b2_staticBody;
 	b2PolygonShape shape;
-	shape.SetAsBox(5, 0.25);
+	shape.SetAsBox(10, 0.25);
 	b2FixtureDef fixturedef;
 	fixturedef.shape = &shape;
 	fixturedef.density = 1.0;
@@ -135,68 +89,11 @@ void Game::OnAppStartUp()
 void Game::OnAppShutDown()
 {
 	DEBUG_INFO("OnAppShutdown");
-	//delete texture;
 }
 
 void Game::OnAppUpdate()
 {
-	Application& app = AIngine::Application::Get();
-
-	// spawning sprites with random shapes
-	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::SPACE)) {
-		int width = app.GetWindow().GetWidth();
-		int height = app.GetWindow().GetHeight();
-		static float maxSizeX = 1;
-		static float maxSizeY = 1;
-		static float minSizeX = 1;
-		static float minSizeY = 1;
-		static float minRot = -M_PI;
-		static float maxRot = M_PI;
-		static glm::vec2 minWorld(0, 0);
-		static glm::vec2 maxWorld(10, 10);
-		static std::string path("assets/game/textures/awesomeface.png");
-
-
-		AIngine::GameObject* obj = AIngine::World::SpawnObject();
-		AIngine::Rendering::Texture2D* texture = obj->AddComponent<AIngine::Rendering::Texture2D>();
-		AIngine::Assets::BitmapAsset* bitmap = app.GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
-		texture->Generate(bitmap->GetBitmap());
-
-		// sprite size
-		float sizeX = minSizeX + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxSizeX));
-		float sizeY = minSizeY + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxSizeY));
-		texture->SetLocalWorldSize(glm::vec2(sizeX, sizeX));
-
-		// position
-		//glm::vec2 textureSize = glm::vec2(obj->GetLocalScale().x * texture->Width, obj->GetLocalScale().y * texture->Height);
-		float posX = minWorld.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxWorld.x));
-		float posY = minWorld.y + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxWorld.y));
-		obj->SetLocalPosition(glm::vec2(posX, posY));
-
-		// rotation
-		float rot = minRot + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxRot));
-		obj->SetRotation(rot);
-
-		// color
-		float red = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-		float green = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-		float blue = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-		texture->SetColor(glm::vec3(red, green, blue));
-
-		AIngine::PhysicsComponent* phys = obj->AddComponent<AIngine::PhysicsComponent>();
-
-		b2BodyDef bodydef;
-		bodydef.type = b2_dynamicBody;
-		b2CircleShape shape;
-		shape.m_radius = texture->GetLocalWorldSize().x;
-		b2FixtureDef fixturedef;
-		fixturedef.shape = &shape;
-		fixturedef.density = 1.0;
-		phys->CreateBody(bodydef, fixturedef);
-
-	}
-
-
+	/* camera movement */
 
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::A))
 	{
@@ -240,5 +137,69 @@ void Game::OnAppUpdate()
 		m_camera->Zoom(-zoomSpeed * GetDeltaTime());
 	}
 
+}
+
+void Game::OnAppEvent(AIngine::Events::Event & e)
+{
+	if (typeid(e) == typeid(AIngine::Events::MouseButtonPressedEvent)) {
+		// mouse pressed
+		AIngine::Events::MouseButtonPressedEvent keyevent = dynamic_cast<AIngine::Events::MouseButtonPressedEvent&>(e);
+		if (keyevent.GetMouseButton() == 0 && !IsAnyUiElementHovered()) {
+			static std::string path("assets/game/textures/awesomeface.png");
+			static AIngine::Assets::BitmapAsset* bitmapAsset = GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
+			static glm::vec2 minSize(0.1, 0.1);
+			static glm::vec2 maxSize(2, 2);
+
+			AIngine::GameObject* spawn = SpawnObjectAtMousePosition(minSize, maxSize, bitmapAsset->GetBitmap());
+
+			AIngine::PhysicsComponent* phys = spawn->AddComponent<AIngine::PhysicsComponent>();
+			b2BodyDef bodydef;
+			bodydef.type = b2_dynamicBody;
+			b2CircleShape shape;
+			shape.m_radius = spawn->GetComponent<AIngine::Rendering::Texture2D>()->GetLocalWorldSize().x;
+			b2FixtureDef fixturedef;
+			fixturedef.shape = &shape;
+			fixturedef.density = 1.0;
+			phys->CreateBody(bodydef, fixturedef);
+		}
+	}
+}
+
+AIngine::GameObject* Game::SpawnObjectAtMousePosition(const glm::vec2 & minSize, const glm::vec2 & maxSize, Bitmap& bitmap)
+{
+	static int spawnCount = 0;
+
+	glm::vec2 textureSize(1);
+	textureSize.x = minSize.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxSize.x));
+	textureSize.y = textureSize.x; /*minSize.y + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / maxSize.y));*/
+
+	glm::vec2 spawnPosition(0);
+	glm::vec2 mousePosition = glm::vec2(AIngine::Input::GetMousePosition().first, AIngine::Input::GetMousePosition().second);
+	spawnPosition = m_camera->ScreenToWorldPoint(mousePosition);
+
+	float rotation = 0.0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / M_PI));
+
+	std::string name = std::string("GameObject");
+	if (spawnCount > 0) {
+		name.append("(");
+		name.append(std::to_string(spawnCount));
+		name.append(")");
+	}
+
+	// color
+	float red = 0.1 + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	float green = 0.1 +static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	float blue = 0.1+ static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+	AIngine::GameObject* obj = AIngine::World::SpawnObject(name, nullptr, spawnPosition, glm::vec2(1.0), rotation);
+
+	spawnCount++;
+
+	AIngine::Rendering::Texture2D* tex = obj->AddComponent<AIngine::Rendering::Texture2D>();
+	tex->Generate(bitmap);
+	tex->SetLocalWorldSize(textureSize);
+	tex->SetColor(glm::vec3(red, green, blue));
+
+	return obj;
 }
 
