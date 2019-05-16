@@ -3,6 +3,13 @@
 #include "Window.h"
 
 
+bool AIngine::Rendering::Viewport::Contains(const glm::vec2 & screenpoint) const
+{
+	bool withinX = screenpoint.x >= m_x && screenpoint.x <= m_x + m_width;
+	bool withinY = screenpoint.y >= m_y && screenpoint.y <= m_y + m_height;
+	return withinX && withinY;
+}
+
 unsigned int AIngine::Rendering::Viewport::GetWindowWidth() const
 {
 	return m_window.GetWidth();
