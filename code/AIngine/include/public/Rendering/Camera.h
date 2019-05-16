@@ -38,6 +38,7 @@ namespace AIngine::Rendering {
 		void LookAt(const glm::vec2& pos);
 		glm::mat4 GetViewMatrix() const;
 		glm::mat4 GetViewMatrix(const glm::vec2& parallaxFactor) const;
+		glm::mat4 GetProjectionMatrix() const;
 
 		glm::vec2 ScreenToWorldPoint(const glm::vec2& screenpoint) const;
 		glm::vec2 WorldToScreenPoint(const glm::vec2& worldpoint) const;

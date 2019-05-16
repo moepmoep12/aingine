@@ -40,7 +40,7 @@ namespace AIngine::Rendering {
 
 		glViewport(viewport.GetTopLeftCornerPosition().x, height - viewport.GetViewportHeight(), viewport.GetViewportWidth(), viewport.GetViewportHeight());
 
-		glm::mat4 projection = glm::ortho(0.0f, (float)viewport.GetViewportWidth(), (float)viewport.GetViewportHeight(), 0.0f, -1.0f, 1.0f);
+		glm::mat4 projection = cam.GetProjectionMatrix();
 
 		// configure shader
 		m_shader->SetInteger("image", 0, true);

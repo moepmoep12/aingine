@@ -46,6 +46,11 @@ glm::mat4 AIngine::Rendering::Camera::GetViewMatrix(const glm::vec2 & parallaxFa
 	return GetVirtualViewMatrix(parallaxFactor) * m_viewport.GetScaleMat();
 }
 
+glm::mat4 AIngine::Rendering::Camera::GetProjectionMatrix() const
+{
+	return glm::ortho(0.0f, (float)m_viewport.GetViewportWidth(), (float)m_viewport.GetViewportHeight(), 0.0f, -1.0f, 1.0f);
+}
+
 glm::vec2 AIngine::Rendering::Camera::ScreenToWorldPoint(const glm::vec2 & screenpoint) const
 {
 	glm::vec2 point = screenpoint - m_viewport.GetTopLeftCornerPosition();
