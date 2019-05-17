@@ -2,6 +2,7 @@
 
 #include "Structures/Layer.h"
 #include "Structures/SceneGraph.h"
+#include "Rendering/PhysicsRenderer.h"
 #include <Box2D/Box2D.h>
 #include <glm/glm.hpp>
 #include <string>
@@ -16,7 +17,7 @@ namespace AIngine::Editor {
 }
 
 namespace AIngine {
-	class World  : public Layer {
+	class World : public Layer {
 
 		friend class AIngine::Application;
 		friend class AIngine::Editor::Editor;
@@ -41,11 +42,15 @@ namespace AIngine {
 		SceneGraph* m_sceneGraph;
 		b2World* m_physicsWorld;
 		glm::vec4 m_bounds;
+		glm::vec2 m_gravity;
+		AIngine::Rendering::PhysicsRenderer* m_physRenderer;
 
 		// created via Application
 	private:
 		World(const glm::vec4& bounds, const glm::vec2& gravity);
 		World(float bottomLeft, float bottomRight, float topLeft, float topRight, const glm::vec2& gravity);
 		virtual ~World() override;
+
+		void CreateWorldBounds();
 	};
 }

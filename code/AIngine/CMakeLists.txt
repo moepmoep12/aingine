@@ -22,12 +22,14 @@ set(AINGINE_HEADER
 		include/public/AIngine/Physics.h
 		include/public/AIngine/World.h
 		include/public/Assets/Assets.h
+		include/public/Debug/DebugDraw.h
 		include/public/Debug/log.h
 		include/public/Events/Event.h
 		include/public/Events/ApplicationEvents.h
 		include/public/Events/InputEvents.h	
 		include/public/Rendering/bitmap.h
 		include/public/Rendering/Camera.h
+		include/public/Rendering/PhysicsRenderer.h
 		include/public/Rendering/Renderer.h
 		include/public/Rendering/shader.h
 		include/public/Rendering/texture.h
@@ -37,6 +39,7 @@ set(AINGINE_HEADER
 		include/public/Structures/memory.h
 		include/public/Structures/SceneGraph.h
 		include/public/Structures/Traverser.h
+		include/public/Structures/Vectors.h
 		include/public/UI/ImGuiLayer.h	
 		include/private/Editor/CameraWidget.h
 		include/private/Editor/Editor.h
@@ -58,12 +61,14 @@ set(AINGINE_SRC
 		src/AIngine/World.cxx
         src/Assets/Assets.cxx
 		src/Debug/gl_error.cxx
+		src/Debug/DebugDraw.cxx
 		src/Debug/log.cxx
 		src/Editor/CameraWidget.cxx
 		src/Editor/Editor.cxx
 		src/Editor/SceneGraphWidget.cxx
 		src/Rendering/bitmap.cxx
 		src/Rendering/Camera.cxx
+		src/Rendering/PhysicsRenderer.cxx
 		src/Rendering/Renderer.cxx
 		src/Rendering/shader.cxx
 		src/Rendering/texture.cxx
