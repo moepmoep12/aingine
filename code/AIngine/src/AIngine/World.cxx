@@ -59,7 +59,7 @@ namespace AIngine {
 		m_physicsWorld = new b2World(b2Vec2(gravity.x, gravity.y));
 		m_sceneGraph = new SceneGraph();
 		m_physRenderer = new AIngine::Rendering::PhysicsRenderer();
-		m_physRenderer->SetFlags(b2Draw::e_shapeBit + b2Draw::e_centerOfMassBit);
+		m_physRenderer->SetFlags(b2Draw::e_shapeBit /*+ b2Draw::e_centerOfMassBit*/);
 		m_physicsWorld->SetDebugDraw(m_physRenderer);
 
 		CreateWorldBounds();

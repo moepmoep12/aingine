@@ -14,5 +14,10 @@ public:
 	virtual void OnAppUpdate() override;
 	virtual void OnAppEvent(AIngine::Events::Event& e) override;
 
-	AIngine::GameObject* SpawnObjectAtMousePosition(const glm::vec2& minSize, const glm::vec2& maxSize,  Bitmap& bitmap);
+
+	enum Shape {
+		e_Circle = 0,
+		e_Box = 1,
+	};
+	AIngine::GameObject* SpawnObjectAtMousePosition(const glm::vec2& minSize, const glm::vec2& maxSize, Shape  shape);
 };
