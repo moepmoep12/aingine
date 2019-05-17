@@ -59,6 +59,10 @@ namespace AIngine::Rendering {
 
 	bool SpriteRenderer::Traverse(GameObject * root)
 	{
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		m_shader->Use();
 		m_matrixStack.clear();
 		//m_matrixStack.push_back(glm::mat4(1.0f));
@@ -92,15 +96,12 @@ namespace AIngine::Rendering {
 		if (textureComponent && textureComponent->IsActive()) {
 			m_matrixStack.push_back(m_modelViewMatrix);
 
-			//m_modelViewMatrix *= node.GetTransform();
+			glm::vec2& textureSize = textureComponent->GetLocalWorldSize();
+
+			// we rotate around the center
 			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(node.GetLocalPosition(), 0.0f));
-
-			glm::vec2& textureSize = textureComponent->GetLocalWorldSize(); //glm::vec2(node.GetLocalScale().x * textureComponent->Width, node.GetLocalScale().y * textureComponent->Height);
-
-			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(-0.5f * textureSize.x, -0.5f * textureSize.y, 0.0f));
 			m_modelViewMatrix = glm::rotate(m_modelViewMatrix, node.GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
-			//m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(-0.5f * textureSize.x, -0.5f * textureSize.y, 0.0f));
-
+			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(-0.5f * textureSize.x, -0.5f * textureSize.y, 0.0f));
 			m_modelViewMatrix = glm::scale(m_modelViewMatrix, glm::vec3(textureSize, 1.0f));
 
 			m_shader->SetMatrix4("model", m_modelViewMatrix);
@@ -112,6 +113,7 @@ namespace AIngine::Rendering {
 			glBindVertexArray(m_quadVAO);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 			glBindVertexArray(0);
+			glActiveTexture(0);
 
 			m_modelViewMatrix = m_matrixStack.back();
 			m_matrixStack.pop_back();
