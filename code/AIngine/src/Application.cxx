@@ -67,7 +67,7 @@ namespace AIngine {
 		path = std::string("assets/Intellgine/textures/White.png");
 		AIngine::Assets::BitmapAsset* bitmap = GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
 
-
+		m_debugDraw = new AIngine::Debug::DebugDraw();
 
 	}
 
@@ -132,7 +132,9 @@ namespace AIngine {
 			m_imGuiLayer->OnBegin();
 			for (Layer* layer : m_layerStack)
 				layer->OnImGuiRender();
+			m_debugDraw->Flush();
 			m_imGuiLayer->OnEnd();
+
 
 			// finish the frame
 			m_window->OnUpdate();
@@ -150,7 +152,7 @@ namespace AIngine {
 		//delete m_physicsWorld;
 		// destroy camera
 		delete m_camera;
-
+		delete m_debugDraw;
 		delete m_viewport;
 
 
