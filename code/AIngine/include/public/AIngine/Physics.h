@@ -2,9 +2,16 @@
 #include "AIngine/Component.h"
 #include <Box2D/Box2D.h>
 
+namespace AIngine::Editor {
+	class SceneGraphWidget;
+}
+
 namespace AIngine {
 
 	class PhysicsComponent : public AIngine::Component {
+
+		friend class AIngine::Editor::SceneGraphWidget;
+
 	public:
 		PhysicsComponent(GameObject* owner);
 		virtual ~PhysicsComponent();

@@ -6,6 +6,7 @@
 #include "AIngine/Input.h"
 #include "AIngine/KeyCodes.h"
 #include "Events/InputEvents.h"
+#include "AIngine/Physics.h"
 
 namespace AIngine::Editor {
 
@@ -66,14 +67,12 @@ namespace AIngine::Editor {
 	{
 		if (!node) return;
 
-		if (!node) return;
-
 		float* position[] = { &node->GetLocalPosition().x ,&node->GetLocalPosition().y };
 		float* scale[] = { &node->GetLocalScale().x , &node->GetLocalScale().y };
 		ImGui::Text("Transform");
-		ImGui::DragFloat2("Position", *position);
-		ImGui::DragFloat2("Scale", *scale);
-		ImGui::DragFloat("Rotation", &node->GetLocalRotation());
+		bool draggedPosition = ImGui::DragFloat2("Position", *position);
+		bool draggedScale = ImGui::DragFloat2("Scale", *scale);
+		bool draggedRot = ImGui::DragFloat("Rotation", &node->GetLocalRotation(),  M_PI / 180.0);
 
 		AIngine::Rendering::Texture2D* texture = node->GetComponent<AIngine::Rendering::Texture2D>();
 
@@ -88,6 +87,14 @@ namespace AIngine::Editor {
 			ImGui::Text(texture->GetName().c_str());
 			ImGui::DragFloat2("WorldSize", *size, dragSpeed, 0.0f, 1000.0f);
 			ImGui::DragFloat3("Color", *color, 0.02, 0.0f, 1.0f);
+		}
+
+		// adjust position & rotation in the phyiscs world
+		AIngine::PhysicsComponent* physComp = node->GetComponent<AIngine::PhysicsComponent>();
+		if (physComp) {
+			b2Vec2 worldPos = b2Vec2(node->GetWorldPosition().x, node->GetWorldPosition().y);
+			if (draggedPosition || draggedRot)
+				physComp->m_body->SetTransform(worldPos, node->GetWorldRotation());
 		}
 	}
 
