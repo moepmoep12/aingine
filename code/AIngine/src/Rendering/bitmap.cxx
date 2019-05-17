@@ -5,7 +5,9 @@
 
 #include <stb_image.h>
 
-Bitmap::Bitmap(std::string const &filename) {
+Bitmap::Bitmap(std::string const &filename)
+	: m_filename(filename)
+{
     m_data = stbi_load(filename.c_str(), &m_width, &m_height, &m_channels, 0);
     if (m_data == nullptr)
         throw std::runtime_error(std::string("Could not load file: ") + filename);

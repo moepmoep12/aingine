@@ -38,6 +38,8 @@ namespace AIngine::Rendering {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, this->Filter_Max);
 		// Unbind texture
 		glBindTexture(GL_TEXTURE_2D, 0);
+
+		SetName(texture.GetName());
 	}
 
 	void Texture2D::Bind() const

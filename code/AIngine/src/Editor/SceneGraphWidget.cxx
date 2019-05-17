@@ -77,12 +77,15 @@ namespace AIngine::Editor {
 
 		AIngine::Rendering::Texture2D* texture = node->GetComponent<AIngine::Rendering::Texture2D>();
 
+		// show textureComponent
 		if (texture) {
 			ImGui::Separator();
 			static float dragSpeed = 0.1f;
 			float* size[] = { &texture->GetLocalWorldSize().x ,&texture->GetLocalWorldSize().y };
 			float* color[] = { &texture->GetColor().x,&texture->GetColor().y ,&texture->GetColor().z };
 			ImGui::Text("Texture Component");
+			ImGui::SameLine();
+			ImGui::Text(texture->GetName().c_str());
 			ImGui::DragFloat2("WorldSize", *size, dragSpeed, 0.0f, 1000.0f);
 			ImGui::DragFloat3("Color", *color, 0.02, 0.0f, 1.0f);
 		}
