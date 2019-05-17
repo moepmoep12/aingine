@@ -78,6 +78,8 @@ namespace AIngine {
 
 		glm::mat4 GetLocalTransform() const;
 		glm::vec2 GetWorldPosition() const;
+		glm::vec2 GetWorldScale() const;
+		float GetWorldRotation() const;
 		void AddChild(GameObject* obj);
 		void RemoveChild(GameObject* obj);
 

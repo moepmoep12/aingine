@@ -14,6 +14,26 @@ namespace AIngine {
 		}
 		return result;
 	}
+	glm::vec2 GameObject::GetWorldScale() const
+	{
+		GameObject* parent = m_parent;
+		glm::vec2 result = m_scale;
+		while (parent) {
+			result *= parent->m_scale;
+			parent = parent->m_parent;
+		}
+		return result;
+	}
+	float GameObject::GetWorldRotation() const
+	{
+		GameObject* parent = m_parent;
+		float result = m_rotation;
+		while (parent) {
+			result += parent->m_rotation;
+			parent = parent->m_parent;
+		}
+		return result;
+	}
 	glm::mat4  GameObject::GetLocalTransform() const
 	{
 		glm::mat4 result = glm::mat4(1.0);
