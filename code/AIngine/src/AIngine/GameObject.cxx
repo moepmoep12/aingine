@@ -81,9 +81,7 @@ namespace AIngine {
 				for (auto i = m_children.begin(); i != m_children.end(); ++i)
 				{
 					GameObject* node = *i._Ptr;
-					if (!node->Accept(traverser)) {
-						break;
-					}
+					node->Accept(traverser);
 				}
 			}
 			return traverser.Leave(*this);
