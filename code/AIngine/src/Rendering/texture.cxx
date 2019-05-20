@@ -3,7 +3,7 @@
 
 namespace AIngine::Rendering {
 	Texture2D::Texture2D(GameObject* owner)
-		: Width(0), Height(0), Internal_Format(GL_RGB), Image_Format(GL_RGB), Wrap_S(GL_REPEAT), Wrap_T(GL_REPEAT), Filter_Min(GL_LINEAR), Filter_Max(GL_LINEAR), m_spriteColor(glm::vec3(1.0)), Component(owner)
+		: Width(0), Height(0), Internal_Format(GL_RGB), Image_Format(GL_RGB), Wrap_S(GL_REPEAT), Wrap_T(GL_REPEAT), Filter_Min(GL_LINEAR), Filter_Max(GL_LINEAR), m_spriteColor(glm::vec3(1.0)), Component(owner), m_parallaxFactor(glm::vec2(1.0f))
 	{
 		glGenTextures(1, &this->ID);
 	}

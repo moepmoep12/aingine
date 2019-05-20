@@ -97,6 +97,7 @@ namespace AIngine::Rendering {
 			m_matrixStack.push_back(m_modelViewMatrix);
 
 			glm::vec2& textureSize = textureComponent->GetLocalWorldSize();
+			m_shader->SetMatrix4("view", AIngine::Application::Get().GetCamera().GetViewMatrix(textureComponent->GetParallaxFactor()), true);
 
 			// we rotate around the center
 			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(node.GetLocalPosition(), 0.0f));

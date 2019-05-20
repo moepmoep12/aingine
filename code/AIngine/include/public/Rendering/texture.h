@@ -42,9 +42,13 @@ namespace AIngine::Rendering {
 		glm::vec2& GetLocalWorldSize();
 		inline void SetLocalWorldSize(const glm::vec2& size) { m_localWorldSize = size; }
 
+		inline  glm::vec2& GetParallaxFactor() { return m_parallaxFactor; }
+		inline void SetParallaxFactor(const glm::vec2& factor) { m_parallaxFactor = factor; }
+
 	private:
 		glm::vec3 m_spriteColor;
 		glm::vec2 m_localWorldSize = glm::vec2(0);
+		glm::vec2 m_parallaxFactor;
 
 	};
 }
