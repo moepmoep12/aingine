@@ -30,6 +30,7 @@ add_subdirectory(thirdParty)
 add_subdirectory(assets) 
 add_subdirectory(AIngine) 
 add_subdirectory(game) 
+add_subdirectory(CrappyBird) 
 
 
 # Use folders in VisualStudio / XCode

@@ -47,6 +47,7 @@ add_subdirectory("${THIRD_PARTY_DIR}/glm/")
 add_subdirectory("${THIRD_PARTY_DIR}/tinyobjloader/")
 add_subdirectory("${THIRD_PARTY_DIR}/spdlog/")
 add_subdirectory("${THIRD_PARTY_DIR}/Box2D-cmake/")
+add_subdirectory("${THIRD_PARTY_DIR}/boost-cmake/")
 
 #
 # --- Nothings/STB header-only libs (manual) --- ##################
