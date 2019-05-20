@@ -11,10 +11,12 @@ namespace AIngine {
 		inline void SetName(const std::string& name) { m_name = name; }
 
 		inline bool IsActive() const { return m_isActive; }
-		inline void SetActive(bool active) { m_isActive = active; }
+		virtual void SetActive(bool active) { m_isActive = active; }
 
 		virtual void OnUpdate(float deltatime) {}
 		virtual void OnImguiRender() {}
+
+		inline GameObject* GetOwner() { return m_owner; }
 
 		inline Component(GameObject* owner) : m_owner(owner) {}
 		inline virtual ~Component() {}
