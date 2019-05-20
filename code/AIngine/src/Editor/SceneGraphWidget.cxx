@@ -72,7 +72,7 @@ namespace AIngine::Editor {
 		ImGui::Text("Transform");
 		bool draggedPosition = ImGui::DragFloat2("Position", *position);
 		bool draggedScale = ImGui::DragFloat2("Scale", *scale);
-		bool draggedRot = ImGui::DragFloat("Rotation", &node->GetLocalRotation(),  M_PI / 180.0f);
+		bool draggedRot = ImGui::DragFloat("Rotation", &node->GetLocalRotation(), M_PI / 180.0f);
 
 		AIngine::Rendering::Texture2D* texture = node->GetComponent<AIngine::Rendering::Texture2D>();
 
@@ -82,11 +82,13 @@ namespace AIngine::Editor {
 			static float dragSpeed = 0.1f;
 			float* size[] = { &texture->GetLocalWorldSize().x ,&texture->GetLocalWorldSize().y };
 			float* color[] = { &texture->GetColor().x,&texture->GetColor().y ,&texture->GetColor().z };
+			float* parallax[] = { &texture->GetParallaxFactor().x, &texture->GetParallaxFactor().y };
 			ImGui::Text("Texture Component");
 			ImGui::SameLine();
 			ImGui::Text(texture->GetName().c_str());
 			ImGui::DragFloat2("WorldSize", *size, dragSpeed, 0.0f, 1000.0f);
 			ImGui::DragFloat3("Color", *color, 0.02f, 0.0f, 1.0f);
+			ImGui::DragFloat2("Parallax Factor", *parallax, 0.02f, -100.0f, 100.0f);
 		}
 
 		// adjust position & rotation in the phyiscs world
