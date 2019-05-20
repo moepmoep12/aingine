@@ -20,3 +20,6 @@
 [submodule "code/thirdParty/Box2D-cmake"]
 	path = code/thirdParty/Box2D-cmake
 	url = https://github.com/tobanteGaming/Box2D-cmake.git
+[submodule "code/thirdParty/boost-cmake"]
+	path = code/thirdParty/boost-cmake
+	url = https://github.com/Orphis/boost-cmake.git

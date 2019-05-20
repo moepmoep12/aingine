@@ -39,7 +39,6 @@ set(AINGINE_HEADER
 		include/public/Structures/memory.h
 		include/public/Structures/SceneGraph.h
 		include/public/Structures/Traverser.h
-		include/public/Structures/Vectors.h
 		include/public/UI/ImGuiLayer.h	
 		include/private/Editor/CameraWidget.h
 		include/private/Editor/Editor.h
@@ -109,6 +108,8 @@ target_link_libraries(Engine
 		imgui
 		spdlog
 		Box2D-cmake
+		Boost::serialization
+		Boost::boost
         )
 
 #
