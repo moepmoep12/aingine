@@ -130,12 +130,7 @@ void Game::OnAppUpdate()
 
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::F))
 	{
-		m_camera->Zoom(zoomSpeed * GetDeltaTime());
-	}
 
-	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::G))
-	{
-		m_camera->Zoom(-zoomSpeed * GetDeltaTime());
 	}
 
 }
@@ -144,7 +139,7 @@ void Game::OnAppEvent(AIngine::Events::Event & e)
 {
 	if (typeid(e) == typeid(AIngine::Events::MouseScrolledEvent)) {
 		AIngine::Events::MouseScrolledEvent scrolledEvent = dynamic_cast<AIngine::Events::MouseScrolledEvent&>(e);
-		static float zoomSpeed = 10;
+		static float zoomSpeed = 35;
 		m_camera->Zoom(scrolledEvent.GetYOffset() * GetDeltaTime() * zoomSpeed);
 	}
 
@@ -170,6 +165,16 @@ void Game::OnAppEvent(AIngine::Events::Event & e)
 
 			AIngine::GameObject* spawn = SpawnObjectAtMousePosition(minSize, maxSize, e_Box);
 
+		}
+	}
+
+	if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent)) {
+
+		AIngine::Events::KeyPressedEvent keyEvent = dynamic_cast<AIngine::Events::KeyPressedEvent&>(e);
+
+		if (keyEvent.GetKeyCode() == AIngine::KeyCodes::F) {
+			glm::vec2 screenPos = glm::vec2(AIngine::Input::GetMouseX(), AIngine::Input::GetMouseY());
+			m_camera->LookAt(/*m_camera->ScreenToWorldPoint(screenPos)*/glm::vec2(5, 5));
 		}
 	}
 }
