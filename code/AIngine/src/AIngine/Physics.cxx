@@ -22,6 +22,9 @@ namespace AIngine {
 
 	PhysicsComponent::~PhysicsComponent()
 	{
+		if (m_body) {
+			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
+		}
 	}
 
 	void PhysicsComponent::OnUpdate(float deltatime)

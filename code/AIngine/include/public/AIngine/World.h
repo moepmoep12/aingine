@@ -21,6 +21,7 @@ namespace AIngine {
 
 		friend class AIngine::Application;
 		friend class AIngine::Editor::Editor;
+		friend class PhysicsComponent;
 
 	public:
 		static GameObject* const SpawnObject(const std::string& name = std::string("GameObject"), GameObject* parent = nullptr, const glm::vec2& position = glm::vec2(0.0f), const glm::vec2& scale = glm::vec2(1.0f), const float rotation = 0.0f);
