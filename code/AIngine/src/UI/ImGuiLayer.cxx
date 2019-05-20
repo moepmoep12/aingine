@@ -77,7 +77,7 @@ namespace AIngine::UI {
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		const Application& app = Application::Get();
-		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
+		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
 		// Rendering
 		ImGui::Render();
@@ -146,10 +146,10 @@ namespace AIngine::UI {
 		//ImGui::End();
 
 		ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode; 
+		ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 		if (ImGui::IsMouseDragging())
 			dockspace_flags = ImGuiDockNodeFlags_None;
 
-		ImGui::DockSpaceOverViewport(viewport,dockspace_flags);
+		ImGui::DockSpaceOverViewport(viewport, dockspace_flags);
 	}
 }

@@ -53,7 +53,7 @@ namespace AIngine::Rendering {
 		glm::vec2 m_origin = glm::vec2(0);
 		float m_rotation = 0.0;
 		float m_zoom = 1.0;
-		float m_zoomMin = 0.001;
+		float m_zoomMin = 0.001f;
 		float m_zoomMax = 1000;
 		const Viewport& m_viewport;
 	};

@@ -12,9 +12,9 @@ AIngine::Application* AIngine::CreateApplication() {
 }
 
 // cam settings
-static float translationrate = 5;
-static float rotationrate = 0.1;
-static float zoomSpeed = 5;
+static float translationrate = 5.0f;
+static float rotationrate = 0.1f;
+static float zoomSpeed = 5.0f;
 
 
 class ExampleLayer :public  AIngine::Layer {
@@ -191,13 +191,13 @@ AIngine::GameObject * Game::SpawnObjectAtMousePosition(const glm::vec2 & minSize
 	spawnPosition = m_camera->ScreenToWorldPoint(mousePosition);
 
 	// rotation
-	float rotation = 0.0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / M_PI));
+	float rotation = 0.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / M_PI));
 
 	// color
 	glm::vec3 color(1.0);
-	color.x = 0.1 + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-	color.y = 0.1 + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-	color.z = 0.1 + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	color.x = 0.1f + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	color.y = 0.1f + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	color.z = 0.1f + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
 	// worldSize
 	glm::vec2 worldSize(1);
@@ -248,14 +248,14 @@ AIngine::GameObject * Game::SpawnObjectAtMousePosition(const glm::vec2 & minSize
 	bodydef.type = b2_dynamicBody;
 
 	b2FixtureDef fixturedef;
-	fixturedef.density = 1.0;
+	fixturedef.density = 1.0f;
 
 	if (shape == e_Circle) {
-		circleShape.m_radius = worldSize.x / 2.0;
+		circleShape.m_radius = worldSize.x / 2.0f;
 		fixturedef.shape = &circleShape;
 	}
 	else {
-		polyShape.SetAsBox(worldSize.x / 2.0, worldSize.y / 2.0);
+		polyShape.SetAsBox(worldSize.x / 2.0f, worldSize.y / 2.0f);
 		fixturedef.shape = &polyShape;
 	}
 

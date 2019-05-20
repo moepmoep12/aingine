@@ -38,7 +38,7 @@ namespace AIngine::Rendering {
 		Camera& cam = app.GetCamera();
 		const Viewport& viewport = app.GetViewport();
 
-		glViewport(viewport.GetTopLeftCornerPosition().x, height - viewport.GetViewportHeight(), viewport.GetViewportWidth(), viewport.GetViewportHeight());
+		glViewport((GLint)viewport.GetTopLeftCornerPosition().x, (GLint)(height - viewport.GetViewportHeight()), (GLsizei)viewport.GetViewportWidth(), (GLsizei)viewport.GetViewportHeight());
 
 		glm::mat4 projection = cam.GetProjectionMatrix();
 

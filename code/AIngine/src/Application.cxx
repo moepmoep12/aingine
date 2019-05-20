@@ -110,7 +110,7 @@ namespace AIngine {
 		while (m_isRunning)
 		{
 			// calc delta time
-			s_currentFrame = glfwGetTime();
+			s_currentFrame = (float)glfwGetTime();
 			m_deltaTime = s_currentFrame - s_lastFrame;
 			s_lastFrame = s_currentFrame;
 

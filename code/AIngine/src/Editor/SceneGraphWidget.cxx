@@ -19,7 +19,7 @@ namespace AIngine::Editor {
 		static bool p_open = true;
 		static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse /*| ImGuiWindowFlags_NoMove*/;
 
-		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2((float)windowWidth, (float)windowHeight), ImGuiCond_FirstUseEver);
 
 		if (!ImGui::Begin("SceneGraph", &p_open, windowFlags))
 		{
@@ -72,7 +72,7 @@ namespace AIngine::Editor {
 		ImGui::Text("Transform");
 		bool draggedPosition = ImGui::DragFloat2("Position", *position);
 		bool draggedScale = ImGui::DragFloat2("Scale", *scale);
-		bool draggedRot = ImGui::DragFloat("Rotation", &node->GetLocalRotation(),  M_PI / 180.0);
+		bool draggedRot = ImGui::DragFloat("Rotation", &node->GetLocalRotation(),  M_PI / 180.0f);
 
 		AIngine::Rendering::Texture2D* texture = node->GetComponent<AIngine::Rendering::Texture2D>();
 
@@ -86,7 +86,7 @@ namespace AIngine::Editor {
 			ImGui::SameLine();
 			ImGui::Text(texture->GetName().c_str());
 			ImGui::DragFloat2("WorldSize", *size, dragSpeed, 0.0f, 1000.0f);
-			ImGui::DragFloat3("Color", *color, 0.02, 0.0f, 1.0f);
+			ImGui::DragFloat3("Color", *color, 0.02f, 0.0f, 1.0f);
 		}
 
 		// adjust position & rotation in the phyiscs world

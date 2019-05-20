@@ -36,7 +36,7 @@ namespace AIngine {
 	void World::OnUpdate(float delta)
 	{
 		m_sceneGraph->OnUpdate(delta);
-		m_physicsWorld->Step(1.0 / 60.0, 8, 3);
+		m_physicsWorld->Step(1.0f / 60.0f, 8, 3);
 		m_physicsWorld->DrawDebugData();
 	}
 
@@ -91,23 +91,23 @@ namespace AIngine {
 
 
 		// bottom
-		bodydef.position.Set(m_bounds.x + (boundSizeX / 2.0), m_bounds.w);
-		shape.Set(b2Vec2(-boundSizeX / 2.0, 0.0), b2Vec2(boundSizeX / 2.0, 0.0));
+		bodydef.position.Set(m_bounds.x + (boundSizeX / 2.0f), m_bounds.w);
+		shape.Set(b2Vec2(-boundSizeX / 2.0f, 0.0f), b2Vec2(boundSizeX / 2.0f, 0.0f));
 		m_physicsWorld->CreateBody(&bodydef)->CreateFixture(&fixturedef);
 
 		// top
-		bodydef.position.Set(m_bounds.x + (boundSizeX / 2.0), m_bounds.z);
-		shape.Set(b2Vec2(-boundSizeX / 2.0, 0.0), b2Vec2(boundSizeX / 2.0, 0.0));
+		bodydef.position.Set(m_bounds.x + (boundSizeX / 2.0f), m_bounds.z);
+		shape.Set(b2Vec2(-boundSizeX / 2.0f, 0.0), b2Vec2(boundSizeX / 2.0f, 0.0f));
 		m_physicsWorld->CreateBody(&bodydef)->CreateFixture(&fixturedef);
 
 		// left
-		bodydef.position.Set(m_bounds.x, m_bounds.z + (boundSizeY / 2.0));
-		shape.Set(b2Vec2(0.0, -boundSizeY / 2.0), b2Vec2(0.0, boundSizeY / 2.0));
+		bodydef.position.Set(m_bounds.x, m_bounds.z + (boundSizeY / 2.0f));
+		shape.Set(b2Vec2(0.0f, -boundSizeY / 2.0f), b2Vec2(0.0f, boundSizeY / 2.0f));
 		m_physicsWorld->CreateBody(&bodydef)->CreateFixture(&fixturedef);
 
 		// right
-		bodydef.position.Set(m_bounds.y, m_bounds.z + (boundSizeY / 2.0));
-		shape.Set(b2Vec2(0.0, -boundSizeY / 2.0), b2Vec2(0.0, boundSizeY / 2.0));
+		bodydef.position.Set(m_bounds.y, m_bounds.z + (boundSizeY / 2.0f));
+		shape.Set(b2Vec2(0.0f, -boundSizeY / 2.0f), b2Vec2(0.0f, boundSizeY / 2.0f));
 		m_physicsWorld->CreateBody(&bodydef)->CreateFixture(&fixturedef);
 	}
 }
