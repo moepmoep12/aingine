@@ -57,8 +57,11 @@ namespace AIngine::Editor {
 
 			glm::vec2 screenPos = glm::vec2(AIngine::Input::GetMouseX(), AIngine::Input::GetMouseY());
 			glm::vec2 worldPos = m_camera.ScreenToWorldPoint(screenPos);
+			glm::vec2 WorldToScreen = m_camera.WorldToScreenPoint(worldPos);
 
-			ImGui::Text("World Position (%.2f | %.2f)", worldPos.x, worldPos.y);
+			ImGui::Text("MousePosition (%.2f | %.2f)", screenPos.x, screenPos.y);
+			ImGui::Text("Screen To World (%.2f | %.2f)", worldPos.x, worldPos.y);
+			ImGui::Text("World To Screen (%.2f | %.2f)", WorldToScreen.x, WorldToScreen.y);
 
 			ImGui::End();
 		}

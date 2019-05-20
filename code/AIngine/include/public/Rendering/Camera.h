@@ -42,8 +42,9 @@ namespace AIngine::Rendering {
 
 		glm::vec2 ScreenToWorldPoint(const glm::vec2& screenpoint) const;
 		glm::vec2 WorldToScreenPoint(const glm::vec2& worldpoint) const;
+		glm::vec2 GetVisibleWorldSize() const;
 
-		Camera(const Viewport& viewport,const glm::vec2& bounds, const glm::vec2& desiredScreenSizeInWorldUnits = glm::vec2(0));
+		Camera(const Viewport& viewport, const glm::vec2& bounds, const glm::vec2& desiredScreenSizeInWorldUnits = glm::vec2(0));
 
 	private:
 		glm::mat4 GetVirtualViewMatrix(const glm::vec2& parallaxFactor) const;

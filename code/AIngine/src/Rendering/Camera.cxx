@@ -33,7 +33,9 @@ void AIngine::Rendering::Camera::Rotate(float amount)
 
 void AIngine::Rendering::Camera::LookAt(const glm::vec2& pos)
 {
-	m_position = WorldToScreenPoint(pos) - glm::vec2(m_viewport.GetViewportWidth() / 2.0, m_viewport.GetViewportHeight() / 2.0);
+	glm::vec2 worldToScreen = WorldToScreenPoint(pos);
+	glm::vec2 offset = glm::vec2(m_viewport.GetViewportWidth() / 2.0, m_viewport.GetViewportHeight() / 2.0);
+	m_position = worldToScreen - offset;
 }
 
 glm::mat4  AIngine::Rendering::Camera::GetViewMatrix() const
@@ -60,8 +62,17 @@ glm::vec2 AIngine::Rendering::Camera::ScreenToWorldPoint(const glm::vec2 & scree
 
 glm::vec2 AIngine::Rendering::Camera::WorldToScreenPoint(const glm::vec2 & worldpoint) const
 {
-	glm::vec2 point = worldpoint /*+ m_viewport.GetTopLeftCornerPosition()*/;
+	glm::vec2 point = worldpoint + ScreenToWorldPoint( m_viewport.GetTopLeftCornerPosition());
 	return  GetViewMatrix() * glm::vec4(point, 0, 1);
+}
+
+glm::vec2 AIngine::Rendering::Camera::GetVisibleWorldSize() const
+{
+
+	glm::vec2 p1 = ScreenToWorldPoint(m_viewport.GetTopLeftCornerPosition());
+	glm::vec2 p2 = ScreenToWorldPoint(m_viewport.GetTopLeftCornerPosition() + glm::vec2(m_viewport.GetViewportWidth(), m_viewport.GetViewportHeight()));
+
+	return glm::vec2(abs(p2.x - p1.x), abs(p2.y - p1.y));
 }
 
 
