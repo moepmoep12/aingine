@@ -4,6 +4,7 @@
 #include "AIngine/Input.h"
 #include "Editor/Editor.h"
 #include <memory>
+#include "AIngine/Physics.h"
 
 
 #define BIND_EVENT_TO_FN(fn) std::bind(&fn, this, std::placeholders::_1)
@@ -11,6 +12,38 @@
 namespace AIngine {
 
 	Application* Application::s_instance = nullptr;
+
+
+	class ContactListener : public b2ContactListener {
+	public:
+		// Called when two fixtures begin to touch
+		virtual void BeginContact(b2Contact* contact)
+		{
+			//check if fixture A was a ball
+			void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+			if (bodyUserData)
+				static_cast<AIngine::PhysicsComponent*> (bodyUserData)->SetCollision(true, contact->GetFixtureB());
+
+			//check if fixture B was a ball
+			bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+			if (bodyUserData)
+				static_cast<AIngine::PhysicsComponent*> (bodyUserData)->SetCollision(true, contact->GetFixtureA());
+		}
+
+		// Called when two fixtures cease to touch
+		virtual void EndContact(b2Contact* contact)
+		{
+			void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+			if (bodyUserData)
+				static_cast<AIngine::PhysicsComponent*> (bodyUserData)->SetCollision(false, nullptr);
+
+			//check if fixture B was a ball
+			bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+			if (bodyUserData)
+				static_cast<AIngine::PhysicsComponent*> (bodyUserData)->SetCollision(false, nullptr);
+		}
+
+	};
 
 	Application::Application()
 	{
@@ -74,6 +107,7 @@ namespace AIngine {
 	Application::~Application()
 	{
 		CORE_INFO("Destructor Application");
+		delete m_contactListener;
 	}
 
 	static float s_currentFrame = 0.0f;
@@ -83,6 +117,8 @@ namespace AIngine {
 	{
 		// create game world
 		m_world = new World(m_bounds, m_gravity);
+		m_contactListener = new ContactListener();
+		m_world->m_physicsWorld->SetContactListener(m_contactListener);
 		PushLayer(m_world);
 
 		m_viewport = new AIngine::Rendering::Viewport(1508, 906, 0, 0, *m_window.get());

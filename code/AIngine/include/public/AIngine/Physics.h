@@ -31,8 +31,15 @@ namespace AIngine {
 
 		void UpdateTransform();
 
+		inline bool IsCollided() const { return m_collided; }
+		inline void SetCollision(bool collided, b2Fixture* other) { m_collided = collided; m_otherCollided = other; }
+
+		inline b2Fixture* GetOtherCollider() { return m_otherCollided; }
+
 	private:
 		b2Body* m_body;
+		b2Fixture* m_otherCollided;
+		bool m_collided = false;
 
 	};
 }

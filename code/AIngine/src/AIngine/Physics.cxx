@@ -43,6 +43,7 @@ namespace AIngine {
 		bodydef.position.Set(worldPos.x, worldPos.y);
 		m_body = AIngine::World::CreateBody(bodydef);
 		m_body->CreateFixture(&fixtureDef);
+		m_body->SetUserData(this);
 	}
 
 

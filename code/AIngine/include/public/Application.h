@@ -21,6 +21,8 @@ namespace AIngine::Editor {
 
 namespace AIngine {
 
+	class ContactListener;
+
 	class Application {
 
 		friend class Editor::Editor;
@@ -72,6 +74,7 @@ namespace AIngine {
 		static Application* s_instance;
 		float m_deltaTime = 0.0f;
 		AIngine::Debug::DebugDraw* m_debugDraw;
+		ContactListener* m_contactListener;
 
 	};
 
