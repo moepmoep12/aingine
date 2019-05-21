@@ -30,7 +30,6 @@ namespace CrappyBird {
 	{
 	}
 
-
 	void CrappyBird::CrappyBird::OnAppUpdate()
 	{
 		if (m_running) {
@@ -192,7 +191,7 @@ namespace CrappyBird {
 
 		glm::vec2 spawnPosMin(1);
 		glm::vec2 spawnPosMax(1);
-		spawnPosMin.x = worldBounds.x + m_playerSize.x * 4.0f + obstacleWidth ;
+		spawnPosMin.x = worldBounds.x + m_playerSize.x * 4.0f + obstacleWidth;
 		spawnPosMax.x = (4.0f* worldBounds.y) - obstacleWidth / 2.0f;
 
 		AIngine::GameObject* spawnedObject;
@@ -354,7 +353,7 @@ namespace CrappyBird {
 		while (it != m_obstacleParent->GetChildren().end()) {
 			glm::vec2 pos = (*it._Ptr)->GetLocalPosition();
 			pos -= movement;
-			if (pos.x < worldBounds.x)
+			if (pos.x < worldBounds.x - obstacleWidth)
 				pos.x = (worldBounds.y * 4.0f) - 0.5f * obstacleWidth;
 			(*it._Ptr)->SetLocalPosition(pos);
 			AIngine::PhysicsComponent* physComp = (*it._Ptr)->GetComponent<AIngine::PhysicsComponent>();
