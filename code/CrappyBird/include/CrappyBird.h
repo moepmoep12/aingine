@@ -35,5 +35,7 @@ namespace CrappyBird {
 		glm::vec2 m_playerSize;
 		AIngine::GameObject* m_obstacleParent;
 		AIngine::GameObject* m_player;
+		float32 m_groundPosY;
+		bool m_running = true;
 	};
 }

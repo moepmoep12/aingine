@@ -1,6 +1,7 @@
 #include "CrappyBird.h"
 #include "Events/InputEvents.h"
 #include <random>
+#include <time.h>
 
 AIngine::Application* AIngine::CreateApplication() {
 	return new CrappyBird::CrappyBird();
@@ -13,6 +14,8 @@ namespace CrappyBird {
 	static glm::vec2 VisibleWorldSize;
 	static glm::vec2 initialCloud1Pos;
 	static glm::vec2 initialCloud2Pos;
+
+
 
 	void CrappyBird::CrappyBird::OnAppStartUp()
 	{
@@ -30,9 +33,18 @@ namespace CrappyBird {
 
 	void CrappyBird::CrappyBird::OnAppUpdate()
 	{
-		MoveCamera();
-		MoveObstacles();
-		UpdateBackGround();
+		if (m_running) {
+			MoveCamera();
+			MoveObstacles();
+			UpdateBackGround();
+
+			if (m_player->GetComponent<AIngine::PhysicsComponent>()->IsCollided()) {
+				m_running = false;
+				AIngine::PhysicsComponent* other = static_cast<AIngine::PhysicsComponent*>(m_player->GetComponent<AIngine::PhysicsComponent>()->GetOtherCollider()->GetBody()->GetUserData());
+				DEBUG_INFO(other->GetOwner()->GetName().c_str());
+				m_player->RemoveComponent<AIngine::PhysicsComponent>();
+			}
+		}
 	}
 
 	void CrappyBird::OnAppEvent(AIngine::Events::Event & e)
@@ -107,7 +119,7 @@ namespace CrappyBird {
 			m_camera->LookAt(m_camera->ScreenToWorldPoint(screenPos));
 		}
 
-		if (AIngine::Input::IsMouseButtonPressed(0))
+		if (AIngine::Input::IsMouseButtonPressed(0) && m_running)
 		{
 			m_player->GetComponent<AIngine::PhysicsComponent>()->ApplyLinearImpulseToCenter(glm::vec2(0, -0.05f));
 		}
@@ -120,6 +132,7 @@ namespace CrappyBird {
 		AIngine::GameObject* ground = AIngine::World::SpawnObject();
 		ground->SetName("Ground");
 		ground->SetLocalPosition(glm::vec2(5, 5));
+		m_groundPosY = ground->GetLocalPosition().y;
 
 		AIngine::PhysicsComponent* phys = ground->AddComponent<AIngine::PhysicsComponent>();
 
@@ -157,16 +170,18 @@ namespace CrappyBird {
 		physComp->CreateBody(bodydef, fixturedef);
 	}
 
+	static float obstacleWidth = 1.25f;
+
 	void CrappyBird::SpawnObstacles()
 	{
 		std::string boxImagePath("assets/Intellgine/textures/White.png");
 		Bitmap* boxBitmap = &GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(boxImagePath)->GetBitmap();
 		glm::vec4 worldBounds = AIngine::World::GetBounds();
-		float minDistance = 0.5f;
-		float maxDistance = 1.0f;
-		float obstacleWidth = 0.4f;
+		srand(time(NULL));
 		float minObstacleHeight = 1.0f;
-		float maxObstacleHeight = (5.0 / 2.0f) - (1.75f* m_playerSize.y);
+		float maxObstacleHeight = (m_groundPosY / 2.0f) - (2.5f* m_playerSize.y);
+		float minDistance = obstacleWidth;
+		float maxDistance = 1.5f * obstacleWidth;
 		glm::vec2 spawnPosition(0);
 		m_obstacleParent = AIngine::World::SpawnObject(std::string("Obstacles"), nullptr);
 
@@ -177,8 +192,8 @@ namespace CrappyBird {
 
 		glm::vec2 spawnPosMin(1);
 		glm::vec2 spawnPosMax(1);
-		spawnPosMin.x = worldBounds.x + m_playerSize.x * 2.0f + obstacleWidth / 2.0f;
-		spawnPosMax.x = worldBounds.w - obstacleWidth / 2.0f;
+		spawnPosMin.x = worldBounds.x + m_playerSize.x * 4.0f + obstacleWidth ;
+		spawnPosMax.x = (4.0f* worldBounds.y) - obstacleWidth / 2.0f;
 
 		AIngine::GameObject* spawnedObject;
 		int count = 0;
@@ -226,7 +241,7 @@ namespace CrappyBird {
 			color.z = 0.1f + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 			spawnPosition.x = spawnPosX;
 			float sizeY = minObstacleHeight + static_cast <float> (rand()) / static_cast <float> (RAND_MAX / maxObstacleHeight);
-			spawnPosition.y = worldBounds.w / 2.0f - (sizeY / 2.0f);
+			spawnPosition.y = m_groundPosY - (sizeY / 2.0f);
 
 			spawnedObject = AIngine::World::SpawnObject(std::string("Obstacle").append(std::to_string(count)), m_obstacleParent, spawnPosition, glm::vec2(1.0));
 
@@ -340,7 +355,7 @@ namespace CrappyBird {
 			glm::vec2 pos = (*it._Ptr)->GetLocalPosition();
 			pos -= movement;
 			if (pos.x < worldBounds.x)
-				pos.x = worldBounds.y;
+				pos.x = (worldBounds.y * 4.0f) - 0.5f * obstacleWidth;
 			(*it._Ptr)->SetLocalPosition(pos);
 			AIngine::PhysicsComponent* physComp = (*it._Ptr)->GetComponent<AIngine::PhysicsComponent>();
 			physComp->UpdateTransform();
