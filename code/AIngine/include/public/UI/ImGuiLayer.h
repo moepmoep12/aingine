@@ -25,6 +25,6 @@ namespace AIngine::UI {
 		//static AIngine::Editor::LogWidget s_logWidget;
 
 	private:
-		void CreateDockSpace(const bool show);
+		void CreateDockSpace(bool show);
 	};
 }

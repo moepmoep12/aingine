@@ -34,8 +34,8 @@ namespace AIngine::UI {
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-		//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
@@ -97,59 +97,49 @@ namespace AIngine::UI {
 	{
 		//static bool show = true;
 		//ImGui::ShowDemoWindow(&show);
-		//CreateDockSpace(true);
+		CreateDockSpace(true);
 		//s_logWidget.Draw("Log");
 	}
 
-
-	void ImGuiLayer::CreateDockSpace(const bool show)
+	// from imguidemo.cpp
+	void ImGuiLayer::CreateDockSpace( bool show)
 	{
-		if (!show) return;
+		static bool opt_fullscreen_persistant = true;
+		bool opt_fullscreen = opt_fullscreen_persistant;
+		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode;
 
-		//static bool opt_fullscreen_persistant = true;
-		//bool opt_fullscreen = opt_fullscreen_persistant;
-		//static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+		// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+		// because it would be confusing to have two docking targets within each others.
+		ImGuiWindowFlags window_flags = /*ImGuiWindowFlags_MenuBar |*/ ImGuiWindowFlags_NoDocking;
+		if (opt_fullscreen)
+		{
+			ImGuiViewport* viewport = ImGui::GetMainViewport();
+			ImGui::SetNextWindowPos(viewport->Pos);
+			ImGui::SetNextWindowSize(viewport->Size);
+			ImGui::SetNextWindowViewport(viewport->ID);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+			window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+		}
+		// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
+		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+			window_flags |= ImGuiWindowFlags_NoBackground;
 
-		//// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-		//// because it would be confusing to have two docking targets within each others.
-		//ImGuiWindowFlags window_flags =/* ImGuiWindowFlags_MenuBar |*/ ImGuiWindowFlags_NoDocking;
-		//if (opt_fullscreen)
-		//{
-		//	ImGuiViewport* viewport = ImGui::GetMainViewport();
-		//	ImGui::SetNextWindowPos(viewport->Pos);
-		//	ImGui::SetNextWindowSize(viewport->Size);
-		//	ImGui::SetNextWindowViewport(viewport->ID);
-		//	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-		//	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-		//	window_flags |= /*ImGuiWindowFlags_NoTitleBar |*/ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-		//	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-		//}
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		ImGui::Begin("DockSpace Demo", &show, window_flags);
+		ImGui::PopStyleVar();
 
-		//// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
-		//if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-		//	window_flags |= ImGuiWindowFlags_NoBackground;
+		if (opt_fullscreen)
+			ImGui::PopStyleVar(2);
 
-		//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		//ImGui::Begin("DockSpace", &opt_fullscreen, window_flags);
-		//ImGui::PopStyleVar();
-
-		//if (opt_fullscreen)
-		//	ImGui::PopStyleVar(2);
-
-		//// DockSpace
-		//ImGuiIO& io = ImGui::GetIO();
-		//if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-		//{
-		//	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-		//	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-		//}
-		//ImGui::End();
-
-		ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
-		if (ImGui::IsMouseDragging())
-			dockspace_flags = ImGuiDockNodeFlags_None;
-
-		ImGui::DockSpaceOverViewport(viewport, dockspace_flags);
+		// DockSpace
+		ImGuiIO& io = ImGui::GetIO();
+		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+		{
+			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+		}
+		ImGui::End();
 	}
 }
