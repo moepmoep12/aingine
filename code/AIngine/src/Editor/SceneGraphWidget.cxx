@@ -19,7 +19,7 @@ namespace AIngine::Editor {
 		static bool p_open = true;
 		static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse /*| ImGuiWindowFlags_NoMove*/;
 
-		ImGui::SetNextWindowSize(ImVec2((float)windowWidth, (float)windowHeight), ImGuiCond_FirstUseEver);
+		//ImGui::SetNextWindowSize(ImVec2((float)windowWidth, (float)windowHeight), ImGuiCond_FirstUseEver);
 
 		if (!ImGui::Begin("SceneGraph", &p_open, windowFlags))
 		{
@@ -28,6 +28,7 @@ namespace AIngine::Editor {
 		}
 
 		m_size = glm::vec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+		m_position = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 2));
 		ImGui::Columns(2);

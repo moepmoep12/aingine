@@ -25,6 +25,7 @@ namespace AIngine::Editor {
 		if (ImGui::Begin("Camera"))
 		{
 			m_size = glm::vec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+			m_position = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
 
 			// zoom
 			ImGui::DragFloat("Zoom", &m_camera.m_zoom, dragspeed, m_camera.GetZoomMin(), m_camera.GetZoomMax());

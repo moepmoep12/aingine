@@ -64,6 +64,7 @@ namespace AIngine::Editor {
 			}
 
 			m_size = glm::vec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+			m_position = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
 
 
 			// Options menu

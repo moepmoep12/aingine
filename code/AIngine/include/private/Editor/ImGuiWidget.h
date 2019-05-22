@@ -19,10 +19,12 @@ namespace AIngine::Editor {
 		virtual void OnEvent(AIngine::Events::Event& e) {}
 
 		virtual const glm::vec2& GetSize() const { return m_size; }
+		virtual const glm::vec2& GetPosition() const { return m_position; }
 
 		virtual ~ImGuiWidget() {}
 
 	protected:
 		glm::vec2 m_size = glm::vec2(0);
+		glm::vec2 m_position = glm::vec2(0);
 	};
 }
