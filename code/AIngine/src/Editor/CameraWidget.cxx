@@ -1,6 +1,7 @@
 #include "Editor/CameraWidget.h"
 #include "AIngine/Input.h"
 #include <glm/glm.hpp>
+#include "Application.h"
 
 namespace AIngine::Editor {
 	CameraWidget::CameraWidget(AIngine::Rendering::Camera & camera)
@@ -62,6 +63,11 @@ namespace AIngine::Editor {
 			ImGui::Text("MousePosition (%.2f | %.2f)", screenPos.x, screenPos.y);
 			ImGui::Text("Screen To World (%.2f | %.2f)", worldPos.x, worldPos.y);
 			ImGui::Text("World To Screen (%.2f | %.2f)", WorldToScreen.x, WorldToScreen.y);
+
+			float deltaTime = AIngine::Application::Get().GetDeltaTime();
+
+			ImGuiIO& io = ImGui::GetIO();
+			ImGui::Text("%.3f ms/frame (%.1f FPS)", deltaTime * 1000.0f, 1.0f / deltaTime);
 
 			ImGui::End();
 		}
