@@ -3,6 +3,7 @@
 
 namespace AIngine {
 	class Window;
+	class Application;
 }
 
 namespace AIngine::Rendering
@@ -28,7 +29,7 @@ namespace AIngine::Rendering
 		Viewport(int viewportwidth, int viewportheight, int topleftX, int topleftY, const AIngine::Window& window);
 
 	private:
-		//glm::mat4 m_scaleMat;
+		friend class AIngine::Application;
 		unsigned int m_width, m_height, m_x, m_y;
 		const Window& m_window;
 	};
