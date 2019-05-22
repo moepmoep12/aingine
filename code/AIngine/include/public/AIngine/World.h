@@ -31,6 +31,8 @@ namespace AIngine {
 		static inline const b2World& GetPhysicsWorld() { return *s_instance->m_physicsWorld; }
 		static inline b2Body* CreateBody(const b2BodyDef& bodydef) { if (s_instance) return s_instance->m_physicsWorld->CreateBody(&bodydef); else return nullptr; }
 
+		static void SetPhysicsDebugDrawActive(const bool& active);
+
 		// inherited via Layer
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
@@ -45,6 +47,7 @@ namespace AIngine {
 		glm::vec4 m_bounds;
 		glm::vec2 m_gravity;
 		AIngine::Rendering::PhysicsRenderer* m_physRenderer;
+		bool m_isPhysicsDebugDrawn;
 
 		// created via Application
 	private:

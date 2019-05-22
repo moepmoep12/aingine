@@ -23,6 +23,13 @@ namespace AIngine {
 		}
 	}
 
+	void World::SetPhysicsDebugDrawActive(const bool & active)
+	{
+		if (s_instance) {
+			s_instance->m_isPhysicsDebugDrawn = active;
+		}
+	}
+
 	void World::OnAttach()
 	{
 		m_sceneGraph->OnAttach();
@@ -37,7 +44,8 @@ namespace AIngine {
 	{
 		m_sceneGraph->OnUpdate(delta);
 		m_physicsWorld->Step(1.0f / 60.0f, 8, 3);
-		m_physicsWorld->DrawDebugData();
+		if (m_isPhysicsDebugDrawn)
+			m_physicsWorld->DrawDebugData();
 	}
 
 	void World::OnEvent(AIngine::Events::Event & e)
@@ -61,6 +69,7 @@ namespace AIngine {
 		m_physRenderer = new AIngine::Rendering::PhysicsRenderer();
 		m_physRenderer->SetFlags(b2Draw::e_shapeBit /*+ b2Draw::e_centerOfMassBit*/);
 		m_physicsWorld->SetDebugDraw(m_physRenderer);
+		m_isPhysicsDebugDrawn = true;
 
 		CreateWorldBounds();
 	}
