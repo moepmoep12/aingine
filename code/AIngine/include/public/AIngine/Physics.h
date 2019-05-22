@@ -19,6 +19,9 @@ namespace AIngine {
 
 		// inherited via Component
 		virtual void OnUpdate(float deltatime) override;
+		virtual void SetActive(bool active) override;
+		virtual void OnOwnerLocalPositionChanged(const glm::vec2& position) override;
+		virtual void OnOwnerLocalRotationChanged(const float& rot) override;
 
 		void CreateBody(b2BodyDef& bodydef, b2FixtureDef& fixtureDef);
 
@@ -28,8 +31,6 @@ namespace AIngine {
 		void ApplyForceToCenter(const b2Vec2& force);
 		void ApplyLinearImpulseToCenter(const glm::vec2& impulse);
 		void ApplyLinearImpulseToCenter(const b2Vec2& impulse);
-
-		void UpdateTransform();
 
 		inline bool IsCollided() const { return m_collided; }
 		inline void SetCollision(bool collided, b2Fixture* other) { m_collided = collided; m_otherCollided = other; }

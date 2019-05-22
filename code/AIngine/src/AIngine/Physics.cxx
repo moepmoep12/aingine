@@ -4,20 +4,6 @@
 namespace AIngine {
 	PhysicsComponent::PhysicsComponent(GameObject * owner) : Component(owner)
 	{
-		//const Application& app = Application::Get();
-		//const b2World& physWorld = app.GetPhysicsWorld();
-
-		//b2BodyDef bodydef;
-		//bodydef.type = b2_dynamicBody;
-
-
-		//b2CircleShape shape;
-		//shape.m_radius = 1.0;
-
-		//b2FixtureDef fixturedef;
-		//fixturedef.shape = &shape;
-		//fixturedef.density = 1.0;
-		//m_body->CreateFixture(&fixturedef);
 	}
 
 	PhysicsComponent::~PhysicsComponent()
@@ -37,6 +23,32 @@ namespace AIngine {
 			m_owner->SetRotation(rot);
 		}
 	}
+
+	void PhysicsComponent::SetActive(bool active)
+	{
+		Component::SetActive(active);
+
+		if (m_body) {
+			m_body->SetActive(active);
+		}
+	}
+
+	void PhysicsComponent::OnOwnerLocalPositionChanged(const glm::vec2 & position)
+	{
+		if (m_body && IsActive()) {
+			glm::vec2 worldPos = m_owner->GetWorldPosition();
+			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), m_owner->GetWorldRotation());
+		}
+	}
+
+	void PhysicsComponent::OnOwnerLocalRotationChanged(const float & rot)
+	{
+		if (m_body && IsActive()) {
+			glm::vec2 worldPos = m_owner->GetWorldPosition();
+			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), m_owner->GetWorldRotation());
+		}
+	}
+
 	void PhysicsComponent::CreateBody(b2BodyDef & bodydef, b2FixtureDef& fixtureDef)
 	{
 		glm::vec2 worldPos = m_owner->GetWorldPosition();
@@ -71,11 +83,5 @@ namespace AIngine {
 	{
 		m_body->ApplyLinearImpulseToCenter(impulse, true);
 	}
-	void PhysicsComponent::UpdateTransform()
-	{
-		if (m_body) {
-			glm::vec2 worldPos = m_owner->GetWorldPosition();
-			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), m_owner->GetWorldRotation());
-		}
-	}
+
 }

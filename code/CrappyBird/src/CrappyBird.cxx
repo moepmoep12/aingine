@@ -23,6 +23,8 @@ namespace CrappyBird {
 		CreatePlayer();
 		CreateGround();
 		SpawnObstacles();
+		//disable phys debug draw
+		AIngine::World::SetPhysicsDebugDrawActive(false);
 	}
 
 
@@ -32,8 +34,9 @@ namespace CrappyBird {
 
 	void CrappyBird::CrappyBird::OnAppUpdate()
 	{
+		MoveCamera();
+
 		if (m_running) {
-			MoveCamera();
 			MoveObstacles();
 			UpdateBackGround();
 
@@ -41,7 +44,7 @@ namespace CrappyBird {
 				m_running = false;
 				AIngine::PhysicsComponent* other = static_cast<AIngine::PhysicsComponent*>(m_player->GetComponent<AIngine::PhysicsComponent>()->GetOtherCollider()->GetBody()->GetUserData());
 				DEBUG_INFO(other->GetOwner()->GetName().c_str());
-				m_player->RemoveComponent<AIngine::PhysicsComponent>();
+				m_player->GetComponent<AIngine::PhysicsComponent>()->SetActive(false);
 			}
 		}
 	}
@@ -52,6 +55,14 @@ namespace CrappyBird {
 			AIngine::Events::MouseScrolledEvent scrolledEvent = dynamic_cast<AIngine::Events::MouseScrolledEvent&>(e);
 			static float zoomSpeed = 30;
 			m_camera->Zoom(scrolledEvent.GetYOffset() * GetDeltaTime() * zoomSpeed);
+		}
+
+		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent)) {
+			AIngine::Events::KeyPressedEvent pressedEvent = dynamic_cast<AIngine::Events::KeyPressedEvent&>(e);
+			if (pressedEvent.GetKeyCode() == AIngine::KeyCodes::R) {
+				if (!m_running)
+					RestartGame();
+			}
 		}
 	}
 
@@ -356,10 +367,15 @@ namespace CrappyBird {
 			if (pos.x < worldBounds.x - obstacleWidth)
 				pos.x = (worldBounds.y * 4.0f) - 0.5f * obstacleWidth;
 			(*it._Ptr)->SetLocalPosition(pos);
-			AIngine::PhysicsComponent* physComp = (*it._Ptr)->GetComponent<AIngine::PhysicsComponent>();
-			physComp->UpdateTransform();
 			it++;
 		}
+	}
+
+	void CrappyBird::RestartGame()
+	{
+		m_running = true;
+		m_player->GetComponent<AIngine::PhysicsComponent>()->SetActive(true);
+		m_player->SetLocalPosition(glm::vec2(1.5, 3));
 	}
 
 }

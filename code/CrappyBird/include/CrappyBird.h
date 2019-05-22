@@ -26,6 +26,7 @@ namespace CrappyBird {
 		void CreateBackGround();
 		void UpdateBackGround();
 		void MoveObstacles();
+		void RestartGame();
 
 	private:
 		AIngine::Rendering::Texture2D* m_backGroundSky;
