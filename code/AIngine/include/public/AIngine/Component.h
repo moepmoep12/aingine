@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <glm/glm.hpp>
 
 namespace AIngine {
 
@@ -15,6 +16,11 @@ namespace AIngine {
 
 		virtual void OnUpdate(float deltatime) {}
 		virtual void OnImguiRender() {}
+
+		virtual void OnOwnerLocalPositionChanged(const glm::vec2& position) {}
+		virtual void OnOwnerLocalScaleChanged(const glm::vec2& scale) {}
+		virtual void OnOwnerLocalRotationChanged(const float& rot) {}
+		virtual void OnOwnerParentChanged(const GameObject& newParent) {}
 
 		inline GameObject* GetOwner() { return m_owner; }
 

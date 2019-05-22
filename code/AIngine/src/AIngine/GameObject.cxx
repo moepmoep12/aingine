@@ -34,6 +34,67 @@ namespace AIngine {
 		}
 		return result;
 	}
+
+	void GameObject::SetParent(GameObject & parent)
+	{
+		m_parent = &parent;
+		auto it = m_components.begin();
+		while (it != m_components.end()) {
+			(*it._Ptr)->OnOwnerParentChanged(parent);
+			it++;
+		}
+	}
+
+	void GameObject::SetLocalPosition(const glm::vec2 & position)
+	{
+		m_position = position;
+		auto it = m_components.begin();
+		while (it != m_components.end()) {
+			(*it._Ptr)->OnOwnerLocalPositionChanged(position);
+			it++;
+		}
+	}
+
+	void GameObject::Translate(const glm::vec2 & translation)
+	{
+		m_position += translation;
+		auto it = m_components.begin();
+		while (it != m_components.end()) {
+			(*it._Ptr)->OnOwnerLocalPositionChanged(m_position);
+			it++;
+		}
+	}
+
+	void GameObject::SetLocalScale(const glm::vec2 & scale)
+	{
+		m_scale = scale;
+		auto it = m_components.begin();
+		while (it != m_components.end()) {
+			(*it._Ptr)->OnOwnerLocalScaleChanged(scale);
+			it++;
+		}
+	}
+
+	void GameObject::SetRotation(float rot)
+	{
+		m_rotation = rot;
+		auto it = m_components.begin();
+		while (it != m_components.end()) {
+			(*it._Ptr)->OnOwnerLocalRotationChanged(rot);
+			it++;
+		}
+	}
+
+	void GameObject::Rotate(float amount)
+	{
+		m_rotation += amount;
+		auto it = m_components.begin();
+		while (it != m_components.end()) {
+			(*it._Ptr)->OnOwnerLocalRotationChanged(m_rotation);
+			it++;
+		}
+	}
+
 	glm::mat4  GameObject::GetLocalTransform() const
 	{
 		glm::mat4 result = glm::mat4(1.0);

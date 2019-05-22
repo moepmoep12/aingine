@@ -62,17 +62,18 @@ namespace AIngine {
 		inline void SetName(const std::string& name) { m_name = name; }
 
 		inline GameObject& GetParent() { return *m_parent; }
-		inline void SetParent(GameObject&  parent) { m_parent = &parent; }
+		void SetParent(GameObject&  parent);
 
 		inline glm::vec2& GetLocalPosition() { return m_position; }
-		inline void SetLocalPosition(const glm::vec2 position) { m_position = position; }
-
+		void SetLocalPosition(const glm::vec2& position);
+		void Translate(const glm::vec2& translation);
 
 		inline glm::vec2& GetLocalScale() { return m_scale; }
-		inline void SetLocalScale(const glm::vec2 scale) { m_scale = scale; }
+		void SetLocalScale(const glm::vec2& scale);
 
 		inline float& GetLocalRotation() { return m_rotation; }
-		inline void SetRotation(float rot) { m_rotation = rot; }
+		void SetRotation(float rot);
+		void Rotate(float amount);
 
 		inline const std::vector<GameObject*>& GetChildren() { return m_children; }
 
