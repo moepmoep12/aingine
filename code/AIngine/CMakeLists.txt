@@ -37,6 +37,7 @@ set(AINGINE_HEADER
 		include/public/Structures/Layer.h
 		include/public/Structures/LayerStack.h
 		include/public/Structures/memory.h
+		include/public/Structures/Rectangle.h
 		include/public/Structures/SceneGraph.h
 		include/public/Structures/Traverser.h
 		include/public/UI/ImGuiLayer.h	
