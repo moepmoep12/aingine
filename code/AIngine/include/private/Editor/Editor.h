@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Structures/Layer.h"
+#include "Structures/Rectangle.h"
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -43,13 +44,14 @@ namespace AIngine::Editor {
 
 		static bool IsAnyUIElementHovered();
 
-		glm::vec4 GetEditorBounds() const;
+		AIngine::Structures::Rectangle CalculateViewportRect(const glm::vec2& windowSize) const;
 
 		virtual ~Editor() override;
 
 
 
 	private:
+		glm::vec2 ClosestPoint(const AIngine::Structures::Rectangle& rect, const glm::vec2& point, AIngine::Structures::Rectangle::Corner* corner) const;
 		Editor();
 
 	private:
