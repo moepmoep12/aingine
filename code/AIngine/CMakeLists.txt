@@ -108,8 +108,6 @@ target_link_libraries(Engine
 		imgui
 		spdlog
 		Box2D-cmake
-		Boost::serialization
-		Boost::boost
         )
 
 #
