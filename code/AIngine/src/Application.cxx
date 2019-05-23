@@ -124,8 +124,9 @@ namespace AIngine {
 
 			// ui rendering
 			m_imGuiLayer->OnBegin();
-			for (AIngine::Structures::Layer* layer : m_layerStack)
+			for (AIngine::Structures::Layer* layer : m_layerStack) {
 				layer->OnImGuiRender();
+			}
 			// render debug stuff last
 			m_debugDraw->Flush();
 			// finish UI rendering
@@ -171,6 +172,7 @@ namespace AIngine {
 				break;
 		}
 
+		dispatcher.Dispatch<AIngine::Events::ViewportChangedEvent>(BIND_EVENT_TO_FN(Application::OnViewportChanged));
 	}
 
 	void Application::PushLayer(AIngine::Structures::Layer * layer)
@@ -198,6 +200,8 @@ namespace AIngine {
 			return false;
 	}
 
+	/* Event handling */
+
 	bool Application::OnWindowClose(AIngine::Events::WindowCloseEvent & e)
 	{
 		CORE_INFO(e.ToString());
@@ -207,9 +211,18 @@ namespace AIngine {
 
 		return true;
 	}
+
 	bool Application::OnWindowResize(AIngine::Events::WindowResizeEvent & e)
 	{
 		m_renderer->SetViewport();
+		return true;
+	}
+
+	bool Application::OnViewportChanged(AIngine::Events::ViewportChangedEvent & e)
+	{
+		m_viewport->Set(e.ViewportRect.GetPosition(), e.ViewportRect.width, e.ViewportRect.height);
+		m_renderer->SetViewport();
+		CORE_INFO("Viewport Size Changed To ({0} | {1})", m_viewport->m_width, m_viewport->m_height);
 		return true;
 	}
 }

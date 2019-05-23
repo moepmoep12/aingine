@@ -56,6 +56,7 @@ namespace AIngine {
 	private:
 		bool OnWindowClose(AIngine::Events::WindowCloseEvent& e);
 		bool OnWindowResize(AIngine::Events::WindowResizeEvent& e);
+		bool OnViewportChanged(AIngine::Events::ViewportChangedEvent& e);
 
 	private:
 		std::unique_ptr<Window> m_window;
