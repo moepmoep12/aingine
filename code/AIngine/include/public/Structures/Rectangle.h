@@ -12,8 +12,8 @@ namespace AIngine::Structures {
 			: x(x), y(y), width(width), height(height) {}
 
 		bool Contains(const glm::vec2& point) const {
-			return (point.x > x && point.x < x + width)
-				&& (point.y > y && point.y < y + height);
+			return (point.x >= x && point.x <= x + width)
+				&& (point.y >= y && point.y <= y + height);
 		}
 
 		// corresponds to the top left corner
