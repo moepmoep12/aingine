@@ -24,7 +24,7 @@ AIngine::Rendering::Camera::Camera(const Viewport & viewport, const glm::vec2& b
 		screenSize = desiredScreenSizeInWorldUnits;
 	}
 
-	m_zoom = viewport.GetViewportWidth() / screenSize.x;
+	m_zoom = viewport.GetWindowWidth() / screenSize.x;
 }
 
 void AIngine::Rendering::Camera::Zoom(float amount)

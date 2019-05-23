@@ -6,9 +6,6 @@
 
 #include <memory>
 
-
-#define BIND_EVENT_TO_FN(fn) std::bind(&fn, this, std::placeholders::_1)
-
 namespace AIngine {
 
 	Application* Application::s_instance = nullptr;
@@ -84,7 +81,7 @@ namespace AIngine {
 		m_world = new World(m_bounds, m_gravity);
 		PushLayer(m_world);
 
-		m_viewport = new AIngine::Rendering::Viewport(m_window->GetWidth() / 2.0f, m_window->GetHeight() / 2.0f, 200, 200, *m_window.get());
+		m_viewport = new AIngine::Rendering::Viewport(800, 450, 0, 0, *m_window.get());
 
 		// create camera
 		m_camera = new AIngine::Rendering::Camera(*m_viewport, glm::vec2(m_bounds.y - m_bounds.x, m_bounds.z - m_bounds.w));
@@ -118,8 +115,6 @@ namespace AIngine {
 
 			OnAppUpdate();
 
-			//m_physicsWorld->Step(1.0 / 60.0, 8, 3);
-
 			// update logic
 			for (AIngine::Structures::Layer* layer : m_layerStack)
 				layer->OnUpdate(GetDeltaTime());
@@ -131,9 +126,10 @@ namespace AIngine {
 			m_imGuiLayer->OnBegin();
 			for (AIngine::Structures::Layer* layer : m_layerStack)
 				layer->OnImGuiRender();
+			// render debug stuff last
 			m_debugDraw->Flush();
+			// finish UI rendering
 			m_imGuiLayer->OnEnd();
-
 
 			// finish the frame
 			m_window->OnUpdate();
@@ -154,7 +150,6 @@ namespace AIngine {
 		m_layerStack.PopOverlay(m_editor);
 		delete m_editor;
 #endif
-
 	}
 
 	void Application::OnEvent(AIngine::Events::Event & e)
