@@ -29,19 +29,42 @@ namespace AIngine::Events {
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "WindowResizeEvent: " << m_Width << ", " << m_Height;
+			ss << "ViewportResize: " << m_Width << ", " << m_Height;
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(WindowResize)
+		EVENT_CLASS_TYPE(ViewportResize)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
 	private:
 		unsigned int m_Width, m_Height;
 	};
 
+	class  ViewportResizeEvent : public Event
+	{
+	public:
+		ViewportResizeEvent(unsigned int width, unsigned int height)
+			: m_Width(width), m_Height(height) {}
 
-	class  AppTickEvent : public Event
+		inline unsigned int GetWidth() const { return m_Width; }
+		inline unsigned int GetHeight() const { return m_Height; }
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "ViewportResizeEvent: " << m_Width << ", " << m_Height;
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(WindowResize)
+			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+
+	private:
+		unsigned int m_Width, m_Height;
+	};
+
+
+	/*class  AppTickEvent : public Event
 	{
 	public:
 		AppTickEvent() {}
@@ -66,5 +89,5 @@ namespace AIngine::Events {
 
 		EVENT_CLASS_TYPE(AppRender)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
-	};
+	};*/
 }
