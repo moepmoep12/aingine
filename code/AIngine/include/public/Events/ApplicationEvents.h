@@ -30,7 +30,7 @@ namespace AIngine::Events {
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "ViewportResize: " << m_Width << ", " << m_Height;
+			ss << "Window Size: " << m_Width << ", " << m_Height;
 			return ss.str();
 		}
 
@@ -39,6 +39,29 @@ namespace AIngine::Events {
 
 	private:
 		unsigned int m_Width, m_Height;
+	};
+
+	class  WindowMovedEvent : public Event
+	{
+	public:
+		WindowMovedEvent(unsigned int xpos, unsigned int ypos)
+			: m_x(xpos), m_y(ypos) {}
+
+		inline unsigned int GetX() const { return m_x; }
+		inline unsigned int GetY() const { return m_y; }
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "Window Position: " << m_x << ", " << m_y;
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(WindowMoved)
+			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+
+	private:
+		unsigned int m_x, m_y;
 	};
 
 	class  ViewportChangedEvent : public Event

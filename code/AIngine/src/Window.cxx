@@ -55,7 +55,7 @@ AIngine::Window::Window(const WindowConfig & config)
 
 	glfwGetWindowSize(m_window, &m_windowData.Width, &m_windowData.Height);
 	glfwGetWindowFrameSize(m_window, &m_leftEdge, &m_topEdge, &m_rightEdge, &m_bottomEdge);
-	glfwGetWindowPos(m_window, &m_x, &m_y);
+	glfwGetWindowPos(m_window, &m_windowData.XPos, &m_windowData.YPos);
 }
 
 
@@ -128,6 +128,15 @@ void AIngine::Window::SetGLFWCallbacks()
 	{
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 		AIngine::Events::WindowCloseEvent event;
+		data.EventCallback(event);
+	});
+
+	glfwSetWindowPosCallback(m_window, [](GLFWwindow* window, int xpos, int ypos) {
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		data.XPos = xpos;
+		data.YPos = ypos;
+
+		AIngine::Events::WindowMovedEvent event(xpos, ypos);
 		data.EventCallback(event);
 	});
 
