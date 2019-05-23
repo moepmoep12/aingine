@@ -54,6 +54,8 @@ AIngine::Window::Window(const WindowConfig & config)
 	CORE_INFO("Window created");
 
 	glfwGetWindowSize(m_window, &m_windowData.Width, &m_windowData.Height);
+	glfwGetWindowFrameSize(m_window, &m_leftEdge, &m_topEdge, &m_rightEdge, &m_bottomEdge);
+	glfwGetWindowPos(m_window, &m_x, &m_y);
 }
 
 
@@ -97,6 +99,12 @@ void AIngine::Window::SetVSync(bool active)
 bool AIngine::Window::IsVSyncActive() const
 {
 	return m_bVsync;
+}
+
+glm::vec2 AIngine::Window::GetMonitorResolution() const
+{
+	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	return glm::vec2(mode->width, mode->height);
 }
 
 AIngine::Window* AIngine::Window::Create(const WindowConfig & config)
