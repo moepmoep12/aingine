@@ -2,6 +2,7 @@
 
 #include "imgui.h"
 #include "Events/Event.h"
+#include "Structures/Rectangle.h"
 
 #include <glm/glm.hpp>
 
@@ -23,6 +24,10 @@ namespace AIngine::Editor {
 		virtual const glm::vec2& GetPosition() const { return m_position; }
 		virtual bool IsWindowDocked() const { return m_isDocked; }
 		virtual bool WasWindowSizeChanged() const { return m_wasSizeChanged; }
+
+		virtual AIngine::Structures::Rectangle GetRectangle() const {
+			return AIngine::Structures::Rectangle(m_position.x, m_position.y, m_size.x, m_size.y);
+		}
 
 		virtual ~ImGuiWidget() {}
 

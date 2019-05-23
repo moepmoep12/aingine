@@ -16,6 +16,13 @@ namespace AIngine::Structures {
 				&& (point.y >= y && point.y <= y + height);
 		}
 
+		bool Contains(const Rectangle& other) const {
+			return Contains(other.GetPosition())
+				|| Contains(other.GetMax())
+				|| Contains(other.GetBottomLeft())
+				|| Contains(other.GetTopRight());
+		}
+
 		// corresponds to the top left corner
 		glm::vec2 GetPosition() const {
 			return glm::vec2(x, y);
