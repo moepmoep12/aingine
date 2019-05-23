@@ -42,3 +42,15 @@ AIngine::Rendering::Viewport::Viewport(int viewportwidth, int viewportheight, in
 {
 
 }
+
+void AIngine::Rendering::Viewport::Set(const glm::vec2 & pos, unsigned int width, unsigned int height, bool preserveAspect)
+{
+	if (preserveAspect) {
+		float aspectRatio = m_window.GetWidth() / m_window.GetHeight();
+		m_x = pos.x;
+		m_y = pos.y;
+
+		m_height = std::floorf(((float)width * ((float)m_window.GetHeight() / (float)m_window.GetWidth())));
+		m_width = width;
+	}
+}

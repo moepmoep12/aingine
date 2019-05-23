@@ -32,5 +32,8 @@ namespace AIngine::Rendering
 		friend class AIngine::Application;
 		unsigned int m_width, m_height, m_x, m_y;
 		const Window& m_window;
+
+	private:
+		void Set(const glm::vec2& pos, unsigned int width, unsigned int height, bool preserveAspect = true);
 	};
 }
