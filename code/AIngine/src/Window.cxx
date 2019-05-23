@@ -52,6 +52,8 @@ AIngine::Window::Window(const WindowConfig & config)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	CORE_INFO("Window created");
+
+	glfwGetWindowSize(m_window, &m_windowData.Width, &m_windowData.Height);
 }
 
 

@@ -32,18 +32,24 @@ namespace AIngine::Rendering {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 
-
-		const Camera& cam = Camera::Get();
-		const Viewport& viewport = cam.GetViewport();
-		GLfloat windowHeight = static_cast<GLfloat>(viewport.GetWindowHeight());
-
-		glViewport((GLint)viewport.GetTopLeftCornerPosition().x, (GLint)(windowHeight - viewport.GetViewportHeight()), (GLsizei)viewport.GetViewportWidth(), (GLsizei)viewport.GetViewportHeight());
-
-		glm::mat4 projection = cam.GetProjectionMatrix();
+		glm::mat4 projection = Camera::Get().GetProjectionMatrix();
 
 		// configure shader
 		m_shader->SetInteger("image", 0, true);
 		m_shader->SetMatrix4("projection", projection);
+
+		SetViewport();
+	}
+
+	void SpriteRenderer::SetViewport()
+	{
+
+		const Camera& cam = Camera::Get();
+		const Viewport& viewport = cam.GetViewport();
+		GLfloat windowHeight = static_cast<GLfloat>(viewport.GetWindowHeight());
+		glm::vec2 bottomLeft = glm::vec2(viewport.GetTopLeftCornerPosition().x, viewport.GetTopLeftCornerPosition().y + viewport.GetViewportHeight());
+
+		glViewport((GLint)bottomLeft.x, (GLint)viewport.GetWindowHeight() - bottomLeft.y, (GLsizei)viewport.GetViewportWidth(), (GLsizei)viewport.GetViewportHeight());
 	}
 
 	SpriteRenderer::SpriteRenderer(AIngine::Rendering::GLShaderProgram* shader)

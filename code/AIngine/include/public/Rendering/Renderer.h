@@ -20,6 +20,7 @@ namespace AIngine::Rendering {
 		virtual bool Visit(GameObject & node) override;
 
 		void initRenderData();
+		void SetViewport();
 
 	private:
 		std::vector<glm::mat4> m_matrixStack;

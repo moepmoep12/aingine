@@ -20,8 +20,8 @@ namespace AIngine {
 
 	struct WindowData {
 		std::string Title;
-		unsigned int Width;
-		unsigned int Height;
+		int Width;
+		int Height;
 		std::function<void(Events::Event&)> EventCallback;
 	};
 

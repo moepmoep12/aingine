@@ -64,7 +64,7 @@ namespace AIngine {
 
 		//load basic white texture
 		path = std::string("assets/Intellgine/textures/White.png");
-		AIngine::Assets::BitmapAsset* bitmap =m_assetRegistry.Load<AIngine::Assets::BitmapAsset>(path);
+		AIngine::Assets::BitmapAsset* bitmap = m_assetRegistry.Load<AIngine::Assets::BitmapAsset>(path);
 
 		m_debugDraw = new AIngine::Debug::DebugDraw();
 
@@ -84,7 +84,7 @@ namespace AIngine {
 		m_world = new World(m_bounds, m_gravity);
 		PushLayer(m_world);
 
-		m_viewport = new AIngine::Rendering::Viewport(m_window->GetWidth(), m_window->GetHeight(), 0, 0, *m_window.get());
+		m_viewport = new AIngine::Rendering::Viewport(m_window->GetWidth() / 2.0f, m_window->GetHeight() / 2.0f, 200, 200, *m_window.get());
 
 		// create camera
 		m_camera = new AIngine::Rendering::Camera(*m_viewport, glm::vec2(m_bounds.y - m_bounds.x, m_bounds.z - m_bounds.w));
@@ -163,6 +163,7 @@ namespace AIngine {
 
 		// call the OnWindowClose function if its a windowclose event
 		dispatcher.Dispatch<AIngine::Events::WindowCloseEvent>(BIND_EVENT_TO_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<AIngine::Events::WindowResizeEvent>(BIND_EVENT_TO_FN(Application::OnWindowResize));
 
 		// propagate it to the game
 		OnAppEvent(e);
@@ -209,6 +210,11 @@ namespace AIngine {
 		//stop running
 		m_isRunning = false;
 
+		return true;
+	}
+	bool Application::OnWindowResize(AIngine::Events::WindowResizeEvent & e)
+	{
+		m_renderer->SetViewport();
 		return true;
 	}
 }
