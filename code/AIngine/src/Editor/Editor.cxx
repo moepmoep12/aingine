@@ -26,6 +26,11 @@ namespace AIngine::Editor {
 
 	void Editor::OnUpdate(float delta)
 	{
+		if (DidAnyDockedWidgetChangeSize()) {
+			AIngine::Structures::Rectangle viewportRect = CalculateViewportRect(glm::vec2(m_app.GetWindow().GetWidth(), m_app.GetWindow().GetHeight()));
+			AIngine::Events::ViewportChangedEvent e(viewportRect);
+			m_app.OnEvent(e);
+		}
 	}
 
 	void Editor::OnEvent(AIngine::Events::Event & e)
@@ -67,29 +72,6 @@ namespace AIngine::Editor {
 		return false;
 	}
 
-	glm::vec2 Editor::ClosestPoint(const AIngine::Structures::Rectangle & rect, const glm::vec2 & point, AIngine::Structures::Rectangle::Corner* corner) const
-	{
-		glm::vec2 corners[] = {
-			rect.GetPosition(),
-			rect.GetPosition() + glm::vec2(rect.width,0),
-			rect.GetMax(),
-			rect.GetPosition() + glm::vec2(0, rect.height)
-		};
-		float minDistance = std::numeric_limits<float>::max();
-
-		unsigned int index = 0;
-
-		for (int i = 0; i < 4; ++i) {
-			float distance = glm::distance(point, corners[i]);
-			if (distance < minDistance) {
-				index = i;
-				minDistance = distance;
-			}
-		}
-		*corner = (AIngine::Structures::Rectangle::Corner)index;
-		return corners[index];
-	}
-
 	Editor::Editor()
 		: m_app(AIngine::Application::Get())
 	{
@@ -116,31 +98,42 @@ namespace AIngine::Editor {
 		while (it != m_widgets.end()) {
 			const ImGuiWidget& widget = *(*it._Ptr);
 			if (widget.IsWindowDocked()) {
-				glm::vec2 points[] = {
-					widget.GetPosition(),
-					widget.GetPosition() + glm::vec2(widget.GetSize().x,0)
-				};
+				AIngine::Structures::Rectangle widgetRect = widget.GetRectangle();
+				if (viewportRect.Contains(widgetRect)) {
+					glm::vec2 windowPos = glm::vec2(m_app.m_window->GetX(), m_app.m_window->GetY());
+					glm::vec2 viewportPos = viewportRect.GetPosition();
+					glm::vec2 viewportMax = viewportRect.GetMax();
+					glm::vec2 widgetPos = widgetRect.GetPosition() - windowPos;
+					glm::vec2 widgetMax = widgetRect.GetMax() - windowPos;
 
-				for (glm::vec2 point : points) {
-					if (viewportRect.Contains(point)) {
-						glm::vec2 closestCorner = ClosestPoint(viewportRect, point, &corner);
-						glm::vec2 distance = point - closestCorner;
-						closestCorner += distance;
-
-						if (corner == Corner::BottomRight) {
-							viewportRect.width += distance.x;
-						}
-						if (corner == Corner::BottomLeft) {
-							viewportRect.height += distance.y;
-						}
-						if (corner == Corner::TopRight) {
-							viewportRect.width += distance.x;
-						}
-						if (corner == Corner::TopLeft) {
-							viewportRect.width += distance.x;
-							viewportRect.x -= distance.x;
-						}
-
+					if (widgetPos.x > viewportPos.x
+						&& widgetPos.y == viewportPos.y
+						&& widgetMax.x == viewportMax.x
+						&& widgetMax.y == viewportMax.y)
+					{
+						viewportRect.width -= widgetRect.width;
+						DEBUG_INFO("greaterPosX");
+					}
+					if (widgetPos.x == viewportPos.x
+						&& widgetPos.y == viewportPos.y
+						&& widgetMax.x < viewportMax.x
+						&& widgetMax.y == viewportMax.y)
+					{
+						viewportRect.x += widgetRect.width;
+					}
+					if (widgetPos.x == viewportPos.x
+						&& widgetPos.y > viewportPos.y
+						&& widgetMax.x == viewportMax.x
+						&& widgetMax.y == viewportMax.y)
+					{
+						viewportRect.height -= widgetRect.height;
+					}
+					if (widgetPos.x == viewportPos.x
+						&& widgetPos.y == viewportPos.y
+						&& widgetMax.x == viewportMax.x
+						&& widgetMax.y < viewportMax.y)
+					{
+						viewportRect.y += widgetRect.height;
 					}
 				}
 			}
