@@ -1,6 +1,7 @@
 #include "Editor/Editor.h"
 #include "AIngine/Macros.h"
 #include "Application.h"
+#include "AIngine/KeyCodes.h"
 
 // widgets
 #include "Editor/ImGuiWidget.h"
@@ -29,6 +30,11 @@ namespace AIngine::Editor {
 
 	void Editor::OnEvent(AIngine::Events::Event & e)
 	{
+		AIngine::Events::EventDispatcher dispatcher(e);
+
+		// call the OnWindowClose function if its a windowclose event
+		dispatcher.Dispatch<AIngine::Events::KeyPressedEvent>(BIND_EVENT_TO_FN(Editor::OnKeyPressed));
+
 		auto it = m_widgets.begin();
 		while (it != m_widgets.end()) {
 			(*it._Ptr)->OnEvent(e);
@@ -45,6 +51,20 @@ namespace AIngine::Editor {
 			(*it._Ptr)->OnImGuiRender();
 			it++;
 		}
+	}
+
+	static bool s_physicsDraw = false;
+
+	bool Editor::OnKeyPressed(AIngine::Events::KeyPressedEvent & e)
+	{
+		if (e.GetKeyCode() == AIngine::KeyCodes::F1)
+		{
+			AIngine::World::SetPhysicsDebugDrawActive(!s_physicsDraw);
+			s_physicsDraw = !s_physicsDraw;
+			return true;
+		}
+
+		return false;
 	}
 
 	glm::vec2 Editor::ClosestPoint(const AIngine::Structures::Rectangle & rect, const glm::vec2 & point, AIngine::Structures::Rectangle::Corner* corner) const
@@ -95,32 +115,33 @@ namespace AIngine::Editor {
 
 		while (it != m_widgets.end()) {
 			const ImGuiWidget& widget = *(*it._Ptr);
+			if (widget.IsWindowDocked()) {
+				glm::vec2 points[] = {
+					widget.GetPosition(),
+					widget.GetPosition() + glm::vec2(widget.GetSize().x,0)
+				};
 
-			glm::vec2 points[] = {
-				widget.GetPosition(),
-				widget.GetPosition() + glm::vec2(widget.GetSize().x,0)
-			};
+				for (glm::vec2 point : points) {
+					if (viewportRect.Contains(point)) {
+						glm::vec2 closestCorner = ClosestPoint(viewportRect, point, &corner);
+						glm::vec2 distance = point - closestCorner;
+						closestCorner += distance;
 
-			for (glm::vec2 point : points) {
-				if (viewportRect.Contains(point)) {
-					glm::vec2 closestCorner = ClosestPoint(viewportRect, point, &corner);
-					glm::vec2 distance = point - closestCorner;
-					closestCorner += distance;
+						if (corner == Corner::BottomRight) {
+							viewportRect.width += distance.x;
+						}
+						if (corner == Corner::BottomLeft) {
+							viewportRect.height += distance.y;
+						}
+						if (corner == Corner::TopRight) {
+							viewportRect.width += distance.x;
+						}
+						if (corner == Corner::TopLeft) {
+							viewportRect.width += distance.x;
+							viewportRect.x -= distance.x;
+						}
 
-					if (corner == Corner::BottomRight) {
-						viewportRect.width += distance.x;
 					}
-					if (corner == Corner::BottomLeft) {
-						viewportRect.height += distance.y;
-					}
-					if (corner == Corner::TopRight) {
-						viewportRect.width += distance.x;
-					}
-					if (corner == Corner::TopLeft) {
-						viewportRect.width += distance.x;
-						viewportRect.x -= distance.x;
-					}
-
 				}
 			}
 			it++;
@@ -132,6 +153,19 @@ namespace AIngine::Editor {
 	bool Editor::IsAnyUIElementHovered()
 	{
 		return ImGui::IsAnyWindowHovered();
+	}
+
+	bool Editor::DidAnyDockedWidgetChangeSize() const
+	{
+		auto it = m_widgets.begin();
+
+		while (it != m_widgets.end()) {
+			const ImGuiWidget& widget = *(*it._Ptr);
+			if (widget.WasWindowSizeChanged() && widget.IsWindowDocked())
+				return true;
+			it++;
+		}
+		return false;
 	}
 
 	Editor::~Editor()

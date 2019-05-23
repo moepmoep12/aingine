@@ -27,7 +27,10 @@ namespace AIngine::Editor {
 		if (ImGui::Begin("Camera"))
 		{
 			m_size = glm::vec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
-			m_position = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+			glm::vec2 newPosition = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+			m_wasSizeChanged = newPosition != m_position;
+			m_position = newPosition;
+			m_isDocked = ImGui::IsWindowDocked();
 
 			// zoom
 			ImGui::DragFloat("Zoom", &m_camera.m_zoom, dragspeed, m_camera.GetZoomMin(), m_camera.GetZoomMax());
@@ -72,9 +75,9 @@ namespace AIngine::Editor {
 			ImGuiIO& io = ImGui::GetIO();
 			ImGui::Text("%.3f ms/frame (%.1f FPS)", deltaTime * 1000.0f, 1.0f / deltaTime);
 
-			ImGui::End();
+			//ImGui::DragFloat2()
 
-			Debug::DebugDraw::Point(worldPos, 2.0f, glm::vec3(1.0));
+			ImGui::End();
 		}
 	}
 }

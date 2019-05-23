@@ -28,7 +28,10 @@ namespace AIngine::Editor {
 		}
 
 		m_size = glm::vec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
-		m_position = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+		glm::vec2 pos = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+		m_wasSizeChanged = pos != m_position;
+		m_position = pos;
+		m_isDocked = ImGui::IsWindowDocked();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 2));
 		ImGui::Columns(2);

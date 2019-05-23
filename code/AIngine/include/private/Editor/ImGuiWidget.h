@@ -21,11 +21,15 @@ namespace AIngine::Editor {
 
 		virtual const glm::vec2& GetSize() const { return m_size; }
 		virtual const glm::vec2& GetPosition() const { return m_position; }
+		virtual bool IsWindowDocked() const { return m_isDocked; }
+		virtual bool WasWindowSizeChanged() const { return m_wasSizeChanged; }
 
 		virtual ~ImGuiWidget() {}
 
 	protected:
 		glm::vec2 m_size = glm::vec2(0);
 		glm::vec2 m_position = glm::vec2(0);
+		bool m_isDocked = false;
+		bool m_wasSizeChanged = true;
 	};
 }
