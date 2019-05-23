@@ -72,6 +72,8 @@ namespace AIngine::Rendering {
 		m_matrixStack.clear();
 		m_modelViewMatrix = glm::mat4(1.0f);
 		m_shader->SetMatrix4("view", Camera::Get().GetViewMatrix());
+		m_shader->SetMatrix4("projection", Camera::Get().GetProjectionMatrix());
+
 
 		return root->Accept(*this);
 
