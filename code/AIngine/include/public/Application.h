@@ -8,7 +8,6 @@
 #include "Structures/LayerStack.h"
 #include "Assets/Assets.h"
 #include "Rendering/Renderer.h"
-//#include "Structures/SceneGraph.h"
 #include "Box2D/Box2D.h"
 #include "Rendering/Camera.h"
 #include "Rendering/Viewport.h"
@@ -21,8 +20,6 @@ namespace AIngine::Editor {
 
 namespace AIngine {
 
-	class ContactListener;
-
 	class Application {
 
 		friend class Editor::Editor;
@@ -34,17 +31,14 @@ namespace AIngine {
 
 		void Run();
 		void OnEvent(AIngine::Events::Event& e);
-		void PushLayer(Layer* layer);
-		void PushOverlay(Layer* overlay);
+		void PushLayer(AIngine::Structures::Layer* layer);
+		void PushOverlay(AIngine::Structures::Layer* overlay);
 		float GetDeltaTime();
 		bool IsAnyUiElementHovered() const;
 
 
 		inline static Application& Get() { return *s_instance; }
 		inline const Window& GetWindow() const { return *m_window; }
-		inline  AIngine::Rendering::Camera& GetCamera() const { return *m_camera; }
-		inline const AIngine::Rendering::Viewport& GetViewport() const { return *m_viewport; }
-		inline  AIngine::Assets::AssetRegistry& GetAssetRegistry() { return m_assetRegistry; }
 
 	protected:
 
@@ -66,7 +60,7 @@ namespace AIngine {
 		std::unique_ptr<Window> m_window;
 		AIngine::Editor::Editor* m_editor;
 		bool m_isRunning = false;
-		LayerStack m_layerStack;
+		AIngine::Structures::LayerStack m_layerStack;
 		AIngine::UI::ImGuiLayer* m_imGuiLayer;
 		AIngine::Assets::AssetRegistry m_assetRegistry;
 		AIngine::Rendering::SpriteRenderer* m_renderer;
@@ -74,8 +68,6 @@ namespace AIngine {
 		static Application* s_instance;
 		float m_deltaTime = 0.0f;
 		AIngine::Debug::DebugDraw* m_debugDraw;
-		ContactListener* m_contactListener;
-
 	};
 
 	// to be defined by the actual Application

@@ -1,7 +1,7 @@
 #include "AIngine/World.h"
+#include "AIngine/Macros.h"
 #include "AIngine/GameObject.h"
-#include "Debug/log.h"
-#include "Application.h"
+#include "AIngine/Physics.h"
 
 namespace AIngine {
 
@@ -65,11 +65,15 @@ namespace AIngine {
 		s_instance = this;
 
 		m_physicsWorld = new b2World(b2Vec2(gravity.x, gravity.y));
-		m_sceneGraph = new SceneGraph();
+		m_sceneGraph = new AIngine::Structures::SceneGraph();
+
 		m_physRenderer = new AIngine::Rendering::PhysicsRenderer();
 		m_physRenderer->SetFlags(b2Draw::e_shapeBit /*+ b2Draw::e_centerOfMassBit*/);
 		m_physicsWorld->SetDebugDraw(m_physRenderer);
 		m_isPhysicsDebugDrawn = true;
+
+		m_contactListener = new ContactListener();
+		m_physicsWorld->SetContactListener(m_contactListener);
 
 		CreateWorldBounds();
 	}
@@ -85,6 +89,7 @@ namespace AIngine {
 		delete m_physicsWorld;
 		delete m_sceneGraph;
 		delete m_physRenderer;
+		delete m_contactListener;
 	}
 	void World::CreateWorldBounds()
 	{

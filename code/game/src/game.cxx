@@ -17,7 +17,7 @@ static float rotationrate = 0.1f;
 static float zoomSpeed = 5.0f;
 
 
-class ExampleLayer :public  AIngine::Layer {
+class ExampleLayer :public  AIngine::Structures::Layer {
 
 
 public:
@@ -67,7 +67,7 @@ void Game::OnAppStartUp()
 	DEBUG_INFO("OnAppStartUp");
 
 	// spawn ground
-	AIngine::Assets::BitmapAsset* bitmap = GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(std::string("assets/Intellgine/textures/White.png"));
+	AIngine::Assets::BitmapAsset* bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(std::string("assets/Intellgine/textures/White.png"));
 	AIngine::GameObject* ground = AIngine::World::SpawnObject();
 	ground->SetName("Ground");
 	AIngine::Rendering::Texture2D* texture = ground->AddComponent<AIngine::Rendering::Texture2D>();
@@ -120,27 +120,28 @@ void Game::OnAppUpdate()
 
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::E))
 	{
-		m_camera->Rotate(rotationrate *  D2R * GetDeltaTime());
+		m_camera->Rotate(rotationrate *  AIngine::D2R * GetDeltaTime());
 	}
 
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::Q))
 	{
-		m_camera->Rotate(-rotationrate * D2R * GetDeltaTime());
+		m_camera->Rotate(-rotationrate * AIngine::D2R * GetDeltaTime());
 	}
 
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::F))
 	{
 
 	}
-
 }
 
 void Game::OnAppEvent(AIngine::Events::Event & e)
 {
 	if (typeid(e) == typeid(AIngine::Events::MouseScrolledEvent)) {
-		AIngine::Events::MouseScrolledEvent scrolledEvent = dynamic_cast<AIngine::Events::MouseScrolledEvent&>(e);
-		static float zoomSpeed = 35;
-		m_camera->Zoom(scrolledEvent.GetYOffset() * GetDeltaTime() * zoomSpeed);
+		if (!IsAnyUiElementHovered()) {
+			AIngine::Events::MouseScrolledEvent scrolledEvent = dynamic_cast<AIngine::Events::MouseScrolledEvent&>(e);
+			static float zoomSpeed = 35;
+			m_camera->Zoom(scrolledEvent.GetYOffset() * GetDeltaTime() * zoomSpeed);
+		}
 	}
 
 	if (typeid(e) == typeid(AIngine::Events::MouseButtonPressedEvent)) {
@@ -184,8 +185,8 @@ AIngine::GameObject * Game::SpawnObjectAtMousePosition(const glm::vec2 & minSize
 {
 	static std::string circleImagePath("assets/Intellgine/textures/Circle.png");
 	static std::string boxImagePath("assets/Intellgine/textures/White.png");
-	static Bitmap* circleBitmap = &GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(circleImagePath)->GetBitmap();
-	static Bitmap* boxBitmap = &GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(boxImagePath)->GetBitmap();
+	static AIngine::Rendering::Bitmap* circleBitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(circleImagePath)->GetBitmap();
+	static AIngine::Rendering::Bitmap* boxBitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(boxImagePath)->GetBitmap();
 	static int circleCount = 0;
 	static int boxCount = 0;
 

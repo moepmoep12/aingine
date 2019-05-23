@@ -3,7 +3,7 @@
 #include <string>
 #include "Events/Event.h"
 
-namespace AIngine {
+namespace AIngine::Structures {
 
 	class Layer {
 	public:

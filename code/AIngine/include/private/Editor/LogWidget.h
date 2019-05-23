@@ -2,10 +2,11 @@
 
 #include "Editor/Editor.h"
 #include "Editor/ImGuiWidget.h"
-#include "spdlog/fmt/ostr.h"
-#include <mutex>
+
 #include "spdlog/details/null_mutex.h"
 #include "spdlog/sinks/base_sink.h"
+#include "spdlog/fmt/ostr.h"
+#include <mutex>
 
 namespace AIngine::Editor {
 

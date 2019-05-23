@@ -8,8 +8,8 @@ namespace AIngine::Editor {
 	class SceneGraphWidget;
 }
 
-namespace AIngine {
-	class SceneGraph : public AIngine::Layer {
+namespace AIngine::Structures {
+	class SceneGraph : public Layer {
 
 		friend class AIngine::Editor::SceneGraphWidget;
 

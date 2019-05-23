@@ -1,14 +1,14 @@
 #include "Editor/Editor.h"
-#include "Debug/log.h"
-#include "Editor/ImGuiWidget.h"
+#include "AIngine/Macros.h"
 #include "Application.h"
-#include <glm/geometric.hpp>
 
 // widgets
+#include "Editor/ImGuiWidget.h"
 #include "Editor/SceneGraphWidget.h"
 #include "Editor/LogWidget.h"
 #include "Editor/CameraWidget.h"
 
+#include <glm/geometric.hpp>
 
 namespace AIngine::Editor {
 
@@ -70,7 +70,8 @@ namespace AIngine::Editor {
 		return corners[index];
 	}
 
-	Editor::Editor() : m_app(AIngine::Application::Get())
+	Editor::Editor()
+		: m_app(AIngine::Application::Get())
 	{
 		ASSERT(!s_instance, "Editor already running");
 		s_instance = this;

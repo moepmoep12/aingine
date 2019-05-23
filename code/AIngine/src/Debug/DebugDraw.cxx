@@ -1,6 +1,8 @@
 #include "Debug/DebugDraw.h"
-#include "Application.h"
-#include "Debug/log.h"
+#include "AIngine/Macros.h"
+#include "Assets/Assets.h"
+#include "Rendering/Camera.h"
+
 #include "imgui.h"
 #include <string>
 #include <glad/glad.h>
@@ -20,7 +22,7 @@ namespace AIngine::Debug {
 
 			std::string path;
 			path.append(vs).append(";").append(fs);
-			m_shader = &AIngine::Application::Get().GetAssetRegistry().Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
+			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
 
 			m_vertexAttribute = 0;
 			m_colorAttribute = 1;
@@ -89,8 +91,8 @@ namespace AIngine::Debug {
 			if (m_count == 0)
 				return;
 
-			glm::mat4 projection = AIngine::Application::Get().GetCamera().GetProjectionMatrix();
-			glm::mat4 view = AIngine::Application::Get().GetCamera().GetViewMatrix();
+			glm::mat4 projection = AIngine::Rendering::Camera::Get().GetProjectionMatrix();
+			glm::mat4 view = AIngine::Rendering::Camera::Get().GetViewMatrix();
 			m_shader->SetMatrix4("projectionMatrix", projection, true);
 			m_shader->SetMatrix4("view", view);
 
@@ -132,7 +134,7 @@ namespace AIngine::Debug {
 		GLint m_vertexAttribute;
 		GLint m_colorAttribute;
 		GLint m_sizeAttribute;
-		GLShaderProgram* m_shader;
+		AIngine::Rendering::GLShaderProgram* m_shader;
 	};
 
 	struct GLRenderLines
@@ -144,7 +146,7 @@ namespace AIngine::Debug {
 
 			std::string path;
 			path.append(vs).append(";").append(fs);
-			m_shader = &AIngine::Application::Get().GetAssetRegistry().Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
+			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
 
 			m_vertexAttribute = 0;
 			m_colorAttribute = 1;
@@ -206,8 +208,8 @@ namespace AIngine::Debug {
 			if (m_count == 0)
 				return;
 
-			glm::mat4 projection = AIngine::Application::Get().GetCamera().GetProjectionMatrix();
-			glm::mat4 view = AIngine::Application::Get().GetCamera().GetViewMatrix();
+			glm::mat4 projection = AIngine::Rendering::Camera::Get().GetProjectionMatrix();
+			glm::mat4 view = AIngine::Rendering::Camera::Get().GetViewMatrix();
 			m_shader->SetMatrix4("projectionMatrix", projection, true);
 			m_shader->SetMatrix4("view", view);
 
@@ -237,7 +239,7 @@ namespace AIngine::Debug {
 		GLuint m_vaoId;
 		GLuint m_vboIds[2];
 		//GLuint m_programId;
-		GLShaderProgram* m_shader;
+		AIngine::Rendering::GLShaderProgram* m_shader;
 		//GLint m_projectionUniform;
 		GLint m_vertexAttribute;
 		GLint m_colorAttribute;
@@ -253,7 +255,7 @@ namespace AIngine::Debug {
 
 			std::string path;
 			path.append(vs).append(";").append(fs);
-			m_shader = &AIngine::Application::Get().GetAssetRegistry().Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
+			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
 
 			m_vertexAttribute = 0;
 			m_colorAttribute = 1;
@@ -308,8 +310,8 @@ namespace AIngine::Debug {
 			if (m_count == 0)
 				return;
 
-			glm::mat4 projection = AIngine::Application::Get().GetCamera().GetProjectionMatrix();
-			glm::mat4 view = AIngine::Application::Get().GetCamera().GetViewMatrix();
+			glm::mat4 projection = AIngine::Rendering::Camera::Get().GetProjectionMatrix();
+			glm::mat4 view = AIngine::Rendering::Camera::Get().GetViewMatrix();
 			m_shader->SetMatrix4("projectionMatrix", projection, true);
 			m_shader->SetMatrix4("view", view);
 			glm::vec2 screenPos = projection * view *  glm::vec4(glm::vec2(m_vertices[0].x, m_vertices[0].y), 0, 1);
@@ -345,7 +347,7 @@ namespace AIngine::Debug {
 		GLuint m_vboIds[2];
 		GLint m_vertexAttribute;
 		GLint m_colorAttribute;
-		GLShaderProgram* m_shader;
+		AIngine::Rendering::GLShaderProgram* m_shader;
 
 	};
 

@@ -5,31 +5,34 @@
 
 #include <stb_image.h>
 
-Bitmap::Bitmap(std::string const &filename)
-	: m_filename(filename)
-{
-    m_data = stbi_load(filename.c_str(), &m_width, &m_height, &m_channels, 0);
-    if (m_data == nullptr)
-        throw std::runtime_error(std::string("Could not load file: ") + filename);
-}
+namespace AIngine::Rendering {
 
-int Bitmap::GetWidth() const {
-    return m_width;
-}
+	Bitmap::Bitmap(std::string const &filename)
+		: m_filename(filename)
+	{
+		m_data = stbi_load(filename.c_str(), &m_width, &m_height, &m_channels, 0);
+		if (m_data == nullptr)
+			throw std::runtime_error(std::string("Could not load file: ") + filename);
+	}
 
-int Bitmap::GetHeight() const {
-    return m_height;
-}
+	int Bitmap::GetWidth() const {
+		return m_width;
+	}
 
-int Bitmap::GetChannels() const {
-    return m_channels;
-}
+	int Bitmap::GetHeight() const {
+		return m_height;
+	}
 
-unsigned char *Bitmap::GetData() const {
-    return m_data;
-}
+	int Bitmap::GetChannels() const {
+		return m_channels;
+	}
 
-Bitmap::~Bitmap() {
-    stbi_image_free(m_data);
-   // printf("Delete Bitmap");
+	unsigned char *Bitmap::GetData() const {
+		return m_data;
+	}
+
+	Bitmap::~Bitmap() {
+		stbi_image_free(m_data);
+	}
+
 }

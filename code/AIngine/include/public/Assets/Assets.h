@@ -8,6 +8,10 @@
 #include "Rendering/bitmap.h"
 #include "Rendering/shader.h"
 
+namespace AIngine {
+	class Application;
+}
+
 namespace AIngine::Assets {
 
 	using UID = size_t;
@@ -47,13 +51,13 @@ namespace AIngine::Assets {
 		friend class BitmapAssetFactory;
 
 	public:
-		Bitmap & GetBitmap() {
+		AIngine::Rendering::Bitmap & GetBitmap() {
 			return bitmap;
 		}
 		virtual ~BitmapAsset() {};
 
 	private:
-		Bitmap bitmap;
+		AIngine::Rendering::Bitmap bitmap;
 
 	protected:
 		BitmapAsset(std::string const & path) :
@@ -66,7 +70,7 @@ namespace AIngine::Assets {
 	{
 		friend class AssetRegistry;
 
-	public :
+	public:
 		virtual ~BitmapAssetFactory() {}
 
 	protected:
@@ -85,14 +89,14 @@ namespace AIngine::Assets {
 		friend class ShaderAssetFactory;
 
 	public:
-		GLShaderProgram& GetShader() {
+		AIngine::Rendering::GLShaderProgram& GetShader() {
 			return m_shader;
 		}
 
 		virtual ~ShaderAsset() {};
 
 	private:
-		GLShaderProgram m_shader;
+		AIngine::Rendering::GLShaderProgram m_shader;
 
 		inline std::string& GetPath(std::string const &vertexPath, std::string const &fragmentPath) const {
 			static std::string result;
@@ -103,8 +107,8 @@ namespace AIngine::Assets {
 		}
 
 	protected:
-		ShaderAsset(std::string const &vertexPath, std::string const &fragmentPath) 
-			: AssetBase(GetPath(vertexPath,fragmentPath)), m_shader(vertexPath, fragmentPath) {}
+		ShaderAsset(std::string const &vertexPath, std::string const &fragmentPath)
+			: AssetBase(GetPath(vertexPath, fragmentPath)), m_shader(vertexPath, fragmentPath) {}
 	};
 
 	class ShaderAssetFactory : public AssetFactory {
@@ -114,8 +118,8 @@ namespace AIngine::Assets {
 	public:
 		virtual ~ShaderAssetFactory() {}
 
-	protected : 
-		virtual std::unique_ptr<AssetBase> LoadAsset(std::string const & path) override 
+	protected:
+		virtual std::unique_ptr<AssetBase> LoadAsset(std::string const & path) override
 		{
 			std::vector<std::string> paths;
 			split(path, ';', paths);
@@ -157,9 +161,12 @@ namespace AIngine::Assets {
 			factories[std::type_index(typeid(T))] = std::move(factory);
 		}
 
-		AssetBase * Get(UID uid) const
+		static AssetBase * Get(UID uid)
 		{
-			return assets.at(uid).get();
+			if (s_instance) {
+				return s_instance->assets.at(uid).get();
+			}
+			else return nullptr;
 		}
 
 		AssetBase * Load(std::string const & path, std::type_index type)
@@ -175,10 +182,20 @@ namespace AIngine::Assets {
 		}
 
 		template<typename T>
-		T * Load(std::string const & path)
+		static T * Load(std::string const & path)
 		{
-			return (T*)Load(path, std::type_index(typeid(T)));
+			if (s_instance) {
+				return (T*)s_instance->Load(path, std::type_index(typeid(T)));
+			}
+			else return nullptr;
 		}
+
+
+
+	private:
+		friend class AIngine::Application;
+
+		AssetRegistry();
 
 		void Shutdown() {
 			assets.clear();
@@ -188,5 +205,6 @@ namespace AIngine::Assets {
 	private:
 		AssetMap assets;
 		FactoryMap factories;
+		static AssetRegistry* s_instance;
 	};
 }

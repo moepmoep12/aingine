@@ -1,6 +1,8 @@
 #include "Editor/SceneGraphWidget.h"
+#include "AIngine/Constants.h"
 #include "imgui.h"
-#include "Application.h"
+#include "Structures/SceneGraph.h"
+//#include "Application.h"
 #include "AIngine/GameObject.h"
 #include "Rendering/texture.h"
 #include "AIngine/Input.h"
@@ -14,8 +16,6 @@ namespace AIngine::Editor {
 
 	void AIngine::Editor::SceneGraphWidget::OnImGuiRender()
 	{
-		static unsigned int windowWidth = 400;
-		unsigned int windowHeight = AIngine::Application::Get().GetWindow().GetHeight();
 		static bool p_open = true;
 		static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse /*| ImGuiWindowFlags_NoMove*/;
 
@@ -51,7 +51,7 @@ namespace AIngine::Editor {
 			// delete event
 			AIngine::Events::KeyPressedEvent keyevent = dynamic_cast<AIngine::Events::KeyPressedEvent&>(e);
 			if (s_selectedNode && keyevent.GetKeyCode() == AIngine::KeyCodes::DEL) {
-				DeleteTraverser deletetraverser(m_sceneGraph.m_gameObjectPool);
+				AIngine::Structures::DeleteTraverser deletetraverser(m_sceneGraph.m_gameObjectPool);
 				deletetraverser.Traverse(s_selectedNode);
 				s_selectedNode = nullptr;
 			}
@@ -59,7 +59,7 @@ namespace AIngine::Editor {
 	}
 
 
-	SceneGraphWidget::SceneGraphWidget(SceneGraph & sceneGraph)
+	SceneGraphWidget::SceneGraphWidget(AIngine::Structures::SceneGraph & sceneGraph)
 		: m_sceneGraph(sceneGraph)
 	{
 	}

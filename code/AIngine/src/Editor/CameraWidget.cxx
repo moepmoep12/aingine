@@ -1,7 +1,9 @@
 #include "Editor/CameraWidget.h"
+#include "AIngine/Constants.h"
 #include "AIngine/Input.h"
-#include <glm/glm.hpp>
 #include "Application.h"
+
+#include <glm/glm.hpp>
 
 namespace AIngine::Editor {
 	CameraWidget::CameraWidget(AIngine::Rendering::Camera & camera)
@@ -71,6 +73,8 @@ namespace AIngine::Editor {
 			ImGui::Text("%.3f ms/frame (%.1f FPS)", deltaTime * 1000.0f, 1.0f / deltaTime);
 
 			ImGui::End();
+
+			Debug::DebugDraw::Point(worldPos, 2.0f, glm::vec3(1.0));
 		}
 	}
 }

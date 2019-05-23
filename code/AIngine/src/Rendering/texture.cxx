@@ -46,11 +46,7 @@ namespace AIngine::Rendering {
 	{
 		glBindTexture(GL_TEXTURE_2D, this->ID);
 	}
-	//const glm::vec2 Texture2D::GetLocalSize() const
-	//{
-	//	glm::vec2 textureSize = glm::vec2(m_owner->GetLocalScale().x * Width, m_owner->GetLocalScale().y * Height);
-	//	return textureSize;
-	//}
+
 	glm::vec2 & Texture2D::GetLocalWorldSize() 
 	{
 		return m_localWorldSize;

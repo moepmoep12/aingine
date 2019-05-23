@@ -1,10 +1,10 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include "Rendering/shader.h"
 #include "Rendering/bitmap.h"
 #include "AIngine/Component.h"
+
+#include <glad/glad.h>
+#include <glm/glm.hpp>
 
 namespace AIngine::Rendering {
 
@@ -49,7 +49,6 @@ namespace AIngine::Rendering {
 		glm::vec3 m_spriteColor;
 		glm::vec2 m_localWorldSize = glm::vec2(0);
 		glm::vec2 m_parallaxFactor;
-
 	};
 }
 

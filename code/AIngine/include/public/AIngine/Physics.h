@@ -43,4 +43,34 @@ namespace AIngine {
 		bool m_collided = false;
 
 	};
+
+
+	class ContactListener : public b2ContactListener {
+	public:
+		// Called when two fixtures begin to touch
+		virtual void BeginContact(b2Contact* contact) override
+		{
+			void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+			if (bodyUserData)
+				static_cast<AIngine::PhysicsComponent*> (bodyUserData)->SetCollision(true, contact->GetFixtureB());
+
+			bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+			if (bodyUserData)
+				static_cast<AIngine::PhysicsComponent*> (bodyUserData)->SetCollision(true, contact->GetFixtureA());
+		}
+
+		// Called when two fixtures cease to touch
+		virtual void EndContact(b2Contact* contact) override
+		{
+			void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+			if (bodyUserData)
+				static_cast<AIngine::PhysicsComponent*> (bodyUserData)->SetCollision(false, nullptr);
+
+			//check if fixture B was a ball
+			bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+			if (bodyUserData)
+				static_cast<AIngine::PhysicsComponent*> (bodyUserData)->SetCollision(false, nullptr);
+		}
+
+	};
 }

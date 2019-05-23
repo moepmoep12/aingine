@@ -114,12 +114,12 @@ namespace CrappyBird {
 
 		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::E))
 		{
-			m_camera->Rotate(rotationrate *  D2R * GetDeltaTime());
+			m_camera->Rotate(rotationrate *  AIngine::D2R * GetDeltaTime());
 		}
 
 		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::Q))
 		{
-			m_camera->Rotate(-rotationrate * D2R * GetDeltaTime());
+			m_camera->Rotate(-rotationrate * AIngine::D2R * GetDeltaTime());
 		}
 
 		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::F))
@@ -161,7 +161,7 @@ namespace CrappyBird {
 		m_player = m_world->SpawnObject(std::string("Player"), nullptr, glm::vec2(1.5, 3));
 
 		std::string circleImagePath("assets/Intellgine/textures/Circle.png");
-		Bitmap* circleBitmap = &AIngine::Application::Get().GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(circleImagePath)->GetBitmap();
+		AIngine::Rendering::Bitmap* circleBitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(circleImagePath)->GetBitmap();
 		AIngine::Rendering::Texture2D* texture = m_player->AddComponent<AIngine::Rendering::Texture2D>();
 		texture->Generate(*circleBitmap);
 		texture->SetLocalWorldSize(glm::vec2(0.5f));
@@ -185,7 +185,7 @@ namespace CrappyBird {
 	void CrappyBird::SpawnObstacles()
 	{
 		std::string boxImagePath("assets/Intellgine/textures/White.png");
-		Bitmap* boxBitmap = &GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(boxImagePath)->GetBitmap();
+		AIngine::Rendering::Bitmap* boxBitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(boxImagePath)->GetBitmap();
 		glm::vec4 worldBounds = AIngine::World::GetBounds();
 		srand(time(NULL));
 		float minObstacleHeight = 1.0f;
@@ -283,20 +283,20 @@ namespace CrappyBird {
 
 	void CrappyBird::CreateBackGround()
 	{
-		AIngine::Assets::AssetRegistry& assets = GetAssetRegistry();
+		 using assets = AIngine::Assets::AssetRegistry;
 
 		using BitmapAsset = AIngine::Assets::BitmapAsset;
 		using string = std::string;
 		using GameObject = AIngine::GameObject;
 		using Texture2D = AIngine::Rendering::Texture2D;
 
-		BitmapAsset* skyBitmap = assets.Load<BitmapAsset>(string("assets/CrappyBird/textures/hills-sky.png"));
+		BitmapAsset* skyBitmap = assets::Load<BitmapAsset>(string("assets/CrappyBird/textures/hills-sky.png"));
 		BitmapAsset* backGroundHills[4];
-		BitmapAsset* backgroundCloudsBitmap = assets.Load<BitmapAsset>(string("assets/CrappyBird/textures/hills-clouds.png"));
-		backGroundHills[0] = assets.Load<BitmapAsset>(string("assets/CrappyBird/textures/hills-1.png"));
-		backGroundHills[1] = assets.Load<BitmapAsset>(string("assets/CrappyBird/textures/hills-2.png"));
-		backGroundHills[2] = assets.Load<BitmapAsset>(string("assets/CrappyBird/textures/hills-3.png"));
-		backGroundHills[3] = assets.Load<BitmapAsset>(string("assets/CrappyBird/textures/hills-4.png"));
+		BitmapAsset* backgroundCloudsBitmap = assets::Load<BitmapAsset>(string("assets/CrappyBird/textures/hills-clouds.png"));
+		backGroundHills[0] = assets::Load<BitmapAsset>(string("assets/CrappyBird/textures/hills-1.png"));
+		backGroundHills[1] = assets::Load<BitmapAsset>(string("assets/CrappyBird/textures/hills-2.png"));
+		backGroundHills[2] = assets::Load<BitmapAsset>(string("assets/CrappyBird/textures/hills-3.png"));
+		backGroundHills[3] = assets::Load<BitmapAsset>(string("assets/CrappyBird/textures/hills-4.png"));
 
 		VisibleWorldSize = m_camera->GetVisibleWorldSize();
 		s_cloudRepeatWidth = VisibleWorldSize.x * 0.5f;

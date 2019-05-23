@@ -16,9 +16,11 @@ set(AINGINE_HEADER
 		include/public/Window.h
 		include/public/AIngine/Core.h
 		include/public/AIngine/Component.h
+		include/public/AIngine/Constants.h
 		include/public/AIngine/GameObject.h
 		include/public/AIngine/Input.h
 		include/public/AIngine/KeyCodes.h
+		include/public/AIngine/Macros.h
 		include/public/AIngine/Physics.h
 		include/public/AIngine/World.h
 		include/public/Assets/Assets.h

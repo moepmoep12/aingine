@@ -1,10 +1,10 @@
 #include "Application.h"
 #include "Events/ApplicationEvents.h"
-#include "Debug/log.h"
+#include "AIngine/Macros.h"
 #include "AIngine/Input.h"
 #include "Editor/Editor.h"
+
 #include <memory>
-#include "AIngine/Physics.h"
 
 
 #define BIND_EVENT_TO_FN(fn) std::bind(&fn, this, std::placeholders::_1)
@@ -14,36 +14,6 @@ namespace AIngine {
 	Application* Application::s_instance = nullptr;
 
 
-	class ContactListener : public b2ContactListener {
-	public:
-		// Called when two fixtures begin to touch
-		virtual void BeginContact(b2Contact* contact)
-		{
-			//check if fixture A was a ball
-			void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-			if (bodyUserData)
-				static_cast<AIngine::PhysicsComponent*> (bodyUserData)->SetCollision(true, contact->GetFixtureB());
-
-			//check if fixture B was a ball
-			bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-			if (bodyUserData)
-				static_cast<AIngine::PhysicsComponent*> (bodyUserData)->SetCollision(true, contact->GetFixtureA());
-		}
-
-		// Called when two fixtures cease to touch
-		virtual void EndContact(b2Contact* contact)
-		{
-			void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-			if (bodyUserData)
-				static_cast<AIngine::PhysicsComponent*> (bodyUserData)->SetCollision(false, nullptr);
-
-			//check if fixture B was a ball
-			bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-			if (bodyUserData)
-				static_cast<AIngine::PhysicsComponent*> (bodyUserData)->SetCollision(false, nullptr);
-		}
-
-	};
 
 	Application::Application()
 	{
@@ -78,10 +48,6 @@ namespace AIngine {
 				);
 		}
 
-		//// create scenegraph
-		//m_sceneGraph = new SceneGraph();
-		//PushOverlay(m_sceneGraph);
-
 		// load shader
 		std::string vertexPath("assets/Intellgine/shader/screenshader/vertexScreen.glsl");
 		std::string fragPath("assets/Intellgine/shader/screenshader/fragmentScreen.glsl");
@@ -98,7 +64,7 @@ namespace AIngine {
 
 		//load basic white texture
 		path = std::string("assets/Intellgine/textures/White.png");
-		AIngine::Assets::BitmapAsset* bitmap = GetAssetRegistry().Load<AIngine::Assets::BitmapAsset>(path);
+		AIngine::Assets::BitmapAsset* bitmap =m_assetRegistry.Load<AIngine::Assets::BitmapAsset>(path);
 
 		m_debugDraw = new AIngine::Debug::DebugDraw();
 
@@ -107,7 +73,6 @@ namespace AIngine {
 	Application::~Application()
 	{
 		CORE_INFO("Destructor Application");
-		delete m_contactListener;
 	}
 
 	static float s_currentFrame = 0.0f;
@@ -117,11 +82,9 @@ namespace AIngine {
 	{
 		// create game world
 		m_world = new World(m_bounds, m_gravity);
-		m_contactListener = new ContactListener();
-		m_world->m_physicsWorld->SetContactListener(m_contactListener);
 		PushLayer(m_world);
 
-		m_viewport = new AIngine::Rendering::Viewport(1508, 906, 0, 0, *m_window.get());
+		m_viewport = new AIngine::Rendering::Viewport(m_window->GetWidth(), m_window->GetHeight(), 0, 0, *m_window.get());
 
 		// create camera
 		m_camera = new AIngine::Rendering::Camera(*m_viewport, glm::vec2(m_bounds.y - m_bounds.x, m_bounds.z - m_bounds.w));
@@ -158,15 +121,15 @@ namespace AIngine {
 			//m_physicsWorld->Step(1.0 / 60.0, 8, 3);
 
 			// update logic
-			for (Layer* layer : m_layerStack)
+			for (AIngine::Structures::Layer* layer : m_layerStack)
 				layer->OnUpdate(GetDeltaTime());
 
 			// scene rendering
-			m_renderer->Traverse(&m_world->m_sceneGraph->GetRoot());
+			m_renderer->Traverse(&m_world->GetSceneGraph().GetRoot());
 
 			// ui rendering
 			m_imGuiLayer->OnBegin();
-			for (Layer* layer : m_layerStack)
+			for (AIngine::Structures::Layer* layer : m_layerStack)
 				layer->OnImGuiRender();
 			m_debugDraw->Flush();
 			m_imGuiLayer->OnEnd();
@@ -180,13 +143,8 @@ namespace AIngine {
 
 		OnAppShutDown();
 
-		// destroy our window
 		m_window = NULL;
-		// destroy our renderer
 		delete m_renderer;
-		// destroy our physics world
-		//delete m_physicsWorld;
-		// destroy camera
 		delete m_camera;
 		delete m_debugDraw;
 		delete m_viewport;
@@ -219,13 +177,13 @@ namespace AIngine {
 
 	}
 
-	void Application::PushLayer(Layer * layer)
+	void Application::PushLayer(AIngine::Structures::Layer * layer)
 	{
 		m_layerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
-	void Application::PushOverlay(Layer * overlay)
+	void Application::PushOverlay(AIngine::Structures::Layer * overlay)
 	{
 		m_layerStack.PushOverlay(overlay);
 		overlay->OnAttach();

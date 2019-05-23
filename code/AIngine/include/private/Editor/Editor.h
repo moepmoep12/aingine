@@ -2,6 +2,7 @@
 
 #include "Structures/Layer.h"
 #include "Structures/Rectangle.h"
+
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -13,7 +14,7 @@ namespace AIngine::Editor {
 
 	class ImGuiWidget;
 
-	class Editor : public AIngine::Layer {
+	class Editor : public AIngine::Structures::Layer {
 
 		// Application should create the Editor
 		friend class Application;

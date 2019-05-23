@@ -1,15 +1,16 @@
 #pragma once
 #include "Rendering/shader.h"
+#include "Structures/Traverser.h"
+
 #include <vector>
 #include <glm/glm.hpp>
-#include "Structures/Traverser.h"
 
 namespace AIngine::Rendering {
 
 	class SpriteRenderer : public AIngine::Traverser {
 	public:
 
-		SpriteRenderer(GLShaderProgram* shader);
+		SpriteRenderer(AIngine::Rendering::GLShaderProgram* shader);
 		virtual ~SpriteRenderer();
 
 		// Inherited via Traverser

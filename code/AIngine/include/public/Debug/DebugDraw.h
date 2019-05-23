@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <Box2D/Box2D.h>
 
+
 namespace AIngine::Debug {
 
 	struct GLRenderPoints;

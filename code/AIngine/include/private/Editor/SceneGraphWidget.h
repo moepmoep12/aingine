@@ -1,10 +1,16 @@
+#pragma once
+
 #include "Editor/ImGuiWidget.h"
 #include "Structures/Traverser.h"
+
 #include <unordered_map>
 
 namespace AIngine {
-	class SceneGraph;
 	class GameObject;
+}
+
+namespace AIngine::Structures {
+	class SceneGraph;
 }
 
 namespace AIngine::Editor {
@@ -14,10 +20,10 @@ namespace AIngine::Editor {
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(AIngine::Events::Event& e) override;
 
-		SceneGraphWidget(SceneGraph& sceneGraph);
+		SceneGraphWidget(AIngine::Structures::SceneGraph& sceneGraph);
 
 	private:
-		SceneGraph& m_sceneGraph;
+		AIngine::Structures::SceneGraph& m_sceneGraph;
 
 		void ShowSelectedNodeWidget(GameObject* node);
 

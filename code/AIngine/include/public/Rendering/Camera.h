@@ -1,8 +1,5 @@
 #pragma once
 #include <glm/glm.hpp>
-#ifndef M_PI
-#define M_PI	3.14159265358979323846f
-#endif
 
 namespace AIngine::Editor {
 	class CameraWidget;
@@ -32,6 +29,7 @@ namespace AIngine::Rendering {
 		inline void SetZoomMin(float value) { m_zoomMin = value; }
 		inline void SetZoomMax(float value) { m_zoomMax = value; }
 
+		inline const Viewport& GetViewport() const { return m_viewport; };
 
 		void Zoom(float amount);
 		void Rotate(float amount);
@@ -44,6 +42,8 @@ namespace AIngine::Rendering {
 		glm::vec2 WorldToScreenPoint(const glm::vec2& worldpoint) const;
 		glm::vec2 GetVisibleWorldSize() const;
 
+		static const Camera& Get();
+
 		Camera(const Viewport& viewport, const glm::vec2& bounds, const glm::vec2& desiredScreenSizeInWorldUnits = glm::vec2(0));
 
 	private:
@@ -51,11 +51,11 @@ namespace AIngine::Rendering {
 
 	private:
 		glm::vec2 m_position = glm::vec2(0);
-		glm::vec2 m_origin = glm::vec2(0);
 		float m_rotation = 0.0;
 		float m_zoom = 1.0;
 		float m_zoomMin = 0.001f;
 		float m_zoomMax = 1000;
 		const Viewport& m_viewport;
+		static Camera* s_instance;
 	};
 }

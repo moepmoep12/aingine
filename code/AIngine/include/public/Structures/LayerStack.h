@@ -3,7 +3,7 @@
 #include <vector>
 #include "Layer.h"
 
-namespace AIngine {
+namespace AIngine::Structures {
 
 	class LayerStack {
 

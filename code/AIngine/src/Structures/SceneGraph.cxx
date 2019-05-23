@@ -7,7 +7,7 @@
 #include "Events/InputEvents.h"
 #include <sstream>
 
-namespace AIngine {
+namespace AIngine::Structures {
 
 	static unsigned int nodeCount = 1;
 

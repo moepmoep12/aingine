@@ -9,7 +9,7 @@
 
 namespace AIngine::UI {
 
-	class ImGuiLayer : public AIngine::Layer {
+	class ImGuiLayer : public AIngine::Structures::Layer {
 
 	public:
 		ImGuiLayer();
@@ -21,8 +21,6 @@ namespace AIngine::UI {
 
 		void OnBegin();
 		void OnEnd();
-
-		//static AIngine::Editor::LogWidget s_logWidget;
 
 	private:
 		void CreateDockSpace(bool show);

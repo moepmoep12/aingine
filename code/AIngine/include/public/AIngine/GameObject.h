@@ -1,5 +1,5 @@
 #pragma once
-//#include "Component.h"
+
 #include <vector>
 #include <string>
 #include <typeinfo>
@@ -13,6 +13,8 @@ namespace AIngine {
 	class SceneGraph;
 	class Component;
 
+	 /// A GameObject represents an entity wihin a game
+	/// It acts as a container for Components
 	class GameObject {
 	public:
 		inline const std::vector<Component*>& GetComponents() { return m_components; }

@@ -54,9 +54,3 @@ namespace  AIngine {
 	#define DEBUG_INFO(...)
 //#define DEBUG_FATAL(...)  ::AIngine::Log::GetClientLogger()->fatal(__VA_ARGS__)
 #endif
-
-#ifdef _DEBUG
-	#define ASSERT(x,...) {if(!(x)) {CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
-#else
-	#define ASSERT(x,...)
-#endif

@@ -1,5 +1,6 @@
 #include "Rendering/Renderer.h"
-#include "Application.h"
+#include "Rendering/Camera.h"
+#include "Rendering/Viewport.h"
 #include "Rendering/texture.h"
 
 namespace AIngine::Rendering {
@@ -31,14 +32,12 @@ namespace AIngine::Rendering {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 
-		const Application& app = AIngine::Application::Get();
-		GLfloat width = static_cast<GLfloat>(app.GetWindow().GetWidth());
-		GLfloat height = static_cast<GLfloat>(app.GetWindow().GetHeight());
 
-		Camera& cam = app.GetCamera();
-		const Viewport& viewport = app.GetViewport();
+		const Camera& cam = Camera::Get();
+		const Viewport& viewport = cam.GetViewport();
+		GLfloat windowHeight = static_cast<GLfloat>(viewport.GetWindowHeight());
 
-		glViewport((GLint)viewport.GetTopLeftCornerPosition().x, (GLint)(height - viewport.GetViewportHeight()), (GLsizei)viewport.GetViewportWidth(), (GLsizei)viewport.GetViewportHeight());
+		glViewport((GLint)viewport.GetTopLeftCornerPosition().x, (GLint)(windowHeight - viewport.GetViewportHeight()), (GLsizei)viewport.GetViewportWidth(), (GLsizei)viewport.GetViewportHeight());
 
 		glm::mat4 projection = cam.GetProjectionMatrix();
 
@@ -47,7 +46,7 @@ namespace AIngine::Rendering {
 		m_shader->SetMatrix4("projection", projection);
 	}
 
-	SpriteRenderer::SpriteRenderer(GLShaderProgram* shader)
+	SpriteRenderer::SpriteRenderer(AIngine::Rendering::GLShaderProgram* shader)
 	{
 		m_shader = shader;
 	}
@@ -65,9 +64,8 @@ namespace AIngine::Rendering {
 
 		m_shader->Use();
 		m_matrixStack.clear();
-		//m_matrixStack.push_back(glm::mat4(1.0f));
 		m_modelViewMatrix = glm::mat4(1.0f);
-		m_shader->SetMatrix4("view", AIngine::Application::Get().GetCamera().GetViewMatrix());
+		m_shader->SetMatrix4("view", Camera::Get().GetViewMatrix());
 
 		return root->Accept(*this);
 
@@ -97,7 +95,7 @@ namespace AIngine::Rendering {
 			m_matrixStack.push_back(m_modelViewMatrix);
 
 			glm::vec2& textureSize = textureComponent->GetLocalWorldSize();
-			m_shader->SetMatrix4("view", AIngine::Application::Get().GetCamera().GetViewMatrix(textureComponent->GetParallaxFactor()), true);
+			m_shader->SetMatrix4("view", Camera::Get().GetViewMatrix(textureComponent->GetParallaxFactor()), true);
 
 			// we rotate around the center
 			m_modelViewMatrix = glm::translate(m_modelViewMatrix, glm::vec3(node.GetLocalPosition(), 0.0f));
