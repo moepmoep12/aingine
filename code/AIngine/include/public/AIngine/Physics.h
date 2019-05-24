@@ -20,6 +20,7 @@ namespace AIngine {
 		// inherited via Component
 		virtual void OnUpdate(float deltatime) override;
 		virtual void SetActive(bool active) override;
+		virtual void OnOwnerTransformChanged(const glm::vec2 newPosition, const glm::vec2& newScale, const float& newRotation) override;
 		virtual void OnOwnerLocalPositionChanged(const glm::vec2& position) override;
 		virtual void OnOwnerLocalRotationChanged(const float& rot) override;
 

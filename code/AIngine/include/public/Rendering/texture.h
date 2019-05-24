@@ -45,10 +45,14 @@ namespace AIngine::Rendering {
 		inline  glm::vec2& GetParallaxFactor() { return m_parallaxFactor; }
 		inline void SetParallaxFactor(const glm::vec2& factor) { m_parallaxFactor = factor; }
 
+		inline glm::mat4 GetModelMatrix() const { return m_modelMatrix; }
+		inline void SetModelMatrix(const glm::mat4& modelmat) { m_modelMatrix = modelmat; }
+
 	private:
 		glm::vec3 m_spriteColor;
 		glm::vec2 m_localWorldSize = glm::vec2(0);
 		glm::vec2 m_parallaxFactor;
+		glm::mat4 m_modelMatrix;
 	};
 }
 

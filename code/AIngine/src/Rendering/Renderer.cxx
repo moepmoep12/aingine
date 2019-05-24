@@ -116,6 +116,7 @@ namespace AIngine::Rendering {
 
 			glActiveTexture(GL_TEXTURE0);
 			textureComponent->Bind();
+			textureComponent->SetModelMatrix(m_modelViewMatrix);
 
 			glBindVertexArray(m_quadVAO);
 			glDrawArrays(GL_TRIANGLES, 0, 6);

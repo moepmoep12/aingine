@@ -10,6 +10,7 @@
 #include "Events/InputEvents.h"
 #include "AIngine/Physics.h"
 #include "Debug/log.h"
+#include "Debug/DebugDraw.h"
 
 namespace AIngine::Editor {
 
@@ -36,7 +37,7 @@ namespace AIngine::Editor {
 		m_isDocked = ImGui::IsWindowDocked();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 2));
-		ImGui::Columns(2);
+		//ImGui::Columns(2);
 		ImGui::Separator();
 
 		// traverse tree and create tree with imgui
@@ -229,10 +230,10 @@ namespace AIngine::Editor {
 			glm::vec2 postWorldScale = dragSource->GetWorldScale();
 			float postWorldRot = dragSource->GetWorldRotation();
 
-			//dragSource->UpdateTransform()
-			dragSource->Translate(-(postWorldPos - preWorldPos),false);
-			dragSource->Rotate(-(postWorldRot - preWorldRot),false);
-			dragSource->Scale(-(postWorldScale - preWorldScale),false);
+			dragSource->UpdateTransform(-(postWorldPos - preWorldPos), -(postWorldScale - preWorldScale), -(postWorldRot - preWorldRot));
+			//dragSource->Translate(-(postWorldPos - preWorldPos),false);
+			//dragSource->Rotate(-(postWorldRot - preWorldRot),false);
+			//dragSource->Scale(-(postWorldScale - preWorldScale),false);
 
 			s_DropTarget = nullptr;
 		}

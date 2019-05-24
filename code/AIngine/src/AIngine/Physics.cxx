@@ -1,5 +1,6 @@
 #include "AIngine/Physics.h"
 #include "Application.h"
+#include "AIngine/Constants.h"
 
 namespace AIngine {
 	PhysicsComponent::PhysicsComponent(GameObject * owner) : Component(owner)
@@ -17,7 +18,7 @@ namespace AIngine {
 	{
 		if (m_body) {
 			b2Vec2 pos = m_body->GetPosition();
-			float rot = m_body->GetAngle();
+			float rot = std::fmodf(m_body->GetAngle(), M_PI);
 
 			m_owner->SetLocalPosition(glm::vec2(pos.x, pos.y));
 			m_owner->SetRotation(rot);
@@ -33,11 +34,19 @@ namespace AIngine {
 		}
 	}
 
+	void PhysicsComponent::OnOwnerTransformChanged(const glm::vec2 newPosition, const glm::vec2 & newScale, const float & newRotation)
+	{
+		if (m_body && IsActive()) {
+			glm::vec2 worldPos = m_owner->GetWorldPosition();
+			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y),std::fmodf( m_owner->GetWorldRotation(), M_PI) );
+		}
+	}
+
 	void PhysicsComponent::OnOwnerLocalPositionChanged(const glm::vec2 & position)
 	{
 		if (m_body && IsActive()) {
 			glm::vec2 worldPos = m_owner->GetWorldPosition();
-			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), m_owner->GetWorldRotation());
+			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), std::fmodf(m_owner->GetWorldRotation(), M_PI));
 		}
 	}
 
@@ -45,7 +54,7 @@ namespace AIngine {
 	{
 		if (m_body && IsActive()) {
 			glm::vec2 worldPos = m_owner->GetWorldPosition();
-			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), m_owner->GetWorldRotation());
+			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), std::fmodf(m_owner->GetWorldRotation(), M_PI));
 		}
 	}
 
