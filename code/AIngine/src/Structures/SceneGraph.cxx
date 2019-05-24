@@ -69,7 +69,7 @@ namespace AIngine::Structures {
 
 	bool DeleteTraverser::Traverse(GameObject* root)
 	{
-		GameObject* parent = &root->GetParent();
+		GameObject* parent = root->GetParent();
 
 		if (parent) {
 			parent->RemoveChild(root);

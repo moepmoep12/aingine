@@ -28,6 +28,7 @@ namespace AIngine::Editor {
 		void ShowSelectedNodeWidget(GameObject* node);
 
 
+
 		// Creates a GUI for the scenegraph
 		class ImguiTreeTraverser : public AIngine::Traverser {
 		public:
@@ -41,12 +42,15 @@ namespace AIngine::Editor {
 			virtual bool Leave(GameObject & node) override;
 			virtual bool Visit(GameObject & node) override;
 
+			void PerformDrop();
+
 		private:
 			// we keep track which nodes are open in the editor 
 			// since we need to know when a subtree is finished in imgui
 			std::unordered_map<GameObject*, bool> m_openNodesMap;
 
-
+			void BeginDragSource();
+			void BeginDropTarget(GameObject& obj);
 		};
 	};
 }

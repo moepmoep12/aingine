@@ -9,10 +9,12 @@
 #include "AIngine/KeyCodes.h"
 #include "Events/InputEvents.h"
 #include "AIngine/Physics.h"
+#include "Debug/log.h"
 
 namespace AIngine::Editor {
 
 	static GameObject* s_selectedNode = nullptr;
+	static GameObject* s_DropTarget = nullptr;
 
 	void AIngine::Editor::SceneGraphWidget::OnImGuiRender()
 	{
@@ -73,7 +75,7 @@ namespace AIngine::Editor {
 
 		float* position[] = { &node->GetLocalPosition().x ,&node->GetLocalPosition().y };
 		float* scale[] = { &node->GetLocalScale().x , &node->GetLocalScale().y };
-		ImGui::Text("Transform");
+		ImGui::BulletText("Transform");
 		bool draggedPosition = ImGui::DragFloat2("Position", *position);
 		bool draggedScale = ImGui::DragFloat2("Scale", *scale);
 		bool draggedRot = ImGui::DragFloat("Rotation", &node->GetLocalRotation(), M_PI / 180.0f);
@@ -87,21 +89,23 @@ namespace AIngine::Editor {
 			float* size[] = { &texture->GetLocalWorldSize().x ,&texture->GetLocalWorldSize().y };
 			float* color[] = { &texture->GetColor().x,&texture->GetColor().y ,&texture->GetColor().z };
 			float* parallax[] = { &texture->GetParallaxFactor().x, &texture->GetParallaxFactor().y };
-			ImGui::Text("Texture Component");
-			ImGui::SameLine();
+			ImGui::BulletText("Texture Component");
+			//ImGui::SameLine();
 			ImGui::Text(texture->GetName().c_str());
 			ImGui::DragFloat2("WorldSize", *size, dragSpeed, 0.0f, 1000.0f);
-			ImGui::DragFloat3("Color", *color, 0.02f, 0.0f, 1.0f);
+			ImGui::Indent();
+			ImGui::ColorEdit3("Color", *color, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
+			ImGui::Unindent();
 			ImGui::DragFloat2("Parallax Factor", *parallax, 0.02f, -100.0f, 100.0f);
 		}
 
-		// adjust position & rotation in the phyiscs world
-		AIngine::PhysicsComponent* physComp = node->GetComponent<AIngine::PhysicsComponent>();
-		if (physComp) {
-			b2Vec2 worldPos = b2Vec2(node->GetWorldPosition().x, node->GetWorldPosition().y);
-			if (draggedPosition || draggedRot)
-				physComp->m_body->SetTransform(worldPos, node->GetWorldRotation());
-		}
+		//// adjust position & rotation in the phyiscs world
+		//AIngine::PhysicsComponent* physComp = node->GetComponent<AIngine::PhysicsComponent>();
+		//if (physComp) {
+		//	b2Vec2 worldPos = b2Vec2(node->GetWorldPosition().x, node->GetWorldPosition().y);
+		//	if (draggedPosition || draggedRot)
+		//		physComp->m_body->SetTransform(worldPos, node->GetWorldRotation());
+		//}
 	}
 
 	/*------------------------------------------- IMGUI TREE TRAVERSER -----------------------------------------------*/
@@ -126,6 +130,9 @@ namespace AIngine::Editor {
 		ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, ImGui::GetFontSize() * 2); // Increase spacing to differentiate leaves from expanded contents.
 		bool result = root->Accept(*this);
 		ImGui::PopStyleVar();
+
+		PerformDrop();
+
 		return result;
 	}
 
@@ -149,6 +156,7 @@ namespace AIngine::Editor {
 				s_selectedNode = &node;
 			}
 
+			BeginDragSource();
 			m_openNodesMap[&node] = node_open;
 
 			return node_open;
@@ -161,8 +169,12 @@ namespace AIngine::Editor {
 			if (ImGui::IsItemClicked()) {
 				s_selectedNode = &node;
 			}
+
+			BeginDragSource();
+
 			return false;
 		}
+
 
 	}
 
@@ -191,7 +203,64 @@ namespace AIngine::Editor {
 			s_selectedNode = &node;
 		}
 
+		// Drag & Drop
+		BeginDragSource();
+		BeginDropTarget(node);
+
 		return true;
+	}
+
+	void SceneGraphWidget::ImguiTreeTraverser::PerformDrop()
+	{
+		if (s_DropTarget && s_selectedNode) {
+			GameObject* dragSource = s_selectedNode;
+
+			// we want our source to have the same WorldTransfrom after changing the parent
+			// ==> we have to adjust the local transform according to the new parent
+			glm::vec2 preWorldPos = dragSource->GetWorldPosition();
+			glm::vec2 preWorldScale = dragSource->GetWorldScale();
+			float preWorldRot = dragSource->GetWorldRotation();
+
+			// first, remove the source as child from its parent
+			dragSource->GetParent()->RemoveChild(dragSource);
+			s_DropTarget->AddChild(dragSource);
+
+			glm::vec2 postWorldPos = dragSource->GetWorldPosition();
+			glm::vec2 postWorldScale = dragSource->GetWorldScale();
+			float postWorldRot = dragSource->GetWorldRotation();
+
+			//dragSource->UpdateTransform()
+			dragSource->Translate(-(postWorldPos - preWorldPos),false);
+			dragSource->Rotate(-(postWorldRot - preWorldRot),false);
+			dragSource->Scale(-(postWorldScale - preWorldScale),false);
+
+			s_DropTarget = nullptr;
+		}
+	}
+
+	void SceneGraphWidget::ImguiTreeTraverser::BeginDragSource()
+	{
+		ImGuiDragDropFlags target_flags = 0;
+		target_flags |= ImGuiDragDropFlags_SourceNoHoldToOpenOthers;
+		if (ImGui::BeginDragDropSource(target_flags)) {
+			ImGui::SetDragDropPayload("SelectedNode", s_selectedNode, sizeof(GameObject));
+			ImGui::EndDragDropSource();
+		}
+	}
+
+	void SceneGraphWidget::ImguiTreeTraverser::BeginDropTarget(GameObject& obj)
+	{
+		// Begin Drop. Remember our target to use it AFTER iterating
+		if (ImGui::BeginDragDropTarget()) {
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SelectedNode")) {
+				IM_ASSERT(payload->DataSize == sizeof(GameObject));
+				GameObject* source = s_selectedNode;
+				if (source) {
+					s_DropTarget = &obj;
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
 	}
 }
 
