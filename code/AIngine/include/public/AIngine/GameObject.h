@@ -60,22 +60,25 @@ namespace AIngine {
 			return comp;
 		}
 
-		inline const std::string& GetName() { return m_name; }
+		inline const std::string& GetName() const { return m_name; }
 		inline void SetName(const std::string& name) { m_name = name; }
 
-		inline GameObject& GetParent() { return *m_parent; }
-		void SetParent(GameObject&  parent);
+		inline GameObject* GetParent() { return m_parent; }
+		void SetParent(GameObject&  parent, bool bInformComponents = true);
 
 		inline glm::vec2& GetLocalPosition() { return m_position; }
-		void SetLocalPosition(const glm::vec2& position);
-		void Translate(const glm::vec2& translation);
+		void SetLocalPosition(const glm::vec2& position, bool bInformComponents = true);
+		void Translate(const glm::vec2& translation, bool bInformComponents = true);
 
 		inline glm::vec2& GetLocalScale() { return m_scale; }
-		void SetLocalScale(const glm::vec2& scale);
+		void SetLocalScale(const glm::vec2& scale, bool bInformComponents = true);
+		void Scale(const glm::vec2& amount, bool bInformComponents = true);
 
 		inline float& GetLocalRotation() { return m_rotation; }
-		void SetRotation(float rot);
-		void Rotate(float amount);
+		void SetRotation(float rot, bool bInformComponents = true);
+		void Rotate(float amount, bool bInformComponents = true);
+
+		void UpdateTransform(const glm::vec2& translation, const glm::vec2& scale, float rot);
 
 		inline const std::vector<GameObject*>& GetChildren() { return m_children; }
 

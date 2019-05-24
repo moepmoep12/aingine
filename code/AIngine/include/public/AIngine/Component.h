@@ -17,6 +17,7 @@ namespace AIngine {
 		virtual void OnUpdate(float deltatime) {}
 		virtual void OnImguiRender() {}
 
+		virtual void OnOwnerTransformChanged(const glm::vec2 newPosition, const glm::vec2& newScale, const float& newRotation) {}
 		virtual void OnOwnerLocalPositionChanged(const glm::vec2& position) {}
 		virtual void OnOwnerLocalScaleChanged(const glm::vec2& scale) {}
 		virtual void OnOwnerLocalRotationChanged(const float& rot) {}

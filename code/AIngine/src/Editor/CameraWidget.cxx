@@ -77,7 +77,7 @@ namespace AIngine::Editor {
 
 			//ImGui::DragFloat2()
 
-			ImGui::End();
 		}
+		ImGui::End();
 	}
 }
