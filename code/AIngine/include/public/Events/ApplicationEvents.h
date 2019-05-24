@@ -64,6 +64,36 @@ namespace AIngine::Events {
 		unsigned int m_x, m_y;
 	};
 
+	class WindowFocusEvent : public Event {
+	public:
+		WindowFocusEvent() {}
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "Window Focus Event";
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(WindowFocus)
+			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+	};
+
+	class WindowFocusLostEvent : public Event {
+	public:
+		WindowFocusLostEvent() {}
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "Window Focus Lost Event";
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(WindowLostFocus)
+			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+	};
+
 	class  ViewportChangedEvent : public Event
 	{
 	public:

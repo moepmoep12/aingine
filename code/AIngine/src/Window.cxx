@@ -114,6 +114,7 @@ AIngine::Window* AIngine::Window::Create(const WindowConfig & config)
 
 void AIngine::Window::SetGLFWCallbacks()
 {
+	// WindowSize 
 	glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
 	{
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
@@ -124,6 +125,7 @@ void AIngine::Window::SetGLFWCallbacks()
 		data.EventCallback(event);
 	});
 
+	// WindowClose
 	glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
 	{
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
@@ -131,6 +133,7 @@ void AIngine::Window::SetGLFWCallbacks()
 		data.EventCallback(event);
 	});
 
+	// WindowPosition
 	glfwSetWindowPosCallback(m_window, [](GLFWwindow* window, int xpos, int ypos) {
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 		data.XPos = xpos;
@@ -140,6 +143,22 @@ void AIngine::Window::SetGLFWCallbacks()
 		data.EventCallback(event);
 	});
 
+	// WindowFocus
+	glfwSetWindowFocusCallback(m_window, [](GLFWwindow* window, int focused) {
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		data.HasFocus = focused;
+
+		if (focused) {
+			AIngine::Events::WindowFocusEvent e;
+			data.EventCallback(e);
+		}
+		else {
+			AIngine::Events::WindowFocusLostEvent e;
+			data.EventCallback(e);
+		}
+	});
+
+	// Key
 	glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
@@ -175,6 +194,7 @@ void AIngine::Window::SetGLFWCallbacks()
 		data.EventCallback(event);
 	});
 
+	// MouseButton
 	glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods)
 	{
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
@@ -196,6 +216,7 @@ void AIngine::Window::SetGLFWCallbacks()
 		}
 	});
 
+	// Mouse Scroll
 	glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xOffset, double yOffset)
 	{
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
@@ -204,6 +225,7 @@ void AIngine::Window::SetGLFWCallbacks()
 		data.EventCallback(event);
 	});
 
+	// Mouse Moved
 	glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xPos, double yPos)
 	{
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);

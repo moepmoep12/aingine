@@ -3,6 +3,7 @@
 #include "Structures/Layer.h"
 #include "Structures/Rectangle.h"
 #include "Events/InputEvents.h"
+#include "Events/ApplicationEvents.h"
 
 #include <glm/glm.hpp>
 #include <vector>
@@ -55,7 +56,7 @@ namespace AIngine::Editor {
 
 	private:
 		bool OnKeyPressed(AIngine::Events::KeyPressedEvent& e);
-		glm::vec2 ClosestPoint(const AIngine::Structures::Rectangle& rect, const glm::vec2& point, AIngine::Structures::Rectangle::Corner* corner) const;
+		bool OnWindowResized(AIngine::Events::WindowResizeEvent& e);
 		Editor();
 
 	private:

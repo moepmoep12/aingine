@@ -26,6 +26,7 @@ namespace AIngine {
 		int Height;
 		int XPos;
 		int YPos;
+		bool HasFocus = true;
 		std::function<void(Events::Event&)> EventCallback;
 	};
 

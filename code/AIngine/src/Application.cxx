@@ -23,6 +23,7 @@ namespace AIngine {
 		m_window = std::unique_ptr<Window>(Window::Create(m_windowConfig));
 		m_window->SetEventCallbackFunction(BIND_EVENT_TO_FN(Application::OnEvent));
 
+		// Create UI Layer
 		m_imGuiLayer = new AIngine::UI::ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
 
@@ -64,7 +65,6 @@ namespace AIngine {
 		AIngine::Assets::BitmapAsset* bitmap = m_assetRegistry.Load<AIngine::Assets::BitmapAsset>(path);
 
 		m_debugDraw = new AIngine::Debug::DebugDraw();
-
 	}
 
 	Application::~Application()
@@ -81,7 +81,8 @@ namespace AIngine {
 		m_world = new World(m_bounds, m_gravity);
 		PushLayer(m_world);
 
-		m_viewport = new AIngine::Rendering::Viewport(800, 450, 0, 0, *m_window.get());
+		// create viewport
+		m_viewport = new AIngine::Rendering::Viewport(m_window->GetWidth(), m_window->GetHeight(), 0, 0, *m_window.get());
 
 		// create camera
 		m_camera = new AIngine::Rendering::Camera(*m_viewport, glm::vec2(m_bounds.y - m_bounds.x, m_bounds.z - m_bounds.w));
@@ -215,6 +216,7 @@ namespace AIngine {
 	bool Application::OnWindowResize(AIngine::Events::WindowResizeEvent & e)
 	{
 		m_renderer->SetViewport();
+		CORE_INFO(e.ToString());
 		return true;
 	}
 

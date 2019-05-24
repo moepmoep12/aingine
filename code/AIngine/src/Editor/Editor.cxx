@@ -72,6 +72,14 @@ namespace AIngine::Editor {
 		return false;
 	}
 
+	bool Editor::OnWindowResized(AIngine::Events::WindowResizeEvent & e)
+	{
+		AIngine::Structures::Rectangle viewportRect = CalculateViewportRect(glm::vec2(m_app.GetWindow().GetWidth(), m_app.GetWindow().GetHeight()));
+		AIngine::Events::ViewportChangedEvent ev(viewportRect);
+		m_app.OnEvent(ev);
+		return true;
+	}
+
 	Editor::Editor()
 		: m_app(AIngine::Application::Get())
 	{
@@ -112,7 +120,6 @@ namespace AIngine::Editor {
 						&& widgetMax.y == viewportMax.y)
 					{
 						viewportRect.width -= widgetRect.width;
-						DEBUG_INFO("greaterPosX");
 					}
 					if (widgetPos.x == viewportPos.x
 						&& widgetPos.y == viewportPos.y
