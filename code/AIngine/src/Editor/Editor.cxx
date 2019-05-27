@@ -8,6 +8,7 @@
 #include "Editor/Widgets/SceneGraphWidget.h"
 #include "Editor/Widgets/LogWidget.h"
 #include "Editor/Widgets/CameraWidget.h"
+#include "Editor/Widgets/MenuBarWidget.h"
 
 #include <glm/geometric.hpp>
 
@@ -50,6 +51,7 @@ namespace AIngine::Editor {
 
 	void Editor::OnImGuiRender()
 	{
+
 		auto it = m_widgets.begin();
 
 		while (it != m_widgets.end()) {
@@ -91,6 +93,7 @@ namespace AIngine::Editor {
 		m_widgets.push_back(new SceneGraphWidget(*m_app.m_world->m_sceneGraph));
 		m_widgets.push_back(new LogWidget());
 		m_widgets.push_back(new CameraWidget(*m_app.m_camera));
+		m_widgets.push_back(new MenubarWidget());
 	}
 
 	AIngine::Structures::Rectangle Editor::CalculateViewportRect(const glm::vec2& windowSize) const
@@ -98,7 +101,7 @@ namespace AIngine::Editor {
 		using Rectangle = AIngine::Structures::Rectangle;
 		using Corner = AIngine::Structures::Rectangle::Corner;
 
-		Rectangle viewportRect(0, 0, windowSize.x, windowSize.y);
+		Rectangle viewportRect(0, m_widgets[3]->GetSize().y , windowSize.x, windowSize.y - m_widgets[3]->GetSize().y);
 		Corner corner;
 
 		auto it = m_widgets.begin();
@@ -111,8 +114,8 @@ namespace AIngine::Editor {
 					glm::vec2 windowPos = glm::vec2(m_app.m_window->GetX(), m_app.m_window->GetY());
 					glm::vec2 viewportPos = viewportRect.GetPosition();
 					glm::vec2 viewportMax = viewportRect.GetMax();
-					glm::vec2 widgetPos = widgetRect.GetPosition() - windowPos;
-					glm::vec2 widgetMax = widgetRect.GetMax() - windowPos;
+					glm::vec2 widgetPos = widgetRect.GetPosition() - windowPos /*- m_widgets[3]->GetPosition().y - m_widgets[3]->GetSize().y*/;
+					glm::vec2 widgetMax = widgetRect.GetMax() - windowPos/* - m_widgets[3]->GetPosition().y - m_widgets[3]->GetSize().y*/;
 
 					if (widgetPos.x > viewportPos.x
 						&& widgetPos.y == viewportPos.y

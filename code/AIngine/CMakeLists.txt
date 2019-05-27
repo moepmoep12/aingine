@@ -48,6 +48,7 @@ set(AINGINE_HEADER
 		include/private/Editor/Widgets/CameraWidget.h
 		include/private/Editor/Widgets/ComponentWidget.h
 		include/private/Editor/Widgets/LogWidget.h
+		include/private/Editor/Widgets/MenuBarWidget.h
 		include/private/Editor/Widgets/SceneGraphWidget.h
 		include/private/Editor/Widgets/TextureComponentWidget.h
 		include/private/gl_error.h
@@ -69,7 +70,7 @@ set(AINGINE_SRC
 		src/Debug/log.cxx
 		src/Editor/Editor.cxx
 		src/Editor/Widgets/CameraWidget.cxx
-		src/Editor/Widgets/ComponentWidget.cxx
+		src/Editor/Widgets/MenuBarWidget.cxx
 		src/Editor/Widgets/SceneGraphWidget.cxx
 		src/Editor/Widgets/TextureComponentWidget.cxx
 		src/Rendering/bitmap.cxx
