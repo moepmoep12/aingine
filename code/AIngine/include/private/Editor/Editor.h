@@ -10,6 +10,7 @@
 
 namespace AIngine {
 	class Application;
+	class GameObject;
 }
 
 namespace AIngine::Editor {
@@ -45,6 +46,7 @@ namespace AIngine::Editor {
 			return nullptr;
 		}
 
+		static GameObject* GetSceneGraphRoot();
 		static bool IsAnyUIElementHovered();
 		bool DidAnyDockedWidgetChangeSize() const;
 

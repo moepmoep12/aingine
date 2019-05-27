@@ -153,6 +153,14 @@ namespace AIngine::Editor {
 		return viewportRect;
 	}
 
+	GameObject * Editor::GetSceneGraphRoot()
+	{
+		if (s_instance) {
+			return &s_instance->m_app.m_world->GetSceneGraph().GetRoot();
+		}
+		return nullptr;
+	}
+
 	bool Editor::IsAnyUIElementHovered()
 	{
 		return ImGui::IsAnyWindowHovered();
