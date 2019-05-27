@@ -1,6 +1,8 @@
 #include "Editor/Widgets/MenuBarWidget.h"
-
+#include "Editor/Serialization.h"
 #include "AIngine/World.h"
+
+#include <string>
 
 namespace AIngine::Editor {
 	void MenubarWidget::OnImGuiRender()
@@ -17,8 +19,9 @@ namespace AIngine::Editor {
 					
 				}
 
-				if (ImGui::MenuItem("Save")) {
-
+				if (ImGui::MenuItem("Save")) 
+				{
+					AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(std::string(""));
 				}
 
 				ImGui::EndMenu();
