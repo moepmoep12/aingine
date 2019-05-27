@@ -41,7 +41,7 @@ namespace AIngine {
 
 			while (it != m_components.end())
 			{
-				if (typeid(T) == typeid(*it._Ptr)) {
+				if (typeid(T) == typeid(**it._Ptr)) {
 					it = m_components.erase(it);
 					delete (*it._Ptr);
 					return;

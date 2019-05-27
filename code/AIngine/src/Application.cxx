@@ -223,8 +223,9 @@ namespace AIngine {
 	bool Application::OnViewportChanged(AIngine::Events::ViewportChangedEvent & e)
 	{
 		m_viewport->Set(e.ViewportRect.GetPosition(), e.ViewportRect.width, e.ViewportRect.height);
+		m_camera->SetZoom((float)m_window->GetWidth() / (float)m_world->GetBounds().y);
 		m_renderer->SetViewport();
-		CORE_INFO("Viewport Size Changed To ({0} | {1})", m_viewport->m_width, m_viewport->m_height);
+		CORE_INFO("Viewport Size Changed To ({0} | {1}) at Position ({2} | {3})", m_viewport->m_width, m_viewport->m_height, m_viewport->m_x, m_viewport->m_y);
 		return true;
 	}
 }
