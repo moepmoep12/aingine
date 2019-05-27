@@ -287,7 +287,7 @@ namespace CrappyBird {
 
 	void CrappyBird::CreateBackGround()
 	{
-		 using assets = AIngine::Assets::AssetRegistry;
+		using assets = AIngine::Assets::AssetRegistry;
 
 		using BitmapAsset = AIngine::Assets::BitmapAsset;
 		using string = std::string;
@@ -388,6 +388,12 @@ namespace CrappyBird {
 		m_running = true;
 		m_player->GetComponent<AIngine::PhysicsComponent>()->SetActive(true);
 		m_player->SetLocalPosition(glm::vec2(1.5, 3));
+
+
+		for (auto child : m_obstacleParent->GetChildren()) {
+
+			child->Translate(glm::vec2(AIngine::World::GetBounds().y / 2.0, 0));
+		}
 	}
 
 }
