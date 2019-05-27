@@ -1,4 +1,4 @@
-#include "Editor/CameraWidget.h"
+#include "Editor/Widgets/CameraWidget.h"
 #include "AIngine/Constants.h"
 #include "AIngine/Input.h"
 #include "Application.h"

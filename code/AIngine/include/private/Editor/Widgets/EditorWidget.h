@@ -11,7 +11,7 @@ namespace AIngine::Editor {
 	/*
 	* The base class for widgets that make up the Editor
 	*/
-	class ImGuiWidget {
+	class EditorWidget {
 	public:
 
 		/* Called once per frame when the widget will be drawn*/
@@ -29,7 +29,7 @@ namespace AIngine::Editor {
 			return AIngine::Structures::Rectangle(m_position.x, m_position.y, m_size.x, m_size.y);
 		}
 
-		virtual ~ImGuiWidget() {}
+		virtual ~EditorWidget() {}
 
 	protected:
 		glm::vec2 m_size = glm::vec2(0);

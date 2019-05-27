@@ -4,10 +4,10 @@
 #include "AIngine/KeyCodes.h"
 
 // widgets
-#include "Editor/ImGuiWidget.h"
-#include "Editor/SceneGraphWidget.h"
-#include "Editor/LogWidget.h"
-#include "Editor/CameraWidget.h"
+#include "Editor/Widgets/EditorWidget.h"
+#include "Editor/Widgets/SceneGraphWidget.h"
+#include "Editor/Widgets/LogWidget.h"
+#include "Editor/Widgets/CameraWidget.h"
 
 #include <glm/geometric.hpp>
 
@@ -104,7 +104,7 @@ namespace AIngine::Editor {
 		auto it = m_widgets.begin();
 
 		while (it != m_widgets.end()) {
-			const ImGuiWidget& widget = *(*it._Ptr);
+			const EditorWidget& widget = *(*it._Ptr);
 			if (widget.IsWindowDocked()) {
 				AIngine::Structures::Rectangle widgetRect = widget.GetRectangle();
 				if (viewportRect.Contains(widgetRect)) {
@@ -160,7 +160,7 @@ namespace AIngine::Editor {
 		auto it = m_widgets.begin();
 
 		while (it != m_widgets.end()) {
-			const ImGuiWidget& widget = *(*it._Ptr);
+			const EditorWidget& widget = *(*it._Ptr);
 			if (widget.WasWindowSizeChanged() && widget.IsWindowDocked())
 				return true;
 			it++;

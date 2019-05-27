@@ -1,4 +1,4 @@
-#include "Editor/SceneGraphWidget.h"
+#include "Editor/Widgets/SceneGraphWidget.h"
 #include "AIngine/Constants.h"
 #include "imgui.h"
 #include "Structures/SceneGraph.h"

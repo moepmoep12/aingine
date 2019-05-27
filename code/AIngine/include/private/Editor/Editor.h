@@ -14,7 +14,7 @@ namespace AIngine {
 
 namespace AIngine::Editor {
 
-	class ImGuiWidget;
+	class EditorWidget;
 
 	class Editor : public AIngine::Structures::Layer {
 
@@ -53,7 +53,6 @@ namespace AIngine::Editor {
 		virtual ~Editor() override;
 
 
-
 	private:
 		bool OnKeyPressed(AIngine::Events::KeyPressedEvent& e);
 		bool OnWindowResized(AIngine::Events::WindowResizeEvent& e);
@@ -62,7 +61,7 @@ namespace AIngine::Editor {
 	private:
 		static Editor* s_instance;
 		AIngine::Application& m_app;
-		std::vector<ImGuiWidget*> m_widgets;
+		std::vector<EditorWidget*> m_widgets;
 
 	};
 }

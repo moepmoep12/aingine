@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Editor/Editor.h"
-#include "Editor/ImGuiWidget.h"
+#include "Editor/Widgets/EditorWidget.h"
 
 #include "spdlog/details/null_mutex.h"
 #include "spdlog/sinks/base_sink.h"
@@ -10,7 +10,7 @@
 
 namespace AIngine::Editor {
 
-	class LogWidget : public ImGuiWidget
+	class LogWidget : public EditorWidget
 	{
 	private:
 		ImGuiTextBuffer     Buf;

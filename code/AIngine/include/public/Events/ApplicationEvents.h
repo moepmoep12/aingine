@@ -7,6 +7,7 @@
 
 namespace AIngine::Events {
 
+	// WindowCloseEvent
 	class WindowCloseEvent : public Event
 	{
 	public:
@@ -16,8 +17,7 @@ namespace AIngine::Events {
 			EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-
-
+	// WindowResizeEvent
 	class  WindowResizeEvent : public Event
 	{
 	public:
@@ -41,6 +41,7 @@ namespace AIngine::Events {
 		unsigned int m_Width, m_Height;
 	};
 
+	// WindowMovedEvent
 	class  WindowMovedEvent : public Event
 	{
 	public:
@@ -64,6 +65,7 @@ namespace AIngine::Events {
 		unsigned int m_x, m_y;
 	};
 
+	// WindowFocusEvent
 	class WindowFocusEvent : public Event {
 	public:
 		WindowFocusEvent() {}
@@ -79,6 +81,7 @@ namespace AIngine::Events {
 			EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
+	// WindowFocusLostEvent
 	class WindowFocusLostEvent : public Event {
 	public:
 		WindowFocusLostEvent() {}
@@ -94,6 +97,7 @@ namespace AIngine::Events {
 			EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
+	// ViewportChangedEvent
 	class  ViewportChangedEvent : public Event
 	{
 	public:

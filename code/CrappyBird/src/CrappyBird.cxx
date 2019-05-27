@@ -224,6 +224,8 @@ namespace CrappyBird {
 			{
 				using namespace AIngine::Rendering;
 				Texture2D* texture = spawnedObject->AddComponent<Texture2D>();
+				texture->Filter_Max = GL_NEAREST;
+				texture->Filter_Min = GL_NEAREST;
 				texture->Generate(*boxBitmap);
 				texture->SetLocalWorldSize(glm::vec2(obstacleWidth, sizeY));
 				texture->SetColor(color);
@@ -259,6 +261,8 @@ namespace CrappyBird {
 			{
 				using namespace AIngine::Rendering;
 				Texture2D* texture = spawnedObject->AddComponent<Texture2D>();
+				texture->Filter_Max = GL_NEAREST;
+				texture->Filter_Min = GL_NEAREST;
 				texture->Generate(*boxBitmap);
 				texture->SetLocalWorldSize(glm::vec2(obstacleWidth, sizeY));
 				texture->SetColor(color);
@@ -304,6 +308,8 @@ namespace CrappyBird {
 		// spawn sky
 		GameObject* spawnedGameObject = m_world->SpawnObject(string("Sky"));
 		m_backGroundSky = spawnedGameObject->AddComponent<Texture2D>();
+		m_backGroundSky->Filter_Max = GL_NEAREST;
+		m_backGroundSky->Filter_Min = GL_NEAREST;
 		m_backGroundSky->Generate(skyBitmap->GetBitmap());
 		m_backGroundSky->SetLocalWorldSize(VisibleWorldSize);
 		spawnedGameObject->SetLocalPosition(VisibleWorldSize * 0.5f);
@@ -311,6 +317,8 @@ namespace CrappyBird {
 		// spawn clouds1
 		spawnedGameObject = m_world->SpawnObject(string("Clouds"));
 		m_backGroundClouds = spawnedGameObject->AddComponent<Texture2D>();
+		m_backGroundClouds->Filter_Max = GL_NEAREST;
+		m_backGroundClouds->Filter_Min = GL_NEAREST;
 		m_backGroundClouds->Generate(backgroundCloudsBitmap->GetBitmap());
 		m_backGroundClouds->SetLocalWorldSize(VisibleWorldSize);
 		spawnedGameObject->SetLocalPosition(VisibleWorldSize * 0.5f);
@@ -319,6 +327,8 @@ namespace CrappyBird {
 		// spawn clouds2
 		spawnedGameObject = m_world->SpawnObject(string("Clouds2"));
 		m_backGroundClouds2 = spawnedGameObject->AddComponent<Texture2D>();
+		m_backGroundClouds2->Filter_Max = GL_NEAREST;
+		m_backGroundClouds2->Filter_Min = GL_NEAREST;
 		m_backGroundClouds2->Generate(backgroundCloudsBitmap->GetBitmap());
 		m_backGroundClouds2->SetLocalWorldSize(VisibleWorldSize);
 		spawnedGameObject->SetLocalPosition(glm::vec2(VisibleWorldSize.x * 0.5f, VisibleWorldSize.y * 0.4f));
@@ -331,6 +341,8 @@ namespace CrappyBird {
 
 			spawnedGameObject = m_world->SpawnObject(string("Hills-").append(std::to_string(hillIndex)));
 			m_backGroundHills[hillIndex] = spawnedGameObject->AddComponent<Texture2D>();
+			m_backGroundHills[hillIndex]->Filter_Max = GL_NEAREST;
+			m_backGroundHills[hillIndex]->Filter_Min = GL_NEAREST;
 			m_backGroundHills[hillIndex]->Generate(backGroundHills[hillIndex]->GetBitmap());
 			m_backGroundHills[hillIndex]->SetParallaxFactor(glm::vec2(1.0f) * 0.25f *(float)hillIndex);
 			m_backGroundHills[hillIndex]->SetLocalWorldSize(glm::vec2(VisibleWorldSize.x, 6.0));

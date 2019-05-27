@@ -43,11 +43,13 @@ set(AINGINE_HEADER
 		include/public/Structures/SceneGraph.h
 		include/public/Structures/Traverser.h
 		include/public/UI/ImGuiLayer.h	
-		include/private/Editor/CameraWidget.h
 		include/private/Editor/Editor.h
-		include/private/Editor/ImGuiWidget.h
-		include/private/Editor/LogWidget.h
-		include/private/Editor/SceneGraphWidget.h
+		include/private/Editor/Widgets/EditorWidget.h
+		include/private/Editor/Widgets/CameraWidget.h
+		include/private/Editor/Widgets/ComponentWidget.h
+		include/private/Editor/Widgets/LogWidget.h
+		include/private/Editor/Widgets/SceneGraphWidget.h
+		include/private/Editor/Widgets/TextureComponentWidget.h
 		include/private/gl_error.h
 		include/private/readfile.h
 	)
@@ -65,9 +67,11 @@ set(AINGINE_SRC
 		src/Debug/gl_error.cxx
 		src/Debug/DebugDraw.cxx
 		src/Debug/log.cxx
-		src/Editor/CameraWidget.cxx
 		src/Editor/Editor.cxx
-		src/Editor/SceneGraphWidget.cxx
+		src/Editor/Widgets/CameraWidget.cxx
+		src/Editor/Widgets/ComponentWidget.cxx
+		src/Editor/Widgets/SceneGraphWidget.cxx
+		src/Editor/Widgets/TextureComponentWidget.cxx
 		src/Rendering/bitmap.cxx
 		src/Rendering/Camera.cxx
 		src/Rendering/PhysicsRenderer.cxx

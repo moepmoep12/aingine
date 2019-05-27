@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Editor/ImGuiWidget.h"
+#include "Editor/Widgets/EditorWidget.h"
 #include "Structures/Traverser.h"
 
 #include <unordered_map>
@@ -14,9 +14,9 @@ namespace AIngine::Structures {
 }
 
 namespace AIngine::Editor {
-	class SceneGraphWidget : public ImGuiWidget {
+	class SceneGraphWidget : public EditorWidget {
 	public:
-		// Inherited via ImGuiWidget
+		// Inherited via EditorWidget
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(AIngine::Events::Event& e) override;
 
