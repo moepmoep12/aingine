@@ -44,6 +44,7 @@ set(AINGINE_HEADER
 		include/public/Structures/Traverser.h
 		include/public/UI/ImGuiLayer.h	
 		include/private/Editor/Editor.h
+		include/private/Editor/Serialization.h
 		include/private/Editor/Widgets/EditorWidget.h
 		include/private/Editor/Widgets/CameraWidget.h
 		include/private/Editor/Widgets/ComponentWidget.h
@@ -69,6 +70,7 @@ set(AINGINE_SRC
 		src/Debug/DebugDraw.cxx
 		src/Debug/log.cxx
 		src/Editor/Editor.cxx
+		src/Editor/Serialization.cxx
 		src/Editor/Widgets/CameraWidget.cxx
 		src/Editor/Widgets/MenuBarWidget.cxx
 		src/Editor/Widgets/SceneGraphWidget.cxx
@@ -116,6 +118,7 @@ target_link_libraries(Engine
 		imgui
 		spdlog
 		Box2D-cmake
+		nlohmann_json
         )
 
 #
