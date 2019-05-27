@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Editor/Widgets/EditorWidget.h"
+#include "Editor/Widgets/ComponentWidget.h"
 
 namespace AIngine::Editor {
 
-	class TextureComponentWidget : public EditorWidget {
+	class TextureComponentWidget : public ComponentWidget {
 	public:
-		// Inherited via EditorWidget
+		// Inherited via ComponentWidget
 		virtual void OnImGuiRender() override;
 	};
 }

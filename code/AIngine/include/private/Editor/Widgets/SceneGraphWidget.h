@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Editor/Widgets/EditorWidget.h"
+#include "Editor/Widgets/TextureComponentWidget.h"
 #include "Structures/Traverser.h"
 
 #include <unordered_map>
@@ -20,10 +21,13 @@ namespace AIngine::Editor {
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(AIngine::Events::Event& e) override;
 
+		virtual ~SceneGraphWidget() override;
+
 		SceneGraphWidget(AIngine::Structures::SceneGraph& sceneGraph);
 
 	private:
 		AIngine::Structures::SceneGraph& m_sceneGraph;
+		TextureComponentWidget* m_textureCompWidget;
 
 		void ShowSelectedNodeWidget(GameObject* node);
 

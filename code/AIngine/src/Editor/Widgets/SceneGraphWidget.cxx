@@ -64,10 +64,16 @@ namespace AIngine::Editor {
 		}
 	}
 
+	SceneGraphWidget::~SceneGraphWidget()
+	{
+		delete m_textureCompWidget;
+	}
+
 
 	SceneGraphWidget::SceneGraphWidget(AIngine::Structures::SceneGraph & sceneGraph)
 		: m_sceneGraph(sceneGraph)
 	{
+		m_textureCompWidget = new TextureComponentWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
@@ -85,28 +91,8 @@ namespace AIngine::Editor {
 
 		// show textureComponent
 		if (texture) {
-			ImGui::Separator();
-			static float dragSpeed = 0.1f;
-			float* size[] = { &texture->GetLocalWorldSize().x ,&texture->GetLocalWorldSize().y };
-			float* color[] = { &texture->GetColor().x,&texture->GetColor().y ,&texture->GetColor().z };
-			float* parallax[] = { &texture->GetParallaxFactor().x, &texture->GetParallaxFactor().y };
-			ImGui::BulletText("Texture Component");
-			//ImGui::SameLine();
-			ImGui::Text(texture->GetName().c_str());
-			ImGui::DragFloat2("WorldSize", *size, dragSpeed, 0.0f, 1000.0f);
-			ImGui::Indent();
-			ImGui::ColorEdit3("Color", *color, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
-			ImGui::Unindent();
-			ImGui::DragFloat2("Parallax Factor", *parallax, 0.02f, -100.0f, 100.0f);
+			m_textureCompWidget->Render(std::vector<GameObject*> { node });
 		}
-
-		//// adjust position & rotation in the phyiscs world
-		//AIngine::PhysicsComponent* physComp = node->GetComponent<AIngine::PhysicsComponent>();
-		//if (physComp) {
-		//	b2Vec2 worldPos = b2Vec2(node->GetWorldPosition().x, node->GetWorldPosition().y);
-		//	if (draggedPosition || draggedRot)
-		//		physComp->m_body->SetTransform(worldPos, node->GetWorldRotation());
-		//}
 	}
 
 	/*------------------------------------------- IMGUI TREE TRAVERSER -----------------------------------------------*/
