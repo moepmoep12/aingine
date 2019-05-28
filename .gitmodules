@@ -20,3 +20,7 @@
 [submodule "code/thirdParty/Box2D-cmake"]
 	path = code/thirdParty/Box2D-cmake
 	url = https://github.com/tobanteGaming/Box2D-cmake.git
+	
+[submodule "code/thirdParty/json"]
+	path = code/thirdParty/json
+	url = https://github.com/nlohmann/json.git	
