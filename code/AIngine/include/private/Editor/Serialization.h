@@ -20,7 +20,11 @@ namespace AIngine::Editor::Serialization
 	class Serializer {
 	public:
 		static void SerializeSceneGraph(const std::string& path);
-		static AIngine::GameObject* DeserializeSceneGraph(const std::string& path);
+		static void DeserializeSceneGraph(const std::string& path);
+
+	private:
+		static AIngine::GameObject* RestoreGameObject(const nlohmann::json* const j, AIngine::GameObject* parent);
+		static void RestoreTexture2D(const nlohmann::json* const j, AIngine::GameObject* obj);
 	};
 
 	class SceneGraphSerializer : public AIngine::Traverser {
@@ -41,4 +45,5 @@ namespace AIngine::Editor::Serialization
 		std::vector<AIngine::GameObject*> m_spawnedObjects;
 
 	};
+
 }

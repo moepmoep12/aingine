@@ -5,11 +5,46 @@
 #include "AIngine/GameObject.h"
 #include "Structures/SceneGraph.h"
 #include "AIngine/World.h"
+#include "Assets/Assets.h"
 
 #include <fstream>
 #include <vector>
+#include <glm/glm.hpp>
 
 namespace AIngine::Editor::Serialization {
+
+	namespace AttributeNames {
+
+		// GameObject
+		const char* GAMEOBJECT_NAME = "a_name";
+		const char* GAMEOBJECT_POSITION_X = "a_posX";
+		const char* GAMEOBJECT_POSITION_Y = "a_posY";
+		const char* GAMEOBJECT_SCALE_X = "a_scaleX";
+		const char* GAMEOBJECT_SCALE_Y = "a_scaleY";
+		const char* GAMEOBJECT_ROTATION = "a_rotation";
+		const char* GAMEOBJECT_COMPONENTS = "b_components";
+		const char* GAMEOBJECT_CHILDREN = "c_children";
+
+		// Components
+		const char* COMPONENT_TEXTURE2D = "texture";
+		const char* COMPONENT_PHYSICS = "physics";
+
+		// Texture2D
+		const char* TEXTURE_PATH = "path";
+		const char* TEXTURE_COLOR_R = "colorR";
+		const char* TEXTURE_COLOR_G = "colorG";
+		const char* TEXTURE_COLOR_B = "colorB";
+		const char* TEXTURE_SIZE_X = "sizeX";
+		const char* TEXTURE_SIZE_Y = "sizeY";
+		const char* TEXTURE_PARALLAX_X = "parallaxX";
+		const char* TEXTURE_PARALLAX_Y = "parallaxY";
+		const char* TEXTURE_WRAP_S = "wrapS";
+		const char* TEXTURE_WRAP_T = "wrapT";
+		const char* TEXTURE_FILTER_MIN = "filterMin";
+		const char* TEXTURE_FILTER_MAX = "filterMax";
+		const char* TEXTURE_IMAGEFORMAT = "imageFormat";
+
+	}
 
 	void Serializer::SerializeSceneGraph(const std::string & path)
 	{
@@ -22,92 +57,78 @@ namespace AIngine::Editor::Serialization {
 		file.close();
 	}
 
-	static 	std::vector<std::pair<AIngine::GameObject*, int>> spawnedObjects;
-	static std::ofstream logfile;
-	static bool startingGameObject = false;
 
-	AIngine::GameObject * Serializer::DeserializeSceneGraph(const std::string & path)
+	void Serializer::DeserializeSceneGraph(const std::string & path)
 	{
-		using World = AIngine::World;
 		using json = nlohmann::json;
 
 		// open the file
 		std::ifstream file;
 		file.open(path);
 
-		logfile.open("logJson.txt");
-
-		// callback function for parsing the string
-		json::parser_callback_t cb = [](int depth, json::parse_event_t event, json & parsed)
-		{
-			logfile << depth << "    ";
-
-			if (event == json::parse_event_t::object_start)
-			{
-				logfile << "object_start    " << parsed << "\n";
-
-				// we know we're starting a gameobject, so listen for the next key
-				if (parsed != json("a_localRot") && parsed != json("ParallaxX")) {
-					startingGameObject = true;
-				}
-
-				return true;
-			}
-			if (event == json::parse_event_t::object_end)
-			{
-				logfile << "object_end    " << parsed << "\n";
-
-				// we have completed a GameObject
-				if (depth == spawnedObjects[spawnedObjects.size()].second) {
-
-				}
-
-				return true;
-			}
-
-			if (event == json::parse_event_t::key)
-			{
-				logfile << "key    " << parsed << "\n";
-
-				if (startingGameObject) {
-					spawnedObjects.push_back({ AIngine::World::SpawnObject(parsed),depth });
-					startingGameObject = false;
-				}
-
-				return true;
-			}
-
-			if (event == json::parse_event_t::array_start)
-			{
-				logfile << "array_start    " << parsed << "\n";
-
-				return true;
-			}
-
-			if (event == json::parse_event_t::array_end)
-			{
-				logfile << "array_end    " << parsed << "\n";
-
-				return true;
-			}
-
-			if (event == json::parse_event_t::value)
-			{
-				logfile << "value    " << parsed << "\n";
-
-				return true;
-			}
-
-			return true;
-		};
-
-		json j = json::parse(file, cb);
+		json j = json::parse(file);
 		file.close();
-		logfile.close();
+
+		AIngine::GameObject* parent;
 
 
-		return nullptr;
+		json* jj = &j["Root"];
+
+		// create Root
+		parent = RestoreGameObject(jj, nullptr);
+
+
+		/*	while (jj) {*/
+
+		if ((*jj).contains(AttributeNames::GAMEOBJECT_CHILDREN)) {
+			for (auto child : (*jj)[AttributeNames::GAMEOBJECT_CHILDREN]) {
+				std::string name = child.begin().key();
+				AIngine::GameObject * restoredObject = RestoreGameObject(&child[name], parent);
+				if (child[name].contains(AttributeNames::GAMEOBJECT_COMPONENTS)) {
+					if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_TEXTURE2D)) {
+						RestoreTexture2D(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_TEXTURE2D], restoredObject);
+					}
+				}
+			}
+		}
+
+
+		//}
 	}
+
+	AIngine::GameObject * Serializer::RestoreGameObject(const nlohmann::json* const j, AIngine::GameObject * parent)
+	{
+		std::string name = (*j)[AttributeNames::GAMEOBJECT_NAME];
+		glm::vec2 position = glm::vec2((*j)[AttributeNames::GAMEOBJECT_POSITION_X], (*j)[AttributeNames::GAMEOBJECT_POSITION_Y]);
+		glm::vec2 scale = glm::vec2((*j)[AttributeNames::GAMEOBJECT_SCALE_X], (*j)[AttributeNames::GAMEOBJECT_SCALE_Y]);
+		float rot = (*j)[AttributeNames::GAMEOBJECT_ROTATION];
+
+		return AIngine::World::SpawnObject(name, parent, position, scale, rot);
+	}
+
+	void Serializer::RestoreTexture2D(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		AIngine::Rendering::Texture2D* texture = obj->AddComponent<AIngine::Rendering::Texture2D>();
+
+		glm::vec2 size = glm::vec2((*j)[AttributeNames::TEXTURE_SIZE_X], (*j)[AttributeNames::TEXTURE_SIZE_Y]);
+		glm::vec3 color = glm::vec3((*j)[AttributeNames::TEXTURE_COLOR_R], (*j)[AttributeNames::TEXTURE_COLOR_G], (*j)[AttributeNames::TEXTURE_COLOR_B]);
+		glm::vec2 parallax = glm::vec2((*j)[AttributeNames::TEXTURE_PARALLAX_X], (*j)[AttributeNames::TEXTURE_PARALLAX_Y]);
+
+		texture->Wrap_S = (*j)[AttributeNames::TEXTURE_WRAP_S];
+		texture->Wrap_T = (*j)[AttributeNames::TEXTURE_WRAP_T];
+		texture->Filter_Min = (*j)[AttributeNames::TEXTURE_FILTER_MIN];
+		texture->Filter_Max = (*j)[AttributeNames::TEXTURE_FILTER_MAX];
+		texture->Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
+		texture->SetLocalWorldSize(size);
+		texture->SetColor(color);
+		texture->SetParallaxFactor(parallax);
+
+		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
+		texture->Generate(bitmap);
+	}
+
+
+	/* -------------------------------------------- SCENEGRAPH SERIALIZER -------------------------------------------------------*/
 
 	bool SceneGraphSerializer::Traverse(GameObject * root)
 	{
@@ -153,23 +174,23 @@ namespace AIngine::Editor::Serialization {
 		nlohmann::json outer;
 		nlohmann::json j;
 
-		j["a_name"] = obj.GetName();
-		j["a_localposX"] = obj.GetLocalPosition().x;
-		j["a_localposY"] = obj.GetLocalPosition().y;
-		j["a_localscaleX"] = obj.GetLocalScale().x;
-		j["a_localscaleY"] = obj.GetLocalScale().y;
-		j["a_localRot"] = obj.GetLocalRotation();
+		j[AttributeNames::GAMEOBJECT_NAME] = obj.GetName();
+		j[AttributeNames::GAMEOBJECT_POSITION_X] = obj.GetLocalPosition().x;
+		j[AttributeNames::GAMEOBJECT_POSITION_Y] = obj.GetLocalPosition().y;
+		j[AttributeNames::GAMEOBJECT_SCALE_X] = obj.GetLocalScale().x;
+		j[AttributeNames::GAMEOBJECT_SCALE_Y] = obj.GetLocalScale().y;
+		j[AttributeNames::GAMEOBJECT_ROTATION] = obj.GetLocalRotation();
 
 		// serialize texture
 		AIngine::Rendering::Texture2D* texture = obj.GetComponent<AIngine::Rendering::Texture2D>();
 		if (texture) {
-			j["b_components"]["texture"] = SerializeTexture2D(*texture);
+			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_TEXTURE2D] = SerializeTexture2D(*texture);
 		}
 
 		// serialize physComp
 		AIngine::PhysicsComponent* physComp = obj.GetComponent<AIngine::PhysicsComponent>();
 		if (physComp) {
-			j["b_components"]["physics"] = SerializePhysicsComponent(*physComp);
+			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PHYSICS] = SerializePhysicsComponent(*physComp);
 		}
 
 		outer[obj.GetName()] = j;
@@ -179,14 +200,20 @@ namespace AIngine::Editor::Serialization {
 	nlohmann::json SceneGraphSerializer::SerializeTexture2D(AIngine::Rendering::Texture2D & texture)
 	{
 		nlohmann::json j;
-		j["path"] = texture.GetName();
-		j["colorR"] = texture.GetColor().x;
-		j["colorG"] = texture.GetColor().y;
-		j["colorB"] = texture.GetColor().z;
-		j["SizeX"] = texture.GetLocalWorldSize().x;
-		j["SizeY"] = texture.GetLocalWorldSize().y;
-		j["ParallaxX"] = texture.GetParallaxFactor().x;
-		j["ParallaxY"] = texture.GetParallaxFactor().y;
+
+		j[AttributeNames::TEXTURE_PATH] = texture.GetName();
+		j[AttributeNames::TEXTURE_COLOR_R] = texture.GetColor().x;
+		j[AttributeNames::TEXTURE_COLOR_G] = texture.GetColor().y;
+		j[AttributeNames::TEXTURE_COLOR_B] = texture.GetColor().z;
+		j[AttributeNames::TEXTURE_SIZE_X] = texture.GetLocalWorldSize().x;
+		j[AttributeNames::TEXTURE_SIZE_Y] = texture.GetLocalWorldSize().y;
+		j[AttributeNames::TEXTURE_PARALLAX_X] = texture.GetParallaxFactor().x;
+		j[AttributeNames::TEXTURE_PARALLAX_Y] = texture.GetParallaxFactor().y;
+		j[AttributeNames::TEXTURE_WRAP_S] = texture.Wrap_S;
+		j[AttributeNames::TEXTURE_WRAP_T] = texture.Wrap_T;
+		j[AttributeNames::TEXTURE_FILTER_MIN] = texture.Filter_Min;
+		j[AttributeNames::TEXTURE_FILTER_MAX] = texture.Filter_Max;
+		j[AttributeNames::TEXTURE_IMAGEFORMAT] = texture.Image_Format;
 
 		return j;
 	}
