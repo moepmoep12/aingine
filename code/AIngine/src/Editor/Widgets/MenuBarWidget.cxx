@@ -19,10 +19,9 @@ namespace AIngine::Editor {
 			{
 				if (ImGui::MenuItem("Open")) {
 					// delete the old tree
-					AIngine::Structures::DeleteTraverser deltraverser(*AIngine::Editor::Editor::GetGameObjectPool());
-					deltraverser.Traverse(&AIngine::Editor::Editor::GetSceneGraph()->GetRoot());
+					AIngine::Editor::Editor::ResetSceneGraph();
 
-					AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(std::string("scene.json"));
+					//AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(std::string("scene.json"));
 				}
 
 				if (ImGui::MenuItem("Save")) 
