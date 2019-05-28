@@ -153,10 +153,19 @@ namespace AIngine::Editor {
 		return viewportRect;
 	}
 
-	GameObject * Editor::GetSceneGraphRoot()
+
+	AIngine::Memory::Pool<GameObject>* Editor::GetGameObjectPool()
 	{
 		if (s_instance) {
-			return &s_instance->m_app.m_world->GetSceneGraph().GetRoot();
+			return &s_instance->m_app.m_world->GetSceneGraph().m_gameObjectPool;
+		}
+		return nullptr;
+	}
+
+	AIngine::Structures::SceneGraph * Editor::GetSceneGraph()
+	{
+		if (s_instance) {
+			return &s_instance->m_app.m_world->GetSceneGraph();
 		}
 		return nullptr;
 	}

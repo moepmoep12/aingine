@@ -4,6 +4,7 @@
 #include "Structures/Rectangle.h"
 #include "Events/InputEvents.h"
 #include "Events/ApplicationEvents.h"
+#include "Structures/memory.h"
 
 #include <glm/glm.hpp>
 #include <vector>
@@ -11,6 +12,10 @@
 namespace AIngine {
 	class Application;
 	class GameObject;
+
+	namespace Structures {
+		class SceneGraph;
+	}
 }
 
 namespace AIngine::Editor {
@@ -46,7 +51,8 @@ namespace AIngine::Editor {
 			return nullptr;
 		}
 
-		static GameObject* GetSceneGraphRoot();
+		static AIngine::Memory::Pool<GameObject>* GetGameObjectPool();
+		static AIngine::Structures::SceneGraph* GetSceneGraph();
 		static bool IsAnyUIElementHovered();
 		bool DidAnyDockedWidgetChangeSize() const;
 
