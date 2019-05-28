@@ -101,7 +101,7 @@ namespace AIngine::Editor {
 		using Rectangle = AIngine::Structures::Rectangle;
 		using Corner = AIngine::Structures::Rectangle::Corner;
 
-		Rectangle viewportRect(0, m_widgets[3]->GetSize().y , windowSize.x, windowSize.y - m_widgets[3]->GetSize().y);
+		Rectangle viewportRect(0, m_widgets[3]->GetSize().y, windowSize.x, windowSize.y - m_widgets[3]->GetSize().y);
 		Corner corner;
 
 		auto it = m_widgets.begin();
@@ -153,13 +153,10 @@ namespace AIngine::Editor {
 		return viewportRect;
 	}
 
-
-	AIngine::Memory::Pool<GameObject>* Editor::GetGameObjectPool()
+	void Editor::ResetSceneGraph()
 	{
-		if (s_instance) {
-			return &s_instance->m_app.m_world->GetSceneGraph().m_gameObjectPool;
-		}
-		return nullptr;
+		if (s_instance)
+			s_instance->GetSceneGraph()->Reset();
 	}
 
 	AIngine::Structures::SceneGraph * Editor::GetSceneGraph()

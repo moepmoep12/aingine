@@ -51,7 +51,7 @@ namespace AIngine::Editor {
 			return nullptr;
 		}
 
-		static AIngine::Memory::Pool<GameObject>* GetGameObjectPool();
+		static void ResetSceneGraph();
 		static AIngine::Structures::SceneGraph* GetSceneGraph();
 		static bool IsAnyUIElementHovered();
 		bool DidAnyDockedWidgetChangeSize() const;
