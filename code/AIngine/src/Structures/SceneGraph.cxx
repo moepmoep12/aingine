@@ -43,6 +43,14 @@ namespace AIngine::Structures {
 		deleteTraverser.Traverse(&gameobject);
 	}
 
+	void SceneGraph::Reset()
+	{
+		DeleteTraverser deleteTreeTraverser(m_gameObjectPool);
+		deleteTreeTraverser.Traverse(m_Root);
+		m_Root = new (m_gameObjectPool.Allocate()) GameObject(nullptr, std::string("Root"));
+
+	}
+
 	void SceneGraph::OnUpdate(float delta)
 	{
 		UpdateTraverser updateTraverser(delta);
@@ -76,9 +84,11 @@ namespace AIngine::Structures {
 		}
 
 		bool result = root->Accept(*this);
-
-		for (auto it = m_gameObjectsToDelete.begin(); it < m_gameObjectsToDelete.end(); it++) {
-			m_gameObjectPool->Free(*it);
+		std::reverse(m_gameObjectsToDelete.begin(), m_gameObjectsToDelete.end());
+		for (auto it = m_gameObjectsToDelete.begin(); it < m_gameObjectsToDelete.end(); it++)
+		{
+			GameObject* obj = *it._Ptr;
+			m_gameObjectPool->Free(obj);
 			(*it)->~GameObject();
 		}
 

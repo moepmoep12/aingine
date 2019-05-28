@@ -35,6 +35,8 @@ namespace AIngine::Structures {
 	private:
 		GameObject* m_Root;
 		AIngine::Memory::Pool<GameObject> m_gameObjectPool = AIngine::Memory::Pool<GameObject>(1000);
+
+		void Reset();
 	};
 
 	// traverses 
