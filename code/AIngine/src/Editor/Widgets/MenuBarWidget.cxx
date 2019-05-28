@@ -1,6 +1,8 @@
 #include "Editor/Widgets/MenuBarWidget.h"
+#include "Editor/Editor.h"
 #include "Editor/Serialization.h"
 #include "AIngine/World.h"
+#include "Structures/SceneGraph.h"
 
 #include <string>
 
@@ -16,12 +18,16 @@ namespace AIngine::Editor {
 			if (ImGui::BeginMenu("Scene"))
 			{
 				if (ImGui::MenuItem("Open")) {
-					
+					// delete the old tree
+					AIngine::Structures::DeleteTraverser deltraverser(*AIngine::Editor::Editor::GetGameObjectPool());
+					deltraverser.Traverse(&AIngine::Editor::Editor::GetSceneGraph()->GetRoot());
+
+					AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(std::string("scene.json"));
 				}
 
 				if (ImGui::MenuItem("Save")) 
 				{
-					AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(std::string(""));
+					AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(std::string("scene.json"));
 				}
 
 				ImGui::EndMenu();
