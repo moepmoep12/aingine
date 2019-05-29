@@ -88,8 +88,11 @@ namespace AIngine::Structures {
 		for (auto it = m_gameObjectsToDelete.begin(); it < m_gameObjectsToDelete.end(); it++)
 		{
 			GameObject* obj = *it._Ptr;
-			m_gameObjectPool->Free(obj);
+			if (obj->GetParent()) {
+				obj->GetParent()->RemoveChild(obj);
+			}
 			(*it)->~GameObject();
+			m_gameObjectPool->Free(obj);
 		}
 
 		return result;
