@@ -21,10 +21,10 @@ namespace AIngine::Editor {
 					// delete the old tree
 					AIngine::Editor::Editor::ResetSceneGraph();
 
-					//AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(std::string("scene.json"));
+					AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(std::string("scene.json"));
 				}
 
-				if (ImGui::MenuItem("Save")) 
+				if (ImGui::MenuItem("Save"))
 				{
 					AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(std::string("scene.json"));
 				}
@@ -49,7 +49,7 @@ namespace AIngine::Editor {
 			{
 				static bool show = false;
 
-				if (ImGui::MenuItem("Show Physics Debug Rendering","F1", &show, true)) 
+				if (ImGui::MenuItem("Show Physics Debug Rendering", "F1", &show, true))
 				{
 					AIngine::World::SetPhysicsDebugDrawActive(show);
 				}

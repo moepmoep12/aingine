@@ -69,31 +69,48 @@ namespace AIngine::Editor::Serialization {
 		json j = json::parse(file);
 		file.close();
 
-		AIngine::GameObject* parent;
+		AIngine::GameObject* parent = nullptr;
+		AIngine::GameObject * restoredObject = nullptr;
 
+		json* currentJson = &j["Root"];
 
-		json* jj = &j["Root"];
+		std::vector<json*> openJsons;
+		std::unordered_map<json*, GameObject*> spawnedObjects;
+		openJsons.push_back(currentJson);
 
-		// create Root
-		parent = RestoreGameObject(jj, nullptr);
+		while (openJsons.size() > 0) {
 
+			currentJson = openJsons[0];
 
-		/*	while (jj) {*/
+			if (spawnedObjects.size() != 0) {
+				parent = spawnedObjects[currentJson];
+			}
 
-		if ((*jj).contains(AttributeNames::GAMEOBJECT_CHILDREN)) {
-			for (auto child : (*jj)[AttributeNames::GAMEOBJECT_CHILDREN]) {
-				std::string name = child.begin().key();
-				AIngine::GameObject * restoredObject = RestoreGameObject(&child[name], parent);
-				if (child[name].contains(AttributeNames::GAMEOBJECT_COMPONENTS)) {
-					if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_TEXTURE2D)) {
-						RestoreTexture2D(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_TEXTURE2D], restoredObject);
+			if ((*currentJson).contains(AttributeNames::GAMEOBJECT_CHILDREN)) {
+				int index = 0;
+				for (auto child : (*currentJson)[AttributeNames::GAMEOBJECT_CHILDREN]) {
+					std::string name = child.begin().key();
+					restoredObject = RestoreGameObject(&child[name], parent);
+					// does it have any components?
+					if (child[name].contains(AttributeNames::GAMEOBJECT_COMPONENTS)) {
+						// restore Texture2D
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_TEXTURE2D)) {
+							RestoreTexture2D(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_TEXTURE2D], restoredObject);
+						}
 					}
+
+					// does it have children?
+					if (child[name].contains(AttributeNames::GAMEOBJECT_CHILDREN)) {
+						openJsons.push_back(&(*currentJson)[AttributeNames::GAMEOBJECT_CHILDREN][index][name]);
+						spawnedObjects[&(*currentJson)[AttributeNames::GAMEOBJECT_CHILDREN][index][name]] = restoredObject;
+					}
+					index++;
 				}
 			}
+
+			openJsons.erase(openJsons.begin());
+
 		}
-
-
-		//}
 	}
 
 	AIngine::GameObject * Serializer::RestoreGameObject(const nlohmann::json* const j, AIngine::GameObject * parent)
