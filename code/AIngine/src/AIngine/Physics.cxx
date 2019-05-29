@@ -19,9 +19,9 @@ namespace AIngine {
 		if (m_body && m_body->GetType() != b2_staticBody) {
 			b2Vec2 pos = m_body->GetPosition();
 			float rot = std::fmodf(m_body->GetAngle(), M_PI);
-			
-			m_owner->SetWorldPosition(glm::vec2(pos.x, pos.y));
-			m_owner->SetWorldRotation(rot);
+
+			m_owner->SetWorldPosition(glm::vec2(pos.x, pos.y), false);
+			m_owner->SetWorldRotation(rot, false);
 		}
 	}
 
@@ -37,24 +37,30 @@ namespace AIngine {
 	void PhysicsComponent::OnOwnerTransformChanged(const glm::vec2 newPosition, const glm::vec2 & newScale, const float & newRotation)
 	{
 		if (m_body && IsActive()) {
+			m_body->SetAwake(false);
 			glm::vec2 worldPos = m_owner->GetWorldPosition();
-			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y),std::fmodf( m_owner->GetWorldRotation(), M_PI) );
+			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), std::fmodf(m_owner->GetWorldRotation(), M_PI));
+			m_body->SetAwake(true);
 		}
 	}
 
 	void PhysicsComponent::OnOwnerLocalPositionChanged(const glm::vec2 & position)
 	{
 		if (m_body && IsActive()) {
+			m_body->SetAwake(false);
 			glm::vec2 worldPos = m_owner->GetWorldPosition();
 			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), std::fmodf(m_owner->GetWorldRotation(), M_PI));
+			m_body->SetAwake(true);
 		}
 	}
 
 	void PhysicsComponent::OnOwnerLocalRotationChanged(const float & rot)
 	{
 		if (m_body && IsActive()) {
+			m_body->SetAwake(false);
 			glm::vec2 worldPos = m_owner->GetWorldPosition();
 			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), std::fmodf(m_owner->GetWorldRotation(), M_PI));
+			m_body->SetAwake(true);
 		}
 	}
 

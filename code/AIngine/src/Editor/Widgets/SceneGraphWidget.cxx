@@ -80,6 +80,8 @@ namespace AIngine::Editor {
 	{
 		if (!node) return;
 
+		glm::vec2 originalPosition = node->GetLocalPosition();
+		float originalRot = node->GetLocalRotation();
 		float* position[] = { &node->GetLocalPosition().x ,&node->GetLocalPosition().y };
 		float* scale[] = { &node->GetLocalScale().x , &node->GetLocalScale().y };
 		ImGui::BulletText("Transform");
@@ -87,6 +89,10 @@ namespace AIngine::Editor {
 		bool draggedScale = ImGui::DragFloat2("Scale", *scale);
 		bool draggedRot = ImGui::DragFloat("Rotation", &node->GetLocalRotation(), M_PI / 180.0f);
 
+		if (originalPosition != node->GetLocalPosition() || originalRot != node->GetLocalRotation()) {
+			PhysicsUpdateTraverser physUpdate;
+			physUpdate.Traverse(node);
+		}
 		AIngine::Rendering::Texture2D* texture = node->GetComponent<AIngine::Rendering::Texture2D>();
 
 		// show textureComponent
@@ -248,6 +254,37 @@ namespace AIngine::Editor {
 			}
 			ImGui::EndDragDropTarget();
 		}
+	}
+
+	/*------------------------------------------- PHYSICSUPDATE TRAVERSER -----------------------------------------------*/
+	/*----------------------------------------------------------------------------------------------------------------*/
+
+
+	bool SceneGraphWidget::PhysicsUpdateTraverser::Traverse(GameObject * root)
+	{
+		bool result = root->Accept(*this);
+		return result;
+	}
+	bool SceneGraphWidget::PhysicsUpdateTraverser::Enter(GameObject & node)
+	{
+		AIngine::PhysicsComponent* physComp = node.GetComponent < AIngine::PhysicsComponent>();
+		if (physComp) {
+			physComp->OnOwnerTransformChanged(glm::vec2(0.0), glm::vec2(1.0), 0);
+		}
+
+		return true;
+	}
+	bool SceneGraphWidget::PhysicsUpdateTraverser::Leave(GameObject & node)
+	{
+		return true;
+	}
+	bool SceneGraphWidget::PhysicsUpdateTraverser::Visit(GameObject & node)
+	{
+		AIngine::PhysicsComponent* physComp = node.GetComponent < AIngine::PhysicsComponent>();
+		if (physComp) {
+			physComp->OnOwnerTransformChanged(glm::vec2(0.0), glm::vec2(1.0), 0);
+		}
+		return true;
 	}
 }
 

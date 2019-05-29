@@ -56,5 +56,14 @@ namespace AIngine::Editor {
 			void BeginDragSource();
 			void BeginDropTarget(GameObject& obj);
 		};
+
+		class PhysicsUpdateTraverser : public  AIngine::Traverser {
+		public:
+			// Inherited via Traverser
+			virtual bool Traverse(GameObject * root) override;
+			virtual bool Enter(GameObject & node) override;
+			virtual bool Leave(GameObject & node) override;
+			virtual bool Visit(GameObject & node) override;
+		};
 	};
 }

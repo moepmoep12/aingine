@@ -16,11 +16,11 @@ namespace AIngine {
 		return result;
 	}
 
-	void GameObject::SetWorldPosition(const glm::vec2& pos)
+	void GameObject::SetWorldPosition(const glm::vec2& pos, bool bInformComponents)
 	{
 		glm::vec2 worldPos = GetWorldPosition();
 		glm::vec2 diff = pos - worldPos;
-		Translate(diff);
+		Translate(diff, bInformComponents);
 	}
 
 	glm::vec2 GameObject::GetWorldScale() const
@@ -44,11 +44,11 @@ namespace AIngine {
 		return result;
 	}
 
-	void GameObject::SetWorldRotation(float rot)
+	void GameObject::SetWorldRotation(float rot, bool bInformComponents)
 	{
 		float worldRot = GetWorldRotation();
 		float diff = rot - worldRot;
-		Rotate(diff);
+		Rotate(diff, bInformComponents);
 	}
 
 	void GameObject::SetParent(GameObject & parent, bool bInformComponents)
