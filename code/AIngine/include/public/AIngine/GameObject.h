@@ -13,8 +13,8 @@ namespace AIngine {
 	class SceneGraph;
 	class Component;
 
-	 /// A GameObject represents an entity wihin a game
-	/// It acts as a container for Components
+	/// A GameObject represents an entity wihin a game
+   /// It acts as a container for Components
 	class GameObject {
 	public:
 		inline const std::vector<Component*>& GetComponents() { return m_components; }
@@ -84,8 +84,10 @@ namespace AIngine {
 
 		glm::mat4 GetLocalTransform() const;
 		glm::vec2 GetWorldPosition() const;
+		void SetWorldPosition(const glm::vec2& pos);
 		glm::vec2 GetWorldScale() const;
 		float GetWorldRotation() const;
+		void SetWorldRotation(float rot);
 		void AddChild(GameObject* obj);
 		void RemoveChild(GameObject* obj);
 

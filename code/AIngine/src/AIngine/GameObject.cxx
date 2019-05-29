@@ -2,6 +2,7 @@
 #include "AIngine/Component.h"
 #include "Structures/Traverser.h"
 #include "Debug/log.h"
+#include "AIngine/Constants.h"
 
 namespace AIngine {
 	glm::vec2 GameObject::GetWorldPosition() const
@@ -14,6 +15,14 @@ namespace AIngine {
 		}
 		return result;
 	}
+
+	void GameObject::SetWorldPosition(const glm::vec2& pos)
+	{
+		glm::vec2 worldPos = GetWorldPosition();
+		glm::vec2 diff = pos - worldPos;
+		Translate(diff);
+	}
+
 	glm::vec2 GameObject::GetWorldScale() const
 	{
 		GameObject* parent = m_parent;
@@ -33,6 +42,13 @@ namespace AIngine {
 			parent = parent->m_parent;
 		}
 		return result;
+	}
+
+	void GameObject::SetWorldRotation(float rot)
+	{
+		float worldRot = GetWorldRotation();
+		float diff = rot - worldRot;
+		Rotate(diff);
 	}
 
 	void GameObject::SetParent(GameObject & parent, bool bInformComponents)
@@ -97,7 +113,7 @@ namespace AIngine {
 
 	void GameObject::SetRotation(float rot, bool bInformComponents)
 	{
-		m_rotation = rot;
+		m_rotation = std::fmodf(m_rotation + rot, M_PI);
 		if (bInformComponents) {
 			auto it = m_components.begin();
 			while (it != m_components.end()) {
@@ -109,7 +125,7 @@ namespace AIngine {
 
 	void GameObject::Rotate(float amount, bool bInformComponents)
 	{
-		m_rotation += amount;
+		m_rotation = std::fmodf(m_rotation + amount, M_PI);
 		if (bInformComponents) {
 			auto it = m_components.begin();
 			while (it != m_components.end()) {
