@@ -16,12 +16,12 @@ namespace AIngine {
 
 	void PhysicsComponent::OnUpdate(float deltatime)
 	{
-		if (m_body) {
+		if (m_body && m_body->GetType() != b2_staticBody) {
 			b2Vec2 pos = m_body->GetPosition();
 			float rot = std::fmodf(m_body->GetAngle(), M_PI);
-
-			m_owner->SetLocalPosition(glm::vec2(pos.x, pos.y));
-			m_owner->SetRotation(rot);
+			
+			m_owner->SetWorldPosition(glm::vec2(pos.x, pos.y));
+			m_owner->SetWorldRotation(rot);
 		}
 	}
 
@@ -62,6 +62,7 @@ namespace AIngine {
 	{
 		glm::vec2 worldPos = m_owner->GetWorldPosition();
 		bodydef.position.Set(worldPos.x, worldPos.y);
+		bodydef.angle = m_owner->GetWorldRotation();
 		m_body = AIngine::World::CreateBody(bodydef);
 		m_body->CreateFixture(&fixtureDef);
 		m_body->SetUserData(this);
