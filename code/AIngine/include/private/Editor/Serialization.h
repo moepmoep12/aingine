@@ -8,10 +8,13 @@
 
 namespace AIngine {
 	class GameObject;
-	class PhysicsComponent;
 
 	namespace Rendering {
 		class Texture2D;
+	}
+
+	namespace Physics {
+		class PhysicsComponent;
 	}
 }
 
@@ -25,6 +28,7 @@ namespace AIngine::Editor::Serialization
 	private:
 		static AIngine::GameObject* RestoreGameObject(const nlohmann::json* const j, AIngine::GameObject* parent);
 		static void RestoreTexture2D(const nlohmann::json* const j, AIngine::GameObject* obj);
+		static AIngine::Physics::PhysicsComponent* RestorePhysics(const nlohmann::json* const j, AIngine::GameObject* obj);
 	};
 
 	class SceneGraphSerializer : public AIngine::Traverser {
@@ -40,7 +44,7 @@ namespace AIngine::Editor::Serialization
 	private:
 		nlohmann::json SerializeGameObject(GameObject& obj);
 		nlohmann::json SerializeTexture2D(AIngine::Rendering::Texture2D& texture);
-		nlohmann::json SerializePhysicsComponent(AIngine::PhysicsComponent& physComp);
+		nlohmann::json SerializePhysicsComponent(AIngine::Physics::PhysicsComponent& physComp);
 		nlohmann::json* m_children;
 		std::vector<AIngine::GameObject*> m_spawnedObjects;
 

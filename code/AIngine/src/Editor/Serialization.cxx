@@ -44,6 +44,16 @@ namespace AIngine::Editor::Serialization {
 		const char* TEXTURE_FILTER_MAX = "filterMax";
 		const char* TEXTURE_IMAGEFORMAT = "imageFormat";
 
+		// PhysicsComponent
+		const char* PHYSICS_SHAPE = "shape";
+		const char* PHYSICS_BODYTYPE = "bodyType";
+		const char* PHYSICS_FRICTION = "friction";
+		const char* PHYSICS_RESTITUTION = "restitution";
+		const char* PHYSICS_DENSITY = "density";
+		const char* PHYSICS_RADIUS = "radius";
+		const char* PHYSICS_WIDTH = "width";
+		const char* PHYSICS_HEIGHT = "height";
+		const char* PHYSICS_VERTICES = "vertices";
 	}
 
 	void Serializer::SerializeSceneGraph(const std::string & path)
@@ -74,6 +84,7 @@ namespace AIngine::Editor::Serialization {
 
 		json* currentJson = &j["Root"];
 
+		std::vector<AIngine::Physics::PhysicsComponent*> physComponents;
 		std::vector<json*> openJsons;
 		std::unordered_map<json*, GameObject*> spawnedObjects;
 		openJsons.push_back(currentJson);
@@ -97,6 +108,10 @@ namespace AIngine::Editor::Serialization {
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_TEXTURE2D)) {
 							RestoreTexture2D(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_TEXTURE2D], restoredObject);
 						}
+						// restore Physics
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_PHYSICS)) {
+							physComponents.push_back(RestorePhysics(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PHYSICS], restoredObject));
+						}
 					}
 
 					// does it have children?
@@ -111,6 +126,10 @@ namespace AIngine::Editor::Serialization {
 			openJsons.erase(openJsons.begin());
 
 		}
+
+		// all physComponetns have been restored, activate them
+		for (auto comp : physComponents)
+			comp->SetActive(true);
 	}
 
 	AIngine::GameObject * Serializer::RestoreGameObject(const nlohmann::json* const j, AIngine::GameObject * parent)
@@ -142,6 +161,40 @@ namespace AIngine::Editor::Serialization {
 
 		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
 		texture->Generate(bitmap);
+	}
+
+	AIngine::Physics::PhysicsComponent* Serializer::RestorePhysics(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		Physics::PhysicsComponent* physComp = obj->AddComponent<Physics::PhysicsComponent>();
+		Physics::PhysicsProperties properties;
+		Physics::PhysicsShape shape = (*j)[AttributeNames::PHYSICS_SHAPE];
+		Physics::PhysicsBodyType type = (*j)[AttributeNames::PHYSICS_BODYTYPE];
+
+		properties.density = (*j)[AttributeNames::PHYSICS_DENSITY];
+		properties.friction = (*j)[AttributeNames::PHYSICS_FRICTION];
+		properties.restitution = (*j)[AttributeNames::PHYSICS_RESTITUTION];
+
+		float width = 0.0f;
+		float height = 0.0f;
+		float32 radius = 0.0f;
+
+		switch (shape) {
+		case(Physics::PhysicsShape::e_Box):
+			width = (*j)[AttributeNames::PHYSICS_WIDTH];
+			height = (*j)[AttributeNames::PHYSICS_HEIGHT];
+			physComp->CreateBoxBody(properties, type, width, height);
+			break;
+		case(Physics::PhysicsShape::e_Circle):
+			radius = (*j)[AttributeNames::PHYSICS_RADIUS];
+			physComp->CreateCircleBody(properties, type, radius);
+			break;
+		case(Physics::PhysicsShape::e_Polygon):
+			break;
+		}
+
+		physComp->SetActive(false);
+
+		return physComp;
 	}
 
 
@@ -205,7 +258,7 @@ namespace AIngine::Editor::Serialization {
 		}
 
 		// serialize physComp
-		AIngine::PhysicsComponent* physComp = obj.GetComponent<AIngine::PhysicsComponent>();
+		Physics::PhysicsComponent* physComp = obj.GetComponent<Physics::PhysicsComponent>();
 		if (physComp) {
 			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PHYSICS] = SerializePhysicsComponent(*physComp);
 		}
@@ -235,9 +288,31 @@ namespace AIngine::Editor::Serialization {
 		return j;
 	}
 
-	nlohmann::json SceneGraphSerializer::SerializePhysicsComponent(AIngine::PhysicsComponent & physComp)
+	nlohmann::json SceneGraphSerializer::SerializePhysicsComponent(Physics::PhysicsComponent & physComp)
 	{
-		return nlohmann::json();
+		nlohmann::json j;
+
+		const Physics::PhysicsBodyInformation& bodyInfo = physComp.GetBodyInformation();
+		const Physics::PhysicsProperties& properties = physComp.GetProperties();
+
+		if (bodyInfo.shape == Physics::PhysicsShape::e_Box) {
+			j[AttributeNames::PHYSICS_WIDTH] = bodyInfo.width;
+			j[AttributeNames::PHYSICS_HEIGHT] = bodyInfo.height;
+		}
+		else if (bodyInfo.shape == Physics::PhysicsShape::e_Circle) {
+			j[AttributeNames::PHYSICS_RADIUS] = bodyInfo.radius;
+		}
+		// polygon
+		else {
+		}
+
+		j[AttributeNames::PHYSICS_SHAPE] = bodyInfo.shape;
+		j[AttributeNames::PHYSICS_BODYTYPE] = bodyInfo.type;
+		j[AttributeNames::PHYSICS_DENSITY] = properties.density;
+		j[AttributeNames::PHYSICS_FRICTION] = properties.friction;
+		j[AttributeNames::PHYSICS_RESTITUTION] = properties.restitution;
+
+		return j;
 	}
 
 }
