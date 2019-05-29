@@ -65,15 +65,15 @@ namespace AIngine::Physics {
 		}
 	}
 
-	void PhysicsComponent::CreateBody(b2BodyDef & bodydef, b2FixtureDef& fixtureDef)
-	{
-		glm::vec2 worldPos = m_owner->GetWorldPosition();
-		bodydef.position.Set(worldPos.x, worldPos.y);
-		bodydef.angle = m_owner->GetWorldRotation();
-		m_body = AIngine::World::CreateBody(bodydef);
-		m_body->CreateFixture(&fixtureDef);
-		m_body->SetUserData(this);
-	}
+	//void PhysicsComponent::CreateBody(b2BodyDef & bodydef, b2FixtureDef& fixtureDef)
+	//{
+	//	glm::vec2 worldPos = m_owner->GetWorldPosition();
+	//	bodydef.position.Set(worldPos.x, worldPos.y);
+	//	bodydef.angle = m_owner->GetWorldRotation();
+	//	m_body = AIngine::World::CreateBody(bodydef);
+	//	m_body->CreateFixture(&fixtureDef);
+	//	m_body->SetUserData(this);
+	//}
 
 	void PhysicsComponent::CreateCircleBody(const PhysicsProperties & properties, PhysicsBodyType type, float radius)
 	{
@@ -144,6 +144,43 @@ namespace AIngine::Physics {
 
 		b2PolygonShape shape;
 		shape.SetAsBox(width / 2.0f, height / 2.0f);
+
+		fixtureDef.shape = &shape;
+
+		m_body = AIngine::World::CreateBody(bodyDef);
+		m_body->CreateFixture(&fixtureDef);
+		m_body->SetUserData(this);
+	}
+
+	void PhysicsComponent::CreateEdgeBody(const PhysicsProperties & properties, PhysicsBodyType type, const glm::vec2 & p1Offset, const glm::vec2 & p2Offset)
+	{
+		if (m_body) {
+			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
+		}
+		m_properties = properties;
+		m_bodyInformation.shape = PhysicsShape::e_Edge;
+		m_bodyInformation.type = type;
+
+		b2FixtureDef fixtureDef;
+		fixtureDef.density = properties.density;
+		fixtureDef.friction = properties.friction;
+		fixtureDef.restitution = properties.restitution;
+
+		b2BodyDef bodyDef;
+		if (type != PhysicsBodyType::e_Static) {
+			if (type == PhysicsBodyType::e_Dynamic) {
+				bodyDef.type = b2_dynamicBody;
+			}
+			else {
+				bodyDef.type = b2_kinematicBody;
+			}
+		}
+		glm::vec2 worldPos = m_owner->GetWorldPosition();
+		bodyDef.position.Set(worldPos.x, worldPos.y);
+		bodyDef.angle = m_owner->GetWorldRotation();
+
+		b2EdgeShape shape;
+		shape.Set(b2Vec2(p1Offset.x, p1Offset.y), b2Vec2(p2Offset.x, p2Offset.y));
 
 		fixtureDef.shape = &shape;
 

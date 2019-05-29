@@ -40,11 +40,11 @@ namespace CrappyBird {
 			MoveObstacles();
 			UpdateBackGround();
 
-			if (m_player->GetComponent<AIngine::PhysicsComponent>()->IsCollided()) {
+			if (m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->IsCollided()) {
 				m_running = false;
-				AIngine::PhysicsComponent* other = static_cast<AIngine::PhysicsComponent*>(m_player->GetComponent<AIngine::PhysicsComponent>()->GetOtherCollider()->GetBody()->GetUserData());
+				AIngine::Physics::PhysicsComponent* other = static_cast<AIngine::Physics::PhysicsComponent*>(m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->GetOtherCollider()->GetBody()->GetUserData());
 				DEBUG_INFO(other->GetOwner()->GetName().c_str());
-				m_player->GetComponent<AIngine::PhysicsComponent>()->SetActive(false);
+				m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->SetActive(false);
 			}
 		}
 	}
@@ -131,7 +131,7 @@ namespace CrappyBird {
 
 		if (AIngine::Input::IsMouseButtonPressed(0) && m_running)
 		{
-			m_player->GetComponent<AIngine::PhysicsComponent>()->ApplyLinearImpulseToCenter(glm::vec2(0, -0.05f));
+			m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->ApplyLinearImpulseToCenter(glm::vec2(0, -0.05f));
 		}
 
 	}
@@ -144,16 +144,19 @@ namespace CrappyBird {
 		ground->SetLocalPosition(glm::vec2(5, 5));
 		m_groundPosY = ground->GetLocalPosition().y;
 
-		AIngine::PhysicsComponent* phys = ground->AddComponent<AIngine::PhysicsComponent>();
+		AIngine::Physics::PhysicsComponent* phys = ground->AddComponent<AIngine::Physics::PhysicsComponent>();
+		AIngine::Physics::PhysicsProperties properties;
+		properties.density = 1.0f;
+		phys->CreateEdgeBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, glm::vec2(-5, 0), glm::vec2(5, 0));
 
-		b2BodyDef bodydef;
-		bodydef.type = b2_staticBody;
-		b2EdgeShape shape;
-		shape.Set(b2Vec2(-5, 0), b2Vec2(5, 0));
-		b2FixtureDef fixturedef;
-		fixturedef.shape = &shape;
-		fixturedef.density = 1.0;
-		phys->CreateBody(bodydef, fixturedef);
+		//b2BodyDef bodydef;
+		//bodydef.type = b2_staticBody;
+		//b2EdgeShape shape;
+		//shape.Set(b2Vec2(-5, 0), b2Vec2(5, 0));
+		//b2FixtureDef fixturedef;
+		//fixturedef.shape = &shape;
+		//fixturedef.density = 1.0;
+		//phys->CreateBody(bodydef, fixturedef);
 	}
 
 	void CrappyBird::CreatePlayer()
@@ -168,16 +171,11 @@ namespace CrappyBird {
 		m_playerSize = texture->GetLocalWorldSize();
 		texture->SetColor(glm::vec3(0.2f, 0.2f, 1.0f));
 
-		AIngine::PhysicsComponent* physComp = m_player->AddComponent<AIngine::PhysicsComponent>();
-		b2CircleShape circleShape;
-		b2PolygonShape polyShape;
-		b2BodyDef bodydef;
-		bodydef.type = b2_dynamicBody;
-		b2FixtureDef fixturedef;
-		fixturedef.density = 1.0f;
-		circleShape.m_radius = m_playerSize.x / 2.0f;
-		fixturedef.shape = &circleShape;
-		physComp->CreateBody(bodydef, fixturedef);
+		AIngine::Physics::PhysicsComponent* physComp = m_player->AddComponent<AIngine::Physics::PhysicsComponent>();
+		float32 radius = m_playerSize.x / 2.0f;
+		AIngine::Physics::PhysicsProperties properties;
+		properties.density = 1.0f;
+		physComp->CreateCircleBody(properties, AIngine::Physics::PhysicsBodyType::e_Dynamic, radius);
 	}
 
 	static float obstacleWidth = 1.25f;
@@ -232,15 +230,9 @@ namespace CrappyBird {
 			}
 
 			// add physics
-			AIngine::PhysicsComponent* physComponent = spawnedObject->AddComponent<AIngine::PhysicsComponent>();
-			b2PolygonShape polyShape;
-			b2BodyDef bodydef;
-			bodydef.type = b2_staticBody;
-			b2FixtureDef fixturedef;
-			fixturedef.density = 1.0f;
-			polyShape.SetAsBox(obstacleWidth / 2.0f, sizeY / 2.0f);
-			fixturedef.shape = &polyShape;
-			physComponent->CreateBody(bodydef, fixturedef);
+			AIngine::Physics::PhysicsComponent* physComponent = spawnedObject->AddComponent<AIngine::Physics::PhysicsComponent>();
+			AIngine::Physics::PhysicsProperties properties;
+			physComponent->CreateBoxBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, obstacleWidth, sizeY);
 
 			count++;
 
@@ -269,15 +261,9 @@ namespace CrappyBird {
 			}
 
 			// add physics
-			AIngine::PhysicsComponent* physComponent = spawnedObject->AddComponent<AIngine::PhysicsComponent>();
-			b2PolygonShape polyShape;
-			b2BodyDef bodydef;
-			bodydef.type = b2_staticBody;
-			b2FixtureDef fixturedef;
-			fixturedef.density = 1.0f;
-			polyShape.SetAsBox(obstacleWidth / 2.0f, sizeY / 2.0f);
-			fixturedef.shape = &polyShape;
-			physComponent->CreateBody(bodydef, fixturedef);
+			AIngine::Physics::PhysicsComponent* physComponent = spawnedObject->AddComponent<AIngine::Physics::PhysicsComponent>();
+			AIngine::Physics::PhysicsProperties properties;
+			physComponent->CreateBoxBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, obstacleWidth, sizeY);
 
 			count++;
 
@@ -386,7 +372,7 @@ namespace CrappyBird {
 	void CrappyBird::RestartGame()
 	{
 		m_running = true;
-		m_player->GetComponent<AIngine::PhysicsComponent>()->SetActive(true);
+		m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->SetActive(true);
 		m_player->SetLocalPosition(glm::vec2(1.5, 3));
 
 

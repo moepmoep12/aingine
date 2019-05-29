@@ -12,7 +12,8 @@ namespace AIngine::Physics {
 	enum PhysicsShape {
 		e_Circle = 0,
 		e_Box = 1,
-		e_Polygon = 2
+		e_Polygon = 2,
+		e_Edge = 3
 	};
 
 	enum PhysicsBodyType {
@@ -26,7 +27,7 @@ namespace AIngine::Physics {
 		PhysicsProperties() {
 			friction = 0.2f;
 			restitution = 0.0f;
-			density = 0.0f;
+			density = 1.0f;
 		}
 
 		float32 friction;
@@ -60,9 +61,10 @@ namespace AIngine::Physics {
 		virtual void OnOwnerLocalPositionChanged(const glm::vec2& position) override;
 		virtual void OnOwnerLocalRotationChanged(const float& rot) override;
 
-		void CreateBody(b2BodyDef& bodydef, b2FixtureDef& fixtureDef);
+		//void CreateBody(b2BodyDef& bodydef, b2FixtureDef& fixtureDef);
 		void CreateCircleBody(const PhysicsProperties& properties, PhysicsBodyType type, float radius);
 		void CreateBoxBody(const PhysicsProperties& properties, PhysicsBodyType type, float width, float height);
+		void CreateEdgeBody(const PhysicsProperties& properties, PhysicsBodyType type, const glm::vec2& p1Offset, const glm::vec2& p2Offset);
 
 		void ApplyForce(const glm::vec2& force, const glm::vec2& point);
 		void ApplyForce(const b2Vec2& force, const b2Vec2& point);
