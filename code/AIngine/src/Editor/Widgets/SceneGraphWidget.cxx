@@ -267,7 +267,7 @@ namespace AIngine::Editor {
 	}
 	bool SceneGraphWidget::PhysicsUpdateTraverser::Enter(GameObject & node)
 	{
-		AIngine::PhysicsComponent* physComp = node.GetComponent < AIngine::PhysicsComponent>();
+		Physics::PhysicsComponent* physComp = node.GetComponent < Physics::PhysicsComponent>();
 		if (physComp) {
 			physComp->OnOwnerTransformChanged(glm::vec2(0.0), glm::vec2(1.0), 0);
 		}
@@ -280,7 +280,7 @@ namespace AIngine::Editor {
 	}
 	bool SceneGraphWidget::PhysicsUpdateTraverser::Visit(GameObject & node)
 	{
-		AIngine::PhysicsComponent* physComp = node.GetComponent < AIngine::PhysicsComponent>();
+		Physics::PhysicsComponent* physComp = node.GetComponent < Physics::PhysicsComponent>();
 		if (physComp) {
 			physComp->OnOwnerTransformChanged(glm::vec2(0.0), glm::vec2(1.0), 0);
 		}

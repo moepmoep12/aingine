@@ -75,16 +75,19 @@ void Game::OnAppStartUp()
 	texture->SetLocalWorldSize(glm::vec2(10, 1));
 	ground->SetLocalPosition(glm::vec2(5, 5));
 
-	AIngine::PhysicsComponent* phys = ground->AddComponent<AIngine::PhysicsComponent>();
-
-	b2BodyDef bodydef;
-	bodydef.type = b2_staticBody;
-	b2PolygonShape shape;
-	shape.SetAsBox(5, 0.5);
-	b2FixtureDef fixturedef;
-	fixturedef.shape = &shape;
-	fixturedef.density = 1.0;
-	phys->CreateBody(bodydef, fixturedef);
+	AIngine::Physics::PhysicsComponent* phys = ground->AddComponent<AIngine::Physics::PhysicsComponent>();
+	AIngine::Physics::PhysicsProperties properties;
+	properties.density = 1.0f;
+	phys->CreateBoxBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, 10, 1);
+	////phys->CreateBoxBody()
+	//b2BodyDef bodydef;
+	//bodydef.type = b2_staticBody;
+	//b2PolygonShape shape;
+	//shape.SetAsBox(5, 0.5);
+	//b2FixtureDef fixturedef;
+	//fixturedef.shape = &shape;
+	//fixturedef.density = 1.0;
+	//phys->CreateBody(bodydef, fixturedef);
 }
 
 void Game::OnAppShutDown()
@@ -245,27 +248,22 @@ AIngine::GameObject * Game::SpawnObjectAtMousePosition(const glm::vec2 & minSize
 
 	// add physicsComponent
 
-
-	AIngine::PhysicsComponent* physComponent = spawnedObject->AddComponent<AIngine::PhysicsComponent>();
-	static b2CircleShape circleShape;
-	static b2PolygonShape polyShape;
-
-	b2BodyDef bodydef;
-	bodydef.type = b2_dynamicBody;
-
-	b2FixtureDef fixturedef;
-	fixturedef.density = 1.0f;
-
+	AIngine::Physics::PhysicsComponent* physComponent = spawnedObject->AddComponent<AIngine::Physics::PhysicsComponent>();
 	if (shape == e_Circle) {
-		circleShape.m_radius = worldSize.x / 2.0f;
-		fixturedef.shape = &circleShape;
+		float32 radius = worldSize.x / 2.0f;
+		AIngine::Physics::PhysicsProperties properties;
+		properties.density = 1.0f;
+		physComponent->CreateCircleBody(properties, AIngine::Physics::PhysicsBodyType::e_Dynamic, radius);
 	}
 	else {
-		polyShape.SetAsBox(worldSize.x / 2.0f, worldSize.y / 2.0f);
-		fixturedef.shape = &polyShape;
+		float width = worldSize.x;
+		float height = worldSize.y;
+		AIngine::Physics::PhysicsProperties properties;
+		properties.density = 1.0f;
+		physComponent->CreateBoxBody(properties, AIngine::Physics::PhysicsBodyType::e_Dynamic, width, height);
 	}
 
-	physComponent->CreateBody(bodydef, fixturedef);
+
 
 	return spawnedObject;
 

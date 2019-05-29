@@ -72,7 +72,7 @@ namespace AIngine {
 		m_physicsWorld->SetDebugDraw(m_physRenderer);
 		m_isPhysicsDebugDrawn = true;
 
-		m_contactListener = new ContactListener();
+		m_contactListener = new Physics::ContactListener();
 		m_physicsWorld->SetContactListener(m_contactListener);
 
 		CreateWorldBounds();

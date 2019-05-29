@@ -11,18 +11,22 @@
 namespace AIngine {
 	class Application;
 	class GameObject;
-	class ContactListener;
-}
 
-namespace AIngine::Editor {
-	class Editor;
+	namespace Physics {
+		class PhysicsComponent;
+		class ContactListener;
+	}
+
+	namespace Editor {
+		class Editor;
+	}
 }
 
 namespace AIngine {
 	class World : public AIngine::Structures::Layer {
 
 		friend class AIngine::Editor::Editor;
-		friend class PhysicsComponent;
+		friend class AIngine::Physics::PhysicsComponent;
 
 	public:
 		World(const glm::vec4& bounds, const glm::vec2& gravity);
@@ -53,7 +57,7 @@ namespace AIngine {
 		glm::vec4 m_bounds;
 		glm::vec2 m_gravity;
 		AIngine::Rendering::PhysicsRenderer* m_physRenderer;
-		ContactListener* m_contactListener;
+		Physics::ContactListener* m_contactListener;
 		bool m_isPhysicsDebugDrawn;
 
 	private:

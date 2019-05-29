@@ -2,8 +2,8 @@
 #include "Application.h"
 #include "AIngine/Constants.h"
 
-namespace AIngine {
-	PhysicsComponent::PhysicsComponent(GameObject * owner) : Component(owner)
+namespace AIngine::Physics {
+	PhysicsComponent::PhysicsComponent(GameObject * owner) : Component(owner), m_body(nullptr)
 	{
 	}
 
@@ -30,7 +30,8 @@ namespace AIngine {
 		Component::SetActive(active);
 
 		if (m_body) {
-			m_body->SetActive(active);
+			//m_body->SetActive(active);
+			m_body->SetAwake(active);
 		}
 	}
 
@@ -70,6 +71,83 @@ namespace AIngine {
 		bodydef.position.Set(worldPos.x, worldPos.y);
 		bodydef.angle = m_owner->GetWorldRotation();
 		m_body = AIngine::World::CreateBody(bodydef);
+		m_body->CreateFixture(&fixtureDef);
+		m_body->SetUserData(this);
+	}
+
+	void PhysicsComponent::CreateCircleBody(const PhysicsProperties & properties, PhysicsBodyType type, float radius)
+	{
+		if (m_body) {
+			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
+		}
+		m_properties = properties;
+		m_bodyInformation.type = type;
+		m_bodyInformation.shape = PhysicsShape::e_Circle;
+		m_bodyInformation.radius = radius;
+
+		b2FixtureDef fixtureDef;
+		fixtureDef.density = properties.density;
+		fixtureDef.friction = properties.friction;
+		fixtureDef.restitution = properties.restitution;
+
+		b2BodyDef bodyDef;
+		if (type != PhysicsBodyType::e_Static) {
+			if (type == PhysicsBodyType::e_Dynamic) {
+				bodyDef.type = b2_dynamicBody;
+			}
+			else {
+				bodyDef.type = b2_kinematicBody;
+			}
+		}
+		glm::vec2 worldPos = m_owner->GetWorldPosition();
+		bodyDef.position.Set(worldPos.x, worldPos.y);
+		bodyDef.angle = m_owner->GetWorldRotation();
+
+		b2CircleShape shape;
+		shape.m_radius = radius;
+
+		fixtureDef.shape = &shape;
+
+		m_body = AIngine::World::CreateBody(bodyDef);
+		m_body->CreateFixture(&fixtureDef);
+		m_body->SetUserData(this);
+	}
+
+	void PhysicsComponent::CreateBoxBody(const PhysicsProperties & properties, PhysicsBodyType type, float width, float height)
+	{
+		if (m_body) {
+			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
+		}
+		m_properties = properties;
+		m_bodyInformation.width = width;
+		m_bodyInformation.height = height;
+		m_bodyInformation.shape = PhysicsShape::e_Box;
+		m_bodyInformation.type = type;
+
+		b2FixtureDef fixtureDef;
+		fixtureDef.density = properties.density;
+		fixtureDef.friction = properties.friction;
+		fixtureDef.restitution = properties.restitution;
+
+		b2BodyDef bodyDef;
+		if (type != PhysicsBodyType::e_Static) {
+			if (type == PhysicsBodyType::e_Dynamic) {
+				bodyDef.type = b2_dynamicBody;
+			}
+			else {
+				bodyDef.type = b2_kinematicBody;
+			}
+		}
+		glm::vec2 worldPos = m_owner->GetWorldPosition();
+		bodyDef.position.Set(worldPos.x, worldPos.y);
+		bodyDef.angle = m_owner->GetWorldRotation();
+
+		b2PolygonShape shape;
+		shape.SetAsBox(width / 2.0f, height / 2.0f);
+
+		fixtureDef.shape = &shape;
+
+		m_body = AIngine::World::CreateBody(bodyDef);
 		m_body->CreateFixture(&fixtureDef);
 		m_body->SetUserData(this);
 	}
