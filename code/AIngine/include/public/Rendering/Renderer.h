@@ -6,6 +6,10 @@
 #include <glm/glm.hpp>
 
 namespace AIngine::Rendering {
+	class Texture2D;
+}
+
+namespace AIngine::Rendering {
 
 	class SpriteRenderer : public AIngine::Traverser {
 	public:
@@ -23,8 +27,11 @@ namespace AIngine::Rendering {
 		void SetViewport();
 
 	private:
+		void RenderSprite( Texture2D& texture);
+
+	private:
 		std::vector<glm::mat4> m_matrixStack;
-		glm::mat4 m_modelViewMatrix = glm::mat4(1.0f);
+		glm::mat4 m_modelMatrix = glm::mat4(1.0f);
 		GLShaderProgram* m_shader;
 		GLuint m_quadVAO;
 
