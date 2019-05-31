@@ -2,6 +2,8 @@
 #include "AIngine/Macros.h"
 #include "Application.h"
 #include "AIngine/KeyCodes.h"
+#include "AIngine/Input.h"
+#include "AIngine/Constants.h"
 
 // widgets
 #include "Editor/Widgets/EditorWidget.h"
@@ -32,6 +34,8 @@ namespace AIngine::Editor {
 			AIngine::Events::ViewportChangedEvent e(viewportRect);
 			m_app.OnEvent(e);
 		}
+
+		MoveCamera(delta);
 	}
 
 	void Editor::OnEvent(AIngine::Events::Event & e)
@@ -40,6 +44,7 @@ namespace AIngine::Editor {
 
 		// call the OnWindowClose function if its a windowclose event
 		dispatcher.Dispatch<AIngine::Events::KeyPressedEvent>(BIND_EVENT_TO_FN(Editor::OnKeyPressed));
+		dispatcher.Dispatch<AIngine::Events::MouseScrolledEvent>(BIND_EVENT_TO_FN(Editor::OnMouseScrolled));
 
 		auto it = m_widgets.begin();
 		while (it != m_widgets.end()) {
@@ -64,6 +69,7 @@ namespace AIngine::Editor {
 
 	bool Editor::OnKeyPressed(AIngine::Events::KeyPressedEvent & e)
 	{
+		// Toggle PhysicsDebugDraw
 		if (e.GetKeyCode() == AIngine::KeyCodes::F1)
 		{
 			AIngine::World::SetPhysicsDebugDrawActive(!s_physicsDraw);
@@ -82,6 +88,57 @@ namespace AIngine::Editor {
 		return true;
 	}
 
+	// cam settings
+	static float translationrate = 5.0f;
+	static float rotationrate = 0.1f;
+	static float zoomSpeed = 35;
+
+	bool Editor::OnMouseScrolled(AIngine::Events::MouseScrolledEvent & e)
+	{
+		if (!m_app.IsAnyUiElementHovered()) {
+			AIngine::Events::MouseScrolledEvent scrolledEvent = dynamic_cast<AIngine::Events::MouseScrolledEvent&>(e);
+			m_app.m_camera->Zoom(scrolledEvent.GetYOffset() * m_app.GetDeltaTime() * zoomSpeed);
+		}
+		return true;
+	}
+
+	void Editor::MoveCamera(float delta)
+	{
+		AIngine::Rendering::Camera* camera = m_app.m_camera;
+
+		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::A))
+		{
+			camera->Translate(glm::vec2(-translationrate, 0.0));
+		}
+
+		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::D))
+		{
+			camera->Translate(glm::vec2(translationrate, 0.0));
+		}
+
+
+		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::W))
+		{
+			camera->Translate(glm::vec2(0.0, -translationrate));
+		}
+
+
+		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::S))
+		{
+			camera->Translate(glm::vec2(0.0, +translationrate));
+		}
+
+		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::E))
+		{
+			camera->Rotate(rotationrate *  AIngine::D2R * delta);
+		}
+
+		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::Q))
+		{
+			camera->Rotate(-rotationrate * AIngine::D2R * delta);
+		}
+	}
+
 	Editor::Editor()
 		: m_app(AIngine::Application::Get())
 	{
@@ -94,6 +151,20 @@ namespace AIngine::Editor {
 		m_widgets.push_back(new LogWidget());
 		m_widgets.push_back(new CameraWidget(*m_app.m_camera));
 		m_widgets.push_back(new MenubarWidget());
+	}
+
+	std::vector<AIngine::GameObject*>& Editor::GetSelectedObjects()
+	{
+		if (s_instance) {
+			return s_instance->m_selectedObjects;
+		}
+	}
+
+	void Editor::SetSelectedObjects(std::vector<AIngine::GameObject*> selectedObjects)
+	{
+		if (s_instance) {
+			s_instance->m_selectedObjects = selectedObjects;
+		}
 	}
 
 	AIngine::Structures::Rectangle Editor::CalculateViewportRect(const glm::vec2& windowSize) const

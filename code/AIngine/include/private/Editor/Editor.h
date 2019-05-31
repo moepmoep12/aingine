@@ -20,14 +20,15 @@ namespace AIngine {
 
 namespace AIngine::Editor {
 
+	// forward declaration
 	class EditorWidget;
 
 	class Editor : public AIngine::Structures::Layer {
 
 		// Application should create the Editor
 		friend class Application;
-	public:
 
+	public:
 		// Inherited via Layer
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
@@ -51,25 +52,32 @@ namespace AIngine::Editor {
 			return nullptr;
 		}
 
+		/*  Resets the scene graph by deleting all nodes and creating a new root node */
 		static void ResetSceneGraph();
 		static AIngine::Structures::SceneGraph* GetSceneGraph();
-		static bool IsAnyUIElementHovered();
-		bool DidAnyDockedWidgetChangeSize() const;
 
+		/* Returns wheter any UI element is currently hovered with the mouse */
+		static bool IsAnyUIElementHovered();
+
+		/* Calculates the available viewport size to be used for rendering the scene
+		* @returns : Returns the viewport Rectangle with a screen position & size */
 		AIngine::Structures::Rectangle CalculateViewportRect(const glm::vec2& windowSize) const;
 
 		virtual ~Editor() override;
 
 
 	private:
+		/* Checks whether a docked Editor widget changed its size in the last frame to be able to adjust the viewport accordingly*/
+		bool DidAnyDockedWidgetChangeSize() const;
 		bool OnKeyPressed(AIngine::Events::KeyPressedEvent& e);
 		bool OnWindowResized(AIngine::Events::WindowResizeEvent& e);
+		bool OnMouseScrolled(AIngine::Events::MouseScrolledEvent& e);
+		void MoveCamera(float delta);
 		Editor();
 
 	private:
 		static Editor* s_instance;
 		AIngine::Application& m_app;
 		std::vector<EditorWidget*> m_widgets;
-
 	};
 }
