@@ -67,10 +67,13 @@ namespace AIngine {
 		m_physicsWorld = new b2World(b2Vec2(gravity.x, gravity.y));
 		m_sceneGraph = new AIngine::Structures::SceneGraph();
 
+		// when we're in Release don't do debug drawing
+#ifdef _DEBUG 
 		m_physRenderer = new AIngine::Rendering::PhysicsRenderer();
 		m_physRenderer->SetFlags(b2Draw::e_shapeBit /*+ b2Draw::e_centerOfMassBit*/);
 		m_physicsWorld->SetDebugDraw(m_physRenderer);
 		m_isPhysicsDebugDrawn = true;
+#endif
 
 		m_contactListener = new Physics::ContactListener();
 		m_physicsWorld->SetContactListener(m_contactListener);
@@ -88,8 +91,8 @@ namespace AIngine {
 		s_instance = nullptr;
 		delete m_physicsWorld;
 		delete m_sceneGraph;
-		delete m_physRenderer;
 		delete m_contactListener;
+		if (m_physRenderer) delete m_physRenderer;
 	}
 	void World::CreateWorldBounds()
 	{

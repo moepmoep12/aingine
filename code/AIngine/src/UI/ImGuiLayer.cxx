@@ -12,18 +12,13 @@ namespace AIngine::UI {
 
 #define BIND_EVENT_TO_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
-	//AIngine::Editor::LogWidget ImGuiLayer::s_logWidget;
-
 	ImGuiLayer::ImGuiLayer() : Layer("ImGui Layer")
 	{
-		CORE_INFO("Creating ImGuiLayer");
 	}
 
 	ImGuiLayer::~ImGuiLayer()
 	{
 		OnDetach();
-		CORE_INFO("Destructor ImGuiLayer");
-		//s_logWidget.Clear();
 	}
 
 	void ImGuiLayer::OnAttach()
@@ -95,10 +90,11 @@ namespace AIngine::UI {
 
 	void ImGuiLayer::OnImGuiRender()
 	{
+#ifdef _DEBUG
 		//static bool show = true;
 		//ImGui::ShowDemoWindow(&show);
 		CreateDockSpace(true);
-		//s_logWidget.Draw("Log");
+#endif
 	}
 
 	// from imguidemo.cpp
