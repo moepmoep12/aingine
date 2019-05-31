@@ -52,6 +52,7 @@ set(AINGINE_HEADER
 		include/private/Editor/Widgets/MenuBarWidget.h
 		include/private/Editor/Widgets/SceneGraphWidget.h
 		include/private/Editor/Widgets/TextureComponentWidget.h
+		include/private/Editor/Widgets/TransformComponentWidget.h
 		include/private/gl_error.h
 		include/private/readfile.h
 	)
@@ -75,6 +76,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/MenuBarWidget.cxx
 		src/Editor/Widgets/SceneGraphWidget.cxx
 		src/Editor/Widgets/TextureComponentWidget.cxx
+		src/Editor/Widgets/TransformComponentWidget.cxx
 		src/Rendering/bitmap.cxx
 		src/Rendering/Camera.cxx
 		src/Rendering/PhysicsRenderer.cxx

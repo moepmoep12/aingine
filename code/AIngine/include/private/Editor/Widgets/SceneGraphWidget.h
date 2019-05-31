@@ -2,7 +2,7 @@
 
 #include "Editor/Widgets/EditorWidget.h"
 #include "Editor/Widgets/TextureComponentWidget.h"
-#include "Structures/Traverser.h"
+#include "Editor/Widgets/TransformComponentWidget.h"
 
 #include <unordered_map>
 
@@ -28,6 +28,7 @@ namespace AIngine::Editor {
 	private:
 		AIngine::Structures::SceneGraph& m_sceneGraph;
 		TextureComponentWidget* m_textureCompWidget;
+		TransformComponentWidget* m_transformCompWidget;
 
 		void ShowSelectedNodeWidget(GameObject* node);
 
@@ -57,13 +58,6 @@ namespace AIngine::Editor {
 			void BeginDropTarget(GameObject& obj);
 		};
 
-		class PhysicsUpdateTraverser : public  AIngine::Traverser {
-		public:
-			// Inherited via Traverser
-			virtual bool Traverse(GameObject * root) override;
-			virtual bool Enter(GameObject & node) override;
-			virtual bool Leave(GameObject & node) override;
-			virtual bool Visit(GameObject & node) override;
-		};
+		
 	};
 }

@@ -22,8 +22,6 @@ namespace AIngine::Editor {
 		static bool p_open = true;
 		static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse /*| ImGuiWindowFlags_NoMove*/;
 
-		//ImGui::SetNextWindowSize(ImVec2((float)windowWidth, (float)windowHeight), ImGuiCond_FirstUseEver);
-
 		if (!ImGui::Begin("SceneGraph", &p_open, windowFlags))
 		{
 			ImGui::End();
@@ -37,7 +35,6 @@ namespace AIngine::Editor {
 		m_isDocked = ImGui::IsWindowDocked();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 2));
-		//ImGui::Columns(2);
 		ImGui::Separator();
 
 		// traverse tree and create tree with imgui
@@ -67,6 +64,7 @@ namespace AIngine::Editor {
 	SceneGraphWidget::~SceneGraphWidget()
 	{
 		delete m_textureCompWidget;
+		delete m_transformCompWidget;
 	}
 
 
@@ -74,27 +72,16 @@ namespace AIngine::Editor {
 		: m_sceneGraph(sceneGraph)
 	{
 		m_textureCompWidget = new TextureComponentWidget();
+		m_transformCompWidget = new TransformComponentWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
 	{
 		if (!node) return;
 
-		glm::vec2 originalPosition = node->GetLocalPosition();
-		float originalRot = node->GetLocalRotation();
-		float* position[] = { &node->GetLocalPosition().x ,&node->GetLocalPosition().y };
-		float* scale[] = { &node->GetLocalScale().x , &node->GetLocalScale().y };
-		ImGui::BulletText("Transform");
-		bool draggedPosition = ImGui::DragFloat2("Position", *position);
-		bool draggedScale = ImGui::DragFloat2("Scale", *scale);
-		bool draggedRot = ImGui::DragFloat("Rotation", &node->GetLocalRotation(), M_PI / 180.0f);
+		m_transformCompWidget->Render(std::vector<GameObject*> { node });
 
-		if (originalPosition != node->GetLocalPosition() || originalRot != node->GetLocalRotation()) {
-			PhysicsUpdateTraverser physUpdate;
-			physUpdate.Traverse(node);
-		}
 		AIngine::Rendering::Texture2D* texture = node->GetComponent<AIngine::Rendering::Texture2D>();
-
 		// show textureComponent
 		if (texture) {
 			m_textureCompWidget->Render(std::vector<GameObject*> { node });
@@ -223,9 +210,6 @@ namespace AIngine::Editor {
 			float postWorldRot = dragSource->GetWorldRotation();
 
 			dragSource->UpdateTransform(-(postWorldPos - preWorldPos), -(postWorldScale - preWorldScale), -(postWorldRot - preWorldRot));
-			//dragSource->Translate(-(postWorldPos - preWorldPos),false);
-			//dragSource->Rotate(-(postWorldRot - preWorldRot),false);
-			//dragSource->Scale(-(postWorldScale - preWorldScale),false);
 
 			s_DropTarget = nullptr;
 		}
@@ -254,37 +238,6 @@ namespace AIngine::Editor {
 			}
 			ImGui::EndDragDropTarget();
 		}
-	}
-
-	/*------------------------------------------- PHYSICSUPDATE TRAVERSER -----------------------------------------------*/
-	/*----------------------------------------------------------------------------------------------------------------*/
-
-
-	bool SceneGraphWidget::PhysicsUpdateTraverser::Traverse(GameObject * root)
-	{
-		bool result = root->Accept(*this);
-		return result;
-	}
-	bool SceneGraphWidget::PhysicsUpdateTraverser::Enter(GameObject & node)
-	{
-		Physics::PhysicsComponent* physComp = node.GetComponent < Physics::PhysicsComponent>();
-		if (physComp) {
-			physComp->OnOwnerTransformChanged(glm::vec2(0.0), glm::vec2(1.0), 0);
-		}
-
-		return true;
-	}
-	bool SceneGraphWidget::PhysicsUpdateTraverser::Leave(GameObject & node)
-	{
-		return true;
-	}
-	bool SceneGraphWidget::PhysicsUpdateTraverser::Visit(GameObject & node)
-	{
-		Physics::PhysicsComponent* physComp = node.GetComponent < Physics::PhysicsComponent>();
-		if (physComp) {
-			physComp->OnOwnerTransformChanged(glm::vec2(0.0), glm::vec2(1.0), 0);
-		}
-		return true;
 	}
 }
 
