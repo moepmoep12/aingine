@@ -98,7 +98,7 @@ void Game::OnAppShutDown()
 void Game::OnAppUpdate()
 {
 	/* camera movement */
-
+#ifndef _DEBUG
 	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::A))
 	{
 		m_camera->Translate(glm::vec2(-translationrate, 0.0));
@@ -130,15 +130,13 @@ void Game::OnAppUpdate()
 	{
 		m_camera->Rotate(-rotationrate * AIngine::D2R * GetDeltaTime());
 	}
+#endif // !_DEBUG
 
-	if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::F))
-	{
-
-	}
 }
 
 void Game::OnAppEvent(AIngine::Events::Event & e)
 {
+#ifndef _DEBUG
 	if (typeid(e) == typeid(AIngine::Events::MouseScrolledEvent)) {
 		if (!IsAnyUiElementHovered()) {
 			AIngine::Events::MouseScrolledEvent scrolledEvent = dynamic_cast<AIngine::Events::MouseScrolledEvent&>(e);
@@ -146,6 +144,8 @@ void Game::OnAppEvent(AIngine::Events::Event & e)
 			m_camera->Zoom(scrolledEvent.GetYOffset() * GetDeltaTime() * zoomSpeed);
 		}
 	}
+#endif // !_DEBUG
+
 
 	if (typeid(e) == typeid(AIngine::Events::MouseButtonPressedEvent)) {
 		// mouse pressed
