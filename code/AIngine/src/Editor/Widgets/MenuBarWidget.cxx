@@ -4,9 +4,14 @@
 #include "AIngine/World.h"
 #include "Structures/SceneGraph.h"
 
+#include "Debug/log.h"
+
 #include <string>
+#include <nfd.h>
 
 namespace AIngine::Editor {
+
+
 	void MenubarWidget::OnImGuiRender()
 	{
 		if (ImGui::BeginMainMenuBar()) {
@@ -17,16 +22,41 @@ namespace AIngine::Editor {
 
 			if (ImGui::BeginMenu("Scene"))
 			{
-				if (ImGui::MenuItem("Open")) {
-					// delete the old tree
-					AIngine::Editor::Editor::ResetSceneGraph();
+				static std::string openedScene;
+				static const nfdchar_t *filterList = "txt,json";
 
-					AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(std::string("scene.json"));
+				if (ImGui::MenuItem("Open")) {
+
+					nfdchar_t *outPath = NULL;
+					nfdresult_t result = NFD_OpenDialog(filterList, NULL, &outPath);
+
+					if (result == NFD_OKAY)
+					{
+						openedScene = std::string(outPath);
+						// delete the old tree
+						AIngine::Editor::Editor::ResetSceneGraph();
+						AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(openedScene);
+						free(outPath);
+					}
 				}
 
-				if (ImGui::MenuItem("Save"))
+				if (ImGui::MenuItem("Save", "STRG + S", false, !openedScene.empty()))
 				{
-					AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(std::string("scene.json"));
+					AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(openedScene);
+				}
+
+				if (ImGui::MenuItem("Save As"))
+				{
+					nfdchar_t *outPath = NULL;
+					nfdresult_t result = NFD_SaveDialog(filterList, NULL, &outPath);
+
+					if (result == NFD_OKAY)
+					{
+						openedScene = std::string(outPath);
+						// delete the old tree
+						AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(openedScene);
+						free(outPath);
+					}
 				}
 
 				ImGui::EndMenu();
