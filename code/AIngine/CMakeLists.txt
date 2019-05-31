@@ -121,6 +121,7 @@ target_link_libraries(Engine
 		spdlog
 		Box2D-cmake
 		nlohmann_json
+		nativefiledialog
         )
 
 #

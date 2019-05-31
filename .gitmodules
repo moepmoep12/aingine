@@ -24,3 +24,6 @@
 [submodule "code/thirdParty/json"]
 	path = code/thirdParty/json
 	url = https://github.com/nlohmann/json.git	
+[submodule "code/thirdParty/nativefiledialog-cmake"]
+	path = code/thirdParty/nativefiledialog-cmake
+	url = https://github.com/aarcangeli/nativefiledialog-cmake.git
