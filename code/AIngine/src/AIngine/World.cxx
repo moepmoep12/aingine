@@ -105,6 +105,7 @@ namespace AIngine {
 		b2FixtureDef fixturedef;
 		fixturedef.shape = &shape;
 		fixturedef.density = 1.0;
+		fixturedef.isSensor = true;
 
 
 		// bottom

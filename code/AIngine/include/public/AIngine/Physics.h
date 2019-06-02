@@ -38,6 +38,7 @@ namespace AIngine::Physics {
 	struct PhysicsBodyInformation {
 		PhysicsBodyType type;
 		PhysicsShape shape;
+		bool isTrigger;
 		float32 radius;
 		float32 width;
 		float32 height;
@@ -62,9 +63,9 @@ namespace AIngine::Physics {
 		virtual void OnOwnerLocalRotationChanged(const float& rot) override;
 
 		//void CreateBody(b2BodyDef& bodydef, b2FixtureDef& fixtureDef);
-		void CreateCircleBody(const PhysicsProperties& properties, PhysicsBodyType type, float radius);
-		void CreateBoxBody(const PhysicsProperties& properties, PhysicsBodyType type, float width, float height);
-		void CreateEdgeBody(const PhysicsProperties& properties, PhysicsBodyType type, const glm::vec2& p1Offset, const glm::vec2& p2Offset);
+		void CreateCircleBody(const PhysicsProperties& properties, PhysicsBodyType type, float radius, bool isTrigger = false);
+		void CreateBoxBody(const PhysicsProperties& properties, PhysicsBodyType type, float width, float height, bool isTrigger = false);
+		void CreateEdgeBody(const PhysicsProperties& properties, PhysicsBodyType type, const glm::vec2& p1Offset, const glm::vec2& p2Offset, bool isTrigger = false);
 
 		void ApplyForce(const glm::vec2& force, const glm::vec2& point);
 		void ApplyForce(const b2Vec2& force, const b2Vec2& point);

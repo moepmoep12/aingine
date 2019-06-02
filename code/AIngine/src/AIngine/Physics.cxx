@@ -65,17 +65,7 @@ namespace AIngine::Physics {
 		}
 	}
 
-	//void PhysicsComponent::CreateBody(b2BodyDef & bodydef, b2FixtureDef& fixtureDef)
-	//{
-	//	glm::vec2 worldPos = m_owner->GetWorldPosition();
-	//	bodydef.position.Set(worldPos.x, worldPos.y);
-	//	bodydef.angle = m_owner->GetWorldRotation();
-	//	m_body = AIngine::World::CreateBody(bodydef);
-	//	m_body->CreateFixture(&fixtureDef);
-	//	m_body->SetUserData(this);
-	//}
-
-	void PhysicsComponent::CreateCircleBody(const PhysicsProperties & properties, PhysicsBodyType type, float radius)
+	void PhysicsComponent::CreateCircleBody(const PhysicsProperties & properties, PhysicsBodyType type, float radius, bool isTrigger)
 	{
 		if (m_body) {
 			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
@@ -84,6 +74,7 @@ namespace AIngine::Physics {
 		m_bodyInformation.type = type;
 		m_bodyInformation.shape = PhysicsShape::e_Circle;
 		m_bodyInformation.radius = radius;
+		m_bodyInformation.isTrigger = isTrigger;
 
 		b2FixtureDef fixtureDef;
 		fixtureDef.density = properties.density;
@@ -107,13 +98,14 @@ namespace AIngine::Physics {
 		shape.m_radius = radius;
 
 		fixtureDef.shape = &shape;
+		fixtureDef.isSensor = isTrigger;
 
 		m_body = AIngine::World::CreateBody(bodyDef);
 		m_body->CreateFixture(&fixtureDef);
 		m_body->SetUserData(this);
 	}
 
-	void PhysicsComponent::CreateBoxBody(const PhysicsProperties & properties, PhysicsBodyType type, float width, float height)
+	void PhysicsComponent::CreateBoxBody(const PhysicsProperties & properties, PhysicsBodyType type, float width, float height, bool isTrigger)
 	{
 		if (m_body) {
 			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
@@ -123,6 +115,8 @@ namespace AIngine::Physics {
 		m_bodyInformation.height = height;
 		m_bodyInformation.shape = PhysicsShape::e_Box;
 		m_bodyInformation.type = type;
+		m_bodyInformation.isTrigger = isTrigger;
+
 
 		b2FixtureDef fixtureDef;
 		fixtureDef.density = properties.density;
@@ -146,13 +140,14 @@ namespace AIngine::Physics {
 		shape.SetAsBox(width / 2.0f, height / 2.0f);
 
 		fixtureDef.shape = &shape;
+		fixtureDef.isSensor = isTrigger;
 
 		m_body = AIngine::World::CreateBody(bodyDef);
 		m_body->CreateFixture(&fixtureDef);
 		m_body->SetUserData(this);
 	}
 
-	void PhysicsComponent::CreateEdgeBody(const PhysicsProperties & properties, PhysicsBodyType type, const glm::vec2 & p1Offset, const glm::vec2 & p2Offset)
+	void PhysicsComponent::CreateEdgeBody(const PhysicsProperties & properties, PhysicsBodyType type, const glm::vec2 & p1Offset, const glm::vec2 & p2Offset, bool isTrigger)
 	{
 		if (m_body) {
 			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
@@ -160,6 +155,8 @@ namespace AIngine::Physics {
 		m_properties = properties;
 		m_bodyInformation.shape = PhysicsShape::e_Edge;
 		m_bodyInformation.type = type;
+		m_bodyInformation.isTrigger = isTrigger;
+
 
 		b2FixtureDef fixtureDef;
 		fixtureDef.density = properties.density;
@@ -183,6 +180,7 @@ namespace AIngine::Physics {
 		shape.Set(b2Vec2(p1Offset.x, p1Offset.y), b2Vec2(p2Offset.x, p2Offset.y));
 
 		fixtureDef.shape = &shape;
+		fixtureDef.isSensor = isTrigger;
 
 		m_body = AIngine::World::CreateBody(bodyDef);
 		m_body->CreateFixture(&fixtureDef);

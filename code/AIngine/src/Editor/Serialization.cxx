@@ -54,6 +54,7 @@ namespace AIngine::Editor::Serialization {
 		const char* PHYSICS_WIDTH = "width";
 		const char* PHYSICS_HEIGHT = "height";
 		const char* PHYSICS_VERTICES = "vertices";
+		const char* PHYSICS_ISTRIGGER = "isTrigger";
 	}
 
 	void Serializer::SerializeSceneGraph(const std::string & path)
@@ -169,6 +170,7 @@ namespace AIngine::Editor::Serialization {
 		Physics::PhysicsProperties properties;
 		Physics::PhysicsShape shape = (*j)[AttributeNames::PHYSICS_SHAPE];
 		Physics::PhysicsBodyType type = (*j)[AttributeNames::PHYSICS_BODYTYPE];
+		bool isTrigger = (*j)[AttributeNames::PHYSICS_ISTRIGGER];
 
 		properties.density = (*j)[AttributeNames::PHYSICS_DENSITY];
 		properties.friction = (*j)[AttributeNames::PHYSICS_FRICTION];
@@ -182,11 +184,11 @@ namespace AIngine::Editor::Serialization {
 		case(Physics::PhysicsShape::e_Box):
 			width = (*j)[AttributeNames::PHYSICS_WIDTH];
 			height = (*j)[AttributeNames::PHYSICS_HEIGHT];
-			physComp->CreateBoxBody(properties, type, width, height);
+			physComp->CreateBoxBody(properties, type, width, height, isTrigger);
 			break;
 		case(Physics::PhysicsShape::e_Circle):
 			radius = (*j)[AttributeNames::PHYSICS_RADIUS];
-			physComp->CreateCircleBody(properties, type, radius);
+			physComp->CreateCircleBody(properties, type, radius, isTrigger);
 			break;
 		case(Physics::PhysicsShape::e_Polygon):
 			break;
@@ -308,6 +310,7 @@ namespace AIngine::Editor::Serialization {
 
 		j[AttributeNames::PHYSICS_SHAPE] = bodyInfo.shape;
 		j[AttributeNames::PHYSICS_BODYTYPE] = bodyInfo.type;
+		j[AttributeNames::PHYSICS_ISTRIGGER] = bodyInfo.isTrigger;
 		j[AttributeNames::PHYSICS_DENSITY] = properties.density;
 		j[AttributeNames::PHYSICS_FRICTION] = properties.friction;
 		j[AttributeNames::PHYSICS_RESTITUTION] = properties.restitution;
