@@ -19,7 +19,6 @@ namespace CrappyBird {
 		virtual ~CrappyBird();
 
 	private:
-		void MoveCamera();
 		void CreateGround();
 		void CreatePlayer();
 		void SpawnObstacles();

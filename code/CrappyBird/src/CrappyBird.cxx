@@ -34,16 +34,24 @@ namespace CrappyBird {
 
 	void CrappyBird::CrappyBird::OnAppUpdate()
 	{
-		MoveCamera();
-
 		if (m_running) {
+
+			if (AIngine::Input::IsMouseButtonPressed(0) && m_running)
+			{
+				m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->ApplyLinearImpulseToCenter(glm::vec2(0, -0.05f));
+			}
+
 			MoveObstacles();
 			UpdateBackGround();
 
 			if (m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->IsCollided()) {
 				m_running = false;
 				AIngine::Physics::PhysicsComponent* other = static_cast<AIngine::Physics::PhysicsComponent*>(m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->GetOtherCollider()->GetBody()->GetUserData());
-				DEBUG_INFO(other->GetOwner()->GetName().c_str());
+				std::stringstream ss;
+				if (other && other->GetOwner()) {
+					ss << m_player->GetName() << "  collided with  " << other->GetOwner()->GetName();
+					DEBUG_INFO(ss.str());
+				}
 				m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->SetActive(false);
 			}
 		}
@@ -51,12 +59,6 @@ namespace CrappyBird {
 
 	void CrappyBird::OnAppEvent(AIngine::Events::Event & e)
 	{
-		if (typeid(e) == typeid(AIngine::Events::MouseScrolledEvent)) {
-			AIngine::Events::MouseScrolledEvent scrolledEvent = dynamic_cast<AIngine::Events::MouseScrolledEvent&>(e);
-			static float zoomSpeed = 30;
-			m_camera->Zoom(scrolledEvent.GetYOffset() * GetDeltaTime() * zoomSpeed);
-		}
-
 		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent)) {
 			AIngine::Events::KeyPressedEvent pressedEvent = dynamic_cast<AIngine::Events::KeyPressedEvent&>(e);
 			if (pressedEvent.GetKeyCode() == AIngine::KeyCodes::R) {
@@ -83,58 +85,6 @@ namespace CrappyBird {
 	{
 	}
 
-	void CrappyBird::MoveCamera() {
-
-		// cam settings
-		static float translationrate = 5.0f;
-		static float rotationrate = 0.1f;
-		static float zoomSpeed = 5.0f;
-
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::A))
-		{
-			m_camera->Translate(glm::vec2(-translationrate, 0.0));
-		}
-
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::D))
-		{
-			m_camera->Translate(glm::vec2(translationrate, 0.0));
-		}
-
-
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::W))
-		{
-			m_camera->Translate(glm::vec2(0.0, -translationrate));
-		}
-
-
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::S))
-		{
-			m_camera->Translate(glm::vec2(0.0, +translationrate));
-		}
-
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::E))
-		{
-			m_camera->Rotate(rotationrate *  AIngine::D2R * GetDeltaTime());
-		}
-
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::Q))
-		{
-			m_camera->Rotate(-rotationrate * AIngine::D2R * GetDeltaTime());
-		}
-
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::F))
-		{
-			glm::vec2 screenPos = glm::vec2(AIngine::Input::GetMouseX(), AIngine::Input::GetMouseY());
-
-			m_camera->LookAt(m_camera->ScreenToWorldPoint(screenPos));
-		}
-
-		if (AIngine::Input::IsMouseButtonPressed(0) && m_running)
-		{
-			m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->ApplyLinearImpulseToCenter(glm::vec2(0, -0.05f));
-		}
-
-	}
 
 	void CrappyBird::CreateGround()
 	{
@@ -148,15 +98,6 @@ namespace CrappyBird {
 		AIngine::Physics::PhysicsProperties properties;
 		properties.density = 1.0f;
 		phys->CreateEdgeBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, glm::vec2(-5, 0), glm::vec2(5, 0));
-
-		//b2BodyDef bodydef;
-		//bodydef.type = b2_staticBody;
-		//b2EdgeShape shape;
-		//shape.Set(b2Vec2(-5, 0), b2Vec2(5, 0));
-		//b2FixtureDef fixturedef;
-		//fixturedef.shape = &shape;
-		//fixturedef.density = 1.0;
-		//phys->CreateBody(bodydef, fixturedef);
 	}
 
 	void CrappyBird::CreatePlayer()
@@ -195,9 +136,6 @@ namespace CrappyBird {
 
 		// color
 		glm::vec3 color(1.0);
-
-
-
 		glm::vec2 spawnPosMin(1);
 		glm::vec2 spawnPosMax(1);
 		spawnPosMin.x = worldBounds.x + m_playerSize.x * 4.0f + obstacleWidth;
@@ -373,7 +311,8 @@ namespace CrappyBird {
 	{
 		m_running = true;
 		m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->SetActive(true);
-		m_player->SetLocalPosition(glm::vec2(1.5, 3));
+		m_player->SetLocalPosition(glm::vec2(1.5, 3), true);
+		m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->SetCollision(false, nullptr);
 
 
 		for (auto child : m_obstacleParent->GetChildren()) {

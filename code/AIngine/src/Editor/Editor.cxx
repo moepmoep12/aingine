@@ -153,20 +153,6 @@ namespace AIngine::Editor {
 		m_widgets.push_back(new MenubarWidget());
 	}
 
-	std::vector<AIngine::GameObject*>& Editor::GetSelectedObjects()
-	{
-		if (s_instance) {
-			return s_instance->m_selectedObjects;
-		}
-	}
-
-	void Editor::SetSelectedObjects(std::vector<AIngine::GameObject*> selectedObjects)
-	{
-		if (s_instance) {
-			s_instance->m_selectedObjects = selectedObjects;
-		}
-	}
-
 	AIngine::Structures::Rectangle Editor::CalculateViewportRect(const glm::vec2& windowSize) const
 	{
 		using Rectangle = AIngine::Structures::Rectangle;
