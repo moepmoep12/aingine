@@ -2,6 +2,7 @@
 #include "Events/InputEvents.h"
 #include <random>
 #include <time.h>
+#include <xxr/xcs.hpp>
 
 AIngine::Application* AIngine::CreateApplication() {
 	return new CrappyBird::CrappyBird();
@@ -34,26 +35,57 @@ namespace CrappyBird {
 
 	void CrappyBird::CrappyBird::OnAppUpdate()
 	{
+
+		static auto constants = xxr::XCSConstants();
+		constants.n = 2000;
+		constants.doActionSetSubsumption = true;
+		constants.doGASubsumption = true;
+		constants.mu = 0.01;
+		static auto xcs = xxr::XCS<int, bool>({ true,false }, constants);
+
+
 		if (m_running) {
 
-			if (AIngine::Input::IsMouseButtonPressed(0) && m_running)
-			{
-				m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->ApplyLinearImpulseToCenter(glm::vec2(0, -0.05f));
-			}
+			//if (AIngine::Input::IsMouseButtonPressed(0) && m_running)
+			//{
+			//	m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->ApplyLinearImpulseToCenter(glm::vec2(0, -0.05f));
+			//}
 
-			MoveObstacles();
+			//MoveObstacles();
+
+			float playerHeight = m_player->GetLocalPosition().y;
+			bool isAboveCenter = playerHeight >= 3.0f;
+			bool falling  = m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->GetVelocity().y > 0;
+
+			bool action = xcs.explore(std::vector<int>{isAboveCenter,falling});
+			DEBUG_INFO(xcs.populationSize());
+			// apply action
+			if(action)
+				m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->ApplyLinearImpulseToCenter(glm::vec2(0, -0.05f / 20.0f));
+
+
+
+
 			UpdateBackGround();
 
-			if (m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->IsCollided()) {
-				m_running = false;
-				AIngine::Physics::PhysicsComponent* other = static_cast<AIngine::Physics::PhysicsComponent*>(m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->GetOtherCollider()->GetBody()->GetUserData());
-				std::stringstream ss;
-				if (other && other->GetOwner()) {
-					ss << m_player->GetName() << "  collided with  " << other->GetOwner()->GetName();
-					DEBUG_INFO(ss.str());
-				}
-				m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->SetActive(false);
+			if (isGameOver()) {
+				//m_running = false;
+				//AIngine::Physics::PhysicsComponent* other = m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->GetOtherCollider();
+				//std::stringstream ss;
+				//if (other && other->GetOwner()) {
+				//	ss << m_player->GetName() << "  collided with  " << other->GetOwner()->GetName();
+				//	DEBUG_INFO(ss.str());
+				//}
+				//m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->SetActive(false);
+
+				xcs.reward(-1.0, true);
+
+				RestartGame();
 			}
+			else {
+				xcs.reward(1.0 / 500.0, false);
+			}
+			
 		}
 	}
 
@@ -88,15 +120,23 @@ namespace CrappyBird {
 
 	void CrappyBird::CreateGround()
 	{
-		// spawn ground
+		// spawn bottom ground
 		AIngine::GameObject* ground = AIngine::World::SpawnObject();
-		ground->SetName("Ground");
+		ground->SetName("GroundBottom");
 		ground->SetLocalPosition(glm::vec2(5, 5));
-		m_groundPosY = ground->GetLocalPosition().y;
+		m_bottomGroundPosY = ground->GetLocalPosition().y;
 
 		AIngine::Physics::PhysicsComponent* phys = ground->AddComponent<AIngine::Physics::PhysicsComponent>();
 		AIngine::Physics::PhysicsProperties properties;
 		properties.density = 1.0f;
+		phys->CreateEdgeBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, glm::vec2(-5, 0), glm::vec2(5, 0));
+
+		// spawn ceiling
+		ground = AIngine::World::SpawnObject();
+		ground->SetName("Ceiling");
+		ground->SetLocalPosition(glm::vec2(5, 0));
+		m_ceilingPosY = ground->GetLocalPosition().y;
+		phys = ground->AddComponent<AIngine::Physics::PhysicsComponent>();
 		phys->CreateEdgeBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, glm::vec2(-5, 0), glm::vec2(5, 0));
 	}
 
@@ -128,7 +168,7 @@ namespace CrappyBird {
 		glm::vec4 worldBounds = AIngine::World::GetBounds();
 		srand(time(NULL));
 		float minObstacleHeight = 1.0f;
-		float maxObstacleHeight = (m_groundPosY / 2.0f) - (2.5f* m_playerSize.y);
+		float maxObstacleHeight = (m_bottomGroundPosY / 2.0f) - (2.5f* m_playerSize.y);
 		float minDistance = obstacleWidth;
 		float maxDistance = 1.5f * obstacleWidth;
 		glm::vec2 spawnPosition(0);
@@ -170,7 +210,7 @@ namespace CrappyBird {
 			// add physics
 			AIngine::Physics::PhysicsComponent* physComponent = spawnedObject->AddComponent<AIngine::Physics::PhysicsComponent>();
 			AIngine::Physics::PhysicsProperties properties;
-			physComponent->CreateBoxBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, obstacleWidth, sizeY);
+			physComponent->CreateBoxBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, obstacleWidth, sizeY, true);
 
 			count++;
 
@@ -183,7 +223,7 @@ namespace CrappyBird {
 			color.z = 0.1f + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 			spawnPosition.x = spawnPosX;
 			float sizeY = minObstacleHeight + static_cast <float> (rand()) / static_cast <float> (RAND_MAX / maxObstacleHeight);
-			spawnPosition.y = m_groundPosY - (sizeY / 2.0f);
+			spawnPosition.y = m_bottomGroundPosY - (sizeY / 2.0f);
 
 			spawnedObject = AIngine::World::SpawnObject(std::string("Obstacle").append(std::to_string(count)), m_obstacleParent, spawnPosition, glm::vec2(1.0));
 
@@ -201,7 +241,7 @@ namespace CrappyBird {
 			// add physics
 			AIngine::Physics::PhysicsComponent* physComponent = spawnedObject->AddComponent<AIngine::Physics::PhysicsComponent>();
 			AIngine::Physics::PhysicsProperties properties;
-			physComponent->CreateBoxBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, obstacleWidth, sizeY);
+			physComponent->CreateBoxBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, obstacleWidth, sizeY, true);
 
 			count++;
 
@@ -315,10 +355,20 @@ namespace CrappyBird {
 		m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->SetCollision(false, nullptr);
 
 
-		for (auto child : m_obstacleParent->GetChildren()) {
+		//for (auto child : m_obstacleParent->GetChildren()) {
 
-			child->Translate(glm::vec2(AIngine::World::GetBounds().y / 2.0, 0));
+		//	child->Translate(glm::vec2(AIngine::World::GetBounds().y / 2.0, 0));
+		//}
+	}
+
+	bool CrappyBird::isGameOver()
+	{
+		if (m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->IsCollided()) {
+			AIngine::Physics::PhysicsComponent* other = m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->GetOtherCollider();
+			if (other && other->GetOwner())
+				return (other->GetOwner()->GetName() == "Ceiling" || other->GetOwner()->GetName() == "GroundBottom");
 		}
+		return false;
 	}
 
 }

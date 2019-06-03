@@ -27,6 +27,8 @@ namespace CrappyBird {
 		void MoveObstacles();
 		void RestartGame();
 
+		bool isGameOver();
+
 	private:
 		AIngine::Rendering::Texture2D* m_backGroundSky;
 		AIngine::Rendering::Texture2D* m_backGroundClouds;
@@ -35,7 +37,8 @@ namespace CrappyBird {
 		glm::vec2 m_playerSize;
 		AIngine::GameObject* m_obstacleParent;
 		AIngine::GameObject* m_player;
-		float32 m_groundPosY;
+		float32 m_bottomGroundPosY;
+		float32 m_ceilingPosY;
 		bool m_running = true;
 	};
 }
