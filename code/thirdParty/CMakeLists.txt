@@ -49,6 +49,7 @@ add_subdirectory("${THIRD_PARTY_DIR}/spdlog/")
 add_subdirectory("${THIRD_PARTY_DIR}/Box2D-cmake/")
 add_subdirectory("${THIRD_PARTY_DIR}/json/")
 add_subdirectory("${THIRD_PARTY_DIR}/nativefiledialog-cmake/")
+add_subdirectory("${THIRD_PARTY_DIR}/xcsrlib/")
 
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 

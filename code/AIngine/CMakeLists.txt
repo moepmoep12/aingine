@@ -122,6 +122,8 @@ target_link_libraries(Engine
 		Box2D-cmake
 		nlohmann_json
 		nativefiledialog
+		cxxopts
+		xcsrlib
         )
 
 #

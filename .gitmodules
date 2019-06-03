@@ -27,3 +27,6 @@
 [submodule "code/thirdParty/nativefiledialog-cmake"]
 	path = code/thirdParty/nativefiledialog-cmake
 	url = https://github.com/aarcangeli/nativefiledialog-cmake.git
+[submodule "code/thirdParty/xcsrlib"]
+	path = code/thirdParty/xcsrlib
+	url = https://github.com/moepmoep12/xxr.git
