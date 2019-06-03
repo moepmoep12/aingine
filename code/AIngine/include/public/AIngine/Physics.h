@@ -77,9 +77,14 @@ namespace AIngine::Physics {
 		inline bool IsCollided() const { return m_collided; }
 		inline void SetCollision(bool collided, b2Fixture* other) { m_collided = collided; m_otherCollided = other; }
 
-		inline b2Fixture* GetOtherCollider() { return m_otherCollided; }
 		inline const PhysicsProperties& GetProperties() const { return m_properties; }
 		inline const PhysicsBodyInformation& GetBodyInformation() const { return m_bodyInformation; }
+
+		//query data
+
+		glm::vec2 GetVelocity() const;
+
+		PhysicsComponent* GetOtherCollider();
 
 	private:
 		b2Body* m_body;

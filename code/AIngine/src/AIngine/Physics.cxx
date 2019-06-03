@@ -187,6 +187,18 @@ namespace AIngine::Physics {
 		m_body->SetUserData(this);
 	}
 
+	PhysicsComponent* PhysicsComponent::GetOtherCollider() {
+		if (m_otherCollided) {
+			return static_cast<PhysicsComponent*>(m_otherCollided->GetBody()->GetUserData());
+		}
+		return nullptr;
+	}
+
+	glm::vec2 PhysicsComponent::GetVelocity() const {
+		b2Vec2 vel = m_body->GetLinearVelocity();
+		return glm::vec2(vel.x, vel.y);
+	}
+
 
 	void PhysicsComponent::ApplyForce(const glm::vec2 & force, const glm::vec2 & point)
 	{
