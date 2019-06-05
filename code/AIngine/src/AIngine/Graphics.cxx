@@ -1,4 +1,4 @@
-#include "Debug/DebugDraw.h"
+#include "AIngine/Graphics.h"
 #include "AIngine/Macros.h"
 #include "Assets/Assets.h"
 #include "Rendering/Camera.h"
@@ -8,7 +8,7 @@
 #include <glad/glad.h>
 #include <algorithm>
 
-namespace AIngine::Debug {
+namespace AIngine {
 
 #define BUFFER_OFFSET(x)  ((const void*) (x))
 
@@ -395,10 +395,10 @@ namespace AIngine::Debug {
 		TextElement textStack[e_maxTextElements];
 	};
 
-	DebugDraw* DebugDraw::s_instance = nullptr;
+	Graphics* Graphics::s_instance = nullptr;
 
 
-	DebugDraw::DebugDraw() {
+	Graphics::Graphics() {
 		ASSERT(!s_instance, "An entity of type World already exists!");
 		s_instance = this;
 
@@ -412,7 +412,7 @@ namespace AIngine::Debug {
 		m_text->Create();
 	}
 
-	DebugDraw::~DebugDraw() {
+	Graphics::~Graphics() {
 		s_instance = nullptr;
 
 		m_points->Destroy();
@@ -432,19 +432,19 @@ namespace AIngine::Debug {
 		m_text = NULL;
 	}
 
-	void DebugDraw::Flush() {
+	void Graphics::Flush() {
 		m_triangles->Flush();
 		m_lines->Flush();
 		m_points->Flush();
 		m_text->Flush();
 	}
 
-	void DebugDraw::Line(const glm::vec2 & v1World, const glm::vec2 & v2World, const glm::vec3 & color)
+	void Graphics::Line(const glm::vec2 & v1World, const glm::vec2 & v2World, const glm::vec3 & color)
 	{
 		Line(b2Vec2(v1World.x, v1World.y), b2Vec2(v2World.x, v2World.y), b2Color(color.x, color.y, color.z));
 	}
 
-	void DebugDraw::Line(const b2Vec2 & v1World, const b2Vec2 & v2World, const b2Color & color)
+	void Graphics::Line(const b2Vec2 & v1World, const b2Vec2 & v2World, const b2Color & color)
 	{
 		if (s_instance) {
 			s_instance->m_lines->Vertex(v1World, color);
@@ -452,12 +452,12 @@ namespace AIngine::Debug {
 		}
 	}
 
-	void DebugDraw::Triangle(const glm::vec2 & v1World, const glm::vec2 & v2World, const glm::vec2 & v3World, const glm::vec3 & color)
+	void Graphics::Triangle(const glm::vec2 & v1World, const glm::vec2 & v2World, const glm::vec2 & v3World, const glm::vec3 & color)
 	{
 		Triangle(b2Vec2(v1World.x, v1World.y), b2Vec2(v2World.x, v2World.y), b2Vec2(v3World.x, v3World.y), b2Color(color.x, color.y, color.z));
 	}
 
-	void DebugDraw::Triangle(const b2Vec2 & v1World, const b2Vec2 & v2World, const b2Vec2 & v3World, const b2Color & color)
+	void Graphics::Triangle(const b2Vec2 & v1World, const b2Vec2 & v2World, const b2Vec2 & v3World, const b2Color & color)
 	{
 		if (s_instance) {
 			s_instance->m_triangles->Vertex(v1World, color);
@@ -466,17 +466,17 @@ namespace AIngine::Debug {
 		}
 
 	}
-	void DebugDraw::Point(const glm::vec2 & vWorl, float32 size, const glm::vec3 & color)
+	void Graphics::Point(const glm::vec2 & vWorl, float32 size, const glm::vec3 & color)
 	{
 		Point(b2Vec2(vWorl.x, vWorl.y), size, b2Color(color.x, color.y, color.z));
 	}
-	void DebugDraw::Point(const b2Vec2 & vWorl, float32 size, const b2Color & color)
+	void Graphics::Point(const b2Vec2 & vWorl, float32 size, const b2Color & color)
 	{
 		if (s_instance) {
 			s_instance->m_points->Vertex(vWorl, color, size);
 		}
 	}
-	void DebugDraw::Text(int x, int y, const char * string, ...)
+	void Graphics::Text(int x, int y, const char * string, ...)
 	{
 		if (s_instance) {
 			s_instance->m_text->AddText(x, y, string);

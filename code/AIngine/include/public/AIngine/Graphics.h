@@ -4,17 +4,17 @@
 #include <Box2D/Box2D.h>
 
 
-namespace AIngine::Debug {
+namespace AIngine {
 
 	struct GLRenderPoints;
 	struct GLRenderLines;
 	struct GLRenderTriangles;
 	struct GLText;
 
-	class DebugDraw {
+	class Graphics {
 	public:
-		DebugDraw();
-		~DebugDraw();
+		Graphics();
+		~Graphics();
 
 		void Flush();
 
@@ -34,6 +34,6 @@ namespace AIngine::Debug {
 		GLRenderLines* m_lines;
 		GLRenderTriangles* m_triangles;
 		GLText*  m_text;
-		static DebugDraw* s_instance;
+		static Graphics* s_instance;
 	};
 }

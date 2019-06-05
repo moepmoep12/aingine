@@ -10,7 +10,6 @@
 #include "Events/InputEvents.h"
 #include "AIngine/Physics.h"
 #include "Debug/log.h"
-#include "Debug/DebugDraw.h"
 
 namespace AIngine::Editor {
 

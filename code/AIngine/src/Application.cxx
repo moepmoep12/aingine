@@ -66,7 +66,7 @@ namespace AIngine {
 		path = std::string("assets/Intellgine/textures/White.png");
 		AIngine::Assets::BitmapAsset* bitmap = m_assetRegistry.Load<AIngine::Assets::BitmapAsset>(path);
 
-		m_debugDraw = new AIngine::Debug::DebugDraw();
+		m_Graphics = new AIngine::Graphics();
 	}
 
 	Application::~Application()
@@ -131,7 +131,7 @@ namespace AIngine {
 				layer->OnImGuiRender();
 			}
 			// render debug stuff last
-			m_debugDraw->Flush();
+			m_Graphics->Flush();
 			// finish UI rendering
 			m_imGuiLayer->OnEnd();
 
@@ -146,7 +146,7 @@ namespace AIngine {
 		m_window = NULL;
 		delete m_renderer;
 		delete m_camera;
-		delete m_debugDraw;
+		delete m_Graphics;
 		delete m_viewport;
 
 

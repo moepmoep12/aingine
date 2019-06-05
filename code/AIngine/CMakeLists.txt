@@ -18,13 +18,13 @@ set(AINGINE_HEADER
 		include/public/AIngine/Component.h
 		include/public/AIngine/Constants.h
 		include/public/AIngine/GameObject.h
+		include/public/AIngine/Graphics.h
 		include/public/AIngine/Input.h
 		include/public/AIngine/KeyCodes.h
 		include/public/AIngine/Macros.h
 		include/public/AIngine/Physics.h
 		include/public/AIngine/World.h
 		include/public/Assets/Assets.h
-		include/public/Debug/DebugDraw.h
 		include/public/Debug/log.h
 		include/public/Events/Event.h
 		include/public/Events/ApplicationEvents.h
@@ -63,12 +63,12 @@ set(AINGINE_SRC
 		src/Window.cxx
 		src/AIngine/Component.cxx
 		src/AIngine/GameObject.cxx
+		src/AIngine/Graphics.cxx
 		src/AIngine/Input.cxx
 		src/AIngine/Physics.cxx
 		src/AIngine/World.cxx
         src/Assets/Assets.cxx
 		src/Debug/gl_error.cxx
-		src/Debug/DebugDraw.cxx
 		src/Debug/log.cxx
 		src/Editor/Editor.cxx
 		src/Editor/Serialization.cxx

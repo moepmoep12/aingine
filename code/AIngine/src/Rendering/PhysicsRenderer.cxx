@@ -1,5 +1,5 @@
 #include "Rendering/PhysicsRenderer.h"
-#include "Debug/DebugDraw.h"
+#include "AIngine/Graphics.h"
 
 namespace AIngine::Rendering {
 
@@ -9,7 +9,7 @@ namespace AIngine::Rendering {
 		for (int32 i = 0; i < vertexCount; ++i)
 		{
 			b2Vec2 p2 = vertices[i];
-			AIngine::Debug::DebugDraw::Line(p1, p2, color);
+			AIngine::Graphics::Line(p1, p2, color);
 			p1 = p2;
 		}
 	}
@@ -18,14 +18,14 @@ namespace AIngine::Rendering {
 		b2Color fillColor(0.5f * color.r, 0.5f * color.g, 0.5f * color.b, 0.5f);
 		for (int32 i = 1; i < vertexCount - 1; ++i) 
 		{
-			AIngine::Debug::DebugDraw::Triangle(vertices[0], vertices[i], vertices[i + 1], fillColor);
+			AIngine::Graphics::Triangle(vertices[0], vertices[i], vertices[i + 1], fillColor);
 		}
 
 		b2Vec2 p1 = vertices[vertexCount - 1];
 		for (int32 i = 0; i < vertexCount; ++i)
 		{
 			b2Vec2 p2 = vertices[i];
-			AIngine::Debug::DebugDraw::Line(p1, p2, color);
+			AIngine::Graphics::Line(p1, p2, color);
 			p1 = p2;
 		}
 	}
@@ -44,7 +44,7 @@ namespace AIngine::Rendering {
 			r2.x = cosInc * r1.x - sinInc * r1.y;
 			r2.y = sinInc * r1.x + cosInc * r1.y;
 			b2Vec2 v2 = center + radius * r2;
-			AIngine::Debug::DebugDraw::Line(v1, v2, color);
+			AIngine::Graphics::Line(v1, v2, color);
 			r1 = r2;
 			v1 = v2;
 		}
@@ -66,7 +66,7 @@ namespace AIngine::Rendering {
 			r2.x = cosInc * r1.x - sinInc * r1.y;
 			r2.y = sinInc * r1.x + cosInc * r1.y;
 			b2Vec2 v2 = center + radius * r2;
-			AIngine::Debug::DebugDraw::Triangle(v0, v1, v2, fillColor);
+			AIngine::Graphics::Triangle(v0, v1, v2, fillColor);
 			r1 = r2;
 			v1 = v2;
 		}
@@ -79,18 +79,18 @@ namespace AIngine::Rendering {
 			r2.x = cosInc * r1.x - sinInc * r1.y;
 			r2.y = sinInc * r1.x + cosInc * r1.y;
 			b2Vec2 v2 = center + radius * r2;
-			AIngine::Debug::DebugDraw::Line(v1, v2, color);
+			AIngine::Graphics::Line(v1, v2, color);
 			r1 = r2;
 			v1 = v2;
 		}
 
 		// Draw a line fixed in the circle to animate rotation.
 		b2Vec2 p = center + radius * axis;
-		AIngine::Debug::DebugDraw::Line(center, p, color);
+		AIngine::Graphics::Line(center, p, color);
 	}
 	void PhysicsRenderer::DrawSegment(const b2Vec2 & p1, const b2Vec2 & p2, const b2Color & color)
 	{
-		AIngine::Debug::DebugDraw::Line(p1, p2, color);
+		AIngine::Graphics::Line(p1, p2, color);
 	}
 	void PhysicsRenderer::DrawTransform(const b2Transform & xf)
 	{
@@ -100,13 +100,13 @@ namespace AIngine::Rendering {
 		b2Vec2 p1 = xf.p, p2;
 
 		p2 = p1 + k_axisScale * xf.q.GetXAxis();
-		AIngine::Debug::DebugDraw::Line(p1, p2, red);
+		AIngine::Graphics::Line(p1, p2, red);
 
 		p2 = p1 + k_axisScale * xf.q.GetYAxis();
-		AIngine::Debug::DebugDraw::Line(p1, p2, green);
+		AIngine::Graphics::Line(p1, p2, green);
 	}
 	void PhysicsRenderer::DrawPoint(const b2Vec2 & p, float32 size, const b2Color & color)
 	{
-		AIngine::Debug::DebugDraw::Point(p, size, color);
+		AIngine::Graphics::Point(p, size, color);
 	}
 }

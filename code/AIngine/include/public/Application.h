@@ -11,7 +11,7 @@
 #include "Rendering/Camera.h"
 #include "Rendering/Viewport.h"
 #include "AIngine/World.h"
-#include "Debug/DebugDraw.h"
+#include "AIngine/Graphics.h"
 
 namespace AIngine::Editor {
 }
@@ -75,7 +75,7 @@ namespace AIngine {
 		AIngine::Rendering::Viewport* m_viewport;
 		static Application* s_instance;
 		float m_deltaTime = 0.0f;
-		AIngine::Debug::DebugDraw* m_debugDraw;
+		Graphics* m_Graphics;
 	};
 
 	// to be defined by the actual Application
