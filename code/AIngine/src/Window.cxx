@@ -28,6 +28,7 @@ AIngine::Window::Window(const WindowConfig & config)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	// Windowed Fullscreen
 	glfwWindowHint(GLFW_MAXIMIZED, 1);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	m_window = glfwCreateWindow((int)m_config.Width, (int)m_config.Height, m_config.Title.c_str(), nullptr, nullptr);
 
@@ -50,6 +51,7 @@ AIngine::Window::Window(const WindowConfig & config)
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_MULTISAMPLE);
 
 	CORE_INFO("Window created");
 

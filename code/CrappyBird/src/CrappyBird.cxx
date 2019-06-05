@@ -41,7 +41,8 @@ namespace CrappyBird {
 		constants.doActionSetSubsumption = true;
 		constants.doGASubsumption = true;
 		constants.mu = 0.01;
-		static auto xcs = xxr::XCS<int, bool>({ true,false }, constants);
+		std::unordered_set<bool> actions = { true,false };
+		static auto xcs = xxr::XCS<int, bool>(actions, constants);
 
 
 		if (m_running) {
@@ -58,10 +59,11 @@ namespace CrappyBird {
 			bool falling  = m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->GetVelocity().y > 0;
 
 			bool action = xcs.explore(std::vector<int>{isAboveCenter,falling});
-			DEBUG_INFO(xcs.populationSize());
+
+			//DEBUG_INFO(xcs.populationSize());
 			// apply action
 			if(action)
-				m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->ApplyLinearImpulseToCenter(glm::vec2(0, -0.05f / 20.0f));
+				m_player->GetComponent<AIngine::Physics::PhysicsComponent>()->ApplyLinearImpulseToCenter(glm::vec2(0, -0.05f / 2.0f));
 
 
 
