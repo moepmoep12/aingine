@@ -67,6 +67,9 @@ namespace AIngine::Editor {
 		static void SetShowFramerate(bool active);
 		static inline bool IsFramerateDisplayed() { if (s_instance) return s_instance->m_displayingFramerate; else return false; }
 
+		static inline void SetSelectedObjects(const std::vector<AIngine::GameObject*>& selectedObjects) { if (s_instance) s_instance->m_selectedObjects = selectedObjects; }
+		static inline const std::vector<AIngine::GameObject*>* GetSelectedObjects() { if (s_instance) return &s_instance->m_selectedObjects; else return nullptr; }
+
 		virtual ~Editor() override;
 
 
@@ -86,5 +89,6 @@ namespace AIngine::Editor {
 		static Editor* s_instance;
 		AIngine::Application& m_app;
 		std::vector<EditorWidget*> m_widgets;
+		std::vector<AIngine::GameObject*> m_selectedObjects;
 	};
 }

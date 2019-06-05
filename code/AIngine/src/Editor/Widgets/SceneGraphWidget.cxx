@@ -2,7 +2,6 @@
 #include "AIngine/Constants.h"
 #include "imgui.h"
 #include "Structures/SceneGraph.h"
-//#include "Application.h"
 #include "AIngine/GameObject.h"
 #include "Rendering/texture.h"
 #include "AIngine/Input.h"
@@ -10,6 +9,7 @@
 #include "Events/InputEvents.h"
 #include "AIngine/Physics.h"
 #include "Debug/log.h"
+#include "Editor/Editor.h"
 
 namespace AIngine::Editor {
 
@@ -133,6 +133,7 @@ namespace AIngine::Editor {
 			// check if selected
 			if (ImGui::IsItemClicked()) {
 				s_selectedNode = &node;
+				AIngine::Editor::Editor::SetSelectedObjects({ s_selectedNode });
 			}
 
 			BeginDragSource();
@@ -147,6 +148,7 @@ namespace AIngine::Editor {
 			ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
 			if (ImGui::IsItemClicked()) {
 				s_selectedNode = &node;
+				AIngine::Editor::Editor::SetSelectedObjects({ s_selectedNode });
 			}
 
 			BeginDragSource();
@@ -180,6 +182,7 @@ namespace AIngine::Editor {
 		ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
 		if (ImGui::IsItemClicked()) {
 			s_selectedNode = &node;
+			AIngine::Editor::Editor::SetSelectedObjects({ s_selectedNode });
 		}
 
 		// Drag & Drop
