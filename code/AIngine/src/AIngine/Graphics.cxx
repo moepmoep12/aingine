@@ -392,7 +392,7 @@ namespace AIngine {
 			bool faceSucess = !FT_New_Face(ft, "assets/Intellgine/fonts/arial.ttf", 0, &face);
 			assert(faceSucess);
 			// Set size to load glyphs as
-			FT_Set_Pixel_Sizes(face, 0, 48);
+			FT_Set_Pixel_Sizes(face, 0, 20);
 			// Disable byte-alignment restriction
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
