@@ -31,8 +31,6 @@ set(AINGINE_HEADER
 		include/public/Events/InputEvents.h	
 		include/public/Rendering/bitmap.h
 		include/public/Rendering/Camera.h
-		include/public/Rendering/PhysicsRenderer.h
-		include/public/Rendering/Renderer.h
 		include/public/Rendering/shader.h
 		include/public/Rendering/texture.h
 		include/public/Rendering/Viewport.h
@@ -40,7 +38,6 @@ set(AINGINE_HEADER
 		include/public/Structures/LayerStack.h
 		include/public/Structures/memory.h
 		include/public/Structures/Rectangle.h
-		include/public/Structures/SceneGraph.h
 		include/public/Structures/Traverser.h
 		include/public/UI/ImGuiLayer.h	
 		include/private/Editor/Editor.h
@@ -53,6 +50,9 @@ set(AINGINE_HEADER
 		include/private/Editor/Widgets/SceneGraphWidget.h
 		include/private/Editor/Widgets/TextureComponentWidget.h
 		include/private/Editor/Widgets/TransformComponentWidget.h
+		include/private/Rendering/PhysicsRenderer.h
+		include/private/Rendering/Renderer.h
+		include/private/Structures/SceneGraph.h
 		include/private/gl_error.h
 		include/private/readfile.h
 	)

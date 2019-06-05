@@ -7,7 +7,6 @@
 #include "UI/ImGuiLayer.h"
 #include "Structures/LayerStack.h"
 #include "Assets/Assets.h"
-#include "Rendering/Renderer.h"
 #include "Box2D/Box2D.h"
 #include "Rendering/Camera.h"
 #include "Rendering/Viewport.h"
@@ -15,10 +14,17 @@
 #include "Debug/DebugDraw.h"
 
 namespace AIngine::Editor {
-	class Editor;
 }
 
 namespace AIngine {
+
+	namespace Editor {
+		class Editor;
+	}
+
+	namespace Rendering{
+		class SpriteRenderer;
+	}
 
 	class Application {
 

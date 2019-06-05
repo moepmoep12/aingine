@@ -1,6 +1,6 @@
 #pragma once
 #include "Rendering/Renderer.h"
-#include "memory.h"
+#include "Structures/memory.h"
 #include "Structures/Layer.h"
 #include <vector>
 

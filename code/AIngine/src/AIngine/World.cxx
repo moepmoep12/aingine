@@ -2,6 +2,8 @@
 #include "AIngine/Macros.h"
 #include "AIngine/GameObject.h"
 #include "AIngine/Physics.h"
+#include "Structures/SceneGraph.h"
+#include "Rendering/PhysicsRenderer.h"
 
 namespace AIngine {
 
@@ -28,6 +30,11 @@ namespace AIngine {
 		if (s_instance) {
 			s_instance->m_isPhysicsDebugDrawn = active;
 		}
+	}
+
+	AIngine::Structures::SceneGraph & World::GetSceneGraph()
+	{
+		return *m_sceneGraph;
 	}
 
 	void World::OnAttach()

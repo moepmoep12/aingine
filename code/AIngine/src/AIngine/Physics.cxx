@@ -1,6 +1,7 @@
 #include "AIngine/Physics.h"
 #include "Application.h"
 #include "AIngine/Constants.h"
+#include "AIngine/GameObject.h"
 
 namespace AIngine::Physics {
 	PhysicsComponent::PhysicsComponent(GameObject * owner) : Component(owner), m_body(nullptr)

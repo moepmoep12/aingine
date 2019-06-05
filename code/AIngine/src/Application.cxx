@@ -3,6 +3,8 @@
 #include "AIngine/Macros.h"
 #include "AIngine/Input.h"
 #include "Editor/Editor.h"
+#include "Rendering/Renderer.h"
+#include "Structures/SceneGraph.h"
 
 #include <memory>
 

@@ -4,6 +4,7 @@
 #include "AIngine/KeyCodes.h"
 #include "AIngine/Input.h"
 #include "AIngine/Constants.h"
+#include "Structures/SceneGraph.h"
 
 // widgets
 #include "Editor/Widgets/EditorWidget.h"
@@ -159,7 +160,6 @@ namespace AIngine::Editor {
 		using Corner = AIngine::Structures::Rectangle::Corner;
 
 		Rectangle viewportRect(0, m_widgets[3]->GetSize().y, windowSize.x, windowSize.y - m_widgets[3]->GetSize().y);
-		Corner corner;
 
 		auto it = m_widgets.begin();
 

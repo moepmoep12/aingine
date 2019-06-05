@@ -220,7 +220,7 @@ namespace AIngine::Editor::Serialization {
 		}
 		else {
 			(*m_children).push_back(serializedObject);
-			int count = (*m_children).size();
+			size_t count = (*m_children).size();
 			m_children = &(*m_children)[count - 1][node.GetName()]["c_children"];
 		}
 

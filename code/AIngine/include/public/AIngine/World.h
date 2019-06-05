@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Structures/Layer.h"
-#include "Structures/SceneGraph.h"
-#include "Rendering/PhysicsRenderer.h"
 
 #include <Box2D/Box2D.h>
 #include <glm/glm.hpp>
@@ -19,6 +17,14 @@ namespace AIngine {
 
 	namespace Editor {
 		class Editor;
+	}
+
+	namespace Structures {
+		class SceneGraph;
+	}
+
+	namespace Rendering {
+		class PhysicsRenderer;
 	}
 }
 
@@ -41,7 +47,7 @@ namespace AIngine {
 
 		static void SetPhysicsDebugDrawActive(const bool& active);
 
-		inline AIngine::Structures::SceneGraph& GetSceneGraph() { return *m_sceneGraph; }
+		AIngine::Structures::SceneGraph& GetSceneGraph();
 
 		// inherited via Layer
 		virtual void OnAttach() override;
