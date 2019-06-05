@@ -77,14 +77,18 @@ namespace AIngine::Editor {
 
 			if (ImGui::BeginMenu("View"))
 			{
-				static bool show = false;
+				bool showPhys = AIngine::World::IsDebugPhysicsDrawn();
+				bool showFps = AIngine::Editor::Editor::IsFramerateDisplayed();
 
-				if (ImGui::MenuItem("Show Physics Debug Rendering", "F1", &show, true))
+				if (ImGui::MenuItem("Show Physics Debug Rendering", "F1", &showPhys, true))
 				{
-					AIngine::World::SetPhysicsDebugDrawActive(show);
+					AIngine::World::SetPhysicsDebugDrawActive(showPhys);
 				}
 
-
+				if (ImGui::MenuItem("Show FPS", "F2", &showFps, true))
+				{
+					AIngine::Editor::Editor::SetShowFramerate(showFps);
+				}
 
 				ImGui::EndMenu();
 			}

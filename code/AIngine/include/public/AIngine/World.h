@@ -44,7 +44,7 @@ namespace AIngine {
 		static inline const glm::vec4& GetBounds() { if (s_instance) return s_instance->m_bounds; else return glm::vec4(1.0); }
 		static inline const b2World& GetPhysicsWorld() { return *s_instance->m_physicsWorld; }
 		static inline b2Body* CreateBody(const b2BodyDef& bodydef) { if (s_instance) return s_instance->m_physicsWorld->CreateBody(&bodydef); else return nullptr; }
-
+		static inline bool IsDebugPhysicsDrawn() { if (s_instance) return s_instance->m_isPhysicsDebugDrawn; else return false; }
 		static void SetPhysicsDebugDrawActive(const bool& active);
 
 		AIngine::Structures::SceneGraph& GetSceneGraph();

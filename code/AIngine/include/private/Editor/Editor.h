@@ -63,7 +63,9 @@ namespace AIngine::Editor {
 		* @returns : Returns the viewport Rectangle with a screen position & size */
 		AIngine::Structures::Rectangle CalculateViewportRect(const glm::vec2& windowSize) const;
 
-		static void SetDisplayFramerateActive(bool active);
+		/* Actives/Deactivates the frame counter in the top left corner*/
+		static void SetShowFramerate(bool active);
+		static inline bool IsFramerateDisplayed() { if (s_instance) return s_instance->m_displayingFramerate; else return false; }
 
 		virtual ~Editor() override;
 

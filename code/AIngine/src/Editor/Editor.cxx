@@ -76,6 +76,11 @@ namespace AIngine::Editor {
 			return true;
 		}
 
+		if (e.GetKeyCode() == AIngine::KeyCodes::F2) 
+		{
+			m_displayingFramerate = !m_displayingFramerate;
+		}
+
 		return false;
 	}
 
@@ -208,7 +213,7 @@ namespace AIngine::Editor {
 		return viewportRect;
 	}
 
-	void Editor::SetDisplayFramerateActive(bool active)
+	void Editor::SetShowFramerate(bool active)
 	{
 		if (s_instance)
 			s_instance->m_displayingFramerate = active;
