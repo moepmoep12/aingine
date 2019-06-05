@@ -124,6 +124,7 @@ target_link_libraries(Engine
 		nativefiledialog
 		cxxopts
 		xcsrlib
+		freetype
         )
 
 #

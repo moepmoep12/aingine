@@ -30,3 +30,6 @@
 [submodule "code/thirdParty/xcsrlib"]
 	path = code/thirdParty/xcsrlib
 	url = https://github.com/moepmoep12/xxr.git
+[submodule "code/thirdParty/freetype2"]
+	path = code/thirdParty/freetype2
+	url = https://github.com/aseprite/freetype2.git
