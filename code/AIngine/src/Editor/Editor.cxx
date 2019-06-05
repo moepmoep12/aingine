@@ -37,6 +37,7 @@ namespace AIngine::Editor {
 		}
 
 		MoveCamera(delta);
+		if (m_displayingFramerate) DisplayFramerate(delta);
 	}
 
 	void Editor::OnEvent(AIngine::Events::Event & e)
@@ -66,15 +67,12 @@ namespace AIngine::Editor {
 		}
 	}
 
-	static bool s_physicsDraw = false;
-
 	bool Editor::OnKeyPressed(AIngine::Events::KeyPressedEvent & e)
 	{
 		// Toggle PhysicsDebugDraw
 		if (e.GetKeyCode() == AIngine::KeyCodes::F1)
 		{
-			AIngine::World::SetPhysicsDebugDrawActive(!s_physicsDraw);
-			s_physicsDraw = !s_physicsDraw;
+			AIngine::World::SetPhysicsDebugDrawActive(!AIngine::World::s_instance->m_isPhysicsDebugDrawn);
 			return true;
 		}
 
@@ -210,6 +208,12 @@ namespace AIngine::Editor {
 		return viewportRect;
 	}
 
+	void Editor::SetDisplayFramerateActive(bool active)
+	{
+		if (s_instance)
+			s_instance->m_displayingFramerate = active;
+	}
+
 	void Editor::ResetSceneGraph()
 	{
 		if (s_instance)
@@ -227,6 +231,13 @@ namespace AIngine::Editor {
 	bool Editor::IsAnyUIElementHovered()
 	{
 		return ImGui::IsAnyWindowHovered();
+	}
+
+	void Editor::DisplayFramerate(float delta) const
+	{
+		std::stringstream ss;
+		ss << "FPS: " << (int)(1.0f / delta);
+		AIngine::Graphics::Text(ss.str().c_str(), glm::vec2(0, 0), glm::vec2(0.75));
 	}
 
 	bool Editor::DidAnyDockedWidgetChangeSize() const

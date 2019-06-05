@@ -63,10 +63,14 @@ namespace AIngine::Editor {
 		* @returns : Returns the viewport Rectangle with a screen position & size */
 		AIngine::Structures::Rectangle CalculateViewportRect(const glm::vec2& windowSize) const;
 
+		static void SetDisplayFramerateActive(bool active);
+
 		virtual ~Editor() override;
 
 
 	private:
+		void DisplayFramerate(float delta) const;
+
 		/* Checks whether a docked Editor widget changed its size in the last frame to be able to adjust the viewport accordingly*/
 		bool DidAnyDockedWidgetChangeSize() const;
 		bool OnKeyPressed(AIngine::Events::KeyPressedEvent& e);
@@ -76,6 +80,7 @@ namespace AIngine::Editor {
 		Editor();
 
 	private:
+		bool m_displayingFramerate = true;
 		static Editor* s_instance;
 		AIngine::Application& m_app;
 		std::vector<EditorWidget*> m_widgets;

@@ -12,6 +12,7 @@
 #include "Assets/Assets.h"
 #include "AIngine/GameObject.h"
 #include "AIngine/Physics.h"
+#include "AIngine/Graphics.h"
 #include "World.h"
 
 // EntryPoint
