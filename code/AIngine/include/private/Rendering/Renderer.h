@@ -26,13 +26,20 @@ namespace AIngine::Rendering {
 		void initRenderData();
 		void SetViewport();
 
+	public:
+		static bool AnimateOutline;
+		static void SetAnimateOutlineActive(bool active) { AnimateOutline = active; }
+
+
 	private:
-		void RenderSprite( Texture2D& texture);
+		void RenderSprite( Texture2D& texture, GLShaderProgram* shader);
+		void RenderOutline(Texture2D& texture);
 
 	private:
 		std::vector<glm::mat4> m_matrixStack;
 		glm::mat4 m_modelMatrix = glm::mat4(1.0f);
 		GLShaderProgram* m_shader;
+		GLShaderProgram* m_outlineShader;
 		GLuint m_quadVAO;
 
 	};
