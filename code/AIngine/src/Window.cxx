@@ -3,6 +3,9 @@
 #include "Events/ApplicationEvents.h"
 #include "Events/InputEvents.h"
 
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+
 
 AIngine::Window::Window(const WindowConfig & config)
 {
@@ -107,6 +110,11 @@ glm::vec2 AIngine::Window::GetMonitorResolution() const
 {
 	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	return glm::vec2(mode->width, mode->height);
+}
+
+HWND AIngine::Window::GetWin32Window() const
+{
+	return glfwGetWin32Window(m_window);
 }
 
 AIngine::Window* AIngine::Window::Create(const WindowConfig & config)

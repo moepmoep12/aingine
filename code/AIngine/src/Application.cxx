@@ -5,6 +5,7 @@
 #include "Editor/Editor.h"
 #include "Rendering/Renderer.h"
 #include "Structures/SceneGraph.h"
+#include "AIngine/Sounds.h"
 
 #include <memory>
 
@@ -46,6 +47,12 @@ namespace AIngine {
 					new BitmapAssetFactory()
 					))
 				);
+
+			m_assetRegistry.RegisterFactory<SoundAsset>(
+				std::move(std::unique_ptr<SoundAssetFactory>(
+					new SoundAssetFactory()
+					))
+				);
 		}
 
 		// load shader
@@ -67,6 +74,8 @@ namespace AIngine {
 		AIngine::Assets::BitmapAsset* bitmap = m_assetRegistry.Load<AIngine::Assets::BitmapAsset>(path);
 
 		m_Graphics = new AIngine::Graphics();
+
+		PushLayer(new Sounds());
 	}
 
 	Application::~Application()
