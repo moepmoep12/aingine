@@ -54,6 +54,17 @@ add_subdirectory("${THIRD_PARTY_DIR}/freetype2/")
 
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 
+#
+# --- cute_sound (manual) --- ##################
+#
+set(CUTE_SOUND_INCLUDE_DIR ${THIRD_PARTY_DIR}/cute_sound/)
+file(GLOB CUTE_SOUND_HEADER CUTE_SOUND_INCLUDE_DIR/*.h)
+
+add_library(cute_sound INTERFACE 
+						${CUTE_SOUND_HEADER}
+						)
+include_directories(cute_sound PUBLIC ${CUTE_SOUND_INCLUDE_DIR})
+target_include_directories(cute_sound INTERFACE ${CUTE_SOUND_INCLUDE_DIR})
 
 #
 # --- Nothings/STB header-only libs (manual) --- ##################

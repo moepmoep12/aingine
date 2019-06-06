@@ -23,6 +23,7 @@ set(AINGINE_HEADER
 		include/public/AIngine/KeyCodes.h
 		include/public/AIngine/Macros.h
 		include/public/AIngine/Physics.h
+		include/public/AIngine/Sounds.h
 		include/public/AIngine/World.h
 		include/public/Assets/Assets.h
 		include/public/Debug/log.h
@@ -66,6 +67,7 @@ set(AINGINE_SRC
 		src/AIngine/Graphics.cxx
 		src/AIngine/Input.cxx
 		src/AIngine/Physics.cxx
+		src/AIngine/Sounds.cxx
 		src/AIngine/World.cxx
         src/Assets/Assets.cxx
 		src/Debug/gl_error.cxx
@@ -125,6 +127,7 @@ target_link_libraries(Engine
 		cxxopts
 		xcsrlib
 		freetype
+		cute_sound
         )
 
 #
