@@ -7,6 +7,7 @@
 
 #include "Rendering/bitmap.h"
 #include "Rendering/shader.h"
+#include "cute_sound.h"
 
 namespace AIngine {
 	class Application;
@@ -142,6 +143,48 @@ namespace AIngine::Assets {
 		}
 	};
 
+	/********************************** SoundAsset ******************************************/
+	class SoundAsset :public AssetBase
+	{
+		friend class SoundAssetFactory;
+
+	public:
+		cs_play_sound_def_t& GetSound() {
+			return m_soundDef;
+		}
+
+		virtual ~SoundAsset() {
+			cs_free_sound(&m_loadedSound);
+		};
+
+	private:
+		cs_loaded_sound_t m_loadedSound;
+		cs_play_sound_def_t m_soundDef;
+
+	protected:
+		SoundAsset(std::string const &path)
+			: AssetBase(path), m_loadedSound(cs_load_wav(path.c_str())) 
+		{
+			m_soundDef = cs_make_def(&m_loadedSound);
+		}
+	};
+
+	class SoundAssetFactory : public AssetFactory {
+
+		friend class AssetRegistry;
+
+	public:
+		virtual ~SoundAssetFactory() {}
+
+	protected:
+		virtual std::unique_ptr<AssetBase> LoadAsset(std::string const & path) override
+		{
+			return std::unique_ptr<SoundAsset>(new SoundAsset(path));
+		}
+	};
+
+
+	/********************************** AssetRegistry ******************************************/
 
 	class AssetRegistry
 	{
