@@ -4,10 +4,12 @@
 #include <string>
 #include <typeindex>
 #include <vector>
+#include <sstream>
 
 #include "Rendering/bitmap.h"
 #include "Rendering/shader.h"
 #include "cute_sound.h"
+#include "Rendering/Font.h"
 
 namespace AIngine {
 	class Application;
@@ -163,7 +165,7 @@ namespace AIngine::Assets {
 
 	protected:
 		SoundAsset(std::string const &path)
-			: AssetBase(path), m_loadedSound(cs_load_wav(path.c_str())) 
+			: AssetBase(path), m_loadedSound(cs_load_wav(path.c_str()))
 		{
 			m_soundDef = cs_make_def(&m_loadedSound);
 		}
@@ -180,6 +182,61 @@ namespace AIngine::Assets {
 		virtual std::unique_ptr<AssetBase> LoadAsset(std::string const & path) override
 		{
 			return std::unique_ptr<SoundAsset>(new SoundAsset(path));
+		}
+	};
+
+	/********************************** FontAsset ******************************************/
+
+	class FontAsset :public AssetBase
+	{
+		friend class FontAssetFactory;
+
+	public:
+		virtual ~FontAsset() {};
+		AIngine::Rendering::Font& GetFont() { return m_font; }
+
+	private:
+		AIngine::Rendering::Font m_font;
+
+
+	protected:
+		FontAsset(std::string const &path, unsigned int size)
+			: AssetBase(path), m_font(path.c_str(), size) {}
+	};
+
+	class FontAssetFactory : public AssetFactory {
+
+		friend class AssetRegistry;
+
+	public:
+		virtual ~FontAssetFactory() {}
+
+	protected:
+		virtual std::unique_ptr<AssetBase> LoadAsset(std::string const & path) override
+		{
+			unsigned int size;
+			std::string p;
+			GetPathAndSize(path, &size, &p);
+			return std::unique_ptr<FontAsset>(new FontAsset(p, size));
+		}
+
+	private:
+		void GetPathAndSize(const std::string& path, unsigned int* size, std::string* outpath) {
+			std::istringstream s(path);
+			unsigned int i = 0;
+			for (std::string line; std::getline(s, line); )
+			{
+				switch (i) {
+				case 0:
+					*outpath = line;
+					break;
+				case 1:
+					*size = std::stoi(line);
+					break;
+				}
+				i++;
+			}
+
 		}
 	};
 

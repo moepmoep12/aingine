@@ -64,7 +64,7 @@ namespace CrappyBird {
 
 		std::stringstream ss;
 		ss << "Score: " << s_Score;
-		AIngine::Graphics::Text(ss.str().c_str(), glm::vec2(20, 30), glm::vec2(2.5), glm::vec3(0, 0, 1));
+		AIngine::Graphics::Text(ss.str().c_str(), glm::vec2(20, 30), glm::vec2(1), glm::vec3(0, 0, 1));
 	}
 
 	void CrappyBird::OnAppEvent(AIngine::Events::Event & e)

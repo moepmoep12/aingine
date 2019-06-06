@@ -15,6 +15,7 @@
 #include "AIngine/Graphics.h"
 #include "World.h"
 #include "Sounds.h"
+#include "Rendering/Font.h"
 
 // EntryPoint
 #include "EntryPoint.h"
@@ -27,6 +28,7 @@ typedef AIngine::Assets::AssetRegistry Assets;
 
 typedef AIngine::Assets::BitmapAsset BitmapAsset;
 typedef AIngine::Assets::SoundAsset SoundAsset;
+typedef AIngine::Assets::FontAsset FontAsset;
 
 
 

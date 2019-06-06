@@ -11,6 +11,7 @@
 #include <glad/glad.h>
 #include <algorithm>
 #include <map>
+#include <sstream>
 
 namespace AIngine {
 
@@ -355,20 +356,11 @@ namespace AIngine {
 
 	};
 
-
-	// inspired/copied from https://learnopengl.com/code_viewer.php?code=in-practice/text_rendering
-	/// Holds all state information relevant to a character as loaded using FreeType
-	struct RenderableCharacter {
-		unsigned int TextureID;
-		glm::ivec2 Size;
-		glm::ivec2 Bearing;
-		unsigned int Advance;
-	};
-
 	struct GLText {
 
 		struct TextElement {
 			std::string msg;
+			AIngine::Rendering::Font* font;
 			glm::vec2 position;
 			glm::vec2 scale;
 			glm::vec3 color;
@@ -376,7 +368,7 @@ namespace AIngine {
 		};
 
 		void Create() {
-
+			//"assets/Intellgine/fonts/arial.ttf"
 			// load shader
 			std::string vs("assets/Intellgine/shader/screenshader/vertexText.glsl");
 			std::string fs("assets/Intellgine/shader/screenShader/fragmentText.glsl");
@@ -384,60 +376,11 @@ namespace AIngine {
 			path.append(vs).append(";").append(fs);
 			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
 			m_shader->SetInteger("text", 0,false);
-			// load FreeType
-			FT_Library ft;
-			bool initSucess = !FT_Init_FreeType(&ft);
-			assert(initSucess);
-			FT_Face face;
-			bool faceSucess = !FT_New_Face(ft, "assets/Intellgine/fonts/arial.ttf", 0, &face);
-			assert(faceSucess);
-			// Set size to load glyphs as
-			FT_Set_Pixel_Sizes(face, 0, 20);
-			// Disable byte-alignment restriction
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-			// Load first 128 characters of ASCII set
-			for (GLubyte c = 0; c < 128; c++)
-			{
-				// Load character glyph 
-				if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-				{
-					CORE_ERROR("ERROR::FREETYTPE: Failed to load Glyph {0}", c);
-					continue;
-				}
-				// Generate texture
-				GLuint texture;
-				glGenTextures(1, &texture);
-				glBindTexture(GL_TEXTURE_2D, texture);
-				glTexImage2D(
-					GL_TEXTURE_2D,
-					0,
-					GL_RED,
-					face->glyph->bitmap.width,
-					face->glyph->bitmap.rows,
-					0,
-					GL_RED,
-					GL_UNSIGNED_BYTE,
-					face->glyph->bitmap.buffer
-				);
-				// Set texture options
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				// Now store character for later use
-				RenderableCharacter character = {
-					texture,
-					glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-					glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-					face->glyph->advance.x
-				};
-				Characters.insert(std::pair<GLchar, RenderableCharacter>(c, character));
-			}
-			glBindTexture(GL_TEXTURE_2D, 0);
-			// Destroy FreeType once we're finished
-			FT_Done_Face(face);
-			FT_Done_FreeType(ft);
+			std::stringstream ss;
+			ss << "assets/Intellgine/fonts/arial.ttf";
+			ss << "\n";
+			ss << "50";
+			m_standardFont = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::FontAsset>(ss.str())->GetFont();
 
 
 			// Configure VAO/VBO for texture quads
@@ -454,10 +397,13 @@ namespace AIngine {
 			m_count = 0;
 		}
 
-		void AddText(std::string text, glm::vec2 screenPosition, glm::vec2 scale, glm::vec3 color, float alpha) {
+		void AddText(std::string text, glm::vec2 screenPosition, glm::vec2 scale, glm::vec3 color, float alpha, AIngine::Rendering::Font* font = nullptr) {
 			if (m_count <= e_maxTextElements) {
+				if (!font)
+					font = m_standardFont;
 				textStack[m_count] = TextElement
 				{ text,
+					font,
 					screenPosition,
 					scale,
 					color,
@@ -503,10 +449,10 @@ namespace AIngine {
 				std::string::const_iterator c;
 				for (c = textElement.msg.begin(); c != textElement.msg.end(); c++)
 				{
-					RenderableCharacter ch = Characters[*c];
+					AIngine::Rendering::RenderableCharacter ch = textElement.font->Characters[*c];
 
 					GLfloat xpos = x + ch.Bearing.x * textElement.scale.x;
-					GLfloat ypos = y + (this->Characters['H'].Bearing.y - ch.Bearing.y) * textElement.scale.y;
+					GLfloat ypos = y + (textElement.font->Characters['H'].Bearing.y - ch.Bearing.y) * textElement.scale.y;
 
 					GLfloat w = ch.Size.x * textElement.scale.x;
 					GLfloat h = ch.Size.y * textElement.scale.y;
@@ -544,7 +490,7 @@ namespace AIngine {
 		int32 m_count;
 		TextElement textStack[e_maxTextElements];
 		AIngine::Rendering::GLShaderProgram* m_shader;
-		std::map<GLchar, RenderableCharacter> Characters;
+		AIngine::Rendering::Font* m_standardFont;
 
 	};
 	Graphics* Graphics::s_instance = nullptr;
@@ -629,10 +575,10 @@ namespace AIngine {
 		}
 	}
 
-	void Graphics::Text(const char * text, const glm::vec2 & screenPosition, const glm::vec2 & scale, const glm::vec3 & color, float alpha)
+	void Graphics::Text(const char * text, const glm::vec2 & screenPosition, const glm::vec2 & scale, const glm::vec3 & color, float alpha, AIngine::Rendering::Font* font)
 	{
 		if (s_instance) {
-			s_instance->m_text->AddText(std::string(text), screenPosition, scale, color, alpha);
+			s_instance->m_text->AddText(std::string(text), screenPosition, scale, color, alpha,font);
 		}
 	}
 

@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Rendering/Font.h"
+
 #include <glm/glm.hpp>
 #include <Box2D/Box2D.h>
-
 
 namespace AIngine {
 
@@ -27,7 +28,7 @@ namespace AIngine {
 		static void Point(const glm::vec2& vWorl, float32 size, const glm::vec3& color);
 		static void Point(const b2Vec2& vWorl, float32 size, const b2Color& color);
 
-		static void Text(const char* text, const glm::vec2& screenPosition, const glm::vec2& scale = glm::vec2(1.0), const glm::vec3& color = glm::vec3(1.0), float alpha = 1.0f);
+		static void Text(const char* text, const glm::vec2& screenPosition, const glm::vec2& scale = glm::vec2(1.0), const glm::vec3& color = glm::vec3(1.0), float alpha = 1.0f, AIngine::Rendering::Font* font = nullptr);
 
 	private:
 		GLRenderPoints* m_points;

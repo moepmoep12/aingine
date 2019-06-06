@@ -6,6 +6,7 @@
 #include "Rendering/Renderer.h"
 #include "Structures/SceneGraph.h"
 #include "AIngine/Sounds.h"
+#include "Rendering/Font.h"
 
 #include <memory>
 
@@ -51,6 +52,12 @@ namespace AIngine {
 			m_assetRegistry.RegisterFactory<SoundAsset>(
 				std::move(std::unique_ptr<SoundAssetFactory>(
 					new SoundAssetFactory()
+					))
+				);
+
+			m_assetRegistry.RegisterFactory<FontAsset>(
+				std::move(std::unique_ptr<FontAssetFactory>(
+					new FontAssetFactory()
 					))
 				);
 		}

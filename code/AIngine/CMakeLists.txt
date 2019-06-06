@@ -32,6 +32,7 @@ set(AINGINE_HEADER
 		include/public/Events/InputEvents.h	
 		include/public/Rendering/bitmap.h
 		include/public/Rendering/Camera.h
+		include/public/Rendering/Font.h
 		include/public/Rendering/shader.h
 		include/public/Rendering/texture.h
 		include/public/Rendering/Viewport.h
@@ -81,6 +82,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/TransformComponentWidget.cxx
 		src/Rendering/bitmap.cxx
 		src/Rendering/Camera.cxx
+		src/Rendering/Font.cxx
 		src/Rendering/PhysicsRenderer.cxx
 		src/Rendering/Renderer.cxx
 		src/Rendering/shader.cxx
