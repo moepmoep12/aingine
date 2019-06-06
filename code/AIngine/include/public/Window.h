@@ -54,6 +54,7 @@ namespace AIngine {
 		inline bool IsWindowActive() const { return !glfwWindowShouldClose(m_window); }
 		virtual void* GetNativeWindow() const { return m_window; }
 		glm::vec2 GetMonitorResolution() const;
+		HWND GetWin32Window() const;
 
 		static Window* Create(const WindowConfig& config = WindowConfig());
 

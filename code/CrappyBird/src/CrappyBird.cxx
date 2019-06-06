@@ -15,7 +15,7 @@ namespace CrappyBird {
 	static glm::vec2 initialCloud1Pos;
 	static glm::vec2 initialCloud2Pos;
 
-
+	static SoundAsset* s_gameMusic = nullptr;
 
 	void CrappyBird::CrappyBird::OnAppStartUp()
 	{
@@ -25,11 +25,18 @@ namespace CrappyBird {
 		SpawnObstacles();
 		//disable phys debug draw
 		AIngine::World::SetPhysicsDebugDrawActive(false);
+
+		// load game music
+		std::string soundPath = "assets/CrappyBird/sounds/Off_Limits.wav";
+		s_gameMusic = Assets::Load<SoundAsset>(soundPath);
+		s_gameMusic->GetSound().looped = true;
+		Sounds::Play(*s_gameMusic);
 	}
 
 
 	void CrappyBird::CrappyBird::OnAppShutDown()
 	{
+		s_gameMusic->GetSound().paused = true;
 	}
 
 	static float s_Score = 0.0f;
@@ -57,7 +64,7 @@ namespace CrappyBird {
 
 		std::stringstream ss;
 		ss << "Score: " << s_Score;
-		AIngine::Graphics::Text(ss.str().c_str(), glm::vec2(20, 30), glm::vec2(2.5), glm::vec3(0,0,1));
+		AIngine::Graphics::Text(ss.str().c_str(), glm::vec2(20, 30), glm::vec2(2.5), glm::vec3(0, 0, 1));
 	}
 
 	void CrappyBird::OnAppEvent(AIngine::Events::Event & e)
