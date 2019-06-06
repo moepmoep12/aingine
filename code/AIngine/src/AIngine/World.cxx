@@ -99,7 +99,9 @@ namespace AIngine {
 		delete m_physicsWorld;
 		delete m_sceneGraph;
 		delete m_contactListener;
+#ifdef _DEBUG
 		if (m_physRenderer) delete m_physRenderer;
+#endif
 	}
 	void World::CreateWorldBounds()
 	{
