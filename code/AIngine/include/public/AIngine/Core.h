@@ -14,10 +14,19 @@
 #include "AIngine/Physics.h"
 #include "AIngine/Graphics.h"
 #include "World.h"
+#include "Sounds.h"
 
 // EntryPoint
 #include "EntryPoint.h"
 
+
+typedef AIngine::Sounds Sounds;
+typedef AIngine::GameObject GameObject;
+typedef AIngine::Graphics Graphics;
+typedef AIngine::Assets::AssetRegistry Assets;
+
+typedef AIngine::Assets::BitmapAsset BitmapAsset;
+typedef AIngine::Assets::SoundAsset SoundAsset;
 
 
 
