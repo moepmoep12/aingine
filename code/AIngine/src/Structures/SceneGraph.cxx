@@ -57,6 +57,12 @@ namespace AIngine::Structures {
 		updateTraverser.Traverse(m_Root);
 	}
 
+	void SceneGraph::OnEvent(AIngine::Events::EventData & e)
+	{
+		EventTraverser et(e);
+		et.Traverse(m_Root);
+	}
+
 	/********************************** DELETE TRAVERSER ****************************************/
 
 	DeleteTraverser::DeleteTraverser(AIngine::Memory::Pool<GameObject>& gameObjectPool)
@@ -152,6 +158,56 @@ namespace AIngine::Structures {
 			Component* comp = *it._Ptr;
 			if (comp->IsActive()) {
 				comp->OnUpdate(m_deltaTime);
+			}
+			it++;
+		}
+		return true;
+	}
+
+	/********************************** EVENT TRAVERSER ****************************************/
+
+
+	EventTraverser::EventTraverser(AIngine::Events::EventData & e)
+		:m_eventData(e)
+	{
+	}
+
+	EventTraverser::~EventTraverser()
+	{
+	}
+
+	bool EventTraverser::Traverse(GameObject * root)
+	{
+		return root->Accept(*this);
+	}
+
+	bool EventTraverser::Enter(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+
+		while (it != node.GetComponents().end()) {
+			Component* comp = *it._Ptr;
+			if (comp->IsActive()) {
+				comp->OnEvent(m_eventData);
+			}
+			it++;
+		}
+		return true;
+	}
+
+	bool EventTraverser::Leave(GameObject & node)
+	{
+		return false;
+	}
+
+	bool EventTraverser::Visit(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+
+		while (it != node.GetComponents().end()) {
+			Component* comp = *it._Ptr;
+			if (comp->IsActive()) {
+				comp->OnEvent(m_eventData);
 			}
 			it++;
 		}

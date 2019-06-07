@@ -23,6 +23,7 @@ namespace AIngine::Structures {
 		GameObject& GetRoot() { return *m_Root; }
 
 		virtual void OnUpdate(float delta) override;
+		virtual void OnEvent(AIngine::Events::EventData& e) override;
 
 		GameObject* const SpawnObject(const std::string& name = std::string("GameObject"), GameObject* parent = nullptr, const glm::vec2& position = glm::vec2(0.0f), const glm::vec2& scale = glm::vec2(1.0f), const float rotation = 0.0f);
 
@@ -36,7 +37,7 @@ namespace AIngine::Structures {
 		void Reset();
 	};
 
-	// traverses 
+	// Deletes the specified node and the subtree rooted at that node 
 	class DeleteTraverser : public Traverser {
 
 	public:
@@ -56,6 +57,7 @@ namespace AIngine::Structures {
 		AIngine::Memory::Pool<GameObject>* m_gameObjectPool;
 	};
 
+	// Traverses the SceneGraph to call the Update() method of each active Component of each GameObject
 	class UpdateTraverser : public Traverser {
 	public:
 
@@ -72,6 +74,22 @@ namespace AIngine::Structures {
 
 	private:
 		float m_deltaTime;
+	};
+
+	class EventTraverser : public Traverser {
+	public:
+		EventTraverser(AIngine::Events::EventData& e);
+		virtual ~EventTraverser();
+
+		// Inherited via Traverser
+
+		virtual bool Traverse(GameObject* root) override;
+		virtual bool Enter(GameObject & node) override;
+		virtual bool Leave(GameObject & node) override;
+		virtual bool Visit(GameObject & node) override;
+
+	private:
+		AIngine::Events::EventData& m_eventData;
 	};
 
 
