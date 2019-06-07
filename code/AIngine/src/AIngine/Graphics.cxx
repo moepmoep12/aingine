@@ -582,4 +582,36 @@ namespace AIngine {
 		}
 	}
 
+	void Graphics::Circle(const glm::vec2 & center, float radius, const glm::vec3 & color)
+	{
+		const float32 k_segments = 16.0f;
+		const float32 k_increment = 2.0f * b2_pi / k_segments;
+		float32 sinInc = sinf(k_increment);
+		float32 cosInc = cosf(k_increment);
+		glm::vec2 r1(1.0f, 0.0f);
+		glm::vec2 v1 = center + radius * r1;
+		for (int32 i = 0; i < k_segments; ++i)
+		{
+			// Perform rotation to avoid additional trigonometry.
+			glm::vec2 r2;
+			r2.x = cosInc * r1.x - sinInc * r1.y;
+			r2.y = sinInc * r1.x + cosInc * r1.y;
+			glm::vec2 v2 = center + radius * r2;
+			Line(v1, v2, color);
+			r1 = r2;
+			v1 = v2;
+		}
+	}
+
+	void Graphics::Box(const glm::vec2 * vertices, const glm::vec3 color)
+	{
+		glm::vec2 p1 = vertices[4 - 1];
+		for (int32 i = 0; i < 4; ++i)
+		{
+			glm::vec2 p2 = vertices[i];
+			Line(p1, p2, color);
+			p1 = p2;
+		}
+	}
+
 }

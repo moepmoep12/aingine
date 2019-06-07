@@ -30,6 +30,9 @@ namespace AIngine {
 
 		static void Text(const char* text, const glm::vec2& screenPosition, const glm::vec2& scale = glm::vec2(1.0), const glm::vec3& color = glm::vec3(1.0), float alpha = 1.0f, AIngine::Rendering::Font* font = nullptr);
 
+		static void Circle(const glm::vec2& center, float radius, const glm::vec3& color);
+		static void Box(const glm::vec2* vertices, const glm::vec3 color);
+
 	private:
 		GLRenderPoints* m_points;
 		GLRenderLines* m_lines;
