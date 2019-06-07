@@ -17,7 +17,6 @@ namespace AIngine {
 		virtual void OnAttach();
 		virtual void OnDetach();
 		virtual void OnUpdate(float delta) {}
-		virtual void OnEvent(AIngine::Events::Event& e) {}
 		virtual void OnImGuiRender() {}
 
 		static void Play(AIngine::Assets::SoundAsset& soundAsset);
