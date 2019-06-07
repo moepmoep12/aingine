@@ -28,6 +28,7 @@ namespace AIngine::Structures {
 			return glm::vec2(x, y);
 		}
 
+		// Set position of the top left corner
 		void SetPosition(const glm::vec2& pos) {
 			x = pos.x;
 			y = pos.y;
