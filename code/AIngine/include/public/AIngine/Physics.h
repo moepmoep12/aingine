@@ -1,5 +1,7 @@
 #pragma once
 #include "AIngine/Component.h"
+#include "Events/Event.h"
+
 #include <Box2D/Box2D.h>
 #include <glm/glm.hpp>
 
@@ -49,6 +51,10 @@ namespace AIngine::Physics {
 	class PhysicsComponent : public AIngine::Component {
 	public:
 
+		class CollisionEvent : public AIngine::Events::Event<void, PhysicsComponent*> {
+
+		};
+
 		friend class AIngine::Editor::SceneGraphWidget;
 
 	public:
@@ -75,7 +81,7 @@ namespace AIngine::Physics {
 		void ApplyLinearImpulseToCenter(const b2Vec2& impulse);
 
 		inline bool IsCollided() const { return m_collided; }
-		inline void SetCollision(bool collided, b2Fixture* other) { m_collided = collided; m_otherCollided = other; }
+		void SetCollision(bool collided, b2Fixture* other);
 
 		inline const PhysicsProperties& GetProperties() const { return m_properties; }
 		inline const PhysicsBodyInformation& GetBodyInformation() const { return m_bodyInformation; }
@@ -85,6 +91,10 @@ namespace AIngine::Physics {
 		glm::vec2 GetVelocity() const;
 
 		PhysicsComponent* GetOtherCollider();
+
+	public:
+		CollisionEvent OnCollisionBegin;
+		CollisionEvent OnCollisionEnd;
 
 	private:
 		b2Body* m_body;
