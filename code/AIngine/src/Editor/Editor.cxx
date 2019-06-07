@@ -5,6 +5,7 @@
 #include "AIngine/Input.h"
 #include "AIngine/Constants.h"
 #include "Structures/SceneGraph.h"
+#include "Editor/Serialization.h"
 
 // widgets
 #include "Editor/Widgets/EditorWidget.h"
@@ -14,6 +15,7 @@
 #include "Editor/Widgets/MenuBarWidget.h"
 
 #include <glm/geometric.hpp>
+#include <fstream>
 
 namespace AIngine::Editor {
 
@@ -22,10 +24,12 @@ namespace AIngine::Editor {
 	void Editor::OnAttach()
 	{
 		//activate widgets?
+		m_isInPlayMode = false;
 	}
 
 	void Editor::OnDetach()
 	{
+		m_isInPlayMode = true;
 	}
 
 	void Editor::OnUpdate(float delta)
@@ -140,14 +144,47 @@ namespace AIngine::Editor {
 		}
 	}
 
+	void Editor::OnWindowClose()
+	{
+		SaveOpenScene();
+	}
+
+	static const std::string lastSceneFilePath = "scenes.txt";
+
+	void Editor::LoadLastScene()
+	{
+		std::ifstream file;
+		file.open(lastSceneFilePath);
+		std::getline(file, m_currentScene);
+		if (!(m_currentScene.empty())) {
+			AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(m_currentScene);
+		}
+		file.close();
+	}
+
+	void Editor::SaveOpenScene()
+	{
+		std::ofstream file(lastSceneFilePath);
+		file << m_currentScene;
+		AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(m_currentScene);
+		file.close();
+	}
+
 	Editor::Editor()
 		: m_app(AIngine::Application::Get())
 	{
 		ASSERT(!s_instance, "Editor already running");
 		s_instance = this;
 
-		// allocate widget memory?
+		// register callback
+		m_app.m_window->GetWindowData().OnWindowClosedEvent += [=]() {
+			this->OnWindowClose();
+		};
 
+		// load the last opened scene
+		LoadLastScene();
+
+		// Create Editor Widgets
 		m_widgets.push_back(new SceneGraphWidget(*m_app.m_world->m_sceneGraph));
 		m_widgets.push_back(new LogWidget());
 		m_widgets.push_back(new CameraWidget(*m_app.m_camera));
@@ -263,6 +300,25 @@ namespace AIngine::Editor {
 			delete m_widgets[i];
 		}
 		m_widgets.clear();
+	}
+
+	void Editor::SetIsInPlayMode(bool value)
+	{
+		if (s_instance) {
+			if (value) {
+				// save the scene
+				s_instance->SaveOpenScene();
+				s_instance->m_app.OnAppStartUp();
+			}
+			else {
+				s_instance->m_app.OnAppShutDown();
+				ResetSceneGraph();
+				// load the scene
+				s_instance->LoadLastScene();
+			}
+			s_instance->m_isInPlayMode = value;
+
+		}
 	}
 
 }

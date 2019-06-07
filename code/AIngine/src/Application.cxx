@@ -106,7 +106,7 @@ namespace AIngine {
 		// create camera
 		m_camera = new AIngine::Rendering::Camera(*m_viewport, glm::vec2(m_bounds.y - m_bounds.x, m_bounds.z - m_bounds.w));
 
-		// create Editor
+		// create Editor if we're in Debug
 #ifdef _DEBUG
 		m_editor = new AIngine::Editor::Editor();
 		PushOverlay(m_editor);
@@ -117,7 +117,9 @@ namespace AIngine {
 
 		m_renderer->initRenderData();
 
-		OnAppStartUp();
+		if ((AIngine::Editor::Editor::GetIsInPlayMode())) {
+			OnAppStartUp();
+		}
 
 		CORE_INFO("App is running!");
 
@@ -136,8 +138,9 @@ namespace AIngine {
 			// handle user input
 			m_window->PollInput();
 
-			// update game
-			OnAppUpdate();
+			if ((AIngine::Editor::Editor::GetIsInPlayMode()))
+				// update game
+				OnAppUpdate();
 
 			// update logic
 			for (AIngine::Structures::Layer* layer : m_layerStack)
@@ -187,8 +190,10 @@ namespace AIngine {
 				break;
 		}
 
-		// propagate it to the game
-		OnAppEvent(e);
+		if ((AIngine::Editor::Editor::GetIsInPlayMode()))
+			// propagate it to the game
+			OnAppEvent(e);
+
 	}
 
 	void Application::PushLayer(AIngine::Structures::Layer * layer)

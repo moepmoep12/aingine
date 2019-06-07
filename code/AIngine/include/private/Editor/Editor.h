@@ -72,6 +72,11 @@ namespace AIngine::Editor {
 
 		virtual ~Editor() override;
 
+		static inline bool GetIsInPlayMode() { if (s_instance) return s_instance->m_isInPlayMode; else return true; }
+		static void SetIsInPlayMode(bool value);
+
+		static inline std::string GetCurrentScene() { if (s_instance) return s_instance->m_currentScene; else return std::string(); }
+		static void SetCurrentScene(const std::string& path) { if (s_instance) s_instance->m_currentScene = path; }
 
 	private:
 		void DisplayFramerate(float delta) const;
@@ -82,6 +87,9 @@ namespace AIngine::Editor {
 		bool OnWindowResized(AIngine::Events::WindowResizeEvent::WindowResizeEventData& e);
 		bool OnMouseScrolled(AIngine::Events::MouseScrolledEvent::MouseScrolledEventData& e);
 		void MoveCamera(float delta);
+		void OnWindowClose();
+		void LoadLastScene();
+		void SaveOpenScene();
 		Editor();
 
 	private:
@@ -91,5 +99,7 @@ namespace AIngine::Editor {
 		std::vector<EditorWidget*> m_widgets;
 		std::vector<AIngine::GameObject*> m_selectedObjects;
 		AIngine::Events::ViewportChangedEvent OnViewportChangedEvent;
+		bool m_isInPlayMode = false;
+		std::string m_currentScene;
 	};
 }

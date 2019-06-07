@@ -43,6 +43,7 @@ namespace AIngine::Editor::Serialization
 
 	private:
 		nlohmann::json SerializeGameObject(GameObject& obj);
+		nlohmann::json SerializeWorld();
 		nlohmann::json SerializeTexture2D(AIngine::Rendering::Texture2D& texture);
 		nlohmann::json SerializePhysicsComponent(AIngine::Physics::PhysicsComponent& physComp);
 		nlohmann::json* m_children;

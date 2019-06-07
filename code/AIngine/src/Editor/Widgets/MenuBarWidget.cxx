@@ -22,7 +22,7 @@ namespace AIngine::Editor {
 
 			if (ImGui::BeginMenu("Scene"))
 			{
-				static std::string openedScene;
+
 				static const nfdchar_t *filterList = "txt,json";
 
 				if (ImGui::MenuItem("Open")) {
@@ -32,17 +32,17 @@ namespace AIngine::Editor {
 
 					if (result == NFD_OKAY)
 					{
-						openedScene = std::string(outPath);
+						AIngine::Editor::Editor::SetCurrentScene(std::string(outPath));
 						// delete the old tree
 						AIngine::Editor::Editor::ResetSceneGraph();
-						AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(openedScene);
+						AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(AIngine::Editor::Editor::GetCurrentScene());
 						free(outPath);
 					}
 				}
 
-				if (ImGui::MenuItem("Save", "STRG + S", false, !openedScene.empty()))
+				if (ImGui::MenuItem("Save", "STRG + S", false, !AIngine::Editor::Editor::GetCurrentScene().empty()))
 				{
-					AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(openedScene);
+					AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(AIngine::Editor::Editor::GetCurrentScene());
 				}
 
 				if (ImGui::MenuItem("Save As"))
@@ -52,9 +52,9 @@ namespace AIngine::Editor {
 
 					if (result == NFD_OKAY)
 					{
-						openedScene = std::string(outPath);
+						AIngine::Editor::Editor::SetCurrentScene(std::string(outPath));
 						// delete the old tree
-						AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(openedScene);
+						AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(AIngine::Editor::Editor::GetCurrentScene());
 						free(outPath);
 					}
 				}
@@ -97,6 +97,11 @@ namespace AIngine::Editor {
 				}
 
 				ImGui::EndMenu();
+			}
+
+			static bool play = AIngine::Editor::Editor::GetIsInPlayMode();
+			if (ImGui::Checkbox("Play", &play)) {
+				AIngine::Editor::Editor::SetIsInPlayMode(play);
 			}
 
 			ImGui::EndMainMenuBar();

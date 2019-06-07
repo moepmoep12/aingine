@@ -4,6 +4,8 @@
 #include "AIngine/Physics.h"
 #include "Structures/SceneGraph.h"
 #include "Rendering/PhysicsRenderer.h"
+#include "Editor/Editor.h"
+
 
 namespace AIngine {
 
@@ -22,6 +24,14 @@ namespace AIngine {
 	{
 		if (s_instance) {
 			s_instance->DestroyObject(gameobject);
+		}
+	}
+
+	void World::SetGravity(const glm::vec2 & gravity)
+	{
+		if (s_instance) {
+			s_instance->m_physicsWorld->SetGravity(b2Vec2(gravity.x, gravity.y));
+			s_instance->m_gravity = gravity;
 		}
 	}
 
@@ -50,7 +60,10 @@ namespace AIngine {
 	void World::OnUpdate(float delta)
 	{
 		m_sceneGraph->OnUpdate(delta);
-		m_physicsWorld->Step(1.0f / 60.0f, 8, 3);
+
+		if ((AIngine::Editor::Editor::GetIsInPlayMode()))
+			m_physicsWorld->Step(1.0f / 60.0f, 8, 3);
+
 		if (m_isPhysicsDebugDrawn)
 			m_physicsWorld->DrawDebugData();
 	}

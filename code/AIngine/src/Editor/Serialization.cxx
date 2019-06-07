@@ -6,6 +6,7 @@
 #include "Structures/SceneGraph.h"
 #include "AIngine/World.h"
 #include "Assets/Assets.h"
+#include "AIngine/World.h"
 
 #include <fstream>
 #include <vector>
@@ -14,6 +15,14 @@
 namespace AIngine::Editor::Serialization {
 
 	namespace AttributeNames {
+
+		// world
+		const char* WORLD_GRAVITY_X = "gravityX";
+		const char* WORLD_GRAVITY_Y = "gravityY";
+		const char* WORLD_BOTTOMLEFT = "bottomLeft";
+		const char* WORLD_BOTTOMRIGHT = "bottomRight";
+		const char* WORLD_TOPLEFT = "topleft";
+		const char* WORLD_TOPRIGHT = "topRight";
 
 		// GameObject
 		const char* GAMEOBJECT_NAME = "a_name";
@@ -267,6 +276,19 @@ namespace AIngine::Editor::Serialization {
 
 		outer[obj.GetName()] = j;
 		return outer;
+	}
+
+	nlohmann::json SceneGraphSerializer::SerializeWorld()
+	{
+		nlohmann::json j;
+		glm::vec4 bounds = AIngine::World::GetBounds();
+		j[AttributeNames::WORLD_BOTTOMLEFT] = bounds.x;
+		j[AttributeNames::WORLD_BOTTOMRIGHT] = bounds.y;
+		j[AttributeNames::WORLD_TOPLEFT] = bounds.z;
+		j[AttributeNames::WORLD_TOPRIGHT] = bounds.w;
+		j[AttributeNames::WORLD_GRAVITY_X] = AIngine::World::GetGravity().x;
+		j[AttributeNames::WORLD_GRAVITY_Y] = AIngine::World::GetGravity().y;
+		return j;
 	}
 
 	nlohmann::json SceneGraphSerializer::SerializeTexture2D(AIngine::Rendering::Texture2D & texture)
