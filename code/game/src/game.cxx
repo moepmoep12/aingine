@@ -25,7 +25,7 @@ public:
 
 	}
 
-	virtual void OnEvent(AIngine::Events::Event& e) override
+	virtual void OnEvent(AIngine::Events::EventData& e) override
 	{
 		//DEBUG_INFO(e.ToString().c_str());
 	}
@@ -134,12 +134,12 @@ void Game::OnAppUpdate()
 
 }
 
-void Game::OnAppEvent(AIngine::Events::Event & e)
+void Game::OnAppEvent(AIngine::Events::EventData & e)
 {
 #ifndef _DEBUG
-	if (typeid(e) == typeid(AIngine::Events::MouseScrolledEvent)) {
+	if (typeid(e) == typeid(AIngine::Events::MouseScrolledEvent::MouseScrolledEventData)) {
 		if (!IsAnyUiElementHovered()) {
-			AIngine::Events::MouseScrolledEvent scrolledEvent = dynamic_cast<AIngine::Events::MouseScrolledEvent&>(e);
+			AIngine::Events::MouseScrolledEvent::MouseScrolledEventData scrolledEvent = dynamic_cast<AIngine::Events::MouseScrolledEvent::MouseScrolledEventData&>(e);
 			static float zoomSpeed = 35;
 			m_camera->Zoom(scrolledEvent.GetYOffset() * GetDeltaTime() * zoomSpeed);
 		}
@@ -147,9 +147,9 @@ void Game::OnAppEvent(AIngine::Events::Event & e)
 #endif // !_DEBUG
 
 
-	if (typeid(e) == typeid(AIngine::Events::MouseButtonPressedEvent)) {
+	if (typeid(e) == typeid(AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData)) {
 		// mouse pressed
-		AIngine::Events::MouseButtonPressedEvent keyevent = dynamic_cast<AIngine::Events::MouseButtonPressedEvent&>(e);
+		AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData keyevent = dynamic_cast<AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData&>(e);
 
 		if (keyevent.GetMouseButton() == 0 && !IsAnyUiElementHovered() && AIngine::Input::IsKeyPressed(AIngine::KeyCodes::LEFT_CONTROL))
 		{
@@ -172,9 +172,9 @@ void Game::OnAppEvent(AIngine::Events::Event & e)
 		}
 	}
 
-	if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent)) {
+	if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent::KeyPressedEventData)) {
 
-		AIngine::Events::KeyPressedEvent keyEvent = dynamic_cast<AIngine::Events::KeyPressedEvent&>(e);
+		AIngine::Events::KeyPressedEvent::KeyPressedEventData keyEvent = dynamic_cast<AIngine::Events::KeyPressedEvent::KeyPressedEventData&>(e);
 
 		if (keyEvent.GetKeyCode() == AIngine::KeyCodes::F) {
 			glm::vec2 screenPos = glm::vec2(AIngine::Input::GetMouseX(), AIngine::Input::GetMouseY());

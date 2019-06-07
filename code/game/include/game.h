@@ -12,7 +12,7 @@ public:
 	virtual void OnAppStartUp() override;
 	virtual void OnAppShutDown() override;
 	virtual void OnAppUpdate() override;
-	virtual void OnAppEvent(AIngine::Events::Event& e) override;
+	virtual void OnAppEvent(AIngine::Events::EventData& e) override;
 
 
 	enum Shape {

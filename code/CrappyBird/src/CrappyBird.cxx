@@ -67,10 +67,10 @@ namespace CrappyBird {
 		AIngine::Graphics::Text(ss.str().c_str(), glm::vec2(20, 30), glm::vec2(1), glm::vec3(0, 0, 1));
 	}
 
-	void CrappyBird::OnAppEvent(AIngine::Events::Event & e)
+	void CrappyBird::OnAppEvent(AIngine::Events::EventData & e)
 	{
-		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent)) {
-			AIngine::Events::KeyPressedEvent pressedEvent = dynamic_cast<AIngine::Events::KeyPressedEvent&>(e);
+		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent::KeyPressedEventData)) {
+			AIngine::Events::KeyPressedEvent::KeyPressedEventData pressedEvent = dynamic_cast<AIngine::Events::KeyPressedEvent::KeyPressedEventData&>(e);
 			if (pressedEvent.GetKeyCode() == AIngine::KeyCodes::R) {
 				if (!m_running)
 					RestartGame();
