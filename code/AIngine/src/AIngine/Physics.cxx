@@ -140,12 +140,28 @@ namespace AIngine::Physics {
 		b2PolygonShape shape;
 		shape.SetAsBox(width / 2.0f, height / 2.0f);
 
+
 		fixtureDef.shape = &shape;
 		fixtureDef.isSensor = isTrigger;
 
 		m_body = AIngine::World::CreateBody(bodyDef);
 		m_body->CreateFixture(&fixtureDef);
 		m_body->SetUserData(this);
+
+		// counter clock wise
+		b2Vec2 topleft =  b2Vec2(-width/2.0, -height / 2.0);
+		m_bodyInformation.vertices[0] = glm::vec2(topleft.x, topleft.y);
+
+		b2Vec2 bottomLeft = b2Vec2(-width / 2.0, height / 2.0);
+		m_bodyInformation.vertices[1] = glm::vec2(bottomLeft.x, bottomLeft.y);
+
+		b2Vec2 bottomRight = b2Vec2(width / 2.0, height / 2.0);
+		m_bodyInformation.vertices[2] = glm::vec2(bottomRight.x, bottomRight.y);
+
+		b2Vec2 topRight =  b2Vec2(width / 2.0, -height / 2.0);
+		m_bodyInformation.vertices[3] = glm::vec2(topRight.x, topRight.y);
+
+		m_bodyInformation.verticesCount = 4;
 	}
 
 	void PhysicsComponent::CreateEdgeBody(const PhysicsProperties & properties, PhysicsBodyType type, const glm::vec2 & p1Offset, const glm::vec2 & p2Offset, bool isTrigger)

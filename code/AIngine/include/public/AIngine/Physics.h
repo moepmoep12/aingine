@@ -7,9 +7,12 @@
 
 namespace AIngine::Editor {
 	class SceneGraphWidget;
+	class PhysicsComponentWidget;
 }
 
 namespace AIngine::Physics {
+
+	enum { maxVertices = 8 };
 
 	enum PhysicsShape {
 		e_Circle = 0,
@@ -44,7 +47,8 @@ namespace AIngine::Physics {
 		float32 radius;
 		float32 width;
 		float32 height;
-		glm::vec2 vertices[8];
+		glm::vec2 vertices[maxVertices];
+		unsigned int verticesCount = 0;
 	};
 
 
@@ -56,6 +60,7 @@ namespace AIngine::Physics {
 		};
 
 		friend class AIngine::Editor::SceneGraphWidget;
+		friend class AIngine::Editor::PhysicsComponentWidget;
 
 	public:
 		PhysicsComponent(GameObject* owner);
@@ -83,6 +88,9 @@ namespace AIngine::Physics {
 		inline bool IsCollided() const { return m_collided; }
 		void SetCollision(bool collided, b2Fixture* other);
 
+		inline glm::vec2 GetOffset() const { return m_offset; }
+		inline void SetOffset(const glm::vec2& offset) { m_offset = offset; }
+
 		inline const PhysicsProperties& GetProperties() const { return m_properties; }
 		inline const PhysicsBodyInformation& GetBodyInformation() const { return m_bodyInformation; }
 
@@ -102,6 +110,7 @@ namespace AIngine::Physics {
 		bool m_collided = false;
 		PhysicsProperties m_properties;
 		PhysicsBodyInformation m_bodyInformation;
+		glm::vec2 m_offset = glm::vec2(0);
 	};
 
 
