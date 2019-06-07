@@ -53,7 +53,7 @@ namespace AIngine {
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 		virtual void OnUpdate(float delta) override;
-		virtual void OnEvent(AIngine::Events::Event& e) override;
+		virtual void OnEvent(AIngine::Events::EventData& e) override;
 		virtual void OnImGuiRender() override;
 
 	private:

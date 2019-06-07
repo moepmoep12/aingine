@@ -18,7 +18,7 @@ namespace AIngine::Editor {
 		virtual void OnImGuiRender() = 0;
 
 		/* can be used to react to input events*/
-		virtual void OnEvent(AIngine::Events::Event& e) {}
+		virtual void OnEvent(AIngine::Events::EventData& e) {}
 
 		virtual const glm::vec2& GetSize() const { return m_size; }
 		virtual const glm::vec2& GetPosition() const { return m_position; }

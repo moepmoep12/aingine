@@ -2,6 +2,7 @@
 #include "AIngine/Macros.h"
 #include "Events/ApplicationEvents.h"
 #include "Events/InputEvents.h"
+#include "AIngine/KeyCodes.h"
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
@@ -86,11 +87,6 @@ void AIngine::Window::OnUpdate()
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void AIngine::Window::SetEventCallbackFunction(const std::function<void(Events::Event&)>& callback)
-{
-	m_windowData.EventCallback = callback;
-}
-
 void AIngine::Window::SetVSync(bool active)
 {
 	if (active)
@@ -131,16 +127,14 @@ void AIngine::Window::SetGLFWCallbacks()
 		data.Width = width;
 		data.Height = height;
 
-		AIngine::Events::WindowResizeEvent event(width, height);
-		data.EventCallback(event);
+		data.OnWindowResizeEvent(width, height);
 	});
 
 	// WindowClose
 	glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
 	{
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-		AIngine::Events::WindowCloseEvent event;
-		data.EventCallback(event);
+		data.OnWindowClosedEvent();
 	});
 
 	// WindowPosition
@@ -149,8 +143,7 @@ void AIngine::Window::SetGLFWCallbacks()
 		data.XPos = xpos;
 		data.YPos = ypos;
 
-		AIngine::Events::WindowMovedEvent event(xpos, ypos);
-		data.EventCallback(event);
+		data.OnWindowMovedEvent(xpos, ypos);
 	});
 
 	// WindowFocus
@@ -159,12 +152,10 @@ void AIngine::Window::SetGLFWCallbacks()
 		data.HasFocus = focused;
 
 		if (focused) {
-			AIngine::Events::WindowFocusEvent e;
-			data.EventCallback(e);
+			data.OnWindowFocusEvent();
 		}
 		else {
-			AIngine::Events::WindowFocusLostEvent e;
-			data.EventCallback(e);
+			data.OnWindowFocusLostEvent();
 		}
 	});
 
@@ -177,20 +168,23 @@ void AIngine::Window::SetGLFWCallbacks()
 		{
 		case GLFW_PRESS:
 		{
-			AIngine::Events::KeyPressedEvent event(key, 0);
-			data.EventCallback(event);
+			//AIngine::Events::KeyPressedEvent event(key, 0);
+			//data.EventCallback(event);
+			data.OnKeyPressedEvent((AIngine::KeyCodes)key);
 			break;
 		}
 		case GLFW_RELEASE:
 		{
-			AIngine::Events::KeyReleasedEvent event(key);
-			data.EventCallback(event);
+			//AIngine::Events::KeyReleasedEvent event(key);
+			//data.EventCallback(event);
+			data.OnKeyReleasedEvent((AIngine::KeyCodes)key);
 			break;
 		}
 		case GLFW_REPEAT:
 		{
-			AIngine::Events::KeyPressedEvent event(key, 1);
-			data.EventCallback(event);
+			//AIngine::Events::KeyPressedEvent event(key, 1);
+			//data.EventCallback(event);
+			data.OnKeyPressedEvent((AIngine::KeyCodes)key);
 			break;
 		}
 		}
@@ -200,8 +194,9 @@ void AIngine::Window::SetGLFWCallbacks()
 	{
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-		AIngine::Events::KeyTypedEvent event(keycode);
-		data.EventCallback(event);
+		//AIngine::Events::KeyTypedEvent event(keycode);
+		//data.EventCallback(event);
+		data.OnKeyTypedEvent((AIngine::KeyCodes)keycode);
 	});
 
 	// MouseButton
@@ -213,14 +208,16 @@ void AIngine::Window::SetGLFWCallbacks()
 		{
 		case GLFW_PRESS:
 		{
-			AIngine::Events::MouseButtonPressedEvent event(button);
-			data.EventCallback(event);
+			//AIngine::Events::MouseButtonPressedEvent event(button);
+			//data.EventCallback(event);
+			data.OnMouseButtonPressedEvent(button);
 			break;
 		}
 		case GLFW_RELEASE:
 		{
-			AIngine::Events::MouseButtonReleasedEvent event(button);
-			data.EventCallback(event);
+			//AIngine::Events::MouseButtonReleasedEvent event(button);
+			//data.EventCallback(event);
+			data.OnMouseButtonReleasedEvent(button);
 			break;
 		}
 		}
@@ -231,8 +228,9 @@ void AIngine::Window::SetGLFWCallbacks()
 	{
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-		AIngine::Events::MouseScrolledEvent event((float)xOffset, (float)yOffset);
-		data.EventCallback(event);
+		//AIngine::Events::MouseScrolledEvent event((float)xOffset, (float)yOffset);
+		//data.EventCallback(event);
+		data.OnMouseScrolledEvent((float)xOffset, (float)yOffset);
 	});
 
 	// Mouse Moved
@@ -240,7 +238,17 @@ void AIngine::Window::SetGLFWCallbacks()
 	{
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-		AIngine::Events::MouseMovedEvent event((float)xPos, (float)yPos);
-		data.EventCallback(event);
+		//AIngine::Events::MouseMovedEvent event((float)xPos, (float)yPos);
+		//data.EventCallback(event);
+		data.OnMouseMovedEvent((float)xPos, (float)yPos);
 	});
+}
+
+// Initialize static counter
+namespace AIngine::Events {
+	int EventHandler<void>::counter = 0;
+	int EventHandler<void,unsigned int,unsigned int>::counter = 0;
+	int EventHandler<void,float,float>::counter = 0;
+	int EventHandler<void,int>::counter = 0;
+	int EventHandler<void, AIngine::KeyCodes>::counter = 0;
 }

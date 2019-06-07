@@ -32,21 +32,20 @@ namespace AIngine::Editor {
 	{
 		if (DidAnyDockedWidgetChangeSize()) {
 			AIngine::Structures::Rectangle viewportRect = CalculateViewportRect(glm::vec2(m_app.GetWindow().GetWidth(), m_app.GetWindow().GetHeight()));
-			AIngine::Events::ViewportChangedEvent e(viewportRect);
-			m_app.OnEvent(e);
+			OnViewportChangedEvent(viewportRect);
 		}
 
 		MoveCamera(delta);
 		if (m_displayingFramerate) DisplayFramerate(delta);
 	}
 
-	void Editor::OnEvent(AIngine::Events::Event & e)
+	void Editor::OnEvent(AIngine::Events::EventData & e)
 	{
 		AIngine::Events::EventDispatcher dispatcher(e);
 
 		// call the OnWindowClose function if its a windowclose event
-		dispatcher.Dispatch<AIngine::Events::KeyPressedEvent>(BIND_EVENT_TO_FN(Editor::OnKeyPressed));
-		dispatcher.Dispatch<AIngine::Events::MouseScrolledEvent>(BIND_EVENT_TO_FN(Editor::OnMouseScrolled));
+		dispatcher.Dispatch<AIngine::Events::KeyPressedEvent::KeyPressedEventData>(BIND_EVENT_TO_FN(Editor::OnKeyPressed));
+		dispatcher.Dispatch<AIngine::Events::MouseScrolledEvent::MouseScrolledEventData>(BIND_EVENT_TO_FN(Editor::OnMouseScrolled));
 
 		auto it = m_widgets.begin();
 		while (it != m_widgets.end()) {
@@ -67,7 +66,7 @@ namespace AIngine::Editor {
 		}
 	}
 
-	bool Editor::OnKeyPressed(AIngine::Events::KeyPressedEvent & e)
+	bool Editor::OnKeyPressed(AIngine::Events::KeyPressedEvent::KeyPressedEventData & e)
 	{
 		// Toggle PhysicsDebugDraw
 		if (e.GetKeyCode() == AIngine::KeyCodes::F1)
@@ -76,7 +75,7 @@ namespace AIngine::Editor {
 			return true;
 		}
 
-		if (e.GetKeyCode() == AIngine::KeyCodes::F2) 
+		if (e.GetKeyCode() == AIngine::KeyCodes::F2)
 		{
 			m_displayingFramerate = !m_displayingFramerate;
 		}
@@ -84,11 +83,10 @@ namespace AIngine::Editor {
 		return false;
 	}
 
-	bool Editor::OnWindowResized(AIngine::Events::WindowResizeEvent & e)
+	bool Editor::OnWindowResized(AIngine::Events::WindowResizeEvent::WindowResizeEventData & e)
 	{
 		AIngine::Structures::Rectangle viewportRect = CalculateViewportRect(glm::vec2(m_app.GetWindow().GetWidth(), m_app.GetWindow().GetHeight()));
-		AIngine::Events::ViewportChangedEvent ev(viewportRect);
-		m_app.OnEvent(ev);
+		OnViewportChangedEvent(viewportRect);
 		return true;
 	}
 
@@ -97,11 +95,10 @@ namespace AIngine::Editor {
 	static float rotationrate = 0.1f;
 	static float zoomSpeed = 35;
 
-	bool Editor::OnMouseScrolled(AIngine::Events::MouseScrolledEvent & e)
+	bool Editor::OnMouseScrolled(AIngine::Events::MouseScrolledEvent::MouseScrolledEventData & e)
 	{
 		if (!m_app.IsAnyUiElementHovered()) {
-			AIngine::Events::MouseScrolledEvent scrolledEvent = dynamic_cast<AIngine::Events::MouseScrolledEvent&>(e);
-			m_app.m_camera->Zoom(scrolledEvent.GetYOffset() * m_app.GetDeltaTime() * zoomSpeed);
+			m_app.m_camera->Zoom(e.GetYOffset() * m_app.GetDeltaTime() * zoomSpeed);
 		}
 		return true;
 	}
@@ -269,3 +266,6 @@ namespace AIngine::Editor {
 	}
 
 }
+
+// initialize ViewportChangedEventHandler counter
+int AIngine::Events::EventHandler<void, AIngine::Structures::Rectangle&>::counter = 0;

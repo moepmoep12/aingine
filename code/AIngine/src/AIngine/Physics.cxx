@@ -226,4 +226,17 @@ namespace AIngine::Physics {
 		m_body->ApplyLinearImpulseToCenter(impulse, true);
 	}
 
+	void PhysicsComponent::SetCollision(bool collided, b2Fixture * other)
+	{
+		m_collided = collided;
+		m_otherCollided = other;
+		if (collided)
+			OnCollisionBegin(GetOtherCollider());
+		else OnCollisionEnd(GetOtherCollider());
+	}
+
 }
+
+
+// initialize EventHandler for OnCollionEvent
+int AIngine::Events::EventHandler<void, AIngine::Physics::PhysicsComponent*>::counter = 0;

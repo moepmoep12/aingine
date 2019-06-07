@@ -23,9 +23,9 @@ namespace AIngine {
 		ASSERT(!s_instance, "Application already running");
 		s_instance = this;
 
-		// create window
+		// create window & register callbacks
 		m_window = std::unique_ptr<Window>(Window::Create(m_windowConfig));
-		m_window->SetEventCallbackFunction(BIND_EVENT_TO_FN(Application::OnEvent));
+		RegisterCallbacks();
 
 		// Create UI Layer
 		m_imGuiLayer = new AIngine::UI::ImGuiLayer();
@@ -80,14 +80,15 @@ namespace AIngine {
 		path = std::string("assets/Intellgine/textures/White.png");
 		AIngine::Assets::BitmapAsset* bitmap = m_assetRegistry.Load<AIngine::Assets::BitmapAsset>(path);
 
+		// create Graphics API
 		m_Graphics = new AIngine::Graphics();
 
+		//create Sound API
 		PushLayer(new Sounds());
 	}
 
 	Application::~Application()
 	{
-		CORE_INFO("Destructor Application");
 	}
 
 	static float s_currentFrame = 0.0f;
@@ -105,10 +106,13 @@ namespace AIngine {
 		// create camera
 		m_camera = new AIngine::Rendering::Camera(*m_viewport, glm::vec2(m_bounds.y - m_bounds.x, m_bounds.z - m_bounds.w));
 
-
+		// create Editor
 #ifdef _DEBUG
 		m_editor = new AIngine::Editor::Editor();
 		PushOverlay(m_editor);
+		m_editor->OnViewportChangedEvent += [=](AIngine::Structures::Rectangle& viewport) {
+			this->OnViewportChanged(viewport);
+		};
 #endif
 
 		m_renderer->initRenderData();
@@ -132,6 +136,7 @@ namespace AIngine {
 			// handle user input
 			m_window->PollInput();
 
+			// update game
 			OnAppUpdate();
 
 			// update logic
@@ -159,6 +164,7 @@ namespace AIngine {
 
 		OnAppShutDown();
 
+		// Clean up
 		m_window = NULL;
 		delete m_renderer;
 		delete m_camera;
@@ -172,18 +178,8 @@ namespace AIngine {
 #endif
 	}
 
-	void Application::OnEvent(AIngine::Events::Event & e)
+	void Application::PropagateEventData(AIngine::Events::EventData & e)
 	{
-		AIngine::Events::EventDispatcher dispatcher(e);
-
-		// call the OnWindowClose function if its a windowclose event
-		dispatcher.Dispatch<AIngine::Events::WindowCloseEvent>(BIND_EVENT_TO_FN(Application::OnWindowClose));
-		dispatcher.Dispatch<AIngine::Events::WindowResizeEvent>(BIND_EVENT_TO_FN(Application::OnWindowResize));
-
-		// propagate it to the game
-		OnAppEvent(e);
-
-		// iterate through the layers to propagate the event
 		for (auto it = m_layerStack.end(); it != m_layerStack.begin(); )
 		{
 			(*--it)->OnEvent(e);
@@ -191,7 +187,8 @@ namespace AIngine {
 				break;
 		}
 
-		dispatcher.Dispatch<AIngine::Events::ViewportChangedEvent>(BIND_EVENT_TO_FN(Application::OnViewportChanged));
+		// propagate it to the game
+		OnAppEvent(e);
 	}
 
 	void Application::PushLayer(AIngine::Structures::Layer * layer)
@@ -219,31 +216,74 @@ namespace AIngine {
 			return false;
 	}
 
-	/* Event handling */
-
-	bool Application::OnWindowClose(AIngine::Events::WindowCloseEvent & e)
+	void Application::RegisterCallbacks()
 	{
-		CORE_INFO(e.ToString());
+		m_window->GetWindowData().OnKeyPressedEvent += [=](AIngine::KeyCodes key) {
+			this->PropagateEventData(AIngine::Events::KeyPressedEvent::KeyPressedEventData(key, 1));
+		};
 
+		m_window->GetWindowData().OnKeyReleasedEvent += [=](AIngine::KeyCodes key) {
+			this->PropagateEventData(AIngine::Events::KeyReleasedEvent::KeyReleasedEventData(key));
+		};
+
+		m_window->GetWindowData().OnKeyTypedEvent += [=](AIngine::KeyCodes key) {
+			this->PropagateEventData(AIngine::Events::KeyTypedEvent::KeyTypedEventData(key));
+		};
+
+		m_window->GetWindowData().OnMouseButtonPressedEvent += [=](int button) {
+			this->PropagateEventData(AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData(button));
+		};
+
+		m_window->GetWindowData().OnMouseButtonReleasedEvent += [=](int button) {
+			this->PropagateEventData(AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData(button));
+		};
+
+		m_window->GetWindowData().OnMouseMovedEvent += [=](float xpos, float ypos) {
+			this->PropagateEventData(AIngine::Events::MouseMovedEvent::MouseMovedEventData(xpos, ypos));
+		};
+
+		m_window->GetWindowData().OnMouseScrolledEvent += [=](float xoffset, float yoffset) {
+			this->PropagateEventData(AIngine::Events::MouseScrolledEvent::MouseScrolledEventData(xoffset, yoffset));
+		};
+
+		m_window->GetWindowData().OnWindowClosedEvent += [=]() {
+			this->OnWindowClose();
+		};
+
+		m_window->GetWindowData().OnWindowFocusEvent += [=]() {
+			this->PropagateEventData(AIngine::Events::WindowFocusEvent::WindowFocusEventData());
+		};
+
+		m_window->GetWindowData().OnWindowFocusLostEvent += [=]() {
+			this->PropagateEventData(AIngine::Events::WindowFocusLostEvent::WindowsFocusLostEventData());
+		};
+
+		m_window->GetWindowData().OnWindowMovedEvent += [=](unsigned int x, unsigned int y) {
+			this->PropagateEventData(AIngine::Events::WindowMovedEvent::WindowMovedEventData(x, y));
+		};
+
+		m_window->GetWindowData().OnWindowResizeEvent += [=](unsigned int width, unsigned int height) {
+			this->OnWindowResize(width, height);
+			this->PropagateEventData(AIngine::Events::WindowResizeEvent::WindowResizeEventData(width, height));
+		};
+	}
+
+	void Application::OnWindowClose()
+	{
 		//stop running
 		m_isRunning = false;
-
-		return true;
 	}
 
-	bool Application::OnWindowResize(AIngine::Events::WindowResizeEvent & e)
+	void Application::OnWindowResize(unsigned int width, unsigned int height)
 	{
 		m_renderer->SetViewport();
-		CORE_INFO(e.ToString());
-		return true;
 	}
 
-	bool Application::OnViewportChanged(AIngine::Events::ViewportChangedEvent & e)
+	void Application::OnViewportChanged(AIngine::Structures::Rectangle& viewport)
 	{
-		m_viewport->Set(e.ViewportRect.GetPosition(), e.ViewportRect.width, e.ViewportRect.height);
+		m_viewport->Set(viewport.GetPosition(), viewport.width, viewport.height);
 		m_camera->SetZoom((float)m_window->GetWidth() / (float)m_world->GetBounds().y);
 		m_renderer->SetViewport();
 		CORE_INFO("Viewport Size Changed To ({0} | {1}) at Position ({2} | {3})", m_viewport->m_width, m_viewport->m_height, m_viewport->m_x, m_viewport->m_y);
-		return true;
 	}
 }

@@ -47,11 +47,11 @@ namespace AIngine::Editor {
 		ImGui::End();
 	}
 
-	void SceneGraphWidget::OnEvent(AIngine::Events::Event & e)
+	void SceneGraphWidget::OnEvent(AIngine::Events::EventData & e)
 	{
-		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent)) {
+		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent::KeyPressedEventData)) {
 			// delete event
-			AIngine::Events::KeyPressedEvent keyevent = dynamic_cast<AIngine::Events::KeyPressedEvent&>(e);
+			AIngine::Events::KeyPressedEvent::KeyPressedEventData keyevent = dynamic_cast<AIngine::Events::KeyPressedEvent::KeyPressedEventData&>(e);
 			if (s_selectedNode && keyevent.GetKeyCode() == AIngine::KeyCodes::DEL) {
 				AIngine::Structures::DeleteTraverser deletetraverser(m_sceneGraph.m_gameObjectPool);
 				deletetraverser.Traverse(s_selectedNode);

@@ -33,7 +33,7 @@ namespace AIngine::Editor {
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 		virtual void OnUpdate(float delta) override;
-		virtual void OnEvent(AIngine::Events::Event& e) override;
+		virtual void OnEvent(AIngine::Events::EventData& e) override;
 		virtual void OnImGuiRender() override;
 
 		template<class T>
@@ -78,9 +78,9 @@ namespace AIngine::Editor {
 
 		/* Checks whether a docked Editor widget changed its size in the last frame to be able to adjust the viewport accordingly*/
 		bool DidAnyDockedWidgetChangeSize() const;
-		bool OnKeyPressed(AIngine::Events::KeyPressedEvent& e);
-		bool OnWindowResized(AIngine::Events::WindowResizeEvent& e);
-		bool OnMouseScrolled(AIngine::Events::MouseScrolledEvent& e);
+		bool OnKeyPressed(AIngine::Events::KeyPressedEvent::KeyPressedEventData& e);
+		bool OnWindowResized(AIngine::Events::WindowResizeEvent::WindowResizeEventData& e);
+		bool OnMouseScrolled(AIngine::Events::MouseScrolledEvent::MouseScrolledEventData& e);
 		void MoveCamera(float delta);
 		Editor();
 
@@ -90,5 +90,6 @@ namespace AIngine::Editor {
 		AIngine::Application& m_app;
 		std::vector<EditorWidget*> m_widgets;
 		std::vector<AIngine::GameObject*> m_selectedObjects;
+		AIngine::Events::ViewportChangedEvent OnViewportChangedEvent;
 	};
 }

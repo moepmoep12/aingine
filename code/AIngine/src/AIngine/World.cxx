@@ -55,7 +55,7 @@ namespace AIngine {
 			m_physicsWorld->DrawDebugData();
 	}
 
-	void World::OnEvent(AIngine::Events::Event & e)
+	void World::OnEvent(AIngine::Events::EventData & e)
 	{
 		m_sceneGraph->OnEvent(e);
 	}

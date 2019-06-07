@@ -36,7 +36,7 @@ namespace AIngine {
 		virtual ~Application();
 
 		void Run();
-		void OnEvent(AIngine::Events::Event& e);
+		//void OnEvent(AIngine::Events::Event& e);
 		void PushLayer(AIngine::Structures::Layer* layer);
 		void PushOverlay(AIngine::Structures::Layer* overlay);
 		float GetDeltaTime();
@@ -53,19 +53,22 @@ namespace AIngine {
 		glm::vec4 m_bounds;
 		AIngine::Rendering::Camera* m_camera;
 		World* m_world;
+		std::unique_ptr<Window> m_window;
 
 		virtual void OnAppStartUp() = 0;
 		virtual void OnAppShutDown() = 0;
 		virtual void OnAppUpdate() = 0;
-		virtual void OnAppEvent(AIngine::Events::Event& e) {}
+		virtual void OnAppEvent(AIngine::Events::EventData& e) {}
 
 	private:
-		bool OnWindowClose(AIngine::Events::WindowCloseEvent& e);
-		bool OnWindowResize(AIngine::Events::WindowResizeEvent& e);
-		bool OnViewportChanged(AIngine::Events::ViewportChangedEvent& e);
+		void RegisterCallbacks();
+		// Callbacks
+		void OnWindowClose();
+		void OnWindowResize(unsigned int width, unsigned int height);
+		void OnViewportChanged(AIngine::Structures::Rectangle&);
+		void PropagateEventData(AIngine::Events::EventData& e);
 
 	private:
-		std::unique_ptr<Window> m_window;
 		AIngine::Editor::Editor* m_editor;
 		bool m_isRunning = false;
 		AIngine::Structures::LayerStack m_layerStack;

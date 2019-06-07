@@ -19,7 +19,7 @@ namespace AIngine::Editor {
 	public:
 		// Inherited via EditorWidget
 		virtual void OnImGuiRender() override;
-		virtual void OnEvent(AIngine::Events::Event& e) override;
+		virtual void OnEvent(AIngine::Events::EventData& e) override;
 
 		virtual ~SceneGraphWidget() override;
 

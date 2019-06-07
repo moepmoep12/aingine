@@ -13,9 +13,8 @@ namespace AIngine::Structures {
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
 		virtual void OnUpdate(float delta) {}
-		virtual void OnEvent(AIngine::Events::Event& e) {}
 		virtual void OnImGuiRender() {}
-
+		virtual void OnEvent(AIngine::Events::EventData& e) {}
 		inline const std::string& GetName() const { return m_name; }
 
 	private:

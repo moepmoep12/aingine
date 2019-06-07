@@ -2,6 +2,8 @@
 
 #include <string>
 #include "Events/Event.h"
+#include "Events/ApplicationEvents.h"
+#include "Events/InputEvents.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -27,7 +29,19 @@ namespace AIngine {
 		int XPos;
 		int YPos;
 		bool HasFocus = true;
-		std::function<void(Events::Event&)> EventCallback;
+		Events::WindowCloseEvent OnWindowClosedEvent;
+		Events::WindowFocusEvent OnWindowFocusEvent;
+		Events::WindowFocusLostEvent OnWindowFocusLostEvent;
+		Events::WindowMovedEvent OnWindowMovedEvent;
+		Events::WindowResizeEvent OnWindowResizeEvent;
+		Events::KeyPressedEvent OnKeyPressedEvent;
+		Events::KeyReleasedEvent OnKeyReleasedEvent;
+		Events::KeyTypedEvent OnKeyTypedEvent;
+		Events::MouseButtonPressedEvent OnMouseButtonPressedEvent;
+		Events::MouseButtonReleasedEvent OnMouseButtonReleasedEvent;
+		Events::MouseScrolledEvent OnMouseScrolledEvent;
+		Events::MouseMovedEvent OnMouseMovedEvent;
+
 	};
 
 	class Window
@@ -38,7 +52,6 @@ namespace AIngine {
 
 		void PollInput();
 		void OnUpdate();
-		void SetEventCallbackFunction(const std::function<void(Events::Event&)>& callback);
 
 		void SetVSync(bool active);
 		bool IsVSyncActive() const;
@@ -55,6 +68,7 @@ namespace AIngine {
 		virtual void* GetNativeWindow() const { return m_window; }
 		glm::vec2 GetMonitorResolution() const;
 		HWND GetWin32Window() const;
+		inline WindowData& GetWindowData() { return m_windowData; }
 
 		static Window* Create(const WindowConfig& config = WindowConfig());
 
