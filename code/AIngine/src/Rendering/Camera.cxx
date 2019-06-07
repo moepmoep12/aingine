@@ -69,8 +69,7 @@ glm::vec2 AIngine::Rendering::Camera::ScreenToWorldPoint(const glm::vec2 & scree
 
 glm::vec2 AIngine::Rendering::Camera::WorldToScreenPoint(const glm::vec2 & worldpoint) const
 {
-	glm::vec2 point = worldpoint + ScreenToWorldPoint(m_viewport.GetTopLeftCornerPosition());
-	return  GetViewMatrix() * glm::vec4(point, 0, 1);
+	return  (GetViewMatrix() * glm::vec4(worldpoint, 0, 1)) + glm::vec4(m_viewport.GetTopLeftCornerPosition(), 0, 0);
 }
 
 glm::vec2 AIngine::Rendering::Camera::GetVisibleWorldSize() const
