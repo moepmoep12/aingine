@@ -57,11 +57,6 @@ namespace AIngine::Structures {
 		updateTraverser.Traverse(m_Root);
 	}
 
-	void SceneGraph::OnEvent(AIngine::Events::Event & e)
-	{
-
-	}
-
 	/********************************** DELETE TRAVERSER ****************************************/
 
 	DeleteTraverser::DeleteTraverser(AIngine::Memory::Pool<GameObject>& gameObjectPool)
