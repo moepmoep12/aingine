@@ -3,6 +3,7 @@
 #include "Editor/Widgets/EditorWidget.h"
 #include "Editor/Widgets/TextureComponentWidget.h"
 #include "Editor/Widgets/TransformComponentWidget.h"
+#include "Editor/Widgets/PhysicsComponentWidget.h"
 
 #include <unordered_map>
 
@@ -29,6 +30,7 @@ namespace AIngine::Editor {
 		AIngine::Structures::SceneGraph& m_sceneGraph;
 		TextureComponentWidget* m_textureCompWidget;
 		TransformComponentWidget* m_transformCompWidget;
+		PhysicsComponentWidget* m_physCompWidget;
 
 		void ShowSelectedNodeWidget(GameObject* node);
 

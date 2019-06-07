@@ -49,6 +49,7 @@ set(AINGINE_HEADER
 		include/private/Editor/Widgets/ComponentWidget.h
 		include/private/Editor/Widgets/LogWidget.h
 		include/private/Editor/Widgets/MenuBarWidget.h
+		include/private/Editor/Widgets/PhysicsComponentWidget.h
 		include/private/Editor/Widgets/SceneGraphWidget.h
 		include/private/Editor/Widgets/TextureComponentWidget.h
 		include/private/Editor/Widgets/TransformComponentWidget.h
@@ -77,6 +78,7 @@ set(AINGINE_SRC
 		src/Editor/Serialization.cxx
 		src/Editor/Widgets/CameraWidget.cxx
 		src/Editor/Widgets/MenuBarWidget.cxx
+		src/Editor/Widgets/PhysicsComponentWidget.cxx
 		src/Editor/Widgets/SceneGraphWidget.cxx
 		src/Editor/Widgets/TextureComponentWidget.cxx
 		src/Editor/Widgets/TransformComponentWidget.cxx

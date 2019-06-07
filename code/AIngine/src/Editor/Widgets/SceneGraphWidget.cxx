@@ -64,6 +64,7 @@ namespace AIngine::Editor {
 	{
 		delete m_textureCompWidget;
 		delete m_transformCompWidget;
+		delete m_physCompWidget;
 	}
 
 
@@ -72,6 +73,7 @@ namespace AIngine::Editor {
 	{
 		m_textureCompWidget = new TextureComponentWidget();
 		m_transformCompWidget = new TransformComponentWidget();
+		m_physCompWidget = new PhysicsComponentWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
@@ -84,6 +86,11 @@ namespace AIngine::Editor {
 		// show textureComponent
 		if (texture) {
 			m_textureCompWidget->Render(std::vector<GameObject*> { node });
+		}
+
+		AIngine::Physics::PhysicsComponent* physComp = node->GetComponent<AIngine::Physics::PhysicsComponent>();
+		if (physComp) {
+			m_physCompWidget->Render({ node });
 		}
 	}
 
