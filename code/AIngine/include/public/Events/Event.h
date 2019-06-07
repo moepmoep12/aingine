@@ -77,6 +77,8 @@ namespace AIngine::Events {
 		EventData& m_EventData;
 	};
 
+	/* inspired from http://www.dannyb.me/posts/2014/02/creating_event_system_c++/ */
+	/* enhanced with templates*/
 
 	template<typename ReturnType, class ... Args>
 	class EventHandler {
@@ -165,8 +167,6 @@ namespace AIngine::Events {
 
 			return *this;
 		}
-
-		//virtual std::string ToString() const = 0;
 	};
 
 	template<typename ReturnType, class ... Args>
