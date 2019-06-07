@@ -8,140 +8,127 @@
 namespace AIngine::Events {
 
 	// WindowCloseEvent
-	class WindowCloseEvent : public Event
+	class WindowCloseEvent : public Event<void>
 	{
 	public:
 		WindowCloseEvent() {}
 
-		EVENT_CLASS_TYPE(WindowClose)
-			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		class WindowCloseEventData : public EventData {
+		public:
+			EVENT_CLASS_TYPE(WindowClose)
+				EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		};
 	};
 
+
 	// WindowResizeEvent
-	class  WindowResizeEvent : public Event
+	class  WindowResizeEvent : public Event<void, unsigned int, unsigned int>
 	{
 	public:
-		WindowResizeEvent(unsigned int width, unsigned int height)
-			: m_Width(width), m_Height(height) {}
+		class WindowResizeEventData : public EventData {
+		public:
+			WindowResizeEventData(unsigned int width, unsigned int height)
+				: m_Width(width), m_Height(height) {}
 
-		inline unsigned int GetWidth() const { return m_Width; }
-		inline unsigned int GetHeight() const { return m_Height; }
+			inline unsigned int GetWidth() const { return m_Width; }
+			inline unsigned int GetHeight() const { return m_Height; }
 
-		std::string ToString() const override
-		{
-			std::stringstream ss;
-			ss << "Window Size: " << m_Width << ", " << m_Height;
-			return ss.str();
-		}
+			std::string ToString() const override
+			{
+				std::stringstream ss;
+				ss << "Window Size: " << m_Width << ", " << m_Height;
+				return ss.str();
+			}
 
-		EVENT_CLASS_TYPE(WindowResize)
-			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+			EVENT_CLASS_TYPE(WindowResize)
+				EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
-	private:
-		unsigned int m_Width, m_Height;
+		private:
+			unsigned int m_Width, m_Height;
+		};
 	};
 
 	// WindowMovedEvent
-	class  WindowMovedEvent : public Event
+	class  WindowMovedEvent : public Event<void, unsigned int, unsigned int>
 	{
 	public:
-		WindowMovedEvent(unsigned int xpos, unsigned int ypos)
-			: m_x(xpos), m_y(ypos) {}
+		class WindowMovedEventData : public EventData {
+		public:
+			WindowMovedEventData(unsigned int xpos, unsigned int ypos)
+				: m_x(xpos), m_y(ypos) {}
 
-		inline unsigned int GetX() const { return m_x; }
-		inline unsigned int GetY() const { return m_y; }
+			inline unsigned int GetX() const { return m_x; }
+			inline unsigned int GetY() const { return m_y; }
 
-		std::string ToString() const override
-		{
-			std::stringstream ss;
-			ss << "Window Position: " << m_x << ", " << m_y;
-			return ss.str();
-		}
+			std::string ToString() const override
+			{
+				std::stringstream ss;
+				ss << "Window Position: " << m_x << ", " << m_y;
+				return ss.str();
+			}
 
-		EVENT_CLASS_TYPE(WindowMoved)
-			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+			EVENT_CLASS_TYPE(WindowMoved)
+				EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
-	private:
-		unsigned int m_x, m_y;
+		private:
+			unsigned int m_x, m_y;
+		};
+
 	};
 
 	// WindowFocusEvent
-	class WindowFocusEvent : public Event {
+	class WindowFocusEvent : public Event<void> {
 	public:
 		WindowFocusEvent() {}
+		class WindowFocusEventData : public EventData {
+			std::string ToString() const override
+			{
+				std::stringstream ss;
+				ss << "Window Focus Event";
+				return ss.str();
+			}
 
-		std::string ToString() const override
-		{
-			std::stringstream ss;
-			ss << "Window Focus Event";
-			return ss.str();
-		}
-
-		EVENT_CLASS_TYPE(WindowFocus)
-			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+			EVENT_CLASS_TYPE(WindowFocus)
+				EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		};
 	};
 
 	// WindowFocusLostEvent
-	class WindowFocusLostEvent : public Event {
+	class WindowFocusLostEvent : public Event<void> {
 	public:
 		WindowFocusLostEvent() {}
+		class WindowsFocusLostEventData : public EventData {
+			std::string ToString() const override
+			{
+				std::stringstream ss;
+				ss << "Window Focus Lost Event";
+				return ss.str();
+			}
 
-		std::string ToString() const override
-		{
-			std::stringstream ss;
-			ss << "Window Focus Lost Event";
-			return ss.str();
-		}
-
-		EVENT_CLASS_TYPE(WindowLostFocus)
-			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+			EVENT_CLASS_TYPE(WindowLostFocus)
+				EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		};
 	};
 
 	// ViewportChangedEvent
-	class  ViewportChangedEvent : public Event
+	class  ViewportChangedEvent : public Event<void, AIngine::Structures::Rectangle&>
 	{
 	public:
-		ViewportChangedEvent(AIngine::Structures::Rectangle& viewportRect)
-			: ViewportRect(viewportRect) {}
+		class ViewportChangedEventData : public EventData {
+			ViewportChangedEventData(AIngine::Structures::Rectangle& viewportRect)
+				: ViewportRect(viewportRect) {}
 
-		std::string ToString() const override
-		{
-			std::stringstream ss;
-			ss << "ViewportChangedEvent: " << ViewportRect.x << ", " << ViewportRect.y << "  Size (" << ViewportRect.width << " | " << ViewportRect.height << ")";
-			return ss.str();
-		}
+			std::string ToString() const override
+			{
+				std::stringstream ss;
+				ss << "ViewportChangedEvent: " << ViewportRect.x << ", " << ViewportRect.y << "  Size (" << ViewportRect.width << " | " << ViewportRect.height << ")";
+				return ss.str();
+			}
 
-		EVENT_CLASS_TYPE(ViewportChanged)
-			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+			EVENT_CLASS_TYPE(ViewportChanged)
+				EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
-			AIngine::Structures::Rectangle& ViewportRect;
+				AIngine::Structures::Rectangle& ViewportRect;
+		};
 	};
-
-
-	/*class  AppTickEvent : public Event
-	{
-	public:
-		AppTickEvent() {}
-
-		EVENT_CLASS_TYPE(AppTick)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
-	};
-
-	class  AppUpdateEvent : public Event
-	{
-	public:
-		AppUpdateEvent() {}
-
-		EVENT_CLASS_TYPE(AppUpdate)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
-	};
-
-	class  AppRenderEvent : public Event
-	{
-	public:
-		AppRenderEvent() {}
-
-		EVENT_CLASS_TYPE(AppRender)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
-	};*/
 }
