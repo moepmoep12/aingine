@@ -4,7 +4,7 @@
 
 namespace AIngine::Editor {
 
-	class TextureComponentWidget : public ComponentWidget {
+	class SpriteComponentWidget : public ComponentWidget {
 	public:
 		// Inherited via ComponentWidget
 		virtual void OnImGuiRender() override;

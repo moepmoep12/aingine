@@ -1,21 +1,22 @@
-#include "Editor/Widgets/TextureComponentWidget.h"
+#include "Editor/Widgets/SpriteComponentWidget.h"
 #include "AIngine/GameObject.h"
+#include "AIngine/Sprite.h"
 #include "Rendering/texture.h"
 #include "Assets/Assets.h"
 
 namespace AIngine::Editor {
 
-	void AIngine::Editor::TextureComponentWidget::OnImGuiRender()
+	void AIngine::Editor::SpriteComponentWidget::OnImGuiRender()
 	{
 		if (m_activeGameObjects.size() == 1) {
 			AIngine::GameObject* obj = m_activeGameObjects[0];
-			AIngine::Rendering::Texture2D* texture = obj->GetComponent<AIngine::Rendering::Texture2D>();
-			if (texture) {
+			AIngine::Sprite* spriteComponent = obj->GetComponent<AIngine::Sprite>();
+			if (spriteComponent) {
 				ImGui::Separator();
 				static float dragSpeed = 0.1f;
-				float* size[] = { &texture->GetLocalWorldSize().x ,&texture->GetLocalWorldSize().y };
-				float* color[] = { &texture->GetColor().x,&texture->GetColor().y ,&texture->GetColor().z };
-				float* parallax[] = { &texture->GetParallaxFactor().x, &texture->GetParallaxFactor().y };
+				float* size[] = { &spriteComponent->m_localWorldSize.x ,&spriteComponent->m_localWorldSize.y };
+				float* color[] = { &spriteComponent->m_color.x,&spriteComponent->m_color.y ,&spriteComponent->m_color.z };
+				float* parallax[] = { &spriteComponent->m_parallaxFactor.x, &spriteComponent->m_parallaxFactor.y };
 
 				// Title
 				ImGui::BulletText("Texture Component");
@@ -33,10 +34,10 @@ namespace AIngine::Editor {
 
 				// preview image
 				// we preserve the image ratio in the preview
-				float imageRatio = (float)texture->Height / (float)texture->Width;
+				float imageRatio = (float)spriteComponent->m_texture.Height / (float)spriteComponent->m_texture.Width;
 				ImGui::NewLine();
 				ImGui::NewLine();
-				ImGui::Image((ImTextureID)texture->ID, ImVec2(ImGui::GetWindowWidth() * 0.9f, ImGui::GetWindowWidth() * 0.9f * imageRatio), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 1, 1));
+				ImGui::Image((ImTextureID)spriteComponent->m_texture.ID, ImVec2(ImGui::GetWindowWidth() * 0.9f, ImGui::GetWindowWidth() * 0.9f * imageRatio), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 1, 1));
 
 				ImGui::NewLine();
 				ImGui::NewLine();
@@ -44,13 +45,13 @@ namespace AIngine::Editor {
 
 				// Texture Dimensions
 				ImGui::Columns(2);
-				ImGui::Text("%ix%i", texture->Width, texture->Height);
+				ImGui::Text("%ix%i", spriteComponent->m_texture.Width, spriteComponent->m_texture.Height);
 				ImGui::NextColumn();
 				ImGui::Text("Texture Size");
 
 				// Texture Format
 				ImGui::NextColumn();
-				const char* internalFormat = texture->Image_Format == GL_RGBA ? "GL_RGBA" : "GL_RGB";
+				const char* internalFormat = spriteComponent->m_texture.Image_Format == GL_RGBA ? "GL_RGBA" : "GL_RGB";
 				ImGui::TextColored(ImVec4(0.5, 0, 0.5, 1), internalFormat);
 				ImGui::NextColumn();
 				ImGui::Text("Texture Format");
@@ -97,17 +98,17 @@ namespace AIngine::Editor {
 				ImGui::NewLine();
 				ImGui::NewLine();
 
-				// Apply changes to generate a new texture
+				// Apply changes to generate a new spriteComponent
 				if (ImGui::Button("Apply Changes"))
 				{
-					AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(texture->GetName())->GetBitmap();
+					AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(spriteComponent->GetName())->GetBitmap();
 
-					texture->Wrap_S = choosableWrappingModes[currentWrapS];
-					texture->Wrap_T = choosableWrappingModes[currentWrapT];
-					texture->Filter_Max = FilterOptions[filterMinIndex];
-					texture->Filter_Min = FilterOptions[filterMaxIndex];
+					spriteComponent->m_texture.Wrap_S = choosableWrappingModes[currentWrapS];
+					spriteComponent->m_texture.Wrap_T = choosableWrappingModes[currentWrapT];
+					spriteComponent->m_texture.Filter_Max = FilterOptions[filterMinIndex];
+					spriteComponent->m_texture.Filter_Min = FilterOptions[filterMaxIndex];
 
-					texture->Generate(bitmap);
+					spriteComponent->m_texture.Generate(bitmap);
 				}
 
 
