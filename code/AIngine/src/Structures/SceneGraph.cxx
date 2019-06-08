@@ -5,6 +5,7 @@
 #include"Rendering/texture.h"
 #include "AIngine/GameObject.h"
 #include "Events/InputEvents.h"
+#include "AIngine/Component.h"
 #include <sstream>
 
 namespace AIngine::Structures {
