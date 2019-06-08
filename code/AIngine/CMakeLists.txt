@@ -24,6 +24,7 @@ set(AINGINE_HEADER
 		include/public/AIngine/Macros.h
 		include/public/AIngine/Physics.h
 		include/public/AIngine/Sounds.h
+		include/public/AIngine/Sprite.h
 		include/public/AIngine/World.h
 		include/public/Assets/Assets.h
 		include/public/Debug/log.h
@@ -51,7 +52,7 @@ set(AINGINE_HEADER
 		include/private/Editor/Widgets/MenuBarWidget.h
 		include/private/Editor/Widgets/PhysicsComponentWidget.h
 		include/private/Editor/Widgets/SceneGraphWidget.h
-		include/private/Editor/Widgets/TextureComponentWidget.h
+		include/private/Editor/Widgets/SpriteComponentWidget.h
 		include/private/Editor/Widgets/TransformComponentWidget.h
 		include/private/Rendering/PhysicsRenderer.h
 		include/private/Rendering/Renderer.h
@@ -70,6 +71,7 @@ set(AINGINE_SRC
 		src/AIngine/Input.cxx
 		src/AIngine/Physics.cxx
 		src/AIngine/Sounds.cxx
+		src/AIngine/Sprite.cxx
 		src/AIngine/World.cxx
         src/Assets/Assets.cxx
 		src/Debug/gl_error.cxx
@@ -80,7 +82,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/MenuBarWidget.cxx
 		src/Editor/Widgets/PhysicsComponentWidget.cxx
 		src/Editor/Widgets/SceneGraphWidget.cxx
-		src/Editor/Widgets/TextureComponentWidget.cxx
+		src/Editor/Widgets/SpriteComponentWidget.cxx
 		src/Editor/Widgets/TransformComponentWidget.cxx
 		src/Rendering/bitmap.cxx
 		src/Rendering/Camera.cxx

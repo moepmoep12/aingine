@@ -1,17 +1,16 @@
 #pragma once
 
 #include "Rendering/bitmap.h"
-#include "AIngine/Component.h"
 
 #include <glad/glad.h>
-#include <glm/glm.hpp>
+#include <string>
 
 namespace AIngine::Rendering {
 
-	class Texture2D : public AIngine::Component {
+	class Texture2D {
 	public:
 		// Holds the ID of the texture object, used for all texture operations to reference to this particlar texture
-		GLuint ID;
+		GLuint ID = -1;
 
 		// Texture image dimensions
 		GLuint Width, Height; // Width and height of loaded image in pixels
@@ -27,7 +26,22 @@ namespace AIngine::Rendering {
 		GLuint Filter_Max; // Filtering mode if texture pixels > screen pixels
 
 		// Constructor (sets default texture modes)
-		Texture2D(GameObject* owner);
+		Texture2D();
+		// Creates the texture on the graphics card
+		Texture2D(Bitmap &texture);
+
+		// copy constructor
+		Texture2D(const Texture2D& other);
+
+		// copy assignment
+		Texture2D& operator=(const Texture2D& other);
+
+		// move constructor
+		Texture2D(Texture2D&& other);
+
+		// move assignment
+		Texture2D& operator=(Texture2D&& other);
+
 		virtual ~Texture2D();
 
 		// Generates texture from a bitmap
@@ -36,23 +50,17 @@ namespace AIngine::Rendering {
 		// Binds the texture as the current active GL_TEXTURE_2D texture object
 		void Bind() const;
 
-		inline  glm::vec3& GetColor() { return m_spriteColor; }
-		inline void SetColor(const glm::vec3& color) { m_spriteColor = color; }
+		std::string FileName;
 
-		glm::vec2& GetLocalWorldSize();
-		inline void SetLocalWorldSize(const glm::vec2& size) { m_localWorldSize = size; }
+	//	inline glm::vec3 GetColor() const { return m_color; }
+	//	inline void SetColor(const glm::vec3& color) { m_color = color; }
 
-		inline  glm::vec2& GetParallaxFactor() { return m_parallaxFactor; }
-		inline void SetParallaxFactor(const glm::vec2& factor) { m_parallaxFactor = factor; }
+	//	inline GLfloat GetAlpha() const { return m_alpha; }
+	//	inline void SetAlpha(GLfloat alpha) { m_alpha = alpha; }
 
-		inline glm::mat4 GetModelMatrix() const { return m_modelMatrix; }
-		inline void SetModelMatrix(const glm::mat4& modelmat) { m_modelMatrix = modelmat; }
-
-	private:
-		glm::vec3 m_spriteColor;
-		glm::vec2 m_localWorldSize = glm::vec2(0);
-		glm::vec2 m_parallaxFactor;
-		glm::mat4 m_modelMatrix;
+	//private:
+	//	glm::vec3 m_color;
+	//	GLfloat m_alpha = 1.0f;
 	};
 }
 
