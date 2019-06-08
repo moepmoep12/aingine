@@ -2,6 +2,7 @@
 #include "Rendering/Camera.h"
 #include "Rendering/Viewport.h"
 #include "Rendering/texture.h"
+#include "AIngine/Sprite.h"
 #include "Editor/Editor.h"
 #include "Assets/Assets.h"
 #include "Application.h"
@@ -75,17 +76,17 @@ namespace AIngine::Rendering {
 		glViewport((GLint)bottomLeft.x, (GLint)viewport.GetWindowHeight() - bottomLeft.y, (GLsizei)viewport.GetViewportWidth(), (GLsizei)viewport.GetViewportHeight());
 	}
 
-	void SpriteRenderer::RenderSprite(Texture2D & texture, GLShaderProgram* shader)
+	void SpriteRenderer::RenderSprite(AIngine::Sprite& sprite, GLShaderProgram* shader)
 	{
 		shader->Use();
 
-		GameObject& gameObject = *texture.GetOwner();
-		glm::vec2 textureSize = texture.GetLocalWorldSize();
+		GameObject& gameObject = *sprite.GetOwner();
+		glm::vec2 textureSize = sprite.GetLocalWorldSize();
 		textureSize.x *= gameObject.GetLocalScale().x;
 		textureSize.y *= gameObject.GetLocalScale().y;
 
 		m_matrixStack.push_back(m_modelMatrix);
-		shader->SetMatrix4("view", Camera::Get().GetViewMatrix(texture.GetParallaxFactor()));
+		shader->SetMatrix4("view", Camera::Get().GetViewMatrix(sprite.GetParallaxFactor()));
 
 		// we position & rotate around the center
 		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(gameObject.GetLocalPosition(), 0.0f));
@@ -93,16 +94,13 @@ namespace AIngine::Rendering {
 		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(-0.5f * textureSize.x, -0.5f * textureSize.y, 0.0f));
 		m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(textureSize, 1.0f));
 
-		// save the model matrix 
-		texture.SetModelMatrix(m_modelMatrix);
-
 		// configure shader
 		shader->SetMatrix4("model", m_modelMatrix);
-		shader->SetVector3f("spriteColor", texture.GetColor());
+		shader->SetVector3f("spriteColor", sprite.GetColor());
 
 		// draw
 		glActiveTexture(GL_TEXTURE0);
-		texture.Bind();
+		sprite.GetTexture().Bind();
 
 		glBindVertexArray(m_quadVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -115,14 +113,14 @@ namespace AIngine::Rendering {
 
 	static float s_outlineTime = 0.0f;
 
-	void SpriteRenderer::RenderOutline(Texture2D& texture)
+	void SpriteRenderer::RenderOutline(AIngine::Sprite& sprite)
 	{
 		glEnable(GL_STENCIL_TEST);
 
 		// 1st. render pass, draw objects as normal, writing to the stencil buffer
 		glStencilFunc(GL_ALWAYS, 1, 0xFF);
 		glStencilMask(0xFF); // no mask
-		RenderSprite(texture, m_shader);
+		RenderSprite(sprite, m_shader);
 
 		// 2nd. render pass: now draw slightly scaled versions of the objects, this time disabling stencil writing.
 		// Because the stencil buffer is now filled with several 1s. The parts of the buffer that are 1 are not drawn, thus only drawing 
@@ -134,12 +132,12 @@ namespace AIngine::Rendering {
 		glm::vec2 p1 = Camera::Get().ScreenToWorldPoint(glm::vec2(0));
 		glm::vec2 p2 = Camera::Get().ScreenToWorldPoint(glm::vec2(borderSreenSize, 0));
 		float borderWorldSize = p2.x - p1.x;
-		glm::vec2 originalTexSize = texture.GetLocalWorldSize();
+		glm::vec2 originalTexSize = sprite.GetLocalWorldSize();
 
 
-		texture.SetLocalWorldSize(glm::vec2(originalTexSize.x + borderWorldSize, originalTexSize.y + borderWorldSize));
-		RenderSprite(texture, m_outlineShader);
-		texture.SetLocalWorldSize(originalTexSize);
+		sprite.SetLocalWorldSize(glm::vec2(originalTexSize.x + borderWorldSize, originalTexSize.y + borderWorldSize));
+		RenderSprite(sprite, m_outlineShader);
+		sprite.SetLocalWorldSize(originalTexSize);
 
 		glStencilMask(0xFF); // no mask
 		glClear(GL_STENCIL_BUFFER_BIT);
@@ -183,11 +181,11 @@ namespace AIngine::Rendering {
 
 	bool SpriteRenderer::Enter(GameObject & node)
 	{
-		Texture2D* textureComponent = node.GetComponent<Texture2D>();
+		AIngine::Sprite* spriteComponent = node.GetComponent<AIngine::Sprite>();
 
-		if (textureComponent) {
-			if (textureComponent->IsActive()) {
-				RenderSprite(*textureComponent, m_shader);
+		if (spriteComponent) {
+			if (spriteComponent->IsActive()) {
+				RenderSprite(*spriteComponent, m_shader);
 			}
 		}
 
@@ -206,20 +204,20 @@ namespace AIngine::Rendering {
 	}
 	bool SpriteRenderer::Visit(GameObject & node)
 	{
-		Texture2D* textureComponent = node.GetComponent<Texture2D>();
+		AIngine::Sprite* spriteComponent = node.GetComponent<AIngine::Sprite>();
 
-		if (textureComponent && textureComponent->IsActive()) {
+		if (spriteComponent && spriteComponent->IsActive()) {
 			const std::vector<GameObject*>* selectedObjects = AIngine::Editor::Editor::GetSelectedObjects();
 			if (selectedObjects) {
 				if (std::find(selectedObjects->begin(), selectedObjects->end(), &node) != selectedObjects->end()) {
-					RenderOutline(*textureComponent); // draw outline
+					RenderOutline(*spriteComponent); // draw outline
 				}
 				else {
-					RenderSprite(*textureComponent, m_shader);
+					RenderSprite(*spriteComponent, m_shader);
 				}
 			}
 			else {
-				RenderSprite(*textureComponent, m_shader);
+				RenderSprite(*spriteComponent, m_shader);
 			}
 			return true;
 		}

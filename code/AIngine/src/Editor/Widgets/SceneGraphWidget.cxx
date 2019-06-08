@@ -10,6 +10,7 @@
 #include "AIngine/Physics.h"
 #include "Debug/log.h"
 #include "Editor/Editor.h"
+#include "AIngine/Sprite.h"
 
 namespace AIngine::Editor {
 
@@ -71,7 +72,7 @@ namespace AIngine::Editor {
 	SceneGraphWidget::SceneGraphWidget(AIngine::Structures::SceneGraph & sceneGraph)
 		: m_sceneGraph(sceneGraph)
 	{
-		m_textureCompWidget = new TextureComponentWidget();
+		m_textureCompWidget = new SpriteComponentWidget();
 		m_transformCompWidget = new TransformComponentWidget();
 		m_physCompWidget = new PhysicsComponentWidget();
 	}
@@ -82,9 +83,9 @@ namespace AIngine::Editor {
 
 		m_transformCompWidget->Render(std::vector<GameObject*> { node });
 
-		AIngine::Rendering::Texture2D* texture = node->GetComponent<AIngine::Rendering::Texture2D>();
+		AIngine::Sprite* sprite = node->GetComponent<AIngine::Sprite>();
 		// show textureComponent
-		if (texture) {
+		if (sprite) {
 			m_textureCompWidget->Render(std::vector<GameObject*> { node });
 		}
 

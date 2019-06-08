@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Editor/Widgets/EditorWidget.h"
-#include "Editor/Widgets/TextureComponentWidget.h"
+#include "Editor/Widgets/SpriteComponentWidget.h"
 #include "Editor/Widgets/TransformComponentWidget.h"
 #include "Editor/Widgets/PhysicsComponentWidget.h"
 
@@ -28,7 +28,7 @@ namespace AIngine::Editor {
 
 	private:
 		AIngine::Structures::SceneGraph& m_sceneGraph;
-		TextureComponentWidget* m_textureCompWidget;
+		SpriteComponentWidget* m_textureCompWidget;
 		TransformComponentWidget* m_transformCompWidget;
 		PhysicsComponentWidget* m_physCompWidget;
 

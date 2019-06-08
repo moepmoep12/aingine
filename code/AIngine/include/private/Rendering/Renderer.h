@@ -5,11 +5,13 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-namespace AIngine::Rendering {
-	class Texture2D;
+namespace AIngine {
+	class Sprite;
 }
 
 namespace AIngine::Rendering {
+
+	class Texture2D;
 
 	class SpriteRenderer : public AIngine::Traverser {
 	public:
@@ -32,8 +34,8 @@ namespace AIngine::Rendering {
 
 
 	private:
-		void RenderSprite( Texture2D& texture, GLShaderProgram* shader);
-		void RenderOutline(Texture2D& texture);
+		void RenderSprite(AIngine::Sprite& sprite, GLShaderProgram* shader);
+		void RenderOutline(AIngine::Sprite& sprite);
 
 	private:
 		std::vector<glm::mat4> m_matrixStack;

@@ -70,9 +70,9 @@ void Game::OnAppStartUp()
 	AIngine::Assets::BitmapAsset* bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(std::string("assets/Intellgine/textures/White.png"));
 	AIngine::GameObject* ground = AIngine::World::SpawnObject();
 	ground->SetName("Ground");
-	AIngine::Rendering::Texture2D* texture = ground->AddComponent<AIngine::Rendering::Texture2D>();
-	texture->Generate(bitmap->GetBitmap());
-	texture->SetLocalWorldSize(glm::vec2(10, 1));
+	AIngine::Sprite* sprite = ground->AddComponent<AIngine::Sprite>();
+	sprite->GetTexture().Generate(bitmap->GetBitmap());
+	sprite->SetLocalWorldSize(glm::vec2(10, 1));
 	ground->SetLocalPosition(glm::vec2(5, 5));
 
 	AIngine::Physics::PhysicsComponent* phys = ground->AddComponent<AIngine::Physics::PhysicsComponent>();
@@ -240,10 +240,11 @@ AIngine::GameObject * Game::SpawnObjectAtMousePosition(const glm::vec2 & minSize
 	// add texture
 	{
 		using namespace AIngine::Rendering;
-		Texture2D* texture = spawnedObject->AddComponent<Texture2D>();
-		texture->Generate(shape == e_Circle ? *circleBitmap : *boxBitmap);
-		texture->SetLocalWorldSize(worldSize);
-		texture->SetColor(color);
+		AIngine::Sprite* sprite = spawnedObject->AddComponent<AIngine::Sprite>();
+		Texture2D& texture = sprite->GetTexture();
+		texture.Generate(shape == e_Circle ? *circleBitmap : *boxBitmap);
+		sprite->SetLocalWorldSize(worldSize);
+		sprite->SetColor(color);
 	}
 
 	// add physicsComponent

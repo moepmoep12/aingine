@@ -7,6 +7,7 @@
 #include "AIngine/World.h"
 #include "Assets/Assets.h"
 #include "AIngine/World.h"
+#include "AIngine/Sprite.h"
 
 #include <fstream>
 #include <vector>
@@ -35,18 +36,21 @@ namespace AIngine::Editor::Serialization {
 		const char* GAMEOBJECT_CHILDREN = "c_children";
 
 		// Components
-		const char* COMPONENT_TEXTURE2D = "texture";
+		const char* COMPONENT_SPRITE = "sprite";
 		const char* COMPONENT_PHYSICS = "physics";
 
-		// Texture2D
+		// Sprite
+		const char* SPRITE_COLOR_R = "colorR";
+		const char* SPRITE_COLOR_G = "colorG";
+		const char* SPRITE_COLOR_B = "colorB";
+		const char* SPRITE_ALPHA = "alpha";
+		const char* SPRITE_SIZE_X = "sizeX";
+		const char* SPRITE_SIZE_Y = "sizeY";
+		const char* SPRITE_PARALLAX_X = "parallaxX";
+		const char* SPRITE_PARALLAX_Y = "parallaxY";
+
+		// Texture
 		const char* TEXTURE_PATH = "path";
-		const char* TEXTURE_COLOR_R = "colorR";
-		const char* TEXTURE_COLOR_G = "colorG";
-		const char* TEXTURE_COLOR_B = "colorB";
-		const char* TEXTURE_SIZE_X = "sizeX";
-		const char* TEXTURE_SIZE_Y = "sizeY";
-		const char* TEXTURE_PARALLAX_X = "parallaxX";
-		const char* TEXTURE_PARALLAX_Y = "parallaxY";
 		const char* TEXTURE_WRAP_S = "wrapS";
 		const char* TEXTURE_WRAP_T = "wrapT";
 		const char* TEXTURE_FILTER_MIN = "filterMin";
@@ -85,7 +89,7 @@ namespace AIngine::Editor::Serialization {
 		// open the file
 		std::ifstream file;
 		file.open(path);
-
+		if (file.fail()) return;
 		json j = json::parse(file);
 		file.close();
 
@@ -115,8 +119,8 @@ namespace AIngine::Editor::Serialization {
 					// does it have any components?
 					if (child[name].contains(AttributeNames::GAMEOBJECT_COMPONENTS)) {
 						// restore Texture2D
-						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_TEXTURE2D)) {
-							RestoreTexture2D(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_TEXTURE2D], restoredObject);
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SPRITE)) {
+							RestoreSprite(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SPRITE], restoredObject);
 						}
 						// restore Physics
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_PHYSICS)) {
@@ -152,25 +156,27 @@ namespace AIngine::Editor::Serialization {
 		return AIngine::World::SpawnObject(name, parent, position, scale, rot);
 	}
 
-	void Serializer::RestoreTexture2D(const nlohmann::json * const j, AIngine::GameObject * obj)
+	void Serializer::RestoreSprite(const nlohmann::json * const j, AIngine::GameObject * obj)
 	{
-		AIngine::Rendering::Texture2D* texture = obj->AddComponent<AIngine::Rendering::Texture2D>();
+		AIngine::Sprite* sprite = obj->AddComponent<AIngine::Sprite>();
 
-		glm::vec2 size = glm::vec2((*j)[AttributeNames::TEXTURE_SIZE_X], (*j)[AttributeNames::TEXTURE_SIZE_Y]);
-		glm::vec3 color = glm::vec3((*j)[AttributeNames::TEXTURE_COLOR_R], (*j)[AttributeNames::TEXTURE_COLOR_G], (*j)[AttributeNames::TEXTURE_COLOR_B]);
-		glm::vec2 parallax = glm::vec2((*j)[AttributeNames::TEXTURE_PARALLAX_X], (*j)[AttributeNames::TEXTURE_PARALLAX_Y]);
+		glm::vec2 size = glm::vec2((*j)[AttributeNames::SPRITE_SIZE_X], (*j)[AttributeNames::SPRITE_SIZE_Y]);
+		glm::vec3 color = glm::vec3((*j)[AttributeNames::SPRITE_COLOR_R], (*j)[AttributeNames::SPRITE_COLOR_G], (*j)[AttributeNames::SPRITE_COLOR_B]);
+		glm::vec2 parallax = glm::vec2((*j)[AttributeNames::SPRITE_PARALLAX_X], (*j)[AttributeNames::SPRITE_PARALLAX_Y]);
 
-		texture->Wrap_S = (*j)[AttributeNames::TEXTURE_WRAP_S];
-		texture->Wrap_T = (*j)[AttributeNames::TEXTURE_WRAP_T];
-		texture->Filter_Min = (*j)[AttributeNames::TEXTURE_FILTER_MIN];
-		texture->Filter_Max = (*j)[AttributeNames::TEXTURE_FILTER_MAX];
-		texture->Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
-		texture->SetLocalWorldSize(size);
-		texture->SetColor(color);
-		texture->SetParallaxFactor(parallax);
+		AIngine::Rendering::Texture2D& texture = sprite->GetTexture();
+
+		texture.Wrap_S = (*j)[AttributeNames::TEXTURE_WRAP_S];
+		texture.Wrap_T = (*j)[AttributeNames::TEXTURE_WRAP_T];
+		texture.Filter_Min = (*j)[AttributeNames::TEXTURE_FILTER_MIN];
+		texture.Filter_Max = (*j)[AttributeNames::TEXTURE_FILTER_MAX];
+		texture.Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
+		sprite->SetLocalWorldSize(size);
+		sprite->SetColor(color);
+		sprite->SetParallaxFactor(parallax);
 
 		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
-		texture->Generate(bitmap);
+		texture.Generate(bitmap);
 	}
 
 	AIngine::Physics::PhysicsComponent* Serializer::RestorePhysics(const nlohmann::json * const j, AIngine::GameObject * obj)
@@ -213,6 +219,10 @@ namespace AIngine::Editor::Serialization {
 
 	bool SceneGraphSerializer::Traverse(GameObject * root)
 	{
+		nlohmann::json serializedObject = SerializeGameObject(*root);
+		Result = serializedObject;
+		m_children = &Result[root->GetName()]["c_children"];
+
 		bool result = root->Accept(*this);
 
 		return result;
@@ -222,12 +232,7 @@ namespace AIngine::Editor::Serialization {
 	{
 		nlohmann::json serializedObject = SerializeGameObject(node);
 
-		// root
-		if (!node.GetParent()) {
-			Result = serializedObject;
-			m_children = &Result[node.GetName()]["c_children"];
-		}
-		else {
+		if (node.GetName() != "Root") {
 			(*m_children).push_back(serializedObject);
 			size_t count = (*m_children).size();
 			m_children = &(*m_children)[count - 1][node.GetName()]["c_children"];
@@ -262,10 +267,10 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::GAMEOBJECT_SCALE_Y] = obj.GetLocalScale().y;
 		j[AttributeNames::GAMEOBJECT_ROTATION] = obj.GetLocalRotation();
 
-		// serialize texture
-		AIngine::Rendering::Texture2D* texture = obj.GetComponent<AIngine::Rendering::Texture2D>();
-		if (texture) {
-			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_TEXTURE2D] = SerializeTexture2D(*texture);
+		// serialize sprite
+		AIngine::Sprite* sprite = obj.GetComponent<AIngine::Sprite>();
+		if (sprite) {
+			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SPRITE] = SerializeSprite(*sprite);
 		}
 
 		// serialize physComp
@@ -291,23 +296,23 @@ namespace AIngine::Editor::Serialization {
 		return j;
 	}
 
-	nlohmann::json SceneGraphSerializer::SerializeTexture2D(AIngine::Rendering::Texture2D & texture)
+	nlohmann::json SceneGraphSerializer::SerializeSprite(AIngine::Sprite& sprite)
 	{
 		nlohmann::json j;
 
-		j[AttributeNames::TEXTURE_PATH] = texture.GetName();
-		j[AttributeNames::TEXTURE_COLOR_R] = texture.GetColor().x;
-		j[AttributeNames::TEXTURE_COLOR_G] = texture.GetColor().y;
-		j[AttributeNames::TEXTURE_COLOR_B] = texture.GetColor().z;
-		j[AttributeNames::TEXTURE_SIZE_X] = texture.GetLocalWorldSize().x;
-		j[AttributeNames::TEXTURE_SIZE_Y] = texture.GetLocalWorldSize().y;
-		j[AttributeNames::TEXTURE_PARALLAX_X] = texture.GetParallaxFactor().x;
-		j[AttributeNames::TEXTURE_PARALLAX_Y] = texture.GetParallaxFactor().y;
-		j[AttributeNames::TEXTURE_WRAP_S] = texture.Wrap_S;
-		j[AttributeNames::TEXTURE_WRAP_T] = texture.Wrap_T;
-		j[AttributeNames::TEXTURE_FILTER_MIN] = texture.Filter_Min;
-		j[AttributeNames::TEXTURE_FILTER_MAX] = texture.Filter_Max;
-		j[AttributeNames::TEXTURE_IMAGEFORMAT] = texture.Image_Format;
+		j[AttributeNames::TEXTURE_PATH] = sprite.GetTexture().FileName;
+		j[AttributeNames::SPRITE_COLOR_R] = sprite.GetColor().x;
+		j[AttributeNames::SPRITE_COLOR_G] = sprite.GetColor().y;
+		j[AttributeNames::SPRITE_COLOR_B] = sprite.GetColor().z;
+		j[AttributeNames::SPRITE_SIZE_X] = sprite.GetLocalWorldSize().x;
+		j[AttributeNames::SPRITE_SIZE_Y] = sprite.GetLocalWorldSize().y;
+		j[AttributeNames::SPRITE_PARALLAX_X] = sprite.GetParallaxFactor().x;
+		j[AttributeNames::SPRITE_PARALLAX_Y] = sprite.GetParallaxFactor().y;
+		j[AttributeNames::TEXTURE_WRAP_S] = sprite.GetTexture().Wrap_S;
+		j[AttributeNames::TEXTURE_WRAP_T] = sprite.GetTexture().Wrap_T;
+		j[AttributeNames::TEXTURE_FILTER_MIN] = sprite.GetTexture().Filter_Min;
+		j[AttributeNames::TEXTURE_FILTER_MAX] = sprite.GetTexture().Filter_Max;
+		j[AttributeNames::TEXTURE_IMAGEFORMAT] = sprite.GetTexture().Image_Format;
 
 		return j;
 	}
