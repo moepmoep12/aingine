@@ -23,7 +23,7 @@ namespace AIngine {
 	void World::DestroyObject(GameObject & gameobject)
 	{
 		if (s_instance) {
-			s_instance->DestroyObject(gameobject);
+			s_instance->m_sceneGraph->DestroyObject(gameobject);
 		}
 	}
 
