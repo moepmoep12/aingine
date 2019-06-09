@@ -21,6 +21,14 @@ namespace AIngine::Editor {
 
 				// Title
 				ImGui::BulletText("Physics Component");
+				if (ImGui::BeginPopupContextItem("Physics Component")) {
+					if (ImGui::Selectable("Delete##physComp")) {
+						obj->RemoveComponent<AIngine::Physics::PhysicsComponent>();
+						ImGui::EndPopup();
+						return;
+					}
+					ImGui::EndPopup();
+				}
 				ImGui::NewLine();
 
 
