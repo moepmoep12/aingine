@@ -41,12 +41,12 @@ namespace AIngine::Physics {
 	};
 
 	struct PhysicsBodyInformation {
-		PhysicsBodyType type;
-		PhysicsShape shape;
-		bool isTrigger;
-		float32 radius;
-		float32 width;
-		float32 height;
+		PhysicsBodyType type = PhysicsBodyType::e_Static;
+		PhysicsShape shape = PhysicsShape::e_Circle;
+		bool isTrigger = false;
+		float32 radius = 0;
+		float32 width = 0;
+		float32 height = 0;
 		glm::vec2 vertices[maxVertices];
 		unsigned int verticesCount = 0;
 	};
