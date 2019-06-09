@@ -146,7 +146,7 @@ namespace AIngine::Editor {
 
 	void Editor::OnWindowClose()
 	{
-		SaveOpenScene();
+		//SaveOpenScene();
 	}
 
 	static const std::string lastSceneFilePath = "scenes.txt";
