@@ -68,6 +68,8 @@ namespace AIngine {
 		virtual void* GetNativeWindow() const { return m_window; }
 		glm::vec2 GetMonitorResolution() const;
 		HWND GetWin32Window() const;
+		void SetWindowTitle(const char* title);
+		void SetWindowSize(int w, int h);
 		inline WindowData& GetWindowData() { return m_windowData; }
 
 		static Window* Create(const WindowConfig& config = WindowConfig());

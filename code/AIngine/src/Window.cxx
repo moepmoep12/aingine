@@ -113,6 +113,19 @@ HWND AIngine::Window::GetWin32Window() const
 	return glfwGetWin32Window(m_window);
 }
 
+void AIngine::Window::SetWindowTitle(const char * title)
+{
+	glfwSetWindowTitle(m_window, title);
+	m_windowData.Title = title;
+}
+
+void AIngine::Window::SetWindowSize(int w, int h)
+{
+	glfwSetWindowSize(m_window, w, h);
+	m_windowData.Width = w;
+	m_windowData.Height = h;
+}
+
 AIngine::Window* AIngine::Window::Create(const WindowConfig & config)
 {
 	return new Window(config);
