@@ -46,6 +46,10 @@ namespace AIngine::Structures {
 			return glm::vec2(x + width, y + height);
 		}
 
+		glm::vec2 GetCenter() const {
+			return GetPosition() + glm::vec2(width / 2.0, height / 2.0);
+		}
+
 		float Area() const {
 			return width * height;
 		}
