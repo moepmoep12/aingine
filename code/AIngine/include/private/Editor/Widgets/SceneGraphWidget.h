@@ -4,6 +4,7 @@
 #include "Editor/Widgets/SpriteComponentWidget.h"
 #include "Editor/Widgets/TransformComponentWidget.h"
 #include "Editor/Widgets/PhysicsComponentWidget.h"
+#include "Editor/Widgets/AddComponentWidget.h"
 
 #include <unordered_map>
 
@@ -31,10 +32,9 @@ namespace AIngine::Editor {
 		SpriteComponentWidget* m_textureCompWidget;
 		TransformComponentWidget* m_transformCompWidget;
 		PhysicsComponentWidget* m_physCompWidget;
+		AddComponentWidget* m_addComponentWidget;
 
 		void ShowSelectedNodeWidget(GameObject* node);
-
-
 
 		// Creates a GUI for the scenegraph
 		class ImguiTreeTraverser : public AIngine::Traverser {
@@ -55,6 +55,8 @@ namespace AIngine::Editor {
 			// we keep track which nodes are open in the editor 
 			// since we need to know when a subtree is finished in imgui
 			std::unordered_map<GameObject*, bool> m_openNodesMap;
+
+			GameObject* m_ObjectToDelete = nullptr;
 
 			void BeginDragSource();
 			void BeginDropTarget(GameObject& obj);

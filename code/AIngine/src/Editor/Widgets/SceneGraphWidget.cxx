@@ -11,6 +11,9 @@
 #include "Debug/log.h"
 #include "Editor/Editor.h"
 #include "AIngine/Sprite.h"
+#include "AIngine/World.h"
+#include "AIngine/Graphics.h"
+
 
 namespace AIngine::Editor {
 
@@ -44,7 +47,9 @@ namespace AIngine::Editor {
 		ImGui::Columns(1);
 		ImGui::Separator();
 		ImGui::PopStyleVar();
-		ShowSelectedNodeWidget(s_selectedNode);
+		if (s_selectedNode) {
+			ShowSelectedNodeWidget(s_selectedNode);
+		}
 		ImGui::End();
 	}
 
@@ -66,6 +71,7 @@ namespace AIngine::Editor {
 		delete m_textureCompWidget;
 		delete m_transformCompWidget;
 		delete m_physCompWidget;
+		delete m_addComponentWidget;
 	}
 
 
@@ -75,6 +81,7 @@ namespace AIngine::Editor {
 		m_textureCompWidget = new SpriteComponentWidget();
 		m_transformCompWidget = new TransformComponentWidget();
 		m_physCompWidget = new PhysicsComponentWidget();
+		m_addComponentWidget = new AddComponentWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
@@ -83,15 +90,20 @@ namespace AIngine::Editor {
 
 		m_transformCompWidget->Render(std::vector<GameObject*> { node });
 
-		AIngine::Sprite* sprite = node->GetComponent<AIngine::Sprite>();
-		// show textureComponent
-		if (sprite) {
-			m_textureCompWidget->Render(std::vector<GameObject*> { node });
-		}
+		if (node != &m_sceneGraph.GetRoot()) {
 
-		AIngine::Physics::PhysicsComponent* physComp = node->GetComponent<AIngine::Physics::PhysicsComponent>();
-		if (physComp) {
-			m_physCompWidget->Render({ node });
+			AIngine::Sprite* sprite = node->GetComponent<AIngine::Sprite>();
+			// show textureComponent
+			if (sprite) {
+				m_textureCompWidget->Render(std::vector<GameObject*> { node });
+			}
+
+			AIngine::Physics::PhysicsComponent* physComp = node->GetComponent<AIngine::Physics::PhysicsComponent>();
+			if (physComp) {
+				m_physCompWidget->Render({ node });
+			}
+
+			m_addComponentWidget->Render({ node });
 		}
 	}
 
@@ -107,6 +119,7 @@ namespace AIngine::Editor {
 	SceneGraphWidget::ImguiTreeTraverser::~ImguiTreeTraverser()
 	{
 		m_openNodesMap.clear();
+		m_ObjectToDelete = nullptr;
 	}
 
 	bool SceneGraphWidget::ImguiTreeTraverser::Traverse(GameObject * root)
@@ -119,10 +132,13 @@ namespace AIngine::Editor {
 		ImGui::PopStyleVar();
 
 		PerformDrop();
+		if (m_ObjectToDelete)
+			AIngine::World::DestroyObject(*m_ObjectToDelete);
 
 		return result;
 	}
 
+	// Enter a node with children
 	bool SceneGraphWidget::ImguiTreeTraverser::Enter(GameObject & node)
 	{
 		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
@@ -133,38 +149,31 @@ namespace AIngine::Editor {
 			node_flags |= ImGuiTreeNodeFlags_Selected;
 		}
 
+		AIngine::Graphics::Point(node.GetWorldPosition(), 7, glm::vec3(0, 1, 0));
+
 		// create a inner node with children
-		if (node.GetChildren().size() > 0)
-		{
-			bool node_open = ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
+		bool node_open = ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
 
-			// check if selected
-			if (ImGui::IsItemClicked()) {
-				s_selectedNode = &node;
-				AIngine::Editor::Editor::SetSelectedObjects({ s_selectedNode });
+		if (ImGui::BeginPopupContextItem()) {
+			if (ImGui::Selectable("Add GameObject")) {
+				AIngine::World::SpawnObject("NewGameObject", &node);
 			}
-
-			BeginDragSource();
-			m_openNodesMap[&node] = node_open;
-
-			return node_open;
+			if (ImGui::Selectable("Delete")) {
+				m_ObjectToDelete = &node;
+			}
+			ImGui::EndPopup();
 		}
 
-		// create a leaf
-		else {
-			node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-			ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
-			if (ImGui::IsItemClicked()) {
-				s_selectedNode = &node;
-				AIngine::Editor::Editor::SetSelectedObjects({ s_selectedNode });
-			}
-
-			BeginDragSource();
-
-			return false;
+		// check if selected
+		if (ImGui::IsItemClicked()) {
+			s_selectedNode = &node;
+			AIngine::Editor::Editor::SetSelectedObjects({ s_selectedNode });
 		}
 
+		BeginDragSource();
+		m_openNodesMap[&node] = node_open;
 
+		return node_open;
 	}
 
 	bool SceneGraphWidget::ImguiTreeTraverser::Leave(GameObject & node)
@@ -186,8 +195,21 @@ namespace AIngine::Editor {
 		{
 			node_flags |= ImGuiTreeNodeFlags_Selected;
 		}
+		AIngine::Graphics::Point(node.GetWorldPosition(), 7, glm::vec3(0, 1, 0));
 
+		// create leaf
 		ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
+
+		if (ImGui::BeginPopupContextItem()) {
+			if (ImGui::Selectable("Add GameObject")) {
+				AIngine::World::SpawnObject("NewGameObject", &node);
+			}
+			if (ImGui::Selectable("Delete")) {
+				m_ObjectToDelete = &node;
+			}
+			ImGui::EndPopup();
+		}
+
 		if (ImGui::IsItemClicked()) {
 			s_selectedNode = &node;
 			AIngine::Editor::Editor::SetSelectedObjects({ s_selectedNode });
