@@ -20,13 +20,13 @@ namespace AIngine::Rendering {
 		GLuint VBO;
 		GLfloat vertices[] = {
 			// Pos      // Tex
-			0.0f, 1.0f, 0.0f, 1.0f,
-			1.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f, 0.0f,
+			-0.5f, 0.5f, 0.0f, 1.0f,
+			0.5f, -0.5f, 1.0f, 0.0f,
+			-0.5f, -0.5f, 0.0f, 0.0f,
 
-			0.0f, 1.0f, 0.0f, 1.0f,
-			1.0f, 1.0f, 1.0f, 1.0f,
-			1.0f, 0.0f, 1.0f, 0.0f
+			-0.5f, 0.5f, 0.0f, 1.0f,
+			0.5f, 0.5f, 1.0f, 1.0f,
+			0.5f, -0.5f, 1.0f, 0.0f
 		};
 
 		// generate buffers
@@ -90,8 +90,8 @@ namespace AIngine::Rendering {
 
 		// we position & rotate around the center
 		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(gameObject.GetLocalPosition(), 0.0f));
+		m_modelMatrix = glm::rotate(m_modelMatrix, m_additiveRotation, glm::vec3(0.0f, 0.0f, 1.0f));
 		m_modelMatrix = glm::rotate(m_modelMatrix, gameObject.GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
-		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(-0.5f * textureSize.x, -0.5f * textureSize.y, 0.0f));
 		m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(textureSize, 1.0f));
 
 		// configure shader
@@ -159,12 +159,13 @@ namespace AIngine::Rendering {
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+		
 		// configure shader
 		m_shader->SetMatrix4("projection", Camera::Get().GetProjectionMatrix(), true);
 		m_outlineShader->SetMatrix4("projection", Camera::Get().GetProjectionMatrix(), true);
 
 		m_matrixStack.clear();
+		m_additiveRotation = 0;
 		m_modelMatrix = glm::mat4(1.0f);
 
 		if (AnimateOutline) {
@@ -174,7 +175,7 @@ namespace AIngine::Rendering {
 		else {
 			m_outlineShader->SetFloat("time", 3.55f);
 		}
-
+		
 		return root->Accept(*this);
 
 	}
@@ -191,7 +192,7 @@ namespace AIngine::Rendering {
 
 		m_matrixStack.push_back(m_modelMatrix);
 		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(node.GetLocalPosition(), 0.0f));
-		m_modelMatrix = glm::rotate(m_modelMatrix, node.GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
+		m_additiveRotation += node.GetLocalRotation();
 		m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(node.GetLocalScale(), 1.0f));
 		return true;
 
@@ -200,6 +201,7 @@ namespace AIngine::Rendering {
 	{
 		m_modelMatrix = m_matrixStack.back();
 		m_matrixStack.pop_back();
+		m_additiveRotation -= node.GetLocalRotation();
 		return true;
 	}
 	bool SpriteRenderer::Visit(GameObject & node)

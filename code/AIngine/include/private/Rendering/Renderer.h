@@ -43,6 +43,7 @@ namespace AIngine::Rendering {
 		GLShaderProgram* m_shader;
 		GLShaderProgram* m_outlineShader;
 		GLuint m_quadVAO;
+		float m_additiveRotation = 0.0f;
 
 	};
 
