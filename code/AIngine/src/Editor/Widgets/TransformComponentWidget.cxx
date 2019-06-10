@@ -12,20 +12,20 @@ namespace AIngine::Editor {
 
 			glm::vec2 originalPosition = activeGameObject->GetLocalPosition();
 			glm::vec2 originalScale = activeGameObject->GetLocalScale();
-			float originalRot = activeGameObject->GetLocalRotation();
 
 			float* position[] = { &activeGameObject->GetLocalPosition().x ,&activeGameObject->GetLocalPosition().y };
 			float* scale[] = { &activeGameObject->GetLocalScale().x ,&activeGameObject->GetLocalScale().y };
 			float* rot = &activeGameObject->GetLocalRotation();
+			float rotDegree = activeGameObject->GetLocalRotation() * R2D;
 
 			const float translationSliderSpeed = 0.1f;
 			const float scaleSliderSpeed = 0.1f;
-			const float rotationSliderSpeed = M_PI / 180.0f;
+			const float rotationSliderSpeed = 0.5f;
 
 			ImGui::BulletText("Transform");
 			ImGui::DragFloat2("Position", *position, translationSliderSpeed);
 			ImGui::DragFloat2("Scale", *scale, scaleSliderSpeed);
-			ImGui::DragFloat("Rotation", rot, rotationSliderSpeed);
+			ImGui::DragFloat("Rotation", &rotDegree, rotationSliderSpeed);
 
 
 			glm::vec2 newPosition = activeGameObject->GetLocalPosition();
@@ -33,7 +33,8 @@ namespace AIngine::Editor {
 
 
 			// the transform of the object was changed, we need to propagate this
-			if (newPosition != originalPosition || *rot != originalRot) {
+			if (newPosition != originalPosition || *rot != rotDegree * D2R) {
+				*rot = std::fmodf(rotDegree * D2R, 2 * M_PI);
 				PhysicsUpdateTraverser physUpdate;
 				physUpdate.Traverse(activeGameObject);
 			}
