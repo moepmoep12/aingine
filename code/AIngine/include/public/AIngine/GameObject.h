@@ -87,7 +87,10 @@ namespace AIngine {
 		glm::vec2 GetWorldPosition() const;
 		void SetWorldPosition(const glm::vec2& pos, bool bInformComponents = true);
 		glm::vec2 GetWorldScale() const;
+
+		// clamped between -2PI and 2PI
 		float GetWorldRotation() const;
+
 		void SetWorldRotation(float rot, bool bInformComponents = true);
 		void AddChild(GameObject* obj);
 		void RemoveChild(GameObject* obj);
