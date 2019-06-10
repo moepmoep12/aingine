@@ -8,6 +8,7 @@
 
 #include "imgui.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include <sstream>
 
 namespace AIngine::Editor {
 	void PhysicsComponentWidget::OnImGuiRender()
@@ -43,7 +44,6 @@ namespace AIngine::Editor {
 
 				// PhysicsBodyInformation
 				PhysicsBodyInformation& bodyInfo = physComp->m_bodyInformation;
-				struct FuncHolder { static bool ItemGetter(void* data, int idx, const char** out_str) { *out_str = ((const char**)data)[idx]; return true; } };
 
 				// BodyType Combo
 				{
@@ -93,30 +93,18 @@ namespace AIngine::Editor {
 
 				switch (bodyInfo.shape) {
 				case PhysicsShape::e_Circle:
-					// Circle attributes
-					ImGui::DragFloat2("Offset", *pos, 0.05f);
-					ImGui::DragFloat("Radius", &bodyInfo.radius, bodyInfo.radius != 0 ? bodyInfo.radius * 0.01 : 0.01);
-					// Draw the circle
-					AIngine::Graphics::Circle(physComp->GetOwner()->GetWorldPosition() + physComp->m_offset, bodyInfo.radius, glm::vec3(1, 0, 0));
-					AIngine::Graphics::Point(physComp->GetOwner()->GetWorldPosition() + physComp->m_offset, 5, glm::vec3(1, 0, 0));
+					CreateCircleUI(physComp);
 					break;
 
 				case PhysicsShape::e_Box:
-					// box attributes
-					ImGui::DragFloat("Width", &bodyInfo.width, bodyInfo.width != 0 ? bodyInfo.width * 0.01 : 0.01);
-					ImGui::DragFloat("Height", &bodyInfo.height, bodyInfo.height != 0 ? bodyInfo.height * 0.01 : 0.01);
-					UpdateBoxVertices(*physComp);
-					// draw the box
-					glm::vec2 vertices[4];
-					for (int i = 0; i < 4; i++) {
-						const b2Transform& xf = physComp->m_body->GetTransform();
-						b2Vec2 result = b2Mul(xf, b2Vec2(bodyInfo.vertices[i].x, bodyInfo.vertices[i].y));
-						vertices[i] = glm::vec2(result.x, result.y);
-						DrawVertex(vertices[i]);
-					}
-					AIngine::Graphics::Box(vertices, glm::vec3(0, 0, 1));
+					CreateBoxUI(physComp);
+					break;
+
+				case PhysicsShape::e_Polygon:
+					CreatePolygonUI(physComp);
 					break;
 				}
+
 				ImGui::NewLine();
 				ImGui::NewLine();
 
@@ -131,6 +119,9 @@ namespace AIngine::Editor {
 						physComp->CreateBoxBody(properties, bodyInfo.type, bodyInfo.width, bodyInfo.height, bodyInfo.isTrigger);
 						break;
 
+					case PhysicsShape::e_Polygon:
+						physComp->CreatePolygonBody(properties, bodyInfo.type, bodyInfo.vertices, bodyInfo.verticesCount, bodyInfo.isTrigger);
+						break;
 					}
 				}
 			}
@@ -160,7 +151,7 @@ namespace AIngine::Editor {
 		bodyInformation.verticesCount = 4;
 	}
 
-	void PhysicsComponentWidget::DrawVertex(const glm::vec2 & worldPosition)
+	void PhysicsComponentWidget::DrawVertex(const glm::vec2 & worldPosition, const glm::vec3& color)
 	{
 		float vertexSize = 6.0f;
 		glm::vec2 screenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(worldPosition);
@@ -171,16 +162,100 @@ namespace AIngine::Editor {
 			AIngine::Graphics::Point(worldPosition, vertexSize * 2, glm::vec3(0, 1, 0));
 		}
 		else {
-			AIngine::Graphics::Point(worldPosition, vertexSize * 2, glm::vec3(1, 0, 0));
+			AIngine::Graphics::Point(worldPosition, vertexSize * 2, color);
+		}
+	}
+
+	void PhysicsComponentWidget::CreateCircleUI(AIngine::Physics::PhysicsComponent * physComp)
+	{
+		float* offset[] = { &physComp->m_offset.x,&physComp->m_offset.y };
+		AIngine::Physics::PhysicsBodyInformation& bodyInfo = physComp->m_bodyInformation;
+		glm::vec3 color;
+
+		// Circle attributes
+		ImGui::DragFloat2("Offset", *offset, 0.05f);
+		if (ImGui::DragFloat("Radius", &bodyInfo.radius, bodyInfo.radius != 0 ? bodyInfo.radius * 0.01 : 0.01)) {
+			color = glm::vec3(0, 1, 0);
+		}
+		else {
+			color = glm::vec3(1, 0, 0);
 		}
 
 
-		glm::vec2 verts[4];
-		verts[0] = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertexRectangle.GetPosition());
-		verts[1] = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertexRectangle.GetBottomLeft());
-		verts[2] = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertexRectangle.GetMax());
-		verts[3] = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertexRectangle.GetTopRight());
-		AIngine::Graphics::Box(verts, glm::vec3(0, 0, 0));
+		// Draw the circle shape
+		AIngine::Graphics::Circle(physComp->GetOwner()->GetWorldPosition() + physComp->m_offset, bodyInfo.radius, glm::vec3(1, 0, 0));
+
+		// draw the center point
+		AIngine::Graphics::Point(physComp->GetOwner()->GetWorldPosition() + physComp->m_offset, 5, color);
+	}
+
+	void PhysicsComponentWidget::CreateBoxUI(AIngine::Physics::PhysicsComponent * physComp)
+	{
+		AIngine::Physics::PhysicsBodyInformation& bodyInfo = physComp->m_bodyInformation;
+
+		// box attributes
+		ImGui::DragFloat("Width", &bodyInfo.width, bodyInfo.width != 0 ? bodyInfo.width * 0.01 : 0.01);
+		ImGui::DragFloat("Height", &bodyInfo.height, bodyInfo.height != 0 ? bodyInfo.height * 0.01 : 0.01);
+		UpdateBoxVertices(*physComp);
+
+		// draw the vertices
+		glm::vec2 vertices[4];
+		for (int i = 0; i < 4; i++) {
+			const b2Transform& xf = physComp->m_body->GetTransform();
+			b2Vec2 result = b2Mul(xf, b2Vec2(bodyInfo.vertices[i].x, bodyInfo.vertices[i].y));
+			vertices[i] = glm::vec2(result.x, result.y);
+			DrawVertex(vertices[i]);
+		}
+
+		// draw the box shape
+		AIngine::Graphics::Box(vertices, glm::vec3(0, 0, 1));
+	}
+
+	void PhysicsComponentWidget::CreatePolygonUI(AIngine::Physics::PhysicsComponent * physComp)
+	{
+		AIngine::Physics::PhysicsBodyInformation& bodyInfo = physComp->m_bodyInformation;
+		glm::vec2 vertices[AIngine::Physics::maxVertices];
+		int vertexUnderChangeIndex = -1;
+
+		// transform the vertices into worldspace
+		for (int i = 0; i < bodyInfo.verticesCount; i++) {
+			const b2Transform& xf = physComp->m_body->GetTransform();
+			b2Vec2 result = b2Mul(xf, b2Vec2(bodyInfo.vertices[i].x, bodyInfo.vertices[i].y));
+			vertices[i] = glm::vec2(result.x, result.y);
+		}
+
+		// create dragfloat2 for each vertex to adjust its position
+		for (int i = 0; i < bodyInfo.verticesCount; i++) {
+			std::stringstream ss;
+			ss << "Vertex" << i << "##vertices";
+			float* pos[] = { &bodyInfo.vertices[i].x, &bodyInfo.vertices[i].y };
+			if (ImGui::DragFloat2(ss.str().c_str(), *pos, 0.01f) || ImGui::IsItemHovered()) {
+				vertexUnderChangeIndex = i;
+			}
+		}
+
+		// add vertex button
+		if (ImGui::Button("Add Vertex##physPolygon")) {
+			if (bodyInfo.verticesCount < AIngine::Physics::maxVertices) {
+				glm::vec2 newVertex = bodyInfo.vertices[bodyInfo.verticesCount - 1];
+				newVertex += newVertex * 0.1f; // offset the new vertex by 10% of the previous
+				bodyInfo.vertices[bodyInfo.verticesCount] = newVertex;
+				bodyInfo.verticesCount++;
+			}
+		}
+
+		// draw the vertices
+		for (int i = 0; i < bodyInfo.verticesCount; i++) {
+			if (i == vertexUnderChangeIndex) {
+				DrawVertex(vertices[i],glm::vec3(0,1,0));
+			}
+			else {
+				DrawVertex(vertices[i]);
+			}
+		}
+
+		// draw the polygon shape
+		AIngine::Graphics::Polygon(vertices, bodyInfo.verticesCount, glm::vec3(0, 0, 1));
 	}
 
 }

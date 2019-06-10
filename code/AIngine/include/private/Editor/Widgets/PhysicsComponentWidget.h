@@ -14,6 +14,10 @@ namespace AIngine::Editor {
 
 	private:
 		void UpdateBoxVertices(AIngine::Physics::PhysicsComponent& physComp) const;
-		void DrawVertex(const glm::vec2& worldPosition);
+		void DrawVertex(const glm::vec2& worldPosition, const glm::vec3& color = glm::vec3(1, 0, 0));
+
+		void CreateCircleUI(AIngine::Physics::PhysicsComponent* physComp);
+		void CreateBoxUI(AIngine::Physics::PhysicsComponent* physComp);
+		void CreatePolygonUI(AIngine::Physics::PhysicsComponent* physComp);
 	};
 }
