@@ -7,23 +7,25 @@
 # Hint: $> tree
 
 set(CRAPPYBIRD_SRC 
-    src/CrappyBird.cxx
+    src/CrappyBird_old.cxx
+    src/Player.cxx
     )
 
 set(CRAPPYBIRD_HEADER
-    include/CrappyBird.h
+    include/CrappyBird_old.h
+    include/Player.h
     )
 
 # Add Executable Target 
-add_executable(CrappyBird ${CRAPPYBIRD_HEADER} ${CRAPPYBIRD_SRC})
+add_executable(CrappyBird_old ${CRAPPYBIRD_HEADER} ${CRAPPYBIRD_SRC})
 
-set_target_properties(CrappyBird PROPERTIES
+set_target_properties(CrappyBird_old PROPERTIES
     CXX_STANDARD 17
     CXX_EXTENSIONS OFF) 
 
-target_include_directories(CrappyBird PRIVATE include)
+target_include_directories(CrappyBird_old PRIVATE include)
   
-target_link_libraries(CrappyBird Engine)
+target_link_libraries(CrappyBird_old Engine)
 
 #
 # --- Code Editor Configuration
@@ -31,12 +33,12 @@ target_link_libraries(CrappyBird Engine)
 
 if(WIN32)    
     # Configure VS Project
-    set_target_properties(CrappyBird 
+    set_target_properties(CrappyBird_old 
         PROPERTIES 
         VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)")
     set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         PROPERTY 
-        VS_STARTUP_PROJECT CrappyBird)
+        VS_STARTUP_PROJECT CrappyBird_old)
 endif()
 
 assign_source_group(${CRAPPYBIRD_HEADER} ${CRAPPYBIRD_SRC})
@@ -45,4 +47,4 @@ assign_source_group(${CRAPPYBIRD_HEADER} ${CRAPPYBIRD_SRC})
 # set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT CrappyBird)
 
 # Move to custom folder
-set_target_properties(CrappyBird PROPERTIES FOLDER AIngine)
+set_target_properties(CrappyBird_old PROPERTIES FOLDER AIngine)
