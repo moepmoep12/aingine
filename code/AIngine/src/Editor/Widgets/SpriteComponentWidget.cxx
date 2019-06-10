@@ -4,6 +4,9 @@
 #include "Rendering/texture.h"
 #include "Assets/Assets.h"
 
+#include <map>
+#include <nfd.h>
+
 namespace AIngine::Editor {
 
 	void AIngine::Editor::SpriteComponentWidget::OnImGuiRender()
@@ -42,10 +45,41 @@ namespace AIngine::Editor {
 
 				// preview image
 				// we preserve the image ratio in the preview
-				float imageRatio = (float)spriteComponent->m_texture.Height / (float)spriteComponent->m_texture.Width;
+				static ImVec2 uv0 = ImVec2(0, 0);
+				static ImVec2 uv1 = ImVec2(1, 1);
+				ImVec4 tint_col = ImVec4(1, 1, 1, 1);
+				static ImVec4 border_col = ImVec4(1, 1, 1, 1);
+				ImVec2 textureSize = ImVec2(spriteComponent->m_texture.Width, spriteComponent->m_texture.Height);
+				float imageRatio = 1;
+				if (spriteComponent->m_texture.FileName.empty()) {
+					tint_col = ImVec4(0, 0, 0, 1);
+					textureSize.x = 500;
+					textureSize.y = 500;
+				}
+
+				imageRatio = textureSize.x / textureSize.y;
+				ImVec2 previewImageSize = ImVec2(ImGui::GetWindowWidth() * 0.9f, ImGui::GetWindowWidth() * 0.9f * imageRatio);
+
 				ImGui::NewLine();
 				ImGui::NewLine();
-				ImGui::Image((ImTextureID)spriteComponent->m_texture.ID, ImVec2(ImGui::GetWindowWidth() * 0.9f, ImGui::GetWindowWidth() * 0.9f * imageRatio), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1, 1, 1, 1), ImVec4(1, 1, 1, 1));
+				// create the image preview
+				ImGui::SetCursorPosX(0.5f * (ImGui::GetWindowWidth() - previewImageSize.y));
+				ImGui::Image((ImTextureID)spriteComponent->m_texture.ID, previewImageSize, uv0, uv1, tint_col, border_col);
+
+				// load new texture
+				if (ImGui::IsItemClicked())
+				{
+					static const nfdchar_t *filterList = "png,jpg,jpeg,bmp";
+					nfdchar_t *outPath = NULL;
+					nfdresult_t result = NFD_OpenDialog(filterList, NULL, &outPath);
+
+					if (result == NFD_OKAY)
+					{
+						AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(outPath)->GetBitmap();
+						spriteComponent->m_texture.Generate(bitmap);
+						free(outPath);
+					}
+				}
 
 				ImGui::NewLine();
 				ImGui::NewLine();
