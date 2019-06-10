@@ -85,6 +85,12 @@ namespace AIngine {
 
 		//create Sound API
 		PushLayer(new Sounds());
+
+		// create viewport
+		m_viewport = new AIngine::Rendering::Viewport(m_window->GetWidth(), m_window->GetHeight(), 0, 0, *m_window.get());
+
+		// create camera
+		m_camera = new AIngine::Rendering::Camera(*m_viewport, glm::vec2(m_bounds.y - m_bounds.x, m_bounds.z - m_bounds.w));
 	}
 
 	Application::~Application()
@@ -100,11 +106,6 @@ namespace AIngine {
 		m_world = new World(m_bounds, m_gravity);
 		PushLayer(m_world);
 
-		// create viewport
-		m_viewport = new AIngine::Rendering::Viewport(m_window->GetWidth(), m_window->GetHeight(), 0, 0, *m_window.get());
-
-		// create camera
-		m_camera = new AIngine::Rendering::Camera(*m_viewport, glm::vec2(m_bounds.y - m_bounds.x, m_bounds.z - m_bounds.w));
 
 		// create Editor if we're in Debug
 #ifdef _DEBUG
@@ -281,7 +282,8 @@ namespace AIngine {
 
 	void Application::OnWindowResize(unsigned int width, unsigned int height)
 	{
-		m_renderer->SetViewport();
+		if (m_viewport)
+			m_renderer->SetViewport();
 	}
 
 	void Application::OnViewportChanged(AIngine::Structures::Rectangle& viewport)
