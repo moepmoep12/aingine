@@ -375,7 +375,7 @@ namespace AIngine {
 			std::string path;
 			path.append(vs).append(";").append(fs);
 			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
-			m_shader->SetInteger("text", 0,false);
+			m_shader->SetInteger("text", 0, false);
 			std::stringstream ss;
 			ss << "assets/Intellgine/fonts/arial.ttf";
 			ss << "\n";
@@ -578,7 +578,7 @@ namespace AIngine {
 	void Graphics::Text(const char * text, const glm::vec2 & screenPosition, const glm::vec2 & scale, const glm::vec3 & color, float alpha, AIngine::Rendering::Font* font)
 	{
 		if (s_instance) {
-			s_instance->m_text->AddText(std::string(text), screenPosition, scale, color, alpha,font);
+			s_instance->m_text->AddText(std::string(text), screenPosition, scale, color, alpha, font);
 		}
 	}
 
@@ -607,6 +607,17 @@ namespace AIngine {
 	{
 		glm::vec2 p1 = vertices[4 - 1];
 		for (int32 i = 0; i < 4; ++i)
+		{
+			glm::vec2 p2 = vertices[i];
+			Line(p1, p2, color);
+			p1 = p2;
+		}
+	}
+
+	void Graphics::Polygon(const glm::vec2 * vertices, unsigned int count, const glm::vec3 & color)
+	{
+		glm::vec2 p1 = vertices[count - 1];
+		for (int32 i = 0; i < count; ++i)
 		{
 			glm::vec2 p2 = vertices[i];
 			Line(p1, p2, color);

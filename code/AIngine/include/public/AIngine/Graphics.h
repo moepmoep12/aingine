@@ -32,6 +32,7 @@ namespace AIngine {
 
 		static void Circle(const glm::vec2& center, float radius, const glm::vec3& color);
 		static void Box(const glm::vec2* vertices, const glm::vec3 color);
+		static void Polygon(const glm::vec2* vertices, unsigned int count, const glm::vec3& color);
 
 	private:
 		GLRenderPoints* m_points;
