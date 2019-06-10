@@ -6,6 +6,6 @@ namespace AIngine {
 #define M_PI	3.14159265358979323846f
 #endif
 
-	const float D2R = 180.0f / M_PI;
-	const float R2D = M_PI / 180.0f;
+	const float R2D = 180.0f / M_PI;
+	const float D2R = M_PI / 180.0f;
 }
