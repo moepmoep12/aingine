@@ -41,7 +41,7 @@ namespace AIngine::Physics {
 		if (m_body && IsActive()) {
 			m_body->SetAwake(false);
 			glm::vec2 worldPos = m_owner->GetWorldPosition();
-			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), std::fmodf(m_owner->GetWorldRotation(), 2*M_PI));
+			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), m_owner->GetWorldRotation());
 			m_body->SetAwake(true);
 		}
 	}
@@ -51,7 +51,7 @@ namespace AIngine::Physics {
 		if (m_body && IsActive()) {
 			m_body->SetAwake(false);
 			glm::vec2 worldPos = m_owner->GetWorldPosition();
-			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), std::fmodf(m_owner->GetWorldRotation(), 2*M_PI));
+			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), m_owner->GetWorldRotation());
 			m_body->SetAwake(true);
 		}
 	}
@@ -195,6 +195,50 @@ namespace AIngine::Physics {
 
 		b2EdgeShape shape;
 		shape.Set(b2Vec2(p1Offset.x, p1Offset.y), b2Vec2(p2Offset.x, p2Offset.y));
+
+		fixtureDef.shape = &shape;
+		fixtureDef.isSensor = isTrigger;
+
+		m_body = AIngine::World::CreateBody(bodyDef);
+		m_body->CreateFixture(&fixtureDef);
+		m_body->SetUserData(this);
+	}
+
+	void PhysicsComponent::CreatePolygonBody(const PhysicsProperties & properties, PhysicsBodyType type, const glm::vec2 * vertices, unsigned int count, bool isTrigger)
+	{
+		if (m_body) {
+			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
+		}
+		m_properties = properties;
+		m_bodyInformation.shape = PhysicsShape::e_Polygon;
+		m_bodyInformation.type = type;
+		m_bodyInformation.isTrigger = isTrigger;
+
+		b2FixtureDef fixtureDef;
+		fixtureDef.density = properties.density;
+		fixtureDef.friction = properties.friction;
+		fixtureDef.restitution = properties.restitution;
+
+		b2BodyDef bodyDef;
+		if (type != PhysicsBodyType::e_Static) {
+			if (type == PhysicsBodyType::e_Dynamic) {
+				bodyDef.type = b2_dynamicBody;
+			}
+			else {
+				bodyDef.type = b2_kinematicBody;
+			}
+		}
+
+		glm::vec2 worldPos = m_owner->GetWorldPosition();
+		bodyDef.position.Set(worldPos.x, worldPos.y);
+		bodyDef.angle = m_owner->GetWorldRotation();
+
+		b2PolygonShape shape;
+		b2Vec2 Vertices[maxVertices];
+		for (int i = 0; i < count; i++) {
+			Vertices[i] = b2Vec2(vertices[i].x, vertices[i].y);
+		}
+		shape.Set(Vertices, count);
 
 		fixtureDef.shape = &shape;
 		fixtureDef.isSensor = isTrigger;

@@ -77,6 +77,7 @@ namespace AIngine::Physics {
 		void CreateCircleBody(const PhysicsProperties& properties, PhysicsBodyType type, float radius, bool isTrigger = false);
 		void CreateBoxBody(const PhysicsProperties& properties, PhysicsBodyType type, float width, float height, bool isTrigger = false);
 		void CreateEdgeBody(const PhysicsProperties& properties, PhysicsBodyType type, const glm::vec2& p1Offset, const glm::vec2& p2Offset, bool isTrigger = false);
+		void CreatePolygonBody(const PhysicsProperties& properties, PhysicsBodyType type, const glm::vec2* vertices, unsigned int count, bool isTrigger = false);
 
 		void ApplyForce(const glm::vec2& force, const glm::vec2& point);
 		void ApplyForce(const b2Vec2& force, const b2Vec2& point);
