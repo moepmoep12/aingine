@@ -371,7 +371,7 @@ namespace AIngine {
 			//"assets/Intellgine/fonts/arial.ttf"
 			// load shader
 			std::string vs("assets/Intellgine/shader/screenshader/vertexText.glsl");
-			std::string fs("assets/Intellgine/shader/screenShader/fragmentText.glsl");
+			std::string fs("assets/Intellgine/shader/screenshader/fragmentText.glsl");
 			std::string path;
 			path.append(vs).append(";").append(fs);
 			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();

@@ -82,8 +82,9 @@ namespace AIngine::Editor {
 				free(outPath);
 			}
 
-			ImGui::End();
 		}
+		ImGui::End();
+
 	}
 
 }
