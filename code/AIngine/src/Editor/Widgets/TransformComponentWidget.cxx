@@ -2,6 +2,8 @@
 #include "AIngine/GameObject.h"
 #include "AIngine/Constants.h"
 #include "AIngine/Physics.h"
+#include "Editor/Editor.h"
+#include "Structures/SceneGraph.h"
 
 namespace AIngine::Editor {
 	void TransformComponentWidget::OnImGuiRender()
@@ -27,6 +29,9 @@ namespace AIngine::Editor {
 			ImGui::DragFloat2("Scale", *scale, scaleSliderSpeed);
 			ImGui::DragFloat("Rotation", &rotDegree, rotationSliderSpeed);
 
+			// create vertex at the objects center to move it around with the mouse
+			if (activeGameObject != &AIngine::Editor::Editor::GetSceneGraph()->GetRoot())
+				AIngine::Editor::Editor::CreateMoveablePositionVertex(activeGameObject->GetLocalPosition(), 15, glm::vec3(0, 1, 0), glm::vec3(0, 0, 1));
 
 			glm::vec2 newPosition = activeGameObject->GetLocalPosition();
 			glm::vec newScale = activeGameObject->GetLocalScale();

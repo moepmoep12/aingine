@@ -78,6 +78,7 @@ namespace AIngine::Editor {
 		static inline std::string GetCurrentSceneFilePath() { if (s_instance) return s_instance->m_currentScene; else return std::string(); }
 		static void SetCurrentSceneFilePath(const std::string& path) { if (s_instance) s_instance->m_currentScene = path; }
 
+		static bool CreateMoveablePositionVertex(glm::vec2& worldPosition, float vertexSize, const glm::vec3& colorInteract = glm::vec3(0, 1, 0), const glm::vec3& colorNormal = glm::vec3(1, 0, 0));
 	private:
 		void DisplayFramerate(float delta) const;
 

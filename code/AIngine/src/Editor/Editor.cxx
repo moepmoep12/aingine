@@ -213,34 +213,49 @@ namespace AIngine::Editor {
 					glm::vec2 widgetPos = widgetRect.GetPosition() - windowPos /*- m_widgets[3]->GetPosition().y - m_widgets[3]->GetSize().y*/;
 					glm::vec2 widgetMax = widgetRect.GetMax() - windowPos/* - m_widgets[3]->GetPosition().y - m_widgets[3]->GetSize().y*/;
 
-					if (widgetPos.x > viewportPos.x
-						&& widgetPos.y == viewportPos.y
-						&& widgetMax.x == viewportMax.x
-						&& widgetMax.y == viewportMax.y)
-					{
-						viewportRect.width -= widgetRect.width;
+					//if (widgetPos.x > viewportPos.x
+					//	&& widgetPos.y == viewportPos.y
+					//	&& widgetMax.x == viewportMax.x
+					//	&& widgetMax.y == viewportMax.y)
+					//{
+					//	viewportRect.width -= widgetRect.width;
+					//}
+					//if (widgetPos.x == viewportPos.x
+					//	&& widgetPos.y == viewportPos.y
+					//	&& widgetMax.x < viewportMax.x
+					//	&& widgetMax.y == viewportMax.y)
+					//{
+					//	viewportRect.x += widgetRect.width;
+					//}
+					//if (widgetPos.x == viewportPos.x
+					//	&& widgetPos.y > viewportPos.y
+					//	&& widgetMax.x == viewportMax.x
+					//	&& widgetMax.y == viewportMax.y)
+					//{
+					//	viewportRect.height -= widgetRect.height;
+					//}
+					//if (widgetPos.x == viewportPos.x
+					//	&& widgetPos.y == viewportPos.y
+					//	&& widgetMax.x == viewportMax.x
+					//	&& widgetMax.y < viewportMax.y)
+					//{
+					//	viewportRect.y += widgetRect.height;
+					//}
+
+					if (widgetPos.x > viewportPos.x) {
+						viewportRect.width = widgetPos.x - viewportPos.x;
 					}
-					if (widgetPos.x == viewportPos.x
-						&& widgetPos.y == viewportPos.y
-						&& widgetMax.x < viewportMax.x
-						&& widgetMax.y == viewportMax.y)
-					{
-						viewportRect.x += widgetRect.width;
+					else if (widgetPos.x < viewportPos.x) {
+						viewportRect.x = widgetPos.x + widgetMax.x;
 					}
-					if (widgetPos.x == viewportPos.x
-						&& widgetPos.y > viewportPos.y
-						&& widgetMax.x == viewportMax.x
-						&& widgetMax.y == viewportMax.y)
-					{
-						viewportRect.height -= widgetRect.height;
+
+					if (widgetPos.y > viewportPos.y) {
+						viewportRect.height = widgetPos.y - viewportPos.y;
 					}
-					if (widgetPos.x == viewportPos.x
-						&& widgetPos.y == viewportPos.y
-						&& widgetMax.x == viewportMax.x
-						&& widgetMax.y < viewportMax.y)
-					{
-						viewportRect.y += widgetRect.height;
+					else if (widgetPos.y < viewportPos.y) {
+						viewportRect.y = widgetPos.y + widgetMax.y;
 					}
+
 				}
 			}
 			it++;
@@ -272,6 +287,32 @@ namespace AIngine::Editor {
 	bool Editor::IsAnyUIElementHovered()
 	{
 		return ImGui::IsAnyWindowHovered();
+	}
+
+	bool Editor::CreateMoveablePositionVertex(glm::vec2 & worldPosition, float vertexSize, const glm::vec3 & colorInteract, const glm::vec3 & colorNormal)
+	{
+		glm::vec2 mouseScreenPos = glm::vec2(AIngine::Input::GetMousePosition().first, AIngine::Input::GetMousePosition().second);
+		glm::vec2 mouseWorldPos = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(mouseScreenPos);
+		glm::vec2 screenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(worldPosition);
+		AIngine::Structures::Rectangle vertexRectangle(screenPos.x - vertexSize, screenPos.y - vertexSize, 2 * vertexSize, 2 * vertexSize);
+		bool bInteracted = false;
+
+		if (vertexRectangle.Contains(mouseScreenPos)) {
+			if (AIngine::Input::IsMouseButtonPressed(0)) {
+				glm::vec2 diff = mouseWorldPos - worldPosition;
+				worldPosition += diff;
+				screenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(worldPosition);
+				vertexRectangle = AIngine::Structures::Rectangle(screenPos.x - vertexSize, screenPos.y - vertexSize, 2 * vertexSize, 2 * vertexSize);
+				bInteracted = true;
+			}
+			AIngine::Graphics::Point(worldPosition, vertexSize, colorInteract);
+		}
+		else {
+			AIngine::Graphics::Point(worldPosition, vertexSize, colorNormal);
+		}
+
+		AIngine::Graphics::BoxScreen(vertexRectangle, glm::vec3(1, 1, 0));
+		return bInteracted;
 	}
 
 	void Editor::DisplayFramerate(float delta) const

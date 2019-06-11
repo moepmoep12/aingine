@@ -12,7 +12,6 @@
 #include "Editor/Editor.h"
 #include "AIngine/Sprite.h"
 #include "AIngine/World.h"
-#include "AIngine/Graphics.h"
 
 
 namespace AIngine::Editor {
@@ -27,6 +26,7 @@ namespace AIngine::Editor {
 
 		if (!ImGui::Begin("SceneGraph", &p_open, windowFlags))
 		{
+			m_isDocked = false;
 			ImGui::End();
 			return;
 		}
@@ -149,8 +149,6 @@ namespace AIngine::Editor {
 			node_flags |= ImGuiTreeNodeFlags_Selected;
 		}
 
-		AIngine::Graphics::Point(node.GetWorldPosition(), 7, glm::vec3(0, 1, 0));
-
 		// create a inner node with children
 		bool node_open = ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
 
@@ -195,7 +193,6 @@ namespace AIngine::Editor {
 		{
 			node_flags |= ImGuiTreeNodeFlags_Selected;
 		}
-		AIngine::Graphics::Point(node.GetWorldPosition(), 7, glm::vec3(0, 1, 0));
 
 		// create leaf
 		ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
