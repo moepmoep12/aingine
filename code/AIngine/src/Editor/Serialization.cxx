@@ -67,6 +67,7 @@ namespace AIngine::Editor::Serialization {
 		const char* PHYSICS_WIDTH = "width";
 		const char* PHYSICS_HEIGHT = "height";
 		const char* PHYSICS_VERTICES = "vertices";
+		const char* PHYSICS_VERTEXCOUNT = "vertexcount";
 		const char* PHYSICS_ISTRIGGER = "isTrigger";
 	}
 
@@ -206,6 +207,13 @@ namespace AIngine::Editor::Serialization {
 			physComp->CreateCircleBody(properties, type, radius, isTrigger);
 			break;
 		case(Physics::PhysicsShape::e_Polygon):
+			std::vector<glm::vec2> vertices;
+			for (auto& vertex : (*j)[AttributeNames::PHYSICS_VERTICES]) {
+				vertices.push_back(glm::vec2(vertex.at("x"), vertex.at("y")));
+			}
+			
+			int vertexCount = (*j)[AttributeNames::PHYSICS_VERTEXCOUNT];
+			physComp->CreatePolygonBody(properties, type, vertices.data(), vertexCount, isTrigger);
 			break;
 		}
 
@@ -338,6 +346,8 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::PHYSICS_SHAPE] = bodyInfo.shape;
 		j[AttributeNames::PHYSICS_BODYTYPE] = bodyInfo.type;
 		j[AttributeNames::PHYSICS_ISTRIGGER] = bodyInfo.isTrigger;
+		j[AttributeNames::PHYSICS_VERTICES] = bodyInfo.vertices;
+		j[AttributeNames::PHYSICS_VERTEXCOUNT] = bodyInfo.verticesCount;
 		j[AttributeNames::PHYSICS_DENSITY] = properties.density;
 		j[AttributeNames::PHYSICS_FRICTION] = properties.friction;
 		j[AttributeNames::PHYSICS_RESTITUTION] = properties.restitution;
@@ -345,4 +355,16 @@ namespace AIngine::Editor::Serialization {
 		return j;
 	}
 
+}
+
+namespace glm 
+{
+	void to_json(nlohmann::json& j, const glm::vec2& vec) {
+		j = nlohmann::json{ {"x",vec.x,}, {"y",vec.y} };
+	}
+
+	void from_json(const nlohmann::json& j,  glm::vec2& vec) {
+		j.at("x").get_to(vec.x);
+		j.at("y").get_to(vec.y);
+	}
 }
