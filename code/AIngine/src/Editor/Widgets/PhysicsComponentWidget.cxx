@@ -120,10 +120,10 @@ namespace AIngine::Editor {
 						break;
 
 					case PhysicsShape::e_Polygon:
-						if (bodyInfo.verticesCount <=1)
+						if (bodyInfo.verticesCount < 3)
 						{
-							bodyInfo.vertices[0] = physComp->m_owner->GetLocalPosition();
-							bodyInfo.verticesCount++;
+							// to create a valid polygon we need valid vertices. so create a box first
+							physComp->CreateBoxBody(properties, bodyInfo.type, 1, 1, bodyInfo.isTrigger);
 						}
 						physComp->CreatePolygonBody(properties, bodyInfo.type, bodyInfo.vertices, bodyInfo.verticesCount, bodyInfo.isTrigger);
 						break;
@@ -156,19 +156,31 @@ namespace AIngine::Editor {
 		bodyInformation.verticesCount = 4;
 	}
 
-	void PhysicsComponentWidget::DrawVertex(const glm::vec2 & worldPosition, const glm::vec3& color)
+	void PhysicsComponentWidget::CreateMoveableVertex(glm::vec2 & localPosition, const b2Transform & transform, float size, const glm::vec3 & colorInteract, const glm::vec3 & colorNormal)
 	{
-		float vertexSize = 6.0f;
-		glm::vec2 screenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(worldPosition);
-		AIngine::Structures::Rectangle vertexRectangle(screenPos.x - vertexSize, screenPos.y - vertexSize, 2 * vertexSize, 2 * vertexSize);
-		glm::vec2 mousePos = glm::vec2(AIngine::Input::GetMousePosition().first, AIngine::Input::GetMousePosition().second);
+		glm::vec2 mouseScreenPos = glm::vec2(AIngine::Input::GetMousePosition().first, AIngine::Input::GetMousePosition().second);
+		glm::vec2 mouseWorldPos = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(mouseScreenPos);
+		glm::vec2 vertexWorldPos = CalculateWorldPosition(localPosition, transform);
+		glm::vec2 vertexScreenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(vertexWorldPos);
+		AIngine::Structures::Rectangle vertexRectangle(vertexScreenPos.x - size, vertexScreenPos.y - size, 2 * size, 2 * size);
 
-		if (vertexRectangle.Contains(mousePos)) {
-			AIngine::Graphics::Point(worldPosition, vertexSize * 2, glm::vec3(0, 1, 0));
+		if (vertexRectangle.Contains(mouseScreenPos))
+		{
+			if (AIngine::Input::IsMouseButtonPressed(0)) {
+				glm::vec2 diff = mouseWorldPos - vertexWorldPos;
+				localPosition += diff;
+				vertexWorldPos = CalculateWorldPosition(localPosition, transform);
+				vertexScreenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(vertexWorldPos);
+				vertexRectangle = AIngine::Structures::Rectangle(vertexScreenPos.x - size, vertexScreenPos.y - size, 2 * size, 2 * size);
+			}
+
+			AIngine::Graphics::Point(CalculateWorldPosition(localPosition, transform), size, colorInteract);
 		}
 		else {
-			AIngine::Graphics::Point(worldPosition, vertexSize * 2, color);
+			AIngine::Graphics::Point(vertexWorldPos, size, colorNormal);
 		}
+
+		AIngine::Graphics::BoxScreen(vertexRectangle, glm::vec3(1, 1, 0));
 	}
 
 	void PhysicsComponentWidget::CreateCircleUI(AIngine::Physics::PhysicsComponent * physComp)
@@ -188,7 +200,7 @@ namespace AIngine::Editor {
 
 
 		// Draw the circle shape
-		AIngine::Graphics::Circle(physComp->GetOwner()->GetWorldPosition() + physComp->m_offset, bodyInfo.radius, glm::vec3(1, 0, 0));
+		AIngine::Graphics::CircleWorld(physComp->GetOwner()->GetWorldPosition() + physComp->m_offset, bodyInfo.radius, glm::vec3(1, 0, 0));
 
 		// draw the center point
 		AIngine::Graphics::Point(physComp->GetOwner()->GetWorldPosition() + physComp->m_offset, 5, color);
@@ -207,13 +219,13 @@ namespace AIngine::Editor {
 		glm::vec2 vertices[4];
 		for (int i = 0; i < 4; i++) {
 			const b2Transform& xf = physComp->m_body->GetTransform();
+			CreateMoveableVertex(bodyInfo.vertices[i], xf, 7);
 			b2Vec2 result = b2Mul(xf, b2Vec2(bodyInfo.vertices[i].x, bodyInfo.vertices[i].y));
 			vertices[i] = glm::vec2(result.x, result.y);
-			DrawVertex(vertices[i]);
 		}
 
 		// draw the box shape
-		AIngine::Graphics::Box(vertices, glm::vec3(0, 0, 1));
+		AIngine::Graphics::BoxWorld(vertices, glm::vec3(0, 0, 1));
 	}
 
 	void PhysicsComponentWidget::CreatePolygonUI(AIngine::Physics::PhysicsComponent * physComp)
@@ -222,12 +234,6 @@ namespace AIngine::Editor {
 		glm::vec2 vertices[AIngine::Physics::maxVertices];
 		int vertexUnderChangeIndex = -1;
 
-		// transform the vertices into worldspace
-		for (int i = 0; i < bodyInfo.verticesCount; i++) {
-			const b2Transform& xf = physComp->m_body->GetTransform();
-			b2Vec2 result = b2Mul(xf, b2Vec2(bodyInfo.vertices[i].x, bodyInfo.vertices[i].y));
-			vertices[i] = glm::vec2(result.x, result.y);
-		}
 
 		// create dragfloat2 for each vertex to adjust its position
 		for (int i = 0; i < bodyInfo.verticesCount; i++) {
@@ -242,29 +248,42 @@ namespace AIngine::Editor {
 		// add vertex button
 		if (ImGui::Button("Add Vertex##physPolygon")) {
 			if (bodyInfo.verticesCount < AIngine::Physics::maxVertices) {
-				glm::vec2 newVertex = bodyInfo.vertices[std::clamp(bodyInfo.verticesCount - 1,(unsigned int)0, (unsigned int)AIngine::Physics::maxVertices)];
+				glm::vec2 newVertex = bodyInfo.vertices[std::clamp(bodyInfo.verticesCount - 1, (unsigned int)0, (unsigned int)AIngine::Physics::maxVertices)];
 				newVertex += newVertex * 0.1f; // offset the new vertex by 10% of the previous
 				bodyInfo.vertices[bodyInfo.verticesCount] = newVertex;
 				bodyInfo.verticesCount++;
 			}
 		}
 
-		// draw the vertices
-		for (int i = 0; i < bodyInfo.verticesCount; i++) {
-			if (i == vertexUnderChangeIndex) {
-				DrawVertex(vertices[i],glm::vec3(0,1,0));
-			}
-			else {
-				DrawVertex(vertices[i]);
+		// remove vertex button
+		ImGui::SameLine();
+		if (ImGui::Button("Remove Vertex##physPolygon")) {
+			if (bodyInfo.verticesCount > 3) {
+				bodyInfo.verticesCount--;
+				physComp->CreatePolygonBody(physComp->m_properties, bodyInfo.type, bodyInfo.vertices, bodyInfo.verticesCount, bodyInfo.isTrigger);
 			}
 		}
 
-		// draw the polygon shape
-		if (bodyInfo.verticesCount > 1) {
-			AIngine::Graphics::Polygon(vertices, bodyInfo.verticesCount, glm::vec3(0, 0, 1));
+		// draw the vertices
+		for (int i = 0; i < bodyInfo.verticesCount; i++) {
+			const b2Transform& xf = physComp->m_body->GetTransform();
+			if (i == vertexUnderChangeIndex) {
+				CreateMoveableVertex(bodyInfo.vertices[i], xf, 7, glm::vec3(0, 1, 0), glm::vec3(0, 1, 0));
+			}
+			else {
+				CreateMoveableVertex(bodyInfo.vertices[i], xf, 7);
+			}
+			b2Vec2 result = b2Mul(xf, b2Vec2(bodyInfo.vertices[i].x, bodyInfo.vertices[i].y));
+			vertices[i] = glm::vec2(result.x, result.y);
 		}
-		else
-			AIngine::Graphics::Point(vertices[0], 7, glm::vec3(1, 0, 0));
+
+		AIngine::Graphics::PolygonWorld(vertices, bodyInfo.verticesCount, glm::vec3(0, 0, 1));
+	}
+
+	glm::vec2 PhysicsComponentWidget::CalculateWorldPosition(const glm::vec2 & localPos, const b2Transform & transform)
+	{
+		b2Vec2 temp = b2Mul(transform, b2Vec2(localPos.x, localPos.y));
+		return glm::vec2(temp.x, temp.y);
 	}
 
 }
