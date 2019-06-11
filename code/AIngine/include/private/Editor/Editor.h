@@ -75,8 +75,8 @@ namespace AIngine::Editor {
 		static inline bool GetIsInPlayMode() { if (s_instance) return s_instance->m_isInPlayMode; else return true; }
 		static void SetIsInPlayMode(bool value);
 
-		static inline std::string GetCurrentScene() { if (s_instance) return s_instance->m_currentScene; else return std::string(); }
-		static void SetCurrentScene(const std::string& path) { if (s_instance) s_instance->m_currentScene = path; }
+		static inline std::string GetCurrentSceneFilePath() { if (s_instance) return s_instance->m_currentScene; else return std::string(); }
+		static void SetCurrentSceneFilePath(const std::string& path) { if (s_instance) s_instance->m_currentScene = path; }
 
 	private:
 		void DisplayFramerate(float delta) const;

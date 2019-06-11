@@ -32,17 +32,17 @@ namespace AIngine::Editor {
 
 					if (result == NFD_OKAY)
 					{
-						AIngine::Editor::Editor::SetCurrentScene(std::string(outPath));
+						AIngine::Editor::Editor::SetCurrentSceneFilePath(std::string(outPath));
 						// delete the old tree
 						AIngine::Editor::Editor::ResetSceneGraph();
-						AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(AIngine::Editor::Editor::GetCurrentScene());
+						AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(AIngine::Editor::Editor::GetCurrentSceneFilePath());
 						free(outPath);
 					}
 				}
 
-				if (ImGui::MenuItem("Save", "STRG + S", false, !AIngine::Editor::Editor::GetCurrentScene().empty()))
+				if (ImGui::MenuItem("Save", "STRG + S", false, !AIngine::Editor::Editor::GetCurrentSceneFilePath().empty()))
 				{
-					AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(AIngine::Editor::Editor::GetCurrentScene());
+					AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(AIngine::Editor::Editor::GetCurrentSceneFilePath());
 				}
 
 				if (ImGui::MenuItem("Save As"))
@@ -52,9 +52,9 @@ namespace AIngine::Editor {
 
 					if (result == NFD_OKAY)
 					{
-						AIngine::Editor::Editor::SetCurrentScene(std::string(outPath));
+						AIngine::Editor::Editor::SetCurrentSceneFilePath(std::string(outPath));
 						// delete the old tree
-						AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(AIngine::Editor::Editor::GetCurrentScene());
+						AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(AIngine::Editor::Editor::GetCurrentSceneFilePath());
 						free(outPath);
 					}
 				}

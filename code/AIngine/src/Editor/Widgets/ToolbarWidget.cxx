@@ -1,6 +1,9 @@
 #include "Editor/Widgets/ToolbarWidget.h"
 #include "Assets/Assets.h"
 #include "Editor/Editor.h"
+#include "Editor/Serialization.h"
+
+#include <nfd.h>
 
 namespace AIngine::Editor {
 
@@ -26,8 +29,6 @@ namespace AIngine::Editor {
 
 	ToolbarWidget::~ToolbarWidget()
 	{
-
-
 		m_Icons.clear();
 	}
 
@@ -66,6 +67,23 @@ namespace AIngine::Editor {
 			AIngine::Editor::Editor::SetIsInPlayMode(!isInPlayMode);
 		}
 
-		ImGui::End();
+		if (ImGui::ImageButton((ImTextureID)m_Icons["open"].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
+		{
+			static const nfdchar_t *filterList = "txt,json";
+			nfdchar_t *outPath = NULL;
+			nfdresult_t result = NFD_OpenDialog(filterList, NULL, &outPath);
+
+			if (result == NFD_OKAY)
+			{
+				AIngine::Editor::Editor::SetCurrentSceneFilePath(std::string(outPath));
+				// delete the old tree
+				AIngine::Editor::Editor::ResetSceneGraph();
+				AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(AIngine::Editor::Editor::GetCurrentSceneFilePath());
+				free(outPath);
+			}
+
+			ImGui::End();
+		}
 	}
+
 }
