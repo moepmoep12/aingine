@@ -13,6 +13,7 @@
 #include "Editor/Widgets/LogWidget.h"
 #include "Editor/Widgets/CameraWidget.h"
 #include "Editor/Widgets/MenuBarWidget.h"
+#include "Editor/Widgets/ToolbarWidget.h"
 
 #include <glm/geometric.hpp>
 #include <fstream>
@@ -189,6 +190,7 @@ namespace AIngine::Editor {
 		m_widgets.push_back(new LogWidget());
 		m_widgets.push_back(new CameraWidget(*m_app.m_camera));
 		m_widgets.push_back(new MenubarWidget());
+		m_widgets.push_back(new ToolbarWidget());
 	}
 
 	AIngine::Structures::Rectangle Editor::CalculateViewportRect(const glm::vec2& windowSize) const

@@ -54,6 +54,7 @@ set(AINGINE_HEADER
 		include/private/Editor/Widgets/PhysicsComponentWidget.h
 		include/private/Editor/Widgets/SceneGraphWidget.h
 		include/private/Editor/Widgets/SpriteComponentWidget.h
+		include/private/Editor/Widgets/ToolbarWidget.h
 		include/private/Editor/Widgets/TransformComponentWidget.h
 		include/private/Rendering/PhysicsRenderer.h
 		include/private/Rendering/Renderer.h
@@ -85,6 +86,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/PhysicsComponentWidget.cxx
 		src/Editor/Widgets/SceneGraphWidget.cxx
 		src/Editor/Widgets/SpriteComponentWidget.cxx
+		src/Editor/Widgets/ToolbarWidget.cxx
 		src/Editor/Widgets/TransformComponentWidget.cxx
 		src/Rendering/bitmap.cxx
 		src/Rendering/Camera.cxx
