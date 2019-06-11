@@ -122,8 +122,7 @@ void AIngine::Window::SetWindowTitle(const char * title)
 void AIngine::Window::SetWindowSize(int w, int h)
 {
 	glfwSetWindowSize(m_window, w, h);
-	m_windowData.Width = w;
-	m_windowData.Height = h;
+	glfwGetWindowSize(m_window, &m_windowData.Width, &m_windowData.Height);
 }
 
 AIngine::Window* AIngine::Window::Create(const WindowConfig & config)
