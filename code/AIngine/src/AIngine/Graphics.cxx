@@ -542,6 +542,11 @@ namespace AIngine {
 		Line(b2Vec2(v1World.x, v1World.y), b2Vec2(v2World.x, v2World.y), b2Color(color.x, color.y, color.z));
 	}
 
+	void Graphics::LineScreen(const glm::vec2 & v1Screen, const glm::vec2 & v2Screen, const glm::vec3 & color)
+	{
+		Line(AIngine::Rendering::Camera::Get().ScreenToWorldPoint(v1Screen), AIngine::Rendering::Camera::Get().ScreenToWorldPoint(v2Screen), color);
+	}
+
 	void Graphics::Line(const b2Vec2 & v1World, const b2Vec2 & v2World, const b2Color & color)
 	{
 		if (s_instance) {
@@ -555,6 +560,14 @@ namespace AIngine {
 		Triangle(b2Vec2(v1World.x, v1World.y), b2Vec2(v2World.x, v2World.y), b2Vec2(v3World.x, v3World.y), b2Color(color.x, color.y, color.z));
 	}
 
+	void Graphics::TriangleScreen(const glm::vec2 & v1Screen, const glm::vec2 & v2Scsreen, const glm::vec2 & v3Screen, const glm::vec3 & color)
+	{
+		TriangleScreen(AIngine::Rendering::Camera::Get().ScreenToWorldPoint(v1Screen),
+			AIngine::Rendering::Camera::Get().ScreenToWorldPoint(v2Scsreen),
+			AIngine::Rendering::Camera::Get().ScreenToWorldPoint(v3Screen),
+			color);
+	}
+
 	void Graphics::Triangle(const b2Vec2 & v1World, const b2Vec2 & v2World, const b2Vec2 & v3World, const b2Color & color)
 	{
 		if (s_instance) {
@@ -564,10 +577,17 @@ namespace AIngine {
 		}
 
 	}
+
 	void Graphics::Point(const glm::vec2 & vWorl, float32 size, const glm::vec3 & color)
 	{
 		Point(b2Vec2(vWorl.x, vWorl.y), size, b2Color(color.x, color.y, color.z));
 	}
+
+	void Graphics::PointScreen(const glm::vec2 & vScreen, float32 size, const glm::vec3 & color)
+	{
+		Point(AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vScreen), size, color);
+	}
+
 	void Graphics::Point(const b2Vec2 & vWorl, float32 size, const b2Color & color)
 	{
 		if (s_instance) {
@@ -582,7 +602,7 @@ namespace AIngine {
 		}
 	}
 
-	void Graphics::Circle(const glm::vec2 & center, float radius, const glm::vec3 & color)
+	void Graphics::CircleWorld(const glm::vec2 & center, float radius, const glm::vec3 & color)
 	{
 		const float32 k_segments = 16.0f;
 		const float32 k_increment = 2.0f * b2_pi / k_segments;
@@ -590,7 +610,7 @@ namespace AIngine {
 		float32 cosInc = cosf(k_increment);
 		glm::vec2 r1(1.0f, 0.0f);
 		glm::vec2 v1 = center + radius * r1;
-		for (int32 i = 0; i < k_segments; ++i)
+		for (int i = 0; i < k_segments; ++i)
 		{
 			// Perform rotation to avoid additional trigonometry.
 			glm::vec2 r2;
@@ -603,10 +623,15 @@ namespace AIngine {
 		}
 	}
 
-	void Graphics::Box(const glm::vec2 * vertices, const glm::vec3 color)
+	void Graphics::CircleScreen(const glm::vec2 & center, float radius, const glm::vec3 & color)
+	{
+		CircleScreen(AIngine::Rendering::Camera::Get().ScreenToWorldPoint(center), radius, color);
+	}
+
+	void Graphics::BoxWorld(const glm::vec2 * vertices, const glm::vec3 color)
 	{
 		glm::vec2 p1 = vertices[4 - 1];
-		for (int32 i = 0; i < 4; ++i)
+		for (int i = 0; i < 4; ++i)
 		{
 			glm::vec2 p2 = vertices[i];
 			Line(p1, p2, color);
@@ -614,12 +639,51 @@ namespace AIngine {
 		}
 	}
 
-	void Graphics::Polygon(const glm::vec2 * vertices, unsigned int count, const glm::vec3 & color)
+	void Graphics::BoxScreen(const glm::vec2 * vertices, const glm::vec3 color)
+	{
+		glm::vec2 p1 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[4 - 1]);
+		for (int i = 0; i < 4; ++i)
+		{
+			glm::vec2 p2 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[i]);
+			Line(p1, p2, color);
+			p1 = p2;
+		}
+	}
+
+	void Graphics::BoxScreen(const AIngine::Structures::Rectangle & rect, const glm::vec3 color)
+	{
+		glm::vec2 vertices[4];
+		vertices[0] = rect.GetPosition();
+		vertices[1] = rect.GetBottomLeft();
+		vertices[2] = rect.GetMax();
+		vertices[3] = rect.GetTopRight();
+
+		glm::vec2 p1 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[4 - 1]);
+		for (int i = 0; i < 4; ++i)
+		{
+			glm::vec2 p2 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[i]);
+			Line(p1, p2, color);
+			p1 = p2;
+		}
+	}
+
+	void Graphics::PolygonWorld(const glm::vec2 * vertices, unsigned int count, const glm::vec3 & color)
 	{
 		glm::vec2 p1 = vertices[count - 1];
-		for (int32 i = 0; i < count; ++i)
+		for (int i = 0; i < count; ++i)
 		{
 			glm::vec2 p2 = vertices[i];
+			Line(p1, p2, color);
+			p1 = p2;
+		}
+	}
+
+	void Graphics::PolygonScreen(const glm::vec2 * vertices, unsigned int count, const glm::vec3 & color)
+	{
+		glm::vec2 p1 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[4 - 1]);
+		for (int i = 0; i < count; ++i)
+		{
+			glm::vec2 p2 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[i]);
 			Line(p1, p2, color);
 			p1 = p2;
 		}
