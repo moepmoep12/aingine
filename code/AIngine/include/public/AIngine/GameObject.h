@@ -93,6 +93,7 @@ namespace AIngine {
 
 		void SetWorldRotation(float rot, bool bInformComponents = true);
 		void AddChild(GameObject* obj);
+		void AddChild(std::vector<GameObject*>::const_iterator _where, GameObject* obj);
 		void RemoveChild(GameObject* obj);
 
 		virtual void OnUpdate(float deltatime) {}

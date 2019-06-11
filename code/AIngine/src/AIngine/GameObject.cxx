@@ -164,6 +164,13 @@ namespace AIngine {
 			obj->SetParent(*this);
 		}
 	}
+	void GameObject::AddChild(std::vector<GameObject*>::const_iterator _where, GameObject * obj)
+	{
+		if (obj) {
+			m_children.insert(_where, obj);
+			obj->SetParent(*this);
+		}
+	}
 	void GameObject::RemoveChild(GameObject * obj)
 	{
 		auto it = m_children.begin();

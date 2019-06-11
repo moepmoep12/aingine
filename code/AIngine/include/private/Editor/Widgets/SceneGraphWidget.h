@@ -56,10 +56,15 @@ namespace AIngine::Editor {
 			// since we need to know when a subtree is finished in imgui
 			std::unordered_map<GameObject*, bool> m_openNodesMap;
 
+			GameObject* m_root;
+
 			GameObject* m_ObjectToDelete = nullptr;
+			GameObject* m_ObjectToMoveUp = nullptr;
+			GameObject* m_ObjectToMoveDown = nullptr;
 
 			void BeginDragSource();
 			void BeginDropTarget(GameObject& obj);
+			void PerformGameObjectReposition();
 		};
 
 		

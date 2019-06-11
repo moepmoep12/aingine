@@ -124,6 +124,8 @@ namespace AIngine::Editor {
 
 	bool SceneGraphWidget::ImguiTreeTraverser::Traverse(GameObject * root)
 	{
+		m_root = root;
+
 		// root is always open
 		ImGui::SetNextTreeNodeOpen(true);
 
@@ -132,8 +134,10 @@ namespace AIngine::Editor {
 		ImGui::PopStyleVar();
 
 		PerformDrop();
-		if (m_ObjectToDelete)
+		if (m_ObjectToDelete && m_ObjectToDelete != m_root)
 			AIngine::World::DestroyObject(*m_ObjectToDelete);
+
+		PerformGameObjectReposition();
 
 		return result;
 	}
@@ -147,10 +151,24 @@ namespace AIngine::Editor {
 		if (s_selectedNode == &node)
 		{
 			node_flags |= ImGuiTreeNodeFlags_Selected;
+
+			// create buttons for gameobject order
+			if (&node != m_root) {
+				if (ImGui::ArrowButton("ButtonUp##gameObject1", ImGuiDir_Up)) {
+					m_ObjectToMoveUp = &node;
+				}
+				ImGui::SameLine();
+				if (ImGui::ArrowButton("ButtonDown##gameObject1", ImGuiDir_Down)) {
+					m_ObjectToMoveDown = &node;
+				}
+				ImGui::SameLine();
+			}
 		}
+
 
 		// create a inner node with children
 		bool node_open = ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
+
 
 		if (ImGui::BeginPopupContextItem()) {
 			if (ImGui::Selectable("Add GameObject")) {
@@ -192,6 +210,18 @@ namespace AIngine::Editor {
 		if (s_selectedNode == &node)
 		{
 			node_flags |= ImGuiTreeNodeFlags_Selected;
+
+			// create buttons for gameobject order
+			if (&node != m_root) {
+				if (ImGui::ArrowButton("ButtonUp##gameObject2", ImGuiDir_Up)) {
+					m_ObjectToMoveUp = &node;
+				}
+				ImGui::SameLine();
+				if (ImGui::ArrowButton("ButtonDown##gameObject2", ImGuiDir_Down)) {
+					m_ObjectToMoveDown = &node;
+				}
+				ImGui::SameLine();
+			}
 		}
 
 		// create leaf
@@ -267,6 +297,49 @@ namespace AIngine::Editor {
 			}
 			ImGui::EndDragDropTarget();
 		}
+	}
+	void SceneGraphWidget::ImguiTreeTraverser::PerformGameObjectReposition()
+	{
+		if (m_ObjectToMoveUp && m_ObjectToMoveUp != m_root) {
+			AIngine::GameObject* parent = m_ObjectToMoveUp->GetParent();
+			int index = 0;
+			int i = 0;
+
+			for (auto child : parent->GetChildren()) {
+				if (child == m_ObjectToMoveUp) {
+					index = i - 1;
+					break;
+				}
+				i++;
+			}
+
+			if (index >= 0) {
+				parent->RemoveChild(m_ObjectToMoveUp);
+				parent->AddChild(parent->GetChildren().begin() + index, m_ObjectToMoveUp);
+			}
+		}
+
+		if (m_ObjectToMoveDown && m_ObjectToMoveDown != m_root) {
+			AIngine::GameObject* parent = m_ObjectToMoveDown->GetParent();
+			int index = 0;
+			int i = 0;
+
+			for (auto child : parent->GetChildren()) {
+				if (child == m_ObjectToMoveDown) {
+					index = i +1 ;
+					break;
+				}
+				i++;
+			}
+
+			if (index < parent->GetChildren().size()) {
+				parent->RemoveChild(m_ObjectToMoveDown);
+				parent->AddChild(parent->GetChildren().begin() + index, m_ObjectToMoveDown);
+			}
+		}
+
+		m_ObjectToMoveUp = nullptr;
+		m_ObjectToMoveDown = nullptr;
 	}
 }
 
