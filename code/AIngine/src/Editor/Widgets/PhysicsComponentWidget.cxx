@@ -120,6 +120,11 @@ namespace AIngine::Editor {
 						break;
 
 					case PhysicsShape::e_Polygon:
+						if (bodyInfo.verticesCount <=1)
+						{
+							bodyInfo.vertices[0] = physComp->m_owner->GetLocalPosition();
+							bodyInfo.verticesCount++;
+						}
 						physComp->CreatePolygonBody(properties, bodyInfo.type, bodyInfo.vertices, bodyInfo.verticesCount, bodyInfo.isTrigger);
 						break;
 					}
@@ -237,7 +242,7 @@ namespace AIngine::Editor {
 		// add vertex button
 		if (ImGui::Button("Add Vertex##physPolygon")) {
 			if (bodyInfo.verticesCount < AIngine::Physics::maxVertices) {
-				glm::vec2 newVertex = bodyInfo.vertices[bodyInfo.verticesCount - 1];
+				glm::vec2 newVertex = bodyInfo.vertices[std::clamp(bodyInfo.verticesCount - 1,(unsigned int)0, (unsigned int)AIngine::Physics::maxVertices)];
 				newVertex += newVertex * 0.1f; // offset the new vertex by 10% of the previous
 				bodyInfo.vertices[bodyInfo.verticesCount] = newVertex;
 				bodyInfo.verticesCount++;
@@ -255,7 +260,11 @@ namespace AIngine::Editor {
 		}
 
 		// draw the polygon shape
-		AIngine::Graphics::Polygon(vertices, bodyInfo.verticesCount, glm::vec3(0, 0, 1));
+		if (bodyInfo.verticesCount > 1) {
+			AIngine::Graphics::Polygon(vertices, bodyInfo.verticesCount, glm::vec3(0, 0, 1));
+		}
+		else
+			AIngine::Graphics::Point(vertices[0], 7, glm::vec3(1, 0, 0));
 	}
 
 }
