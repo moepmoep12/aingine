@@ -14,7 +14,6 @@ namespace CrappyBird {
 		// configure game world
 		m_gravity = (glm::vec2(0.0, 5.0));
 		m_bounds = glm::vec4(0.0, 10.0, 0.0, 10.0);
-
 		GLFWmonitor* primary = glfwGetPrimaryMonitor();
 		const GLFWvidmode* mode = glfwGetVideoMode(primary);
 		m_window->SetWindowSize(mode->width, mode->height);
