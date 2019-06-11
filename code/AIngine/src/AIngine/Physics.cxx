@@ -239,7 +239,7 @@ namespace AIngine::Physics {
 
 		b2PolygonShape shape;
 		b2Vec2 Vertices[maxVertices];
-		for (int i = count -1; i >= 0; i--) {
+		for (int i = 0; i < count; i++) {
 			Vertices[i] = b2Vec2(vertices[i].x, vertices[i].y);
 		}
 		shape.Set(Vertices, count);
