@@ -19,7 +19,7 @@ namespace AIngine::Physics {
 	{
 		if (m_body && m_body->GetType() != b2_staticBody) {
 			b2Vec2 pos = m_body->GetPosition();
-			float rot = std::fmodf(m_body->GetAngle(), 2* M_PI);
+			float rot = std::fmodf(m_body->GetAngle(), 2 * M_PI);
 
 			m_owner->SetWorldPosition(glm::vec2(pos.x, pos.y), false);
 			m_owner->SetWorldRotation(rot, false);
@@ -61,7 +61,7 @@ namespace AIngine::Physics {
 		if (m_body && IsActive()) {
 			m_body->SetAwake(false);
 			glm::vec2 worldPos = m_owner->GetWorldPosition();
-			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), std::fmodf(m_owner->GetWorldRotation(), 2*M_PI));
+			m_body->SetTransform(b2Vec2(worldPos.x, worldPos.y), std::fmodf(m_owner->GetWorldRotation(), 2 * M_PI));
 			m_body->SetAwake(true);
 		}
 	}
@@ -76,6 +76,8 @@ namespace AIngine::Physics {
 		m_bodyInformation.shape = PhysicsShape::e_Circle;
 		m_bodyInformation.radius = radius;
 		m_bodyInformation.isTrigger = isTrigger;
+		m_bodyInformation.verticesCount = 1;
+		m_bodyInformation.vertices[0] = m_owner->GetLocalPosition();
 
 		b2FixtureDef fixtureDef;
 		fixtureDef.density = properties.density;
@@ -148,18 +150,19 @@ namespace AIngine::Physics {
 		m_body->CreateFixture(&fixtureDef);
 		m_body->SetUserData(this);
 
-		// counter clock wise
-		b2Vec2 topleft =  b2Vec2(-width/2.0, -height / 2.0);
+		//  clock wise
+		b2Vec2 topleft = b2Vec2(-width / 2.0, -height / 2.0);
 		m_bodyInformation.vertices[0] = glm::vec2(topleft.x, topleft.y);
 
-		b2Vec2 bottomLeft = b2Vec2(-width / 2.0, height / 2.0);
-		m_bodyInformation.vertices[1] = glm::vec2(bottomLeft.x, bottomLeft.y);
+		b2Vec2 topRight = b2Vec2(width / 2.0, -height / 2.0);
+		m_bodyInformation.vertices[1] = glm::vec2(topRight.x, topRight.y);
 
 		b2Vec2 bottomRight = b2Vec2(width / 2.0, height / 2.0);
 		m_bodyInformation.vertices[2] = glm::vec2(bottomRight.x, bottomRight.y);
 
-		b2Vec2 topRight =  b2Vec2(width / 2.0, -height / 2.0);
-		m_bodyInformation.vertices[3] = glm::vec2(topRight.x, topRight.y);
+		b2Vec2 bottomLeft = b2Vec2(-width / 2.0, height / 2.0);
+		m_bodyInformation.vertices[3] = glm::vec2(bottomLeft.x, bottomLeft.y);
+
 
 		m_bodyInformation.verticesCount = 4;
 	}
@@ -213,6 +216,7 @@ namespace AIngine::Physics {
 		m_bodyInformation.shape = PhysicsShape::e_Polygon;
 		m_bodyInformation.type = type;
 		m_bodyInformation.isTrigger = isTrigger;
+		m_bodyInformation.verticesCount = count;
 
 		b2FixtureDef fixtureDef;
 		fixtureDef.density = properties.density;
@@ -235,7 +239,7 @@ namespace AIngine::Physics {
 
 		b2PolygonShape shape;
 		b2Vec2 Vertices[maxVertices];
-		for (int i = 0; i < count; i++) {
+		for (int i = count -1; i >= 0; i--) {
 			Vertices[i] = b2Vec2(vertices[i].x, vertices[i].y);
 		}
 		shape.Set(Vertices, count);
@@ -246,6 +250,11 @@ namespace AIngine::Physics {
 		m_body = AIngine::World::CreateBody(bodyDef);
 		m_body->CreateFixture(&fixtureDef);
 		m_body->SetUserData(this);
+
+		// Box2D might adjust the vertices in order to fit properly, thus we need to update ours
+		for (int i = 0; i < count; i++) {
+			m_bodyInformation.vertices[i] = glm::vec2(shape.m_vertices[i].x, shape.m_vertices[i].y);
+		}
 	}
 
 	PhysicsComponent* PhysicsComponent::GetOtherCollider() {
