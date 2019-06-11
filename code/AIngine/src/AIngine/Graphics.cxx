@@ -639,6 +639,23 @@ namespace AIngine {
 		}
 	}
 
+	void Graphics::BoxWorld(const AIngine::Structures::Rectangle & rect, const glm::vec3 color)
+	{
+		glm::vec2 vertices[4];
+		vertices[0] = rect.GetPosition();
+		vertices[1] = rect.GetBottomLeft();
+		vertices[2] = rect.GetMax();
+		vertices[3] = rect.GetTopRight();
+
+		glm::vec2 p1 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[4 - 1]);
+		for (int i = 0; i < 4; ++i)
+		{
+			glm::vec2 p2 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[i]);
+			Line(p1, p2, color);
+			p1 = p2;
+		}
+	}
+
 	void Graphics::BoxScreen(const glm::vec2 * vertices, const glm::vec3 color)
 	{
 		glm::vec2 p1 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[4 - 1]);
