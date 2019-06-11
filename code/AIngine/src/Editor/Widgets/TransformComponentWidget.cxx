@@ -24,6 +24,12 @@ namespace AIngine::Editor {
 			const float scaleSliderSpeed = 0.1f;
 			const float rotationSliderSpeed = 0.5f;
 
+			// rename
+			static char str0[40] = "Enter Name";
+			if (ImGui::InputText("Name", str0, IM_ARRAYSIZE(str0))) {
+				activeGameObject->SetName(str0);
+			}
+
 			ImGui::BulletText("Transform");
 			ImGui::DragFloat2("Position", *position, translationSliderSpeed);
 			ImGui::DragFloat2("Scale", *scale, scaleSliderSpeed);
