@@ -32,7 +32,10 @@ namespace AIngine::Editor {
 
 			ImGui::Separator();
 
-			ImGui::BulletText("Transform");
+			float textWidth = ImGui::CalcTextSize("Transform Component").x;
+			ImGui::SetCursorPosX((ImGui::GetWindowWidth() - textWidth) * 0.5f);
+			ImGui::TextColored(ImVec4(1,1,0,1),"Transform Component");
+			ImGui::NewLine();
 			ImGui::DragFloat2("Position", *position, translationSliderSpeed);
 			ImGui::DragFloat2("Scale", *scale, scaleSliderSpeed);
 			ImGui::DragFloat("Rotation", &rotDegree, rotationSliderSpeed);

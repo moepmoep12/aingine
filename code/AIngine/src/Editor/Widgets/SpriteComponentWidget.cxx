@@ -22,7 +22,9 @@ namespace AIngine::Editor {
 				float* parallax[] = { &spriteComponent->m_parallaxFactor.x, &spriteComponent->m_parallaxFactor.y };
 
 				// Title
-				ImGui::BulletText("Sprite Component");
+				float textWidth = ImGui::CalcTextSize("Sprite Component").x;
+				ImGui::SetCursorPosX((ImGui::GetWindowWidth() - textWidth) * 0.5f);
+				ImGui::TextColored(ImVec4(1, 1, 0, 1), "Sprite Component");
 				if (ImGui::BeginPopupContextItem("Sprite Component")) {
 					if (ImGui::Selectable("Delete##spriteComp")) {
 						obj->RemoveComponent<AIngine::Sprite>();
@@ -57,13 +59,13 @@ namespace AIngine::Editor {
 					textureSize.y = 500;
 				}
 
-				imageRatio = textureSize.x / textureSize.y;
-				ImVec2 previewImageSize = ImVec2(ImGui::GetWindowWidth() * 0.9f, ImGui::GetWindowWidth() * 0.9f * imageRatio);
+				imageRatio = textureSize.y / textureSize.x;
+				ImVec2 previewImageSize = ImVec2(ImGui::GetWindowContentRegionWidth() * 0.9f, ImGui::GetWindowContentRegionWidth() * 0.9f * imageRatio);
 
 				ImGui::NewLine();
 				ImGui::NewLine();
 				// create the image preview
-				ImGui::SetCursorPosX(0.5f * (ImGui::GetWindowWidth() - previewImageSize.x));
+				ImGui::SetCursorPosX(0.5f * (ImGui::GetWindowContentRegionWidth() - previewImageSize.x));
 				ImGui::Image((ImTextureID)spriteComponent->m_texture.ID, previewImageSize, uv0, uv1, tint_col, border_col);
 
 				// load new texture

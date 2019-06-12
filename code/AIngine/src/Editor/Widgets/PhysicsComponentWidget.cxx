@@ -21,7 +21,9 @@ namespace AIngine::Editor {
 				ImGui::Separator();
 
 				// Title
-				ImGui::BulletText("Physics Component");
+				float textWidth = ImGui::CalcTextSize("Physics Component").x;
+				ImGui::SetCursorPosX((ImGui::GetWindowWidth() - textWidth) * 0.5f);
+				ImGui::TextColored(ImVec4(1, 1, 0, 1), "Physics Component");
 				if (ImGui::BeginPopupContextItem("Physics Component")) {
 					if (ImGui::Selectable("Delete##physComp")) {
 						obj->RemoveComponent<AIngine::Physics::PhysicsComponent>();

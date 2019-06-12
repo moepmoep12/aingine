@@ -1,10 +1,7 @@
 #pragma once
 
 #include "Editor/Widgets/ComponentWidget.h"
-#include "Rendering/texture.h"
 
-#include <string>
-#include <map>
 
 namespace AIngine::Editor {
 
@@ -14,7 +11,5 @@ namespace AIngine::Editor {
 		virtual ~AddComponentWidget();
 		// Inherited via ComponentWidget
 		virtual void OnImGuiRender() override;
-	private:
-		std::map<std::string, AIngine::Rendering::Texture2D> m_Icons;
 	};
 }

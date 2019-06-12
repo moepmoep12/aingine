@@ -2,14 +2,12 @@
 #include "AIngine/GameObject.h"
 #include "AIngine/Sprite.h"
 #include "AIngine/Physics.h"
-#include "Assets/Assets.h"
+#include "AIngine/SoundComponent.h"
 
 namespace AIngine::Editor {
 	AddComponentWidget::AddComponentWidget()
 	{
-		std::string path = "assets/Intellgine/textures/Editor/add-1.png";
-		AIngine::Rendering::Bitmap* bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
-		m_Icons["add"] = AIngine::Rendering::Texture2D(*bitmap);
+
 	}
 
 	AddComponentWidget::~AddComponentWidget()
@@ -22,19 +20,27 @@ namespace AIngine::Editor {
 		{
 			AIngine::GameObject* obj = m_activeGameObjects[0];
 			float windowWidth = ImGui::GetWindowWidth();
-			float buttonWidth = windowWidth - windowWidth * 0.15;
+			float buttonWidth = windowWidth - (windowWidth * 0.15f);
 			static bool active = false;
-
+			static const float buttonHeight = 40;
 
 			ImGui::Separator();
-			
-			if (ImGui::ImageButtonWithText((ImTextureID)m_Icons["add"].ID, "Add Compoonent")) {
+			ImGui::NewLine();
+			ImGui::NewLine();
+
+			ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
+			if (ImGui::Button("Add Component##addComponentWidget", ImVec2(buttonWidth,buttonHeight))) {
 				active = !active;
 			}
-
+			
 			if (active) {
 				static ImGuiTextFilter filter;
-				static const char* componentNames[] = { "Sprite", "Physics" };
+				static const char* componentNames[] = { "Sprite", "Physics", "Sound" };
+
+				ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
+
+				ImGui::BeginChild("addComponentChildWindow", ImVec2(buttonWidth, 30 * 3), true, 0);
+
 				filter.Draw("", buttonWidth);
 
 				for (int i = 0; i < IM_ARRAYSIZE(componentNames); i++) {
@@ -52,10 +58,16 @@ namespace AIngine::Editor {
 									obj->AddComponent<AIngine::Physics::PhysicsComponent>();
 									break;
 								}
+							case 2:
+								if (!obj->GetComponent<AIngine::SoundComponent>()) {
+									obj->AddComponent<AIngine::SoundComponent>();
+									break;
+								}
 							}
 						}
 					}
 				}
+				ImGui::EndChild();
 			}
 		}
 	}
