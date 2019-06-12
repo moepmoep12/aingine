@@ -114,6 +114,12 @@ namespace AIngine {
 		m_editor->OnViewportChangedEvent += [=](AIngine::Structures::Rectangle& viewport) {
 			this->OnViewportChanged(viewport);
 		};
+		m_editor->OnEnterPlayModeEvent += [=]() {
+			this->OnEnterPlayMode();
+		};
+		m_editor->OnLeavePlayModeEvent += [=]() {
+			this->OnLeavePlayMode();
+		};
 #endif
 
 		m_renderer->initRenderData();
@@ -195,6 +201,18 @@ namespace AIngine {
 			// propagate it to the game
 			OnAppEvent(e);
 
+	}
+
+	void Application::OnEnterPlayMode()
+	{
+		OnAppStartUp();
+		AIngine::Structures::OnStartTraverser onStartTraverser;
+		onStartTraverser.Traverse(&m_world->GetSceneGraph().GetRoot());
+	}
+
+	void Application::OnLeavePlayMode()
+	{
+		OnAppShutDown();
 	}
 
 	void Application::PushLayer(AIngine::Structures::Layer * layer)

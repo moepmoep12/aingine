@@ -98,7 +98,7 @@ namespace AIngine::Editor {
 	// cam settings
 	static float translationrate = 5.0f;
 	static float rotationrate = 0.1f;
-	static float zoomSpeed = 35;
+	static float zoomSpeed = 100;
 
 	bool Editor::OnMouseScrolled(AIngine::Events::MouseScrolledEvent::MouseScrolledEventData & e)
 	{
@@ -351,10 +351,10 @@ namespace AIngine::Editor {
 			if (value) {
 				// save the scene
 				s_instance->SaveOpenScene();
-				s_instance->m_app.OnAppStartUp();
+				s_instance->OnEnterPlayModeEvent();
 			}
 			else {
-				s_instance->m_app.OnAppShutDown();
+				s_instance->OnLeavePlayModeEvent();
 				ResetSceneGraph();
 				// load the scene
 				s_instance->LoadLastScene();

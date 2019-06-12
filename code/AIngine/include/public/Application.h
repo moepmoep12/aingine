@@ -67,6 +67,9 @@ namespace AIngine {
 		void OnWindowResize(unsigned int width, unsigned int height);
 		void OnViewportChanged(AIngine::Structures::Rectangle&);
 		void PropagateEventData(AIngine::Events::EventData& e);
+		void OnEnterPlayMode();
+		void OnLeavePlayMode();
+
 
 	private:
 		AIngine::Editor::Editor* m_editor;

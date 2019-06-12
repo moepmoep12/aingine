@@ -4,6 +4,7 @@
 #include "Structures/Rectangle.h"
 #include "Events/InputEvents.h"
 #include "Events/ApplicationEvents.h"
+#include "Events/Event.h"
 #include "Structures/memory.h"
 
 #include <glm/glm.hpp>
@@ -79,6 +80,9 @@ namespace AIngine::Editor {
 		static void SetCurrentSceneFilePath(const std::string& path) { if (s_instance) s_instance->m_currentScene = path; }
 
 		static bool CreateMoveablePositionVertex(glm::vec2& worldPosition, float vertexSize, const glm::vec3& colorInteract = glm::vec3(0, 1, 0), const glm::vec3& colorNormal = glm::vec3(1, 0, 0));
+
+		AIngine::Events::Event<void> OnEnterPlayModeEvent;
+		AIngine::Events::Event<void> OnLeavePlayModeEvent;
 	private:
 		void DisplayFramerate(float delta) const;
 
