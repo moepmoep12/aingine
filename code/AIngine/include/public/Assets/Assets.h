@@ -5,6 +5,7 @@
 #include <typeindex>
 #include <vector>
 #include <sstream>
+#include <filesystem>
 
 #include "Rendering/bitmap.h"
 #include "Rendering/shader.h"
@@ -151,8 +152,8 @@ namespace AIngine::Assets {
 		friend class SoundAssetFactory;
 
 	public:
-		cs_play_sound_def_t& GetSound() {
-			return m_soundDef;
+		inline cs_loaded_sound_t& GetLoadedSound() {
+			return m_loadedSound;
 		}
 
 		virtual ~SoundAsset() {
@@ -161,13 +162,11 @@ namespace AIngine::Assets {
 
 	private:
 		cs_loaded_sound_t m_loadedSound;
-		cs_play_sound_def_t m_soundDef;
 
 	protected:
 		SoundAsset(std::string const &path)
 			: AssetBase(path), m_loadedSound(cs_load_wav(path.c_str()))
 		{
-			m_soundDef = cs_make_def(&m_loadedSound);
 		}
 	};
 
