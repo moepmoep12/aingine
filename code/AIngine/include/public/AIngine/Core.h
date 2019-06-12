@@ -13,6 +13,7 @@
 #include "AIngine/GameObject.h"
 #include "AIngine/Physics.h"
 #include "AIngine/Sprite.h"
+#include "AIngine/SoundComponent.h"
 #include "AIngine/Graphics.h"
 #include "World.h"
 #include "Sounds.h"
@@ -22,7 +23,7 @@
 #include "EntryPoint.h"
 
 
-typedef AIngine::Sounds Sounds;
+typedef AIngine::SoundEngine SoundEngine;
 typedef AIngine::GameObject GameObject;
 typedef AIngine::Graphics Graphics;
 typedef AIngine::Assets::AssetRegistry Assets;
@@ -31,5 +32,8 @@ typedef AIngine::Assets::BitmapAsset BitmapAsset;
 typedef AIngine::Assets::SoundAsset SoundAsset;
 typedef AIngine::Assets::FontAsset FontAsset;
 
+typedef AIngine::Physics::PhysicsComponent PhysicsComponent;
+typedef AIngine::Sprite Sprite;
+typedef AIngine::Sound SoundComponent;
 
 
