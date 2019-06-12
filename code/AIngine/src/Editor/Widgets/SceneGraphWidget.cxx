@@ -195,6 +195,7 @@ namespace AIngine::Editor {
 		}
 
 		BeginDragSource();
+		BeginDropTarget(node);
 		m_openNodesMap[&node] = node_open;
 
 		return node_open;
