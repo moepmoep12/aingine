@@ -84,7 +84,7 @@ namespace AIngine {
 		m_Graphics = new AIngine::Graphics();
 
 		//create Sound API
-		PushLayer(new Sounds());
+		PushLayer(new SoundEngine(m_window->GetWin32Window()));
 
 		// create viewport
 		m_viewport = new AIngine::Rendering::Viewport(m_window->GetWidth(), m_window->GetHeight(), 0, 0, *m_window.get());

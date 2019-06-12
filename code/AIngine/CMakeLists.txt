@@ -23,6 +23,7 @@ set(AINGINE_HEADER
 		include/public/AIngine/KeyCodes.h
 		include/public/AIngine/Macros.h
 		include/public/AIngine/Physics.h
+		include/public/AIngine/SoundComponent.h
 		include/public/AIngine/Sounds.h
 		include/public/AIngine/Sprite.h
 		include/public/AIngine/World.h
@@ -53,6 +54,7 @@ set(AINGINE_HEADER
 		include/private/Editor/Widgets/MenuBarWidget.h
 		include/private/Editor/Widgets/PhysicsComponentWidget.h
 		include/private/Editor/Widgets/SceneGraphWidget.h
+		include/private/Editor/Widgets/SoundComponentWidget.h
 		include/private/Editor/Widgets/SpriteComponentWidget.h
 		include/private/Editor/Widgets/ToolbarWidget.h
 		include/private/Editor/Widgets/TransformComponentWidget.h
@@ -67,11 +69,11 @@ set(AINGINE_HEADER
 set(AINGINE_SRC
         src/Application.cxx
 		src/Window.cxx
-		src/AIngine/Component.cxx
 		src/AIngine/GameObject.cxx
 		src/AIngine/Graphics.cxx
 		src/AIngine/Input.cxx
 		src/AIngine/Physics.cxx
+		src/AIngine/SoundComponent.cxx
 		src/AIngine/Sounds.cxx
 		src/AIngine/Sprite.cxx
 		src/AIngine/World.cxx
@@ -85,6 +87,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/MenuBarWidget.cxx
 		src/Editor/Widgets/PhysicsComponentWidget.cxx
 		src/Editor/Widgets/SceneGraphWidget.cxx
+		src/Editor/Widgets/SoundComponentWidget.cxx
 		src/Editor/Widgets/SpriteComponentWidget.cxx
 		src/Editor/Widgets/ToolbarWidget.cxx
 		src/Editor/Widgets/TransformComponentWidget.cxx
