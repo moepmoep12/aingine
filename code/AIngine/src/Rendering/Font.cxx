@@ -4,6 +4,7 @@
 #include "Debug/log.h"
 
 #include <string>
+#include <filesystem>
 
 namespace AIngine::Rendering {
 	Font::Font(const char * path, unsigned int size)
@@ -72,8 +73,8 @@ namespace AIngine::Rendering {
 
 	void Font::ExtractName(const char * path)
 	{
-		std::string Path(path);
-		unsigned int first = Path.find_last_of('/');
+		std::string Path(std::filesystem::canonical(path).string());
+		unsigned int first = Path.find_last_of('\\'); 
 		unsigned int last = Path.find_last_of('.');
 		Name = Path.substr(first, last - first).c_str();
 	}

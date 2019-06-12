@@ -562,7 +562,7 @@ namespace AIngine {
 
 	void Graphics::TriangleScreen(const glm::vec2 & v1Screen, const glm::vec2 & v2Scsreen, const glm::vec2 & v3Screen, const glm::vec3 & color)
 	{
-		TriangleScreen(AIngine::Rendering::Camera::Get().ScreenToWorldPoint(v1Screen),
+		Triangle(AIngine::Rendering::Camera::Get().ScreenToWorldPoint(v1Screen),
 			AIngine::Rendering::Camera::Get().ScreenToWorldPoint(v2Scsreen),
 			AIngine::Rendering::Camera::Get().ScreenToWorldPoint(v3Screen),
 			color);
@@ -625,7 +625,7 @@ namespace AIngine {
 
 	void Graphics::CircleScreen(const glm::vec2 & center, float radius, const glm::vec3 & color)
 	{
-		CircleScreen(AIngine::Rendering::Camera::Get().ScreenToWorldPoint(center), radius, color);
+		CircleWorld(AIngine::Rendering::Camera::Get().ScreenToWorldPoint(center), radius, color);
 	}
 
 	void Graphics::BoxWorld(const glm::vec2 * vertices, const glm::vec3 color)
