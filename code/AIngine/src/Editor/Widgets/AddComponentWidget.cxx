@@ -2,8 +2,19 @@
 #include "AIngine/GameObject.h"
 #include "AIngine/Sprite.h"
 #include "AIngine/Physics.h"
+#include "Assets/Assets.h"
 
 namespace AIngine::Editor {
+	AddComponentWidget::AddComponentWidget()
+	{
+		std::string path = "assets/Intellgine/textures/Editor/add-1.png";
+		AIngine::Rendering::Bitmap* bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
+		m_Icons["add"] = AIngine::Rendering::Texture2D(*bitmap);
+	}
+
+	AddComponentWidget::~AddComponentWidget()
+	{
+	}
 
 	void AddComponentWidget::OnImGuiRender()
 	{
@@ -16,8 +27,8 @@ namespace AIngine::Editor {
 
 
 			ImGui::Separator();
-			//ImGui::Indent((windowWidth - buttonWidth) * 0.5);
-			if (ImGui::Button("AddComponent", ImVec2(buttonWidth,0))) {
+			
+			if (ImGui::ImageButtonWithText((ImTextureID)m_Icons["add"].ID, "Add Compoonent")) {
 				active = !active;
 			}
 
