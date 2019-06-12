@@ -15,6 +15,7 @@ namespace AIngine {
 		inline bool IsActive() const { return m_isActive; }
 		virtual void SetActive(bool active) { m_isActive = active; }
 
+		virtual void OnStart() {}
 		virtual void OnEvent(AIngine::Events::EventData& e) {}
 		virtual void OnUpdate(float deltatime) {}
 		virtual void OnImguiRender() {}

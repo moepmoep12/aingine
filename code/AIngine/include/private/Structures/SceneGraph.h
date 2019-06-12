@@ -76,6 +76,7 @@ namespace AIngine::Structures {
 		float m_deltaTime;
 	};
 
+	// Traverses the SceneGraph to propagate events
 	class EventTraverser : public Traverser {
 	public:
 		EventTraverser(AIngine::Events::EventData& e);
@@ -90,6 +91,15 @@ namespace AIngine::Structures {
 
 	private:
 		AIngine::Events::EventData& m_eventData;
+	};
+
+	// Traverses the SceneGraph to call the Startmethod of components
+	class OnStartTraverser : public Traverser {
+	public:
+		virtual bool Traverse(GameObject* root) override;
+		virtual bool Enter(GameObject & node) override;
+		virtual bool Leave(GameObject & node) override { return true; }
+		virtual bool Visit(GameObject & node) override;
 	};
 
 

@@ -215,4 +215,33 @@ namespace AIngine::Structures {
 		return true;
 	}
 
+	/********************************** OnStart TRAVERSER ****************************************/
+
+	bool OnStartTraverser::Traverse(GameObject * root)
+	{
+		return root->Accept(*this);
+	}
+
+	bool OnStartTraverser::Enter(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+		while (it != node.GetComponents().end()) {
+			Component* comp = *it._Ptr;
+			comp->OnStart();
+			it++;
+		}
+		return true;
+	}
+
+	bool OnStartTraverser::Visit(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+		while (it != node.GetComponents().end()) {
+			Component* comp = *it._Ptr;
+			comp->OnStart();
+			it++;
+		}
+		return true;
+	}
+
 }
