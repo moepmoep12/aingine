@@ -30,6 +30,8 @@ namespace AIngine::Editor {
 				activeGameObject->SetName(str0);
 			}
 
+			ImGui::Separator();
+
 			ImGui::BulletText("Transform");
 			ImGui::DragFloat2("Position", *position, translationSliderSpeed);
 			ImGui::DragFloat2("Scale", *scale, scaleSliderSpeed);

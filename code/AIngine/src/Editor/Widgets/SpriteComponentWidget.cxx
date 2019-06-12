@@ -63,7 +63,7 @@ namespace AIngine::Editor {
 				ImGui::NewLine();
 				ImGui::NewLine();
 				// create the image preview
-				ImGui::SetCursorPosX(0.5f * (ImGui::GetWindowWidth() - previewImageSize.y));
+				ImGui::SetCursorPosX(0.5f * (ImGui::GetWindowWidth() - previewImageSize.x));
 				ImGui::Image((ImTextureID)spriteComponent->m_texture.ID, previewImageSize, uv0, uv1, tint_col, border_col);
 
 				// load new texture
