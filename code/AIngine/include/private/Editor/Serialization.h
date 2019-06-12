@@ -9,6 +9,7 @@
 namespace AIngine {
 	class GameObject;
 	class Sprite;
+	class SoundComponent;
 
 	namespace Rendering {
 		class Texture2D;
@@ -30,6 +31,7 @@ namespace AIngine::Editor::Serialization
 		static AIngine::GameObject* RestoreGameObject(const nlohmann::json* const j, AIngine::GameObject* parent);
 		static void RestoreSprite(const nlohmann::json* const j, AIngine::GameObject* obj);
 		static AIngine::Physics::PhysicsComponent* RestorePhysics(const nlohmann::json* const j, AIngine::GameObject* obj);
+		static AIngine::SoundComponent* RestorySoundComponent(const nlohmann::json* const j, AIngine::GameObject* obj);
 	};
 
 	class SceneGraphSerializer : public AIngine::Traverser {
@@ -47,6 +49,7 @@ namespace AIngine::Editor::Serialization
 		nlohmann::json SerializeWorld();
 		nlohmann::json SerializeSprite(AIngine::Sprite& sprite);
 		nlohmann::json SerializePhysicsComponent(AIngine::Physics::PhysicsComponent& physComp);
+		nlohmann::json SerializeSoundComponent(AIngine::SoundComponent& soundComp);
 		nlohmann::json* m_children;
 		std::vector<AIngine::GameObject*> m_spawnedObjects;
 

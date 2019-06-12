@@ -8,10 +8,12 @@
 #include "Assets/Assets.h"
 #include "AIngine/World.h"
 #include "AIngine/Sprite.h"
+#include "AIngine/SoundComponent.h"
 
 #include <fstream>
 #include <vector>
 #include <glm/glm.hpp>
+#include <filesystem>
 
 namespace AIngine::Editor::Serialization {
 
@@ -38,6 +40,7 @@ namespace AIngine::Editor::Serialization {
 		// Components
 		const char* COMPONENT_SPRITE = "sprite";
 		const char* COMPONENT_PHYSICS = "physics";
+		const char* COMPONENT_SOUND = "soundComponent";
 
 		// Sprite
 		const char* SPRITE_COLOR_R = "colorR";
@@ -69,6 +72,17 @@ namespace AIngine::Editor::Serialization {
 		const char* PHYSICS_VERTICES = "vertices";
 		const char* PHYSICS_VERTEXCOUNT = "vertexcount";
 		const char* PHYSICS_ISTRIGGER = "isTrigger";
+
+		// SoundComponent
+		const char* SOUNDCOMP_SOUNDS = "sounds";
+		const char* SOUND_LOOPED = "looped";
+		const char* SOUND_PAN = "pan";
+		const char* SOUND_PITCH = "ptich";
+		const char* SOUND_DELAY = "delay";
+		const char* SOUND_NAME = "name";
+		const char* SOUND_PATH = "path";
+		const char* SOUND_VLEFT = "volumeLeft";
+		const char* SOUND_VRIGHT = "volumeRight";
 	}
 
 	void Serializer::SerializeSceneGraph(const std::string & path)
@@ -119,13 +133,17 @@ namespace AIngine::Editor::Serialization {
 					restoredObject = RestoreGameObject(&child[name], parent);
 					// does it have any components?
 					if (child[name].contains(AttributeNames::GAMEOBJECT_COMPONENTS)) {
-						// restore Texture2D
+						// restore Sprite
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SPRITE)) {
 							RestoreSprite(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SPRITE], restoredObject);
 						}
 						// restore Physics
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_PHYSICS)) {
 							physComponents.push_back(RestorePhysics(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PHYSICS], restoredObject));
+						}
+						// restore soundComponent
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SOUND)) {
+							RestorySoundComponent(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SOUND], restoredObject);
 						}
 					}
 
@@ -211,7 +229,7 @@ namespace AIngine::Editor::Serialization {
 			for (auto& vertex : (*j)[AttributeNames::PHYSICS_VERTICES]) {
 				vertices.push_back(glm::vec2(vertex.at("x"), vertex.at("y")));
 			}
-			
+
 			int vertexCount = (*j)[AttributeNames::PHYSICS_VERTEXCOUNT];
 			physComp->CreatePolygonBody(properties, type, vertices.data(), vertexCount, isTrigger);
 			break;
@@ -220,6 +238,26 @@ namespace AIngine::Editor::Serialization {
 		physComp->SetActive(false);
 
 		return physComp;
+	}
+
+	AIngine::SoundComponent * Serializer::RestorySoundComponent(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		AIngine::SoundComponent* soundComp = obj->AddComponent<AIngine::SoundComponent>();
+
+		for (auto& sound  : *j ) {
+			AIngine::Assets::SoundAsset* soundAsset = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::SoundAsset>(sound.at(AttributeNames::SOUND_PATH));
+			AIngine::Sound restoredSound(*soundAsset);
+			restoredSound.SetLooping(sound.at(AttributeNames::SOUND_LOOPED));
+			restoredSound.SetPan(sound.at(AttributeNames::SOUND_PAN));
+			restoredSound.SetPitch(sound.at(AttributeNames::SOUND_PITCH));
+			restoredSound.SetDelay(sound.at(AttributeNames::SOUND_DELAY));
+			float left = sound.at(AttributeNames::SOUND_VLEFT);
+			float right = sound.at(AttributeNames::SOUND_VRIGHT);
+			restoredSound.SetVolume(left, right);
+			soundComp->AddSound(restoredSound);
+		}
+
+		return soundComp;
 	}
 
 
@@ -287,6 +325,11 @@ namespace AIngine::Editor::Serialization {
 			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PHYSICS] = SerializePhysicsComponent(*physComp);
 		}
 
+		AIngine::SoundComponent* soundComp = obj.GetComponent<AIngine::SoundComponent>();
+		if (soundComp) {
+			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SOUND] = SerializeSoundComponent(*soundComp);
+		}
+
 		outer[obj.GetName()] = j;
 		return outer;
 	}
@@ -308,7 +351,7 @@ namespace AIngine::Editor::Serialization {
 	{
 		nlohmann::json j;
 
-		j[AttributeNames::TEXTURE_PATH] = sprite.GetTexture().FileName;
+		j[AttributeNames::TEXTURE_PATH] = std::filesystem::relative(sprite.GetTexture().FileName).string();
 		j[AttributeNames::SPRITE_COLOR_R] = sprite.GetColor().x;
 		j[AttributeNames::SPRITE_COLOR_G] = sprite.GetColor().y;
 		j[AttributeNames::SPRITE_COLOR_B] = sprite.GetColor().z;
@@ -355,15 +398,36 @@ namespace AIngine::Editor::Serialization {
 		return j;
 	}
 
+	nlohmann::json SceneGraphSerializer::SerializeSoundComponent(AIngine::SoundComponent & soundComp)
+	{
+		nlohmann::json outer;
+
+		for (auto& it = soundComp.GetSounds().begin(); it != soundComp.GetSounds().end(); it++)
+		{
+			nlohmann::json j;
+			const AIngine::Sound& sound = *it._Ptr;
+			j[AttributeNames::SOUND_DELAY] = sound.GetDelay();
+			j[AttributeNames::SOUND_LOOPED] = sound.IsLooping();
+			j[AttributeNames::SOUND_PATH] = std::filesystem::relative(sound.GetPath()).string();
+			j[AttributeNames::SOUND_PAN] = sound.GetPan();
+			j[AttributeNames::SOUND_PITCH] = sound.GetPitch();
+			j[AttributeNames::SOUND_VLEFT] = sound.GetVolume().first;
+			j[AttributeNames::SOUND_VRIGHT] = sound.GetVolume().second;
+			outer[sound.GetName()] = j;
+		}
+
+		return outer;
+	}
+
 }
 
-namespace glm 
+namespace glm
 {
 	void to_json(nlohmann::json& j, const glm::vec2& vec) {
 		j = nlohmann::json{ {"x",vec.x,}, {"y",vec.y} };
 	}
 
-	void from_json(const nlohmann::json& j,  glm::vec2& vec) {
+	void from_json(const nlohmann::json& j, glm::vec2& vec) {
 		j.at("x").get_to(vec.x);
 		j.at("y").get_to(vec.y);
 	}
