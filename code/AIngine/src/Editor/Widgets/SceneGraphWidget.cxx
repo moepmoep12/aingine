@@ -12,6 +12,7 @@
 #include "Editor/Editor.h"
 #include "AIngine/Sprite.h"
 #include "AIngine/World.h"
+#include "AIngine/SoundComponent.h"
 
 
 namespace AIngine::Editor {
@@ -72,6 +73,7 @@ namespace AIngine::Editor {
 		delete m_transformCompWidget;
 		delete m_physCompWidget;
 		delete m_addComponentWidget;
+		delete m_soundComponentWidget;
 	}
 
 
@@ -82,6 +84,7 @@ namespace AIngine::Editor {
 		m_transformCompWidget = new TransformComponentWidget();
 		m_physCompWidget = new PhysicsComponentWidget();
 		m_addComponentWidget = new AddComponentWidget();
+		m_soundComponentWidget = new SoundComponentWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
@@ -101,6 +104,11 @@ namespace AIngine::Editor {
 			AIngine::Physics::PhysicsComponent* physComp = node->GetComponent<AIngine::Physics::PhysicsComponent>();
 			if (physComp) {
 				m_physCompWidget->Render({ node });
+			}
+
+			AIngine::SoundComponent* soundComp = node->GetComponent<AIngine::SoundComponent>();
+			if (soundComp) {
+				m_soundComponentWidget->Render({ node });
 			}
 
 			m_addComponentWidget->Render({ node });

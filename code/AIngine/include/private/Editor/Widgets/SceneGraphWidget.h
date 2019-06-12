@@ -5,6 +5,7 @@
 #include "Editor/Widgets/TransformComponentWidget.h"
 #include "Editor/Widgets/PhysicsComponentWidget.h"
 #include "Editor/Widgets/AddComponentWidget.h"
+#include "Editor/Widgets/SoundComponentWidget.h"
 
 #include <unordered_map>
 
@@ -33,6 +34,7 @@ namespace AIngine::Editor {
 		TransformComponentWidget* m_transformCompWidget;
 		PhysicsComponentWidget* m_physCompWidget;
 		AddComponentWidget* m_addComponentWidget;
+		SoundComponentWidget* m_soundComponentWidget;
 
 		void ShowSelectedNodeWidget(GameObject* node);
 
