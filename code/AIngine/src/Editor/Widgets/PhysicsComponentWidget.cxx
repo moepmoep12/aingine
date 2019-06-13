@@ -131,6 +131,7 @@ namespace AIngine::Editor {
 						break;
 					}
 				}
+				ImGui::Separator();
 			}
 		}
 	}

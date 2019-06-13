@@ -24,6 +24,8 @@ namespace AIngine::Editor {
 			const float scaleSliderSpeed = 0.1f;
 			const float rotationSliderSpeed = 0.5f;
 
+			ImGui::Separator();
+
 			// rename
 			static char str0[40] = "Enter Name";
 			if (ImGui::InputText("Name", str0, IM_ARRAYSIZE(str0))) {
@@ -73,6 +75,8 @@ namespace AIngine::Editor {
 			}
 
 			PerformGameObjectReposition(activeGameObject);
+
+			ImGui::Separator();
 		}
 	}
 

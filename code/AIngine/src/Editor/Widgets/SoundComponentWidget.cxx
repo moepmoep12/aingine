@@ -174,5 +174,6 @@ namespace AIngine::Editor {
 				soundComp->m_sounds.erase(toRemove);
 			}
 		}
+		ImGui::Separator();
 	}
 }

@@ -116,7 +116,7 @@ namespace AIngine::Editor {
 				static const char* wrapSNames[] = { "Repeat","Mirrored Repeat", "Clamp to Edge", "Clamp to Border" };
 				static const char* wrapTNames[] = { "Repeat","Mirrored Repeat", "Clamp to Edge", "Clamp to Border" };
 
-				ImGui::Columns(1);
+				ImGui::EndColumns();
 
 				// Wrap_S Combo
 				static int currentWrapSIndex = ModeToIndex[spriteComponent->m_texture.Wrap_S];
@@ -202,7 +202,7 @@ namespace AIngine::Editor {
 
 					spriteComponent->m_texture.Generate(bitmap);
 				}
-
+				ImGui::Separator();
 
 			}
 		}
