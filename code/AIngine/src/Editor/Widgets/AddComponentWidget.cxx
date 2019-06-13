@@ -3,6 +3,10 @@
 #include "AIngine/Sprite.h"
 #include "AIngine/Physics.h"
 #include "AIngine/SoundComponent.h"
+#include "Application.h"
+
+#include <vector>
+#include <string>
 
 namespace AIngine::Editor {
 	AddComponentWidget::AddComponentWidget()
@@ -29,13 +33,13 @@ namespace AIngine::Editor {
 			ImGui::NewLine();
 
 			ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
-			if (ImGui::Button("Add Component##addComponentWidget", ImVec2(buttonWidth,buttonHeight))) {
+			if (ImGui::Button("Add Component##addComponentWidget", ImVec2(buttonWidth, buttonHeight))) {
 				active = !active;
 			}
-			
+
 			if (active) {
 				static ImGuiTextFilter filter;
-				static const char* componentNames[] = { "Sprite", "Physics", "Sound" };
+				std::vector<std::string > componentNames = AIngine::GetAvailableComponentNames();
 
 				ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
 
@@ -43,9 +47,9 @@ namespace AIngine::Editor {
 
 				filter.Draw("", buttonWidth);
 
-				for (int i = 0; i < IM_ARRAYSIZE(componentNames); i++) {
-					if (filter.PassFilter(componentNames[i])) {
-						if (ImGui::Selectable(componentNames[i])) {
+				for (int i = 0; i < componentNames.size(); i++) {
+					if (filter.PassFilter(componentNames[i].c_str())) {
+						if (ImGui::Selectable(componentNames[i].c_str())) {
 							switch (i) {
 							case 0:
 								if (!obj->GetComponent<AIngine::Sprite>()) {
@@ -63,6 +67,9 @@ namespace AIngine::Editor {
 									obj->AddComponent<AIngine::SoundComponent>();
 									break;
 								}
+							default:
+								AIngine::OnAddComponent(obj, i - 3);
+								break;
 							}
 						}
 					}

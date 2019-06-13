@@ -7,6 +7,7 @@
 #include "Structures/SceneGraph.h"
 #include "AIngine/Sounds.h"
 #include "Rendering/Font.h"
+#include "AIngine/Script.h"
 
 #include <memory>
 
@@ -106,6 +107,10 @@ namespace AIngine {
 		m_world = new World(m_bounds, m_gravity);
 		PushLayer(m_world);
 
+		// in order to compile the template we need to dummy-call it
+		m_world->GetSceneGraph().GetRoot().AddComponent<Script>();
+		m_world->GetSceneGraph().GetRoot().GetComponent<Script>();
+		m_world->GetSceneGraph().GetRoot().RemoveComponent<Script>();
 
 		// create Editor if we're in Debug
 #ifdef _DEBUG
@@ -240,6 +245,11 @@ namespace AIngine {
 			return false;
 	}
 
+	bool Application::IsRunning()
+	{
+		return AIngine::Editor::Editor::GetIsInPlayMode();
+	}
+
 	void Application::RegisterCallbacks()
 	{
 		m_window->GetWindowData().OnKeyPressedEvent += [=](AIngine::KeyCodes key) {
@@ -310,5 +320,16 @@ namespace AIngine {
 		m_camera->SetZoom((float)m_window->GetWidth() / (float)m_world->GetBounds().y);
 		m_renderer->SetViewport();
 		CORE_INFO("Viewport Size Changed To ({0} | {1}) at Position ({2} | {3})", m_viewport->m_width, m_viewport->m_height, m_viewport->m_x, m_viewport->m_y);
+	}
+
+	std::vector<std::string> GetAvailableComponentNames()
+	{
+		std::vector<std::string> result = { "Sprite", "Physics", "Sound" };
+
+		for (auto& it = ApplicationComponentNames.begin(); it != ApplicationComponentNames.end(); it++) {
+			result.push_back(*it._Ptr);
+		}
+
+		return result;
 	}
 }

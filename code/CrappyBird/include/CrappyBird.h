@@ -1,6 +1,5 @@
 #pragma once
 #include "AIngine/Core.h"
-#include "Rendering/texture.h"
 
 
 namespace CrappyBird {

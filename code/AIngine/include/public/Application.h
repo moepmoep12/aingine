@@ -18,11 +18,18 @@ namespace AIngine::Editor {
 
 namespace AIngine {
 
+	// All available Components should be listed by the Application
+	extern std::vector<std::string> ApplicationComponentNames;
+
+	extern void OnAddComponent(GameObject* obj,int index);
+
+	std::vector<std::string> GetAvailableComponentNames();
+
 	namespace Editor {
 		class Editor;
 	}
 
-	namespace Rendering{
+	namespace Rendering {
 		class SpriteRenderer;
 	}
 
@@ -46,6 +53,7 @@ namespace AIngine {
 		inline static Application& Get() { return *s_instance; }
 		inline const Window& GetWindow() const { return *m_window; }
 
+		static bool IsRunning();
 	protected:
 
 		WindowConfig m_windowConfig;
@@ -59,6 +67,7 @@ namespace AIngine {
 		virtual void OnAppShutDown() = 0;
 		virtual void OnAppUpdate() = 0;
 		virtual void OnAppEvent(AIngine::Events::EventData& e) {}
+
 
 	private:
 		void RegisterCallbacks();

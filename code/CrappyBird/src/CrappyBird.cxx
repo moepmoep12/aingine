@@ -1,5 +1,5 @@
 #include "CrappyBird.h"
-#include "Events/InputEvents.h"
+#include "Player.h"
 #include <random>
 #include <time.h>
 
@@ -7,8 +7,18 @@ AIngine::Application* AIngine::CreateApplication() {
 	return new CrappyBird::CrappyBird();
 }
 
+std::vector<std::string> AIngine::ApplicationComponentNames = { "Player" };
+
+void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
+	switch (index) {
+	case 0:
+		obj->AddComponent<CrappyBird::Player>()->ScriptIndex = 0;
+		break;
+	}
+}
+
 namespace CrappyBird {
-	
+
 	CrappyBird::CrappyBird()
 	{
 		// configure game world
