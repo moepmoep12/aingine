@@ -38,6 +38,7 @@ namespace AIngine::Editor::Serialization {
 		const char* GAMEOBJECT_CHILDREN = "c_children";
 
 		// Components
+		const char* COMPONENT_ACTIVE = "active";
 		const char* COMPONENT_SPRITE = "sprite";
 		const char* COMPONENT_PHYSICS = "physics";
 		const char* COMPONENT_SOUND = "soundComponent";
@@ -196,6 +197,8 @@ namespace AIngine::Editor::Serialization {
 
 		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
 		texture.Generate(bitmap);
+
+		sprite->SetActive((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
 
 	AIngine::Physics::PhysicsComponent* Serializer::RestorePhysics(const nlohmann::json * const j, AIngine::GameObject * obj)
@@ -244,7 +247,7 @@ namespace AIngine::Editor::Serialization {
 	{
 		AIngine::SoundComponent* soundComp = obj->AddComponent<AIngine::SoundComponent>();
 
-		for (auto& sound  : *j ) {
+		for (auto& sound : *j) {
 			AIngine::Assets::SoundAsset* soundAsset = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::SoundAsset>(sound.at(AttributeNames::SOUND_PATH));
 			AIngine::Sound restoredSound(*soundAsset);
 			restoredSound.SetLooping(sound.at(AttributeNames::SOUND_LOOPED));
@@ -256,6 +259,8 @@ namespace AIngine::Editor::Serialization {
 			restoredSound.SetVolume(left, right);
 			soundComp->AddSound(restoredSound);
 		}
+
+		soundComp->SetActive((*j)[AttributeNames::COMPONENT_ACTIVE]);
 
 		return soundComp;
 	}
@@ -364,6 +369,7 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::TEXTURE_FILTER_MIN] = sprite.GetTexture().Filter_Min;
 		j[AttributeNames::TEXTURE_FILTER_MAX] = sprite.GetTexture().Filter_Max;
 		j[AttributeNames::TEXTURE_IMAGEFORMAT] = sprite.GetTexture().Image_Format;
+		j[AttributeNames::COMPONENT_ACTIVE] = sprite.IsActive();
 
 		return j;
 	}
@@ -394,6 +400,8 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::PHYSICS_DENSITY] = properties.density;
 		j[AttributeNames::PHYSICS_FRICTION] = properties.friction;
 		j[AttributeNames::PHYSICS_RESTITUTION] = properties.restitution;
+		j[AttributeNames::COMPONENT_ACTIVE] = physComp.IsActive();
+
 
 		return j;
 	}
@@ -415,6 +423,8 @@ namespace AIngine::Editor::Serialization {
 			j[AttributeNames::SOUND_VRIGHT] = sound.GetVolume().second;
 			outer[sound.GetName()] = j;
 		}
+
+		outer[AttributeNames::COMPONENT_ACTIVE] = soundComp.IsActive();
 
 		return outer;
 	}
