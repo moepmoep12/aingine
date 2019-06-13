@@ -4,6 +4,8 @@
 
 namespace CrappyBird {
 
+	static float s_GameSpeed = 0.5f;
+
 	class CrappyBird : public AIngine::Application {
 	public:
 

@@ -9,11 +9,15 @@
 set(CRAPPYBIRD_SRC 
     src/CrappyBird.cxx
 	src/Player.cxx
+	src/BackGround.cxx
+	src/Obstacles.cxx
     )
 
 set(CRAPPYBIRD_HEADER
     include/CrappyBird.h
 	include/Player.h
+	include/BackGround.h
+	include/Obstacles.h
     )
 
 # Add Executable Target 

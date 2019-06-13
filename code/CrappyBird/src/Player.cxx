@@ -3,11 +3,13 @@
 #include "Events/Event.h"
 #include "Events/InputEvents.h"
 
+#include <typeinfo>
 
 namespace CrappyBird {
 	Player::Player(AIngine::GameObject * owner)
 		: Script(owner)
 	{
+		SetName(typeid(*this).name());
 	}
 
 	void Player::OnStart()

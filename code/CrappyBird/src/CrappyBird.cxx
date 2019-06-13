@@ -1,18 +1,23 @@
 #include "CrappyBird.h"
 #include "Player.h"
-#include <random>
-#include <time.h>
+#include "BackGround.h"
+#include "EntryPoint.h"
+
 
 AIngine::Application* AIngine::CreateApplication() {
 	return new CrappyBird::CrappyBird();
 }
 
-std::vector<std::string> AIngine::ApplicationComponentNames = { "Player" };
+std::vector<std::string> AIngine::ApplicationComponentNames = { "Player", "BackGround" };
 
 void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
 	switch (index) {
 	case 0:
 		obj->AddComponent<CrappyBird::Player>()->ScriptIndex = 0;
+		break;
+
+	case 1:
+		obj->AddComponent<CrappyBird::BackGround>()->ScriptIndex = 1;
 		break;
 	}
 }
