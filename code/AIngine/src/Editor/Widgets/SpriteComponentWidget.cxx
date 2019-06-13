@@ -25,7 +25,13 @@ namespace AIngine::Editor {
 				float textWidth = ImGui::CalcTextSize("Sprite Component").x;
 				ImGui::SetCursorPosX((ImGui::GetWindowWidth() - textWidth) * 0.5f);
 				ImGui::TextColored(ImVec4(1, 1, 0, 1), "Sprite Component");
+				// ContextMenu
 				if (ImGui::BeginPopupContextItem("Sprite Component")) {
+					std::string action = spriteComponent->IsActive() ? "Deactivate" : "Activate";
+					action.append("##spriteComp");
+					if (ImGui::Selectable(action.c_str())) {
+						spriteComponent->SetActive(!spriteComponent->IsActive());
+					}
 					if (ImGui::Selectable("Delete##spriteComp")) {
 						obj->RemoveComponent<AIngine::Sprite>();
 						ImGui::EndPopup();
