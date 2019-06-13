@@ -51,6 +51,7 @@ namespace AIngine {
 			}
 		}
 
+
 		template <class T>
 		inline T* AddComponent()
 		{
@@ -60,6 +61,8 @@ namespace AIngine {
 
 			return comp;
 		}
+
+		void RemoveComponent(Component* comp);
 
 		inline const std::string& GetName() const { return m_name; }
 		inline void SetName(const std::string& name) { m_name = name; }

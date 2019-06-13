@@ -50,6 +50,21 @@ namespace AIngine {
 		Rotate(diff, bInformComponents);
 	}
 
+	void GameObject::RemoveComponent(Component * comp)
+	{
+		auto it = m_components.begin();
+
+		while (it != m_components.end())
+		{
+			if (comp == *it._Ptr) {
+				m_components.erase(it);
+				delete comp;
+				return;
+			}
+			it++;
+		}
+	}
+
 	void GameObject::SetParent(GameObject & parent, bool bInformComponents)
 	{
 		m_parent = &parent;
