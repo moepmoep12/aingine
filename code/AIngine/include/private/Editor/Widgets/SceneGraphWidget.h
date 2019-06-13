@@ -37,6 +37,7 @@ namespace AIngine::Editor {
 		SoundComponentWidget* m_soundComponentWidget;
 
 		void ShowSelectedNodeWidget(GameObject* node);
+		void ShowUserScripts(GameObject* node);
 
 		// Creates a GUI for the scenegraph
 		class ImguiTreeTraverser : public AIngine::Traverser {

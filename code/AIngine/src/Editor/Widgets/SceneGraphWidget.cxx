@@ -13,6 +13,7 @@
 #include "AIngine/Sprite.h"
 #include "AIngine/World.h"
 #include "AIngine/SoundComponent.h"
+#include "AIngine/Script.h"
 
 
 namespace AIngine::Editor {
@@ -111,7 +112,45 @@ namespace AIngine::Editor {
 				m_soundComponentWidget->Render({ node });
 			}
 
+			ShowUserScripts(node);
+
 			m_addComponentWidget->Render({ node });
+		}
+	}
+
+	void SceneGraphWidget::ShowUserScripts(GameObject * node)
+	{
+		ImGui::Separator();
+		// Title
+		float textWidth = ImGui::CalcTextSize("Scripts").x;
+		ImGui::SetCursorPosX((ImGui::GetWindowWidth() - textWidth) * 0.5f);
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), "User Scripts");
+		ImGui::NewLine();
+
+		ImGui::Separator();
+
+		AIngine::Script* scriptToRemove = nullptr;
+
+		for (auto& it = node->GetComponents().begin(); it != node->GetComponents().end(); it++) {
+			AIngine::Script* script = dynamic_cast<AIngine::Script *>((*it._Ptr));
+			if (script) {
+				ImGui::TextColored(ImVec4(0.34f, 0.448f, 0.33f, 1), script->GetName().c_str());
+				if (ImGui::BeginPopupContextItem("RemoveScript")) {
+					if (ImGui::Selectable("Remove##script")) {
+						scriptToRemove = script;
+						ImGui::EndPopup();
+						return;
+					}
+					ImGui::EndPopup();
+				}
+				ImGui::SameLine();
+				ImGui::Indent(20);
+				ImGui::Text("Index: " + script->ScriptIndex);
+				ImGui::Unindent();
+			}
+		}
+		if (scriptToRemove) {
+			node->RemoveComponent(scriptToRemove);
 		}
 	}
 
@@ -335,7 +374,7 @@ namespace AIngine::Editor {
 
 			for (auto child : parent->GetChildren()) {
 				if (child == m_ObjectToMoveDown) {
-					index = i +1 ;
+					index = i + 1;
 					break;
 				}
 				i++;
