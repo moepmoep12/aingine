@@ -32,6 +32,7 @@ namespace AIngine::Editor::Serialization
 		static void RestoreSprite(const nlohmann::json* const j, AIngine::GameObject* obj);
 		static AIngine::Physics::PhysicsComponent* RestorePhysics(const nlohmann::json* const j, AIngine::GameObject* obj);
 		static AIngine::SoundComponent* RestorySoundComponent(const nlohmann::json* const j, AIngine::GameObject* obj);
+		static void RestoreScripts(const nlohmann::json* const j, AIngine::GameObject* obj);
 	};
 
 	class SceneGraphSerializer : public AIngine::Traverser {
@@ -45,6 +46,7 @@ namespace AIngine::Editor::Serialization
 		nlohmann::json Result;
 
 	private:
+		nlohmann::json SerializeScripts(GameObject& obj);
 		nlohmann::json SerializeGameObject(GameObject& obj);
 		nlohmann::json SerializeWorld();
 		nlohmann::json SerializeSprite(AIngine::Sprite& sprite);

@@ -9,6 +9,8 @@
 #include "AIngine/World.h"
 #include "AIngine/Sprite.h"
 #include "AIngine/SoundComponent.h"
+#include "AIngine/Script.h"
+#include "Application.h"
 
 #include <fstream>
 #include <vector>
@@ -42,6 +44,10 @@ namespace AIngine::Editor::Serialization {
 		const char* COMPONENT_SPRITE = "sprite";
 		const char* COMPONENT_PHYSICS = "physics";
 		const char* COMPONENT_SOUND = "soundComponent";
+		const char* COMPONENT_SCRIPT = "script";
+
+		// Script
+		const char* SCRIPT_INDEX = "index";
 
 		// Sprite
 		const char* SPRITE_COLOR_R = "colorR";
@@ -146,6 +152,9 @@ namespace AIngine::Editor::Serialization {
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SOUND)) {
 							RestorySoundComponent(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SOUND], restoredObject);
 						}
+
+						//restore scripts
+						RestoreScripts(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SCRIPT], restoredObject);
 					}
 
 					// does it have children?
@@ -265,6 +274,13 @@ namespace AIngine::Editor::Serialization {
 		return soundComp;
 	}
 
+	void Serializer::RestoreScripts(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		for (auto index : (*j)) {
+			AIngine::OnAddComponent(obj, index);
+		}
+	}
+
 
 	/* -------------------------------------------- SCENEGRAPH SERIALIZER -------------------------------------------------------*/
 
@@ -306,6 +322,20 @@ namespace AIngine::Editor::Serialization {
 		return true;
 	}
 
+	nlohmann::json SceneGraphSerializer::SerializeScripts(GameObject & obj)
+	{
+		nlohmann::json outer;
+
+		for (auto& it = obj.GetComponents().begin(); it != obj.GetComponents().end(); it++) {
+			AIngine::Script* script = dynamic_cast<AIngine::Script *>((*it._Ptr));
+			if (script) {
+				outer.push_back(script->ScriptIndex);
+			}
+		}
+
+		return outer;
+	}
+
 	nlohmann::json SceneGraphSerializer::SerializeGameObject(GameObject & obj)
 	{
 		nlohmann::json outer;
@@ -334,6 +364,8 @@ namespace AIngine::Editor::Serialization {
 		if (soundComp) {
 			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SOUND] = SerializeSoundComponent(*soundComp);
 		}
+
+		j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SCRIPT] = SerializeScripts(obj);
 
 		outer[obj.GetName()] = j;
 		return outer;
