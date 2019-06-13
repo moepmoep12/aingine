@@ -22,8 +22,7 @@
 
 #include <glm/glm.hpp>
 
-// EntryPoint
-#include "EntryPoint.h"
+
 
 
 typedef AIngine::SoundEngine SoundEngine;
@@ -36,9 +35,11 @@ typedef AIngine::Assets::BitmapAsset BitmapAsset;
 typedef AIngine::Assets::SoundAsset SoundAsset;
 typedef AIngine::Assets::FontAsset FontAsset;
 
+typedef AIngine::Sound Sound;
+
 typedef AIngine::Physics::PhysicsComponent PhysicsComponent;
 typedef AIngine::Sprite Sprite;
-typedef AIngine::Sound SoundComponent;
 typedef AIngine::Script Script;
+typedef AIngine::SoundComponent SoundComponent;
 
 
