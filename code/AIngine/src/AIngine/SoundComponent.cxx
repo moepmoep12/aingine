@@ -9,6 +9,10 @@ namespace AIngine {
 
 	AIngine::SoundComponent::~SoundComponent()
 	{
+		for (auto& sound : m_sounds) {
+			if (sound.IsPlaying())
+				sound.Stop();
+		}
 		m_sounds.clear();
 	}
 
@@ -66,6 +70,23 @@ namespace AIngine {
 	void SoundComponent::AddSound(const AIngine::Sound & sound)
 	{
 		m_sounds.push_back(sound);
+	}
+
+	AIngine::Sound * AIngine::SoundComponent::GetSound(int index)
+	{
+		if (index < m_sounds.size())
+			return &m_sounds[index];
+		else return nullptr;
+	}
+
+	AIngine::Sound * AIngine::SoundComponent::GetSound(const std::string & name)
+	{
+		for (auto& it = m_sounds.begin(); it != m_sounds.end(); it++) {
+			if ((*it._Ptr).GetName() == name) {
+				return (&*it._Ptr);
+			}
+		}
+		return nullptr;
 	}
 
 }

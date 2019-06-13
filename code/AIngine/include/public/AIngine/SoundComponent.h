@@ -29,6 +29,9 @@ namespace AIngine {
 		inline const std::vector<AIngine::Sound>& GetSounds() const { return m_sounds; }
 
 		void AddSound(const AIngine::Sound& sound);
+		AIngine::Sound* GetSound(int index);
+		AIngine::Sound* GetSound(const std::string& name);
+		
 
 	private:
 		std::vector<AIngine::Sound> m_sounds;
