@@ -53,6 +53,7 @@ set(AINGINE_HEADER
 		include/private/Editor/Widgets/LogWidget.h
 		include/private/Editor/Widgets/MenuBarWidget.h
 		include/private/Editor/Widgets/PhysicsComponentWidget.h
+		include/private/Editor/Widgets/PopUps.h
 		include/private/Editor/Widgets/SceneGraphWidget.h
 		include/private/Editor/Widgets/SoundComponentWidget.h
 		include/private/Editor/Widgets/SpriteComponentWidget.h
@@ -86,6 +87,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/CameraWidget.cxx
 		src/Editor/Widgets/MenuBarWidget.cxx
 		src/Editor/Widgets/PhysicsComponentWidget.cxx
+		src/Editor/Widgets/PopUps.cxx
 		src/Editor/Widgets/SceneGraphWidget.cxx
 		src/Editor/Widgets/SoundComponentWidget.cxx
 		src/Editor/Widgets/SpriteComponentWidget.cxx
