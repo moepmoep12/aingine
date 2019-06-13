@@ -6,6 +6,7 @@
 #include "AIngine/Constants.h"
 #include "Structures/SceneGraph.h"
 #include "Editor/Serialization.h"
+#include "Debug/log.h"
 
 // widgets
 #include "Editor/Widgets/EditorWidget.h"
@@ -187,7 +188,7 @@ namespace AIngine::Editor {
 		AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(m_currentSceneFilePath);
 	}
 
-	void Editor::UpdateSceneTitle()
+	std::string Editor::UpdateSceneTitle()
 	{
 		std::string Path(std::filesystem::canonical(m_currentSceneFilePath).string());
 		unsigned int first = Path.find_last_of('\\') + 1;
@@ -195,6 +196,7 @@ namespace AIngine::Editor {
 		std::string sceneName = " | ";
 		sceneName.append(Path.substr(first, last - first).c_str());
 		m_app.m_window->AppendWindowTitle(sceneName.c_str());
+		return Path.substr(first, last - first).c_str();
 	}
 
 	Editor::Editor()
@@ -358,8 +360,9 @@ namespace AIngine::Editor {
 			// remember the path to the new scene
 			s_instance->m_currentSceneFilePath = std::filesystem::relative(path).string();
 
-			s_instance->UpdateSceneTitle();
+			std::string sceneName =  s_instance->UpdateSceneTitle();
 
+			CORE_INFO("Loaded ccene " + sceneName + " from " + path);
 		}
 	}
 
@@ -368,6 +371,7 @@ namespace AIngine::Editor {
 		if (s_instance) {
 			AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(path);
 			s_instance->m_currentSceneFilePath = std::filesystem::relative(path).string();
+			CORE_INFO("Saved scene to " + path);
 		}
 	}
 

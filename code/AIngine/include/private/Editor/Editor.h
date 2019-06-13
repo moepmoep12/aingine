@@ -100,7 +100,7 @@ namespace AIngine::Editor {
 		void OnWindowClose();
 		void LoadLastScene();
 		void SaveOpenScene();
-		void UpdateSceneTitle();
+		std::string UpdateSceneTitle();
 		Editor();
 
 	private:
