@@ -15,9 +15,12 @@
 #include "AIngine/Sprite.h"
 #include "AIngine/SoundComponent.h"
 #include "AIngine/Graphics.h"
+#include "AIngine/Script.h"
 #include "World.h"
 #include "Sounds.h"
 #include "Rendering/Font.h"
+
+#include <glm/glm.hpp>
 
 // EntryPoint
 #include "EntryPoint.h"
@@ -27,6 +30,7 @@ typedef AIngine::SoundEngine SoundEngine;
 typedef AIngine::GameObject GameObject;
 typedef AIngine::Graphics Graphics;
 typedef AIngine::Assets::AssetRegistry Assets;
+typedef AIngine::Input Input;
 
 typedef AIngine::Assets::BitmapAsset BitmapAsset;
 typedef AIngine::Assets::SoundAsset SoundAsset;
@@ -35,5 +39,6 @@ typedef AIngine::Assets::FontAsset FontAsset;
 typedef AIngine::Physics::PhysicsComponent PhysicsComponent;
 typedef AIngine::Sprite Sprite;
 typedef AIngine::Sound SoundComponent;
+typedef AIngine::Script Script;
 
 
