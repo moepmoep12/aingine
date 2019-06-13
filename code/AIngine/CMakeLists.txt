@@ -23,6 +23,7 @@ set(AINGINE_HEADER
 		include/public/AIngine/KeyCodes.h
 		include/public/AIngine/Macros.h
 		include/public/AIngine/Physics.h
+		include/public/AIngine/Script.h
 		include/public/AIngine/SoundComponent.h
 		include/public/AIngine/Sounds.h
 		include/public/AIngine/Sprite.h
