@@ -257,16 +257,18 @@ namespace AIngine::Editor::Serialization {
 		AIngine::SoundComponent* soundComp = obj->AddComponent<AIngine::SoundComponent>();
 
 		for (auto& sound : *j) {
-			AIngine::Assets::SoundAsset* soundAsset = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::SoundAsset>(sound.at(AttributeNames::SOUND_PATH));
-			AIngine::Sound restoredSound(*soundAsset);
-			restoredSound.SetLooping(sound.at(AttributeNames::SOUND_LOOPED));
-			restoredSound.SetPan(sound.at(AttributeNames::SOUND_PAN));
-			restoredSound.SetPitch(sound.at(AttributeNames::SOUND_PITCH));
-			restoredSound.SetDelay(sound.at(AttributeNames::SOUND_DELAY));
-			float left = sound.at(AttributeNames::SOUND_VLEFT);
-			float right = sound.at(AttributeNames::SOUND_VRIGHT);
-			restoredSound.SetVolume(left, right);
-			soundComp->AddSound(restoredSound);
+			if (sound.contains(AttributeNames::SOUND_PATH)) {
+				AIngine::Assets::SoundAsset* soundAsset = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::SoundAsset>(sound.at(AttributeNames::SOUND_PATH));
+				AIngine::Sound restoredSound(*soundAsset);
+				restoredSound.SetLooping(sound.at(AttributeNames::SOUND_LOOPED));
+				restoredSound.SetPan(sound.at(AttributeNames::SOUND_PAN));
+				restoredSound.SetPitch(sound.at(AttributeNames::SOUND_PITCH));
+				restoredSound.SetDelay(sound.at(AttributeNames::SOUND_DELAY));
+				float left = sound.at(AttributeNames::SOUND_VLEFT);
+				float right = sound.at(AttributeNames::SOUND_VRIGHT);
+				restoredSound.SetVolume(left, right);
+				soundComp->AddSound(restoredSound);
+			}
 		}
 
 		soundComp->SetActive((*j)[AttributeNames::COMPONENT_ACTIVE]);
