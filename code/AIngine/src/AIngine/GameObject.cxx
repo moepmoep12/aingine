@@ -1,7 +1,6 @@
 #include "AIngine/GameObject.h"
 #include "AIngine/Component.h"
 #include "Structures/Traverser.h"
-#include "Debug/log.h"
 #include "AIngine/Constants.h"
 
 namespace AIngine {
@@ -219,6 +218,5 @@ namespace AIngine {
 			delete m_components[i];
 		}
 		m_components.clear();
-		CORE_INFO("Destroyed {0}", GetName());
 	}
 }

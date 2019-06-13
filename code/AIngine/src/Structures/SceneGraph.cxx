@@ -1,11 +1,8 @@
 #include "Structures/SceneGraph.h"
-#include "Debug/log.h"
-#include "imgui.h"
-#include "Application.h"
-#include"Rendering/texture.h"
 #include "AIngine/GameObject.h"
-#include "Events/InputEvents.h"
 #include "AIngine/Component.h"
+
+#include "imgui.h"
 #include <sstream>
 
 namespace AIngine::Structures {
