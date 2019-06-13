@@ -69,6 +69,7 @@ namespace AIngine {
 		glm::vec2 GetMonitorResolution() const;
 		HWND GetWin32Window() const;
 		void SetWindowTitle(const char* title);
+		void AppendWindowTitle(const char* append);
 		void SetWindowSize(int w, int h);
 		inline WindowData& GetWindowData() { return m_windowData; }
 

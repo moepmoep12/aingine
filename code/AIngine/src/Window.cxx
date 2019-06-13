@@ -119,6 +119,13 @@ void AIngine::Window::SetWindowTitle(const char * title)
 	m_windowData.Title = title;
 }
 
+void AIngine::Window::AppendWindowTitle(const char * append)
+{
+	std::string Title(m_windowData.Title);
+	Title.append(append);
+	SetWindowTitle(Title.c_str());
+}
+
 void AIngine::Window::SetWindowSize(int w, int h)
 {
 	glfwSetWindowSize(m_window, w, h);
