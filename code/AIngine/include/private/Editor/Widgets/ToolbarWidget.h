@@ -17,5 +17,7 @@ namespace AIngine::Editor {
 
 	private:
 		std::map<std::string, AIngine::Rendering::Texture2D> m_Icons;
+
+
 	};
 }

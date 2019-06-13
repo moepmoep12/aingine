@@ -3,8 +3,7 @@
 #include "Editor/Serialization.h"
 #include "AIngine/World.h"
 #include "Structures/SceneGraph.h"
-
-#include "Debug/log.h"
+#include "Editor/Widgets/PopUps.h"
 
 #include <string>
 #include <nfd.h>
@@ -22,41 +21,33 @@ namespace AIngine::Editor {
 
 			if (ImGui::BeginMenu("Scene"))
 			{
-
 				static const nfdchar_t *filterList = "txt,json";
+				// create new scene
+				ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+				if (ImGui::MenuItem("New##scene"))
+				{
+					PopUps::OpenScenePopUpForNewScene();
+				}
+				PopUps::SaveSceneForNewScenePopUp();
 
+				// load scene
+				ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 				if (ImGui::MenuItem("Open")) {
 
-					nfdchar_t *outPath = NULL;
-					nfdresult_t result = NFD_OpenDialog(filterList, NULL, &outPath);
-
-					if (result == NFD_OKAY)
-					{
-						AIngine::Editor::Editor::SetCurrentSceneFilePath(std::string(outPath));
-						// delete the old tree
-						AIngine::Editor::Editor::ResetSceneGraph();
-						AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(AIngine::Editor::Editor::GetCurrentSceneFilePath());
-						free(outPath);
-					}
+					PopUps::OpenScenePopUpForLoadScene();
 				}
+				PopUps::SaveSceneForLoadScenePopUp();
 
+				// save open scene at existing path
 				if (ImGui::MenuItem("Save", "STRG + S", false, !AIngine::Editor::Editor::GetCurrentSceneFilePath().empty()))
 				{
-					AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(AIngine::Editor::Editor::GetCurrentSceneFilePath());
+					AIngine::Editor::Editor::SaveScene(AIngine::Editor::Editor::GetCurrentSceneFilePath());
 				}
 
+				// save open scene at new path
 				if (ImGui::MenuItem("Save As"))
 				{
-					nfdchar_t *outPath = NULL;
-					nfdresult_t result = NFD_SaveDialog(filterList, NULL, &outPath);
-
-					if (result == NFD_OKAY)
-					{
-						AIngine::Editor::Editor::SetCurrentSceneFilePath(std::string(outPath));
-						// delete the old tree
-						AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(AIngine::Editor::Editor::GetCurrentSceneFilePath());
-						free(outPath);
-					}
+					AIngine::Editor::Editor::SaveSceneToFile();
 				}
 
 				ImGui::EndMenu();

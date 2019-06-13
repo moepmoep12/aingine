@@ -2,6 +2,7 @@
 #include "Assets/Assets.h"
 #include "Editor/Editor.h"
 #include "Editor/Serialization.h"
+#include "Editor/Widgets/PopUps.h"
 
 #include <nfd.h>
 
@@ -62,29 +63,22 @@ namespace AIngine::Editor {
 		bool isInPlayMode = AIngine::Editor::Editor::GetIsInPlayMode();
 		std::string icon = isInPlayMode ? "pause" : "play";
 
+		// enter/exit playmode
 		if (ImGui::ImageButton((ImTextureID)m_Icons[icon].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
 		{
 			AIngine::Editor::Editor::SetIsInPlayMode(!isInPlayMode);
 		}
 
+		// load scene
 		if (ImGui::ImageButton((ImTextureID)m_Icons["open"].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
 		{
-			static const nfdchar_t *filterList = "txt,json";
-			nfdchar_t *outPath = NULL;
-			nfdresult_t result = NFD_OpenDialog(filterList, NULL, &outPath);
-
-			if (result == NFD_OKAY)
-			{
-				AIngine::Editor::Editor::SetCurrentSceneFilePath(std::string(outPath));
-				// delete the old tree
-				AIngine::Editor::Editor::ResetSceneGraph();
-				AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(AIngine::Editor::Editor::GetCurrentSceneFilePath());
-				free(outPath);
-			}
-
+			PopUps::OpenScenePopUpForLoadScene();
 		}
+
+		PopUps::SaveSceneForLoadScenePopUp();
+		
+
 		ImGui::End();
 
 	}
-
 }
