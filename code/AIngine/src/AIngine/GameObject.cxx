@@ -127,7 +127,7 @@ namespace AIngine {
 
 	void GameObject::SetRotation(float rot, bool bInformComponents)
 	{
-		m_rotation = std::fmodf(m_rotation + rot, 2* M_PI);
+		m_rotation = std::fmodf(m_rotation + rot, 2 * M_PI);
 		if (bInformComponents) {
 			auto it = m_components.begin();
 			while (it != m_components.end()) {
@@ -139,7 +139,7 @@ namespace AIngine {
 
 	void GameObject::Rotate(float amount, bool bInformComponents)
 	{
-		m_rotation = std::fmodf(m_rotation + amount, 2* M_PI);
+		m_rotation = std::fmodf(m_rotation + amount, 2 * M_PI);
 		if (bInformComponents) {
 			auto it = m_components.begin();
 			while (it != m_components.end()) {
@@ -201,6 +201,14 @@ namespace AIngine {
 			else
 				it++;
 		}
+	}
+	GameObject * GameObject::GetChild(const std::string & name)
+	{
+		for (auto& it : m_children) {
+			if (it->GetName() == name)
+				return it;
+		}
+		return nullptr;
 	}
 	bool GameObject::Accept(Traverser & traverser)
 	{

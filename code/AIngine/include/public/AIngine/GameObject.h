@@ -98,6 +98,7 @@ namespace AIngine {
 		void AddChild(GameObject* obj);
 		void AddChild(std::vector<GameObject*>::const_iterator _where, GameObject* obj);
 		void RemoveChild(GameObject* obj);
+		GameObject* GetChild(const std::string& name);
 
 		virtual void OnUpdate(float deltatime) {}
 		virtual bool Accept(Traverser& traverser);
