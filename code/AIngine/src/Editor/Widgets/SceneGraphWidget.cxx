@@ -128,7 +128,7 @@ namespace AIngine::Editor {
 		ImGui::NewLine();
 
 		ImGui::Separator();
-
+		ImGui::Columns(2);
 		AIngine::Script* scriptToRemove = nullptr;
 
 		for (auto& it = node->GetComponents().begin(); it != node->GetComponents().end(); it++) {
@@ -139,19 +139,22 @@ namespace AIngine::Editor {
 					if (ImGui::Selectable("Remove##script")) {
 						scriptToRemove = script;
 						ImGui::EndPopup();
-						return;
 					}
-					ImGui::EndPopup();
+					else
+						ImGui::EndPopup();
 				}
-				ImGui::SameLine();
-				ImGui::Indent(20);
-				ImGui::Text("Index: " + script->ScriptIndex);
-				ImGui::Unindent();
+				ImGui::NextColumn();
+				ImGui::Text(std::to_string(script->ScriptIndex).c_str());
+				ImGui::NextColumn();
 			}
 		}
 		if (scriptToRemove) {
 			node->RemoveComponent(scriptToRemove);
 		}
+
+		ImGui::EndColumns();
+		ImGui::NewLine();
+		ImGui::Separator();
 	}
 
 	/*------------------------------------------- IMGUI TREE TRAVERSER -----------------------------------------------*/
