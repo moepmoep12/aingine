@@ -9,6 +9,11 @@ namespace AIngine::Editor {
 		// Inherited via ComponentWidget
 		virtual void OnImGuiRender() override;
 
+	private:
+		GameObject* m_ObjectToMoveUp = nullptr;
+		GameObject* m_ObjectToMoveDown = nullptr;
+
+		void PerformGameObjectReposition(GameObject* obj);
 
 		class PhysicsUpdateTraverser : public  AIngine::Traverser {
 		public:
@@ -17,6 +22,8 @@ namespace AIngine::Editor {
 			virtual bool Enter(GameObject & node) override;
 			virtual bool Leave(GameObject & node) override;
 			virtual bool Visit(GameObject & node) override;
+
+		private:
 		};
 
 	};

@@ -30,12 +30,29 @@ namespace AIngine::Editor {
 				activeGameObject->SetName(str0);
 			}
 
+			GameObject* root = &AIngine::Editor::Editor::GetSceneGraph()->GetRoot();
+			if (activeGameObject != root) {
+				ImGui::SameLine();
+				// create buttons for gameobject order
+				if (ImGui::ArrowButton("ButtonUp##gameObject", ImGuiDir_Up)) {
+					m_ObjectToMoveUp = activeGameObject;
+				}
+				ImGui::SameLine();
+				if (ImGui::ArrowButton("ButtonDown##gameObject", ImGuiDir_Down)) {
+					m_ObjectToMoveDown = activeGameObject;
+				}
+			}
+
 			ImGui::Separator();
 
+			// Component Title
 			float textWidth = ImGui::CalcTextSize("Transform Component").x;
 			ImGui::SetCursorPosX((ImGui::GetWindowWidth() - textWidth) * 0.5f);
-			ImGui::TextColored(ImVec4(1,1,0,1),"Transform Component");
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "Transform Component");
+
 			ImGui::NewLine();
+
+			// Transform Values
 			ImGui::DragFloat2("Position", *position, translationSliderSpeed);
 			ImGui::DragFloat2("Scale", *scale, scaleSliderSpeed);
 			ImGui::DragFloat("Rotation", &rotDegree, rotationSliderSpeed);
@@ -54,7 +71,55 @@ namespace AIngine::Editor {
 				PhysicsUpdateTraverser physUpdate;
 				physUpdate.Traverse(activeGameObject);
 			}
+
+			PerformGameObjectReposition(activeGameObject);
 		}
+	}
+
+	void TransformComponentWidget::PerformGameObjectReposition(GameObject* obj)
+	{
+		GameObject* root = &AIngine::Editor::Editor::GetSceneGraph()->GetRoot();
+
+		if (m_ObjectToMoveUp && m_ObjectToMoveUp != root) {
+			AIngine::GameObject* parent = m_ObjectToMoveUp->GetParent();
+			int index = 0;
+			int i = 0;
+
+			for (auto child : parent->GetChildren()) {
+				if (child == m_ObjectToMoveUp) {
+					index = i - 1;
+					break;
+				}
+				i++;
+			}
+
+			if (index >= 0) {
+				parent->RemoveChild(m_ObjectToMoveUp);
+				parent->AddChild(parent->GetChildren().begin() + index, m_ObjectToMoveUp);
+			}
+		}
+
+		if (m_ObjectToMoveDown && m_ObjectToMoveDown != root) {
+			AIngine::GameObject* parent = m_ObjectToMoveDown->GetParent();
+			int index = 0;
+			int i = 0;
+
+			for (auto child : parent->GetChildren()) {
+				if (child == m_ObjectToMoveDown) {
+					index = i + 1;
+					break;
+				}
+				i++;
+			}
+
+			if (index < parent->GetChildren().size()) {
+				parent->RemoveChild(m_ObjectToMoveDown);
+				parent->AddChild(parent->GetChildren().begin() + index, m_ObjectToMoveDown);
+			}
+		}
+
+		m_ObjectToMoveUp = nullptr;
+		m_ObjectToMoveDown = nullptr;
 	}
 
 	/*------------------------------------------- PHYSICSUPDATE TRAVERSER -----------------------------------------------*/
@@ -87,4 +152,5 @@ namespace AIngine::Editor {
 		}
 		return true;
 	}
+
 }

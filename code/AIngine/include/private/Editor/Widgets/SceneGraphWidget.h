@@ -62,12 +62,10 @@ namespace AIngine::Editor {
 			GameObject* m_root;
 
 			GameObject* m_ObjectToDelete = nullptr;
-			GameObject* m_ObjectToMoveUp = nullptr;
-			GameObject* m_ObjectToMoveDown = nullptr;
 
 			void BeginDragSource();
 			void BeginDropTarget(GameObject& obj);
-			void PerformGameObjectReposition();
+
 		};
 
 		
