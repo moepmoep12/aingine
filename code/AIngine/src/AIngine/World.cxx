@@ -20,6 +20,14 @@ namespace AIngine {
 		return nullptr;
 	}
 
+	GameObject * const World::GetGameObject(const std::string & name)
+	{
+		if (s_instance) {
+			return s_instance->m_sceneGraph->GetGameObject(name);
+		}
+		return nullptr;
+	}
+
 	void World::DestroyObject(GameObject & gameobject)
 	{
 		if (s_instance) {

@@ -41,6 +41,13 @@ namespace AIngine::Structures {
 		deleteTraverser.Traverse(&gameobject);
 	}
 
+	GameObject * const SceneGraph::GetGameObject(const std::string & name)
+	{
+		SearchForNameTraverser traverser(name);
+		traverser.Traverse(m_Root);
+		return traverser.Result;
+	}
+
 	void SceneGraph::Reset()
 	{
 		DeleteTraverser deleteTreeTraverser(m_gameObjectPool);
@@ -241,4 +248,34 @@ namespace AIngine::Structures {
 		return true;
 	}
 
+	/********************************** SEARCHFORNAME TRAVERSER ****************************************/
+
+
+	SearchForNameTraverser::SearchForNameTraverser(const std::string & name)
+		: m_name(name)
+	{
+	}
+
+	bool SearchForNameTraverser::Traverse(GameObject * root)
+	{
+		return root->Accept(*this);
+	}
+
+	bool SearchForNameTraverser::Enter(GameObject & node)
+	{
+		if (node.GetName() == m_name) {
+			Result = &node;
+			return false;
+		}
+		return true;
+	}
+
+	bool SearchForNameTraverser::Visit(GameObject & node)
+	{
+		if (node.GetName() == m_name) {
+			Result = &node;
+			return false;
+		}
+		return true;
+	}
 }

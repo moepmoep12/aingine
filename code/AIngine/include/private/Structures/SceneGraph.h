@@ -30,6 +30,8 @@ namespace AIngine::Structures {
 		// Destroys the gameObject and its children by removing it from the scenegraph and freeing its memory
 		void DestroyObject(GameObject& gameobject);
 
+		GameObject* const GetGameObject(const std::string& name);
+
 	private:
 		GameObject* m_Root;
 		AIngine::Memory::Pool<GameObject> m_gameObjectPool = AIngine::Memory::Pool<GameObject>(1000);
@@ -102,6 +104,20 @@ namespace AIngine::Structures {
 		virtual bool Visit(GameObject & node) override;
 	};
 
+	// Traverses the SceneGraph to look for a GameObject with specified name
+	class SearchForNameTraverser : public Traverser {
+	public:
+		SearchForNameTraverser(const std::string& name);
+		virtual bool Traverse(GameObject* root) override;
+		virtual bool Enter(GameObject & node) override;
+		virtual bool Leave(GameObject & node) override { return true; }
+		virtual bool Visit(GameObject & node) override;
+
+		GameObject* Result = nullptr;
+
+	private:
+		std::string m_name;
+	};
 
 }
 
