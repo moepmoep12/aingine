@@ -19,6 +19,7 @@ namespace AIngine::Editor::PopUps {
 			std::string currentSceneFilepath = AIngine::Editor::Editor::GetCurrentSceneFilePath();
 			bool bSceneLoaded = !currentSceneFilepath.empty();
 			static const ImVec2 buttonSize(90, 20);
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 0));
 
 			if (bSceneLoaded) {
 				if (ImGui::Button("Save##saveScenePopUp", buttonSize)) {
@@ -48,7 +49,7 @@ namespace AIngine::Editor::PopUps {
 				ImGui::CloseCurrentPopup();
 				AIngine::Editor::Editor::CreateNewScene();
 			}
-
+			ImGui::PopStyleVar();
 			ImGui::EndPopup();
 		}
 	}
@@ -66,6 +67,7 @@ namespace AIngine::Editor::PopUps {
 			std::string currentSceneFilepath = AIngine::Editor::Editor::GetCurrentSceneFilePath();
 			bool bSceneLoaded = !currentSceneFilepath.empty();
 			static const ImVec2 buttonSize(90, 20);
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 0));
 
 			if (bSceneLoaded) {
 				if (ImGui::Button("Save##saveScenePopUp", buttonSize)) {
@@ -95,7 +97,7 @@ namespace AIngine::Editor::PopUps {
 				ImGui::CloseCurrentPopup();
 				AIngine::Editor::Editor::LoadSceneFromFile();
 			}
-
+			ImGui::PopStyleVar();
 			ImGui::EndPopup();
 		}
 	}

@@ -26,6 +26,16 @@ namespace AIngine::Editor {
 		path = "assets/Intellgine/textures/Editor/open.png";
 		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["open"] = AIngine::Rendering::Texture2D(*bitmap);
+
+		// createNewIcon
+		path = "assets/Intellgine/textures/Editor/add-file.png";
+		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
+		m_Icons["new"] = AIngine::Rendering::Texture2D(*bitmap);
+
+		// saveIcon
+		path = "assets/Intellgine/textures/Editor/save.png";
+		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
+		m_Icons["save"] = AIngine::Rendering::Texture2D(*bitmap);
 	}
 
 	ToolbarWidget::~ToolbarWidget()
@@ -57,11 +67,12 @@ namespace AIngine::Editor {
 		static const int framePadding = 0;
 		static const ImVec4 backgroundColor = ImVec4(0, 0, 0, 0);
 		static const ImVec4 tintColor = ImVec4(1, 1, 1, 1);
-
 		ImGui::Columns(1);
 
 		bool isInPlayMode = AIngine::Editor::Editor::GetIsInPlayMode();
 		std::string icon = isInPlayMode ? "pause" : "play";
+
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 10));
 
 		// enter/exit playmode
 		if (ImGui::ImageButton((ImTextureID)m_Icons[icon].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
@@ -69,14 +80,28 @@ namespace AIngine::Editor {
 			AIngine::Editor::Editor::SetIsInPlayMode(!isInPlayMode);
 		}
 
+		// create new scene
+		if (ImGui::ImageButton((ImTextureID)m_Icons["new"].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
+		{
+			PopUps::OpenScenePopUpForNewScene();
+		}
+		PopUps::SaveSceneForNewScenePopUp();
+
 		// load scene
 		if (ImGui::ImageButton((ImTextureID)m_Icons["open"].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
 		{
 			PopUps::OpenScenePopUpForLoadScene();
 		}
-
 		PopUps::SaveSceneForLoadScenePopUp();
-		
+
+		// save scene
+		if (ImGui::ImageButton((ImTextureID)m_Icons["save"].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
+		{
+			if (!AIngine::Editor::Editor::GetCurrentSceneFilePath().empty())
+				AIngine::Editor::Editor::SaveScene(AIngine::Editor::Editor::GetCurrentSceneFilePath());
+		}
+
+		ImGui::PopStyleVar();
 
 		ImGui::End();
 
