@@ -8,10 +8,12 @@
 
 set(CRAPPYBIRD_SRC 
     src/CrappyBird.cxx
+	src/Player.cxx
     )
 
 set(CRAPPYBIRD_HEADER
     include/CrappyBird.h
+	include/Player.h
     )
 
 # Add Executable Target 
