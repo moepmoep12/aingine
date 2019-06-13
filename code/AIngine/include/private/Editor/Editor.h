@@ -53,8 +53,6 @@ namespace AIngine::Editor {
 			return nullptr;
 		}
 
-		/*  Resets the scene graph by deleting all nodes and creating a new root node */
-		static void ResetSceneGraph();
 		static AIngine::Structures::SceneGraph* GetSceneGraph();
 
 		/* Returns wheter any UI element is currently hovered with the mouse */
@@ -76,14 +74,21 @@ namespace AIngine::Editor {
 		static inline bool GetIsInPlayMode() { if (s_instance) return s_instance->m_isInPlayMode; else return true; }
 		static void SetIsInPlayMode(bool value);
 
-		static inline std::string GetCurrentSceneFilePath() { if (s_instance) return s_instance->m_currentScene; else return std::string(); }
-		static void SetCurrentSceneFilePath(const std::string& path) { if (s_instance) s_instance->m_currentScene = path; }
+		static inline std::string GetCurrentSceneFilePath() { if (s_instance) return s_instance->m_currentSceneFilePath; else return std::string(); }
+		//static void SetCurrentSceneFilePath(const std::string& path) { if (s_instance) s_instance->m_currentSceneFilePath = path; }
 
 		static bool CreateMoveablePositionVertex(glm::vec2& worldPosition, float vertexSize, const glm::vec3& colorInteract = glm::vec3(0, 1, 0), const glm::vec3& colorNormal = glm::vec3(1, 0, 0));
+
+		static void CreateNewScene();
+		static void LoadScene(const std::string& path);
+		static void SaveScene(const std::string& path);
+		static void LoadSceneFromFile();
+		static bool SaveSceneToFile();
 
 		AIngine::Events::Event<void> OnEnterPlayModeEvent;
 		AIngine::Events::Event<void> OnLeavePlayModeEvent;
 	private:
+		void ResetSceneGraph();
 		void DisplayFramerate(float delta) const;
 
 		/* Checks whether a docked Editor widget changed its size in the last frame to be able to adjust the viewport accordingly*/
@@ -95,6 +100,7 @@ namespace AIngine::Editor {
 		void OnWindowClose();
 		void LoadLastScene();
 		void SaveOpenScene();
+		void UpdateSceneTitle();
 		Editor();
 
 	private:
@@ -105,6 +111,6 @@ namespace AIngine::Editor {
 		std::vector<AIngine::GameObject*> m_selectedObjects;
 		AIngine::Events::ViewportChangedEvent OnViewportChangedEvent;
 		bool m_isInPlayMode = false;
-		std::string m_currentScene;
+		std::string m_currentSceneFilePath;
 	};
 }

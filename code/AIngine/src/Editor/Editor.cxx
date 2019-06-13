@@ -17,6 +17,8 @@
 
 #include <glm/geometric.hpp>
 #include <fstream>
+#include <filesystem>
+#include <nfd.h>
 
 namespace AIngine::Editor {
 
@@ -145,30 +147,54 @@ namespace AIngine::Editor {
 		}
 	}
 
+	// the path to the file that contains the path to the scene that was last opened
+	static const std::string lastSceneFilePath = "scenes.txt";
+
 	void Editor::OnWindowClose()
 	{
-		//SaveOpenScene();
+		// remember the path to the scene
+		std::ofstream file(lastSceneFilePath);
+		file << m_currentSceneFilePath;
+		file.close();
 	}
 
-	static const std::string lastSceneFilePath = "scenes.txt";
 
 	void Editor::LoadLastScene()
 	{
+		// retrieve the path to the scene that was last opened
 		std::ifstream file;
 		file.open(lastSceneFilePath);
-		std::getline(file, m_currentScene);
-		if (!(m_currentScene.empty())) {
-			AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(m_currentScene);
-		}
+		std::getline(file, m_currentSceneFilePath);
 		file.close();
+
+		if (!m_currentSceneFilePath.empty()) {
+			// save the path as relative path
+			m_currentSceneFilePath = std::filesystem::relative(m_currentSceneFilePath).string();
+			// load the scene
+			AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(m_currentSceneFilePath);
+
+			UpdateSceneTitle();
+		}
 	}
 
 	void Editor::SaveOpenScene()
 	{
+		// remember the path to the scene
 		std::ofstream file(lastSceneFilePath);
-		file << m_currentScene;
-		AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(m_currentScene);
+		file << m_currentSceneFilePath;
 		file.close();
+
+		AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(m_currentSceneFilePath);
+	}
+
+	void Editor::UpdateSceneTitle()
+	{
+		std::string Path(std::filesystem::canonical(m_currentSceneFilePath).string());
+		unsigned int first = Path.find_last_of('\\') + 1;
+		unsigned int last = Path.find_last_of('.');
+		std::string sceneName = " | ";
+		sceneName.append(Path.substr(first, last - first).c_str());
+		m_app.m_window->AppendWindowTitle(sceneName.c_str());
 	}
 
 	Editor::Editor()
@@ -226,21 +252,21 @@ namespace AIngine::Editor {
 					//	&& widgetMax.y == viewportMax.y)
 					//{
 					//	viewportRect.x += widgetRect.width;
-					//}
-					//if (widgetPos.x == viewportPos.x
-					//	&& widgetPos.y > viewportPos.y
-					//	&& widgetMax.x == viewportMax.x
-					//	&& widgetMax.y == viewportMax.y)
-					//{
-					//	viewportRect.height -= widgetRect.height;
-					//}
-					//if (widgetPos.x == viewportPos.x
-					//	&& widgetPos.y == viewportPos.y
-					//	&& widgetMax.x == viewportMax.x
-					//	&& widgetMax.y < viewportMax.y)
-					//{
-					//	viewportRect.y += widgetRect.height;
-					//}
+//}
+//if (widgetPos.x == viewportPos.x
+//	&& widgetPos.y > viewportPos.y
+//	&& widgetMax.x == viewportMax.x
+//	&& widgetMax.y == viewportMax.y)
+//{
+//	viewportRect.height -= widgetRect.height;
+//}
+//if (widgetPos.x == viewportPos.x
+//	&& widgetPos.y == viewportPos.y
+//	&& widgetMax.x == viewportMax.x
+//	&& widgetMax.y < viewportMax.y)
+//{
+//	viewportRect.y += widgetRect.height;
+//}
 
 					if (widgetPos.x > viewportPos.x) {
 						viewportRect.width = widgetPos.x - viewportPos.x;
@@ -272,8 +298,7 @@ namespace AIngine::Editor {
 
 	void Editor::ResetSceneGraph()
 	{
-		if (s_instance)
-			s_instance->GetSceneGraph()->Reset();
+		m_app.m_world->GetSceneGraph().Reset();
 	}
 
 	AIngine::Structures::SceneGraph * Editor::GetSceneGraph()
@@ -313,6 +338,65 @@ namespace AIngine::Editor {
 
 		AIngine::Graphics::BoxScreen(vertexRectangle, glm::vec3(1, 1, 0));
 		return bInteracted;
+	}
+
+	void Editor::CreateNewScene()
+	{
+		if (s_instance) {
+			s_instance->m_currentSceneFilePath = "";
+			s_instance->ResetSceneGraph();
+		}
+	}
+
+	void Editor::LoadScene(const std::string& path)
+	{
+		if (s_instance) {
+			// unload the currently open scene
+			s_instance->ResetSceneGraph();
+			// load the new scene
+			AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(path);
+			// remember the path to the new scene
+			s_instance->m_currentSceneFilePath = std::filesystem::relative(path).string();
+
+			s_instance->UpdateSceneTitle();
+
+		}
+	}
+
+	void Editor::SaveScene(const std::string& path)
+	{
+		if (s_instance) {
+			AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(path);
+			s_instance->m_currentSceneFilePath = std::filesystem::relative(path).string();
+		}
+	}
+
+	void Editor::LoadSceneFromFile()
+	{
+		static const nfdchar_t *filterList = "txt,json";
+		nfdchar_t *outPath = NULL;
+		nfdresult_t result = NFD_OpenDialog(filterList, NULL, &outPath);
+
+		if (result == NFD_OKAY)
+		{
+			LoadScene(outPath);
+			free(outPath);
+		}
+	}
+
+	bool Editor::SaveSceneToFile()
+	{
+		static const nfdchar_t *filterList = "txt,json";
+		nfdchar_t *outPath = NULL;
+		nfdresult_t result = NFD_SaveDialog(filterList, NULL, &outPath);
+
+		if (result == NFD_OKAY)
+		{
+			SaveScene(outPath);
+			free(outPath);
+			return true;
+		}
+		return false;
 	}
 
 	void Editor::DisplayFramerate(float delta) const
@@ -355,7 +439,7 @@ namespace AIngine::Editor {
 			}
 			else {
 				s_instance->OnLeavePlayModeEvent();
-				ResetSceneGraph();
+				s_instance->ResetSceneGraph();
 				// load the scene
 				s_instance->LoadLastScene();
 			}
