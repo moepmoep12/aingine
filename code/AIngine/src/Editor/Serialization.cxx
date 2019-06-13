@@ -288,6 +288,7 @@ namespace AIngine::Editor::Serialization {
 	{
 		nlohmann::json serializedObject = SerializeGameObject(*root);
 		Result = serializedObject;
+		m_prevChildren = nullptr;
 		m_children = &Result[root->GetName()]["c_children"];
 
 		bool result = root->Accept(*this);
@@ -301,6 +302,7 @@ namespace AIngine::Editor::Serialization {
 
 		if (node.GetName() != "Root") {
 			(*m_children).push_back(serializedObject);
+			m_prevChildren = m_children;
 			size_t count = (*m_children).size();
 			m_children = &(*m_children)[count - 1][node.GetName()]["c_children"];
 		}
@@ -310,6 +312,9 @@ namespace AIngine::Editor::Serialization {
 
 	bool SceneGraphSerializer::Leave(GameObject & node)
 	{
+		if (m_prevChildren) {
+			m_children = m_prevChildren;
+		}
 		return true;
 	}
 

@@ -52,6 +52,7 @@ namespace AIngine::Editor::Serialization
 		nlohmann::json SerializeSprite(AIngine::Sprite& sprite);
 		nlohmann::json SerializePhysicsComponent(AIngine::Physics::PhysicsComponent& physComp);
 		nlohmann::json SerializeSoundComponent(AIngine::SoundComponent& soundComp);
+		nlohmann::json* m_prevChildren;
 		nlohmann::json* m_children;
 		std::vector<AIngine::GameObject*> m_spawnedObjects;
 
