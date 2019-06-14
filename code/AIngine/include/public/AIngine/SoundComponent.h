@@ -35,5 +35,7 @@ namespace AIngine {
 
 	private:
 		std::vector<AIngine::Sound> m_sounds;
+
+		virtual Component* Copy(GameObject* const owner) const override;
 	};
 }

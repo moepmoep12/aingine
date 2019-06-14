@@ -89,4 +89,16 @@ namespace AIngine {
 		return nullptr;
 	}
 
+	Component * SoundComponent::Copy(GameObject * const owner) const
+	{
+		SoundComponent* copy = new SoundComponent(owner);
+		copy->SetName(GetName());
+
+		for (auto& sound : m_sounds) {
+			copy->m_sounds.push_back(sound);
+		}
+
+		return std::move(copy);
+	}
+
 }

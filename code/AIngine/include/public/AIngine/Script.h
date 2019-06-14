@@ -18,6 +18,16 @@ namespace AIngine {
 		virtual void OnImguiRender() {}
 
 		int ScriptIndex = 0;
+
+	private:
 		virtual void OnUpdate(float deltatime) override { if (AIngine::Application::IsRunning()) Update(deltatime); }
+
+		inline virtual Component* Copy(GameObject* const owner) const override
+		{
+			Script* copy = new Script(owner);
+			copy->ScriptIndex = ScriptIndex;
+			copy->SetName(GetName());
+			return std::move(copy);
+		}
 	};
 }
