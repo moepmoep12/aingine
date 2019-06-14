@@ -10,7 +10,7 @@ namespace CrappyBird {
 
 	void CrappyBird::Obstacles::OnStart()
 	{
-
+		m_playerSpawnPos = AIngine::World::GetGameObject("PlayerRocket")->GetWorldPosition();
 	}
 
 	void CrappyBird::Obstacles::OnEvent(AIngine::Events::EventData & e)

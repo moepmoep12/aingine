@@ -4,7 +4,6 @@
 
 namespace CrappyBird {
 
-	static float s_GameSpeed = 0.5f;
 
 	class CrappyBird : public AIngine::Application {
 	public:
@@ -14,6 +13,8 @@ namespace CrappyBird {
 		virtual void OnAppShutDown() override {}
 		virtual void OnAppUpdate() override {}
 		virtual void OnAppEvent(AIngine::Events::EventData& e) override {}
+
+		static float s_GameSpeed;
 
 		CrappyBird();
 		virtual ~CrappyBird();

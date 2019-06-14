@@ -2,13 +2,14 @@
 #include "Player.h"
 #include "BackGround.h"
 #include "EntryPoint.h"
+#include "PickUp.h"
 
 
 AIngine::Application* AIngine::CreateApplication() {
 	return new CrappyBird::CrappyBird();
 }
 
-std::vector<std::string> AIngine::ApplicationComponentNames = { "Player", "BackGround" };
+std::vector<std::string> AIngine::ApplicationComponentNames = { "Player", "BackGround", "SpeedPickUp" };
 
 void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
 	switch (index) {
@@ -19,10 +20,15 @@ void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
 	case 1:
 		obj->AddComponent<CrappyBird::BackGround>()->ScriptIndex = 1;
 		break;
+
+	case 2:
+		obj->AddComponent<CrappyBird::SpeedPickUp>()->ScriptIndex = 2;
 	}
 }
 
 namespace CrappyBird {
+
+	float CrappyBird::s_GameSpeed = 0.5f;
 
 	CrappyBird::CrappyBird()
 	{

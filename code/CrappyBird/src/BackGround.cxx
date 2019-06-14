@@ -32,7 +32,7 @@ namespace CrappyBird {
 		float i = 0.0f;
 		int k = 1;
 		for (auto& it : m_owner->GetChildren()) {
-			it->Translate(glm::vec2(-s_GameSpeed * i *deltatime, 0), false);
+			it->Translate(glm::vec2(-CrappyBird::s_GameSpeed * i *deltatime, 0), false);
 			glm::vec2 textureSize = it->GetComponent<AIngine::Sprite>()->GetLocalWorldSize();
 			glm::vec worldPos = it->GetWorldPosition();
 			if (worldPos.x <= bounds.x - 0.5f * textureSize.x) {
