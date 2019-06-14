@@ -1,6 +1,7 @@
 #include "Structures/SceneGraph.h"
 #include "AIngine/GameObject.h"
 #include "AIngine/Component.h"
+#include "AIngine/Script.h"
 
 #include "imgui.h"
 #include <sstream>
@@ -230,8 +231,8 @@ namespace AIngine::Structures {
 	{
 		auto it = node.GetComponents().begin();
 		while (it != node.GetComponents().end()) {
-			Component* comp = *it._Ptr;
-			comp->OnStart();
+			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
+			if (comp) comp->OnStart();
 			it++;
 		}
 		return true;
@@ -241,8 +242,35 @@ namespace AIngine::Structures {
 	{
 		auto it = node.GetComponents().begin();
 		while (it != node.GetComponents().end()) {
-			Component* comp = *it._Ptr;
-			comp->OnStart();
+			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
+			if (comp) comp->OnStart();
+			it++;
+		}
+		return true;
+	}
+
+	/********************************** OnEnd TRAVERSER ****************************************/
+
+	bool OnEndTraverser::Traverse(GameObject * root)
+	{
+		return root->Accept(*this);
+	}
+	bool OnEndTraverser::Enter(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+		while (it != node.GetComponents().end()) {
+			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
+			if (comp) comp->OnEnd();
+			it++;
+		}
+		return true;
+	}
+	bool OnEndTraverser::Visit(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+		while (it != node.GetComponents().end()) {
+			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
+			if (comp) comp->OnEnd();
 			it++;
 		}
 		return true;
