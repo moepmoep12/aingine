@@ -85,8 +85,8 @@ void AIngine::Sound::Stop()
 void AIngine::Sound::ExtractName()
 {
 	std::string Path(std::filesystem::canonical(m_path).string());
-	unsigned int first = Path.find_last_of('\\') + 1;
-	unsigned int last = Path.find_last_of('.');
+	size_t first = Path.find_last_of('\\') + 1;
+	size_t last = Path.find_last_of('.');
 	m_name = Path.substr(first, last - first).c_str();
 }
 

@@ -8,7 +8,7 @@ namespace AIngine::Structures {
 		Rectangle()
 			: x(0), y(0), width(0), height(0) {}
 
-		Rectangle(float x, float y, float width, float height)
+		Rectangle(size_t x, size_t y, size_t width, size_t height)
 			: x(x), y(y), width(width), height(height) {}
 
 		bool Contains(const glm::vec2& point) const {
@@ -30,8 +30,8 @@ namespace AIngine::Structures {
 
 		// Set position of the top left corner
 		void SetPosition(const glm::vec2& pos) {
-			x = pos.x;
-			y = pos.y;
+			x = (size_t)pos.x;
+			y = (size_t)pos.y;
 		}
 
 		glm::vec2 GetTopRight() const {
@@ -50,7 +50,7 @@ namespace AIngine::Structures {
 			return GetPosition() + glm::vec2(width / 2.0, height / 2.0);
 		}
 
-		float Area() const {
+		size_t Area() const {
 			return width * height;
 		}
 
@@ -61,6 +61,6 @@ namespace AIngine::Structures {
 			BottomLeft = 3
 		};
 
-		float x, y, width, height;
+		size_t x, y, width, height;
 	};
 }

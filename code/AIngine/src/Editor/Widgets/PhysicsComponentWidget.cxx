@@ -37,9 +37,9 @@ namespace AIngine::Editor {
 
 				// PhysicsProperties
 				const PhysicsProperties& properties = physComp->GetProperties();
-				ImGui::DragFloat("Density", &(float)properties.density, properties.density != 0 ? 0.01 * properties.density : 0.01);
-				ImGui::DragFloat("Friction", &(float)properties.friction, properties.friction != 0 ? 0.01 * properties.friction : 0.01);
-				ImGui::DragFloat("Restitution", &(float)properties.restitution, properties.restitution != 0 ? 0.01 * properties.restitution : 0.01);
+				ImGui::DragFloat("Density", &(float)properties.density, properties.density != 0 ? 0.01f * properties.density : 0.01f);
+				ImGui::DragFloat("Friction", &(float)properties.friction, properties.friction != 0 ? 0.01f * properties.friction : 0.01f);
+				ImGui::DragFloat("Restitution", &(float)properties.restitution, properties.restitution != 0 ? 0.01f * properties.restitution : 0.01f);
 
 				ImGui::NewLine();
 				ImGui::NewLine();
@@ -144,16 +144,16 @@ namespace AIngine::Editor {
 		float height = physComp.m_bodyInformation.height;
 
 		// counter clock wise
-		b2Vec2 topleft = b2Vec2(-width / 2.0, -height / 2.0);
+		b2Vec2 topleft = b2Vec2(-width / 2.0f, -height / 2.0f);
 		bodyInformation.vertices[0] = glm::vec2(topleft.x, topleft.y);
 
-		b2Vec2 bottomLeft = b2Vec2(-width / 2.0, height / 2.0);
+		b2Vec2 bottomLeft = b2Vec2(-width / 2.0f, height / 2.0f);
 		bodyInformation.vertices[1] = glm::vec2(bottomLeft.x, bottomLeft.y);
 
-		b2Vec2 bottomRight = b2Vec2(width / 2, height / 2.0);
+		b2Vec2 bottomRight = b2Vec2(width / 2.0f, height / 2.0f);
 		bodyInformation.vertices[2] = glm::vec2(bottomRight.x, bottomRight.y);
 
-		b2Vec2 topRight = b2Vec2(width / 2.0, -height / 2.0);
+		b2Vec2 topRight = b2Vec2(width / 2.0f, -height / 2.0f);
 		bodyInformation.vertices[3] = glm::vec2(topRight.x, topRight.y);
 
 		bodyInformation.verticesCount = 4;
@@ -194,7 +194,7 @@ namespace AIngine::Editor {
 
 		// Circle attributes
 		ImGui::DragFloat2("Offset", *offset, 0.05f);
-		if (ImGui::DragFloat("Radius", &bodyInfo.radius, bodyInfo.radius != 0 ? bodyInfo.radius * 0.01 : 0.01)) {
+		if (ImGui::DragFloat("Radius", &bodyInfo.radius, bodyInfo.radius != 0 ? bodyInfo.radius * 0.01f : 0.01f)) {
 			color = glm::vec3(0, 1, 0);
 		}
 		else {
@@ -214,8 +214,8 @@ namespace AIngine::Editor {
 		AIngine::Physics::PhysicsBodyInformation& bodyInfo = physComp->m_bodyInformation;
 
 		// box attributes
-		ImGui::DragFloat("Width", &bodyInfo.width, bodyInfo.width != 0 ? bodyInfo.width * 0.01 : 0.01);
-		ImGui::DragFloat("Height", &bodyInfo.height, bodyInfo.height != 0 ? bodyInfo.height * 0.01 : 0.01);
+		ImGui::DragFloat("Width", &bodyInfo.width, bodyInfo.width != 0 ? bodyInfo.width * 0.01f : 0.01f);
+		ImGui::DragFloat("Height", &bodyInfo.height, bodyInfo.height != 0 ? bodyInfo.height * 0.01f : 0.01f);
 		UpdateBoxVertices(*physComp);
 
 		// draw the vertices
@@ -239,7 +239,7 @@ namespace AIngine::Editor {
 
 
 		// create dragfloat2 for each vertex to adjust its position
-		for (int i = 0; i < bodyInfo.verticesCount; i++) {
+		for (unsigned int i = 0; i < bodyInfo.verticesCount; i++) {
 			std::stringstream ss;
 			ss << "Vertex" << i << "##vertices";
 			float* pos[] = { &bodyInfo.vertices[i].x, &bodyInfo.vertices[i].y };
@@ -268,7 +268,7 @@ namespace AIngine::Editor {
 		}
 
 		// draw the vertices
-		for (int i = 0; i < bodyInfo.verticesCount; i++) {
+		for (unsigned int i = 0; i < bodyInfo.verticesCount; i++) {
 			const b2Transform& xf = physComp->m_body->GetTransform();
 			if (i == vertexUnderChangeIndex) {
 				CreateMoveableVertex(bodyInfo.vertices[i], xf, 7, glm::vec3(0, 1, 0), glm::vec3(0, 1, 0));

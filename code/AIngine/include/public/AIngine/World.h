@@ -42,7 +42,7 @@ namespace AIngine {
 		static GameObject* const SpawnObject(const std::string& name = std::string("GameObject"), GameObject* parent = nullptr, const glm::vec2& position = glm::vec2(0.0f), const glm::vec2& scale = glm::vec2(1.0f), const float rotation = 0.0f);
 		static GameObject* const GetGameObject(const std::string& name);
 		static void DestroyObject(GameObject& gameobject);
-		static inline const glm::vec4& GetBounds() { if (s_instance) return s_instance->m_bounds; else return glm::vec4(1.0); }
+		static inline glm::vec4 GetBounds() { if (s_instance) return s_instance->m_bounds; else return glm::vec4(1.0); }
 		static inline const b2World& GetPhysicsWorld() { return *s_instance->m_physicsWorld; }
 		static inline glm::vec2 GetGravity() { if (s_instance) return s_instance->m_gravity; else return glm::vec2(0); }
 		static void SetGravity(const glm::vec2& gravity);

@@ -74,8 +74,8 @@ namespace AIngine::Rendering {
 	void Font::ExtractName(const char * path)
 	{
 		std::string Path(std::filesystem::canonical(path).string());
-		unsigned int first = Path.find_last_of('\\'); 
-		unsigned int last = Path.find_last_of('.');
+		size_t first = Path.find_last_of('\\'); 
+		size_t last = Path.find_last_of('.');
 		Name = Path.substr(first, last - first).c_str();
 	}
 }

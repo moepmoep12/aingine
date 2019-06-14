@@ -687,7 +687,7 @@ namespace AIngine {
 	void Graphics::PolygonWorld(const glm::vec2 * vertices, unsigned int count, const glm::vec3 & color)
 	{
 		glm::vec2 p1 = vertices[count - 1];
-		for (int i = 0; i < count; ++i)
+		for (unsigned int i = 0; i < count; ++i)
 		{
 			glm::vec2 p2 = vertices[i];
 			Line(p1, p2, color);
@@ -698,7 +698,7 @@ namespace AIngine {
 	void Graphics::PolygonScreen(const glm::vec2 * vertices, unsigned int count, const glm::vec3 & color)
 	{
 		glm::vec2 p1 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[4 - 1]);
-		for (int i = 0; i < count; ++i)
+		for (unsigned int i = 0; i < count; ++i)
 		{
 			glm::vec2 p2 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[i]);
 			Line(p1, p2, color);

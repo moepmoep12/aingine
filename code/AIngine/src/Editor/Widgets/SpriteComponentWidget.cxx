@@ -57,7 +57,7 @@ namespace AIngine::Editor {
 				static ImVec2 uv1 = ImVec2(1, 1);
 				ImVec4 tint_col = ImVec4(1, 1, 1, 1);
 				static ImVec4 border_col = ImVec4(1, 1, 1, 1);
-				ImVec2 textureSize = ImVec2(spriteComponent->m_texture.Width, spriteComponent->m_texture.Height);
+				ImVec2 textureSize = ImVec2((float)spriteComponent->m_texture.Width, (float)spriteComponent->m_texture.Height);
 				float imageRatio = 1;
 				if (spriteComponent->m_texture.FileName.empty()) {
 					tint_col = ImVec4(0, 0, 0, 1);

@@ -89,7 +89,7 @@ namespace AIngine::Editor {
 				float delay = sound->GetDelay();
 				std::stringstream ss;
 				ss << "Delay" << "##" << sound->GetPath();
-				if (ImGui::DragFloat(ss.str().c_str(), &delay, 0.1)) {
+				if (ImGui::DragFloat(ss.str().c_str(), &delay, 0.1f)) {
 					sound->SetDelay(delay);
 				}
 				// Looping

@@ -191,8 +191,8 @@ namespace AIngine::Editor {
 	std::string Editor::UpdateSceneTitle()
 	{
 		std::string Path(std::filesystem::canonical(m_currentSceneFilePath).string());
-		unsigned int first = Path.find_last_of('\\') + 1;
-		unsigned int last = Path.find_last_of('.');
+		size_t first = Path.find_last_of('\\') + 1;
+		size_t last = Path.find_last_of('.');
 		std::string sceneName = " | ";
 		sceneName.append(Path.substr(first, last - first).c_str());
 		m_app.m_window->AppendWindowTitle(sceneName.c_str());

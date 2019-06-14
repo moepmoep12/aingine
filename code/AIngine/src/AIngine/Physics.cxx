@@ -151,16 +151,16 @@ namespace AIngine::Physics {
 		m_body->SetUserData(this);
 
 		//  clock wise
-		b2Vec2 topleft = b2Vec2(-width / 2.0, -height / 2.0);
+		b2Vec2 topleft = b2Vec2(-width / 2.0f, -height / 2.0f);
 		m_bodyInformation.vertices[0] = glm::vec2(topleft.x, topleft.y);
 
-		b2Vec2 topRight = b2Vec2(width / 2.0, -height / 2.0);
+		b2Vec2 topRight = b2Vec2(width / 2.0f, -height / 2.0f);
 		m_bodyInformation.vertices[1] = glm::vec2(topRight.x, topRight.y);
 
-		b2Vec2 bottomRight = b2Vec2(width / 2.0, height / 2.0);
+		b2Vec2 bottomRight = b2Vec2(width / 2.0f, height / 2.0f);
 		m_bodyInformation.vertices[2] = glm::vec2(bottomRight.x, bottomRight.y);
 
-		b2Vec2 bottomLeft = b2Vec2(-width / 2.0, height / 2.0);
+		b2Vec2 bottomLeft = b2Vec2(-width / 2.0f, height / 2.0f);
 		m_bodyInformation.vertices[3] = glm::vec2(bottomLeft.x, bottomLeft.y);
 
 
@@ -239,7 +239,7 @@ namespace AIngine::Physics {
 
 		b2PolygonShape shape;
 		b2Vec2 Vertices[maxVertices];
-		for (int i = 0; i < count; i++) {
+		for (unsigned int i = 0; i < count; i++) {
 			Vertices[i] = b2Vec2(vertices[i].x, vertices[i].y);
 		}
 		shape.Set(Vertices, count);
@@ -252,7 +252,7 @@ namespace AIngine::Physics {
 		m_body->SetUserData(this);
 
 		// Box2D might adjust the vertices in order to fit properly, thus we need to update ours
-		for (int i = 0; i < count; i++) {
+		for (unsigned int i = 0; i < count; i++) {
 			m_bodyInformation.vertices[i] = glm::vec2(shape.m_vertices[i].x, shape.m_vertices[i].y);
 		}
 	}

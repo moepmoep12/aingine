@@ -73,7 +73,7 @@ namespace AIngine::Rendering {
 		GLfloat windowHeight = static_cast<GLfloat>(viewport.GetWindowHeight());
 		glm::vec2 bottomLeft = glm::vec2(viewport.GetTopLeftCornerPosition().x, viewport.GetTopLeftCornerPosition().y + viewport.GetViewportHeight());
 
-		glViewport((GLint)bottomLeft.x, (GLint)viewport.GetWindowHeight() - bottomLeft.y, (GLsizei)viewport.GetViewportWidth(), (GLsizei)viewport.GetViewportHeight());
+		glViewport((GLint)bottomLeft.x, (GLint)(viewport.GetWindowHeight() - bottomLeft.y), (GLsizei)viewport.GetViewportWidth(), (GLsizei)viewport.GetViewportHeight());
 	}
 
 	void SpriteRenderer::RenderSprite(AIngine::Sprite& sprite, GLShaderProgram* shader)
