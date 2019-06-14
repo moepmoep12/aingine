@@ -78,8 +78,10 @@ void AIngine::Sound::Pause()
 
 void AIngine::Sound::Stop()
 {
-	if (m_playingSound && m_playingSound->active)
+	if (m_playingSound && m_playingSound->active) {
 		cs_stop_sound(m_playingSound);
+		m_playingSound = nullptr;
+	}
 }
 
 void AIngine::Sound::ExtractName()
