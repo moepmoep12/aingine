@@ -13,12 +13,17 @@ namespace AIngine {
 	class SceneGraph;
 	class Component;
 
+	namespace Structures {
+		class SceneGraph;
+	}
+
 	/// A GameObject represents an entity wihin a game
    /// It acts as a container for Components
 	class GameObject {
 	public:
 		inline const std::vector<Component*>& GetComponents() { return m_components; }
 
+		/* Returns the component by type*/
 		template <class T>
 		inline T* GetComponent()
 		{
@@ -35,6 +40,7 @@ namespace AIngine {
 			return nullptr;
 		}
 
+		/* Removes the component specified by type*/
 		template<class T>
 		inline void RemoveComponent() {
 			auto it = m_components.begin();
@@ -51,7 +57,7 @@ namespace AIngine {
 			}
 		}
 
-
+		/* Adds a new component of type T*/
 		template <class T>
 		inline T* AddComponent()
 		{
@@ -62,49 +68,84 @@ namespace AIngine {
 			return comp;
 		}
 
+		/* Removes the specified component by pointer*/
 		void RemoveComponent(Component* comp);
 
+		/* The name of this GameObject*/
 		inline const std::string& GetName() const { return m_name; }
 		inline void SetName(const std::string& name) { m_name = name; }
 
+		/* The parent GameObject of this GameObject*/
 		inline GameObject* GetParent() { return m_parent; }
 		void SetParent(GameObject&  parent, bool bInformComponents = true);
 
+		/* Returns the local position of this GameObject*/
 		inline glm::vec2& GetLocalPosition() { return m_position; }
+		/* Sets the local position of this gameObject
+		* @bInformComponents: whether to propagate the change to the GameObjects components */
 		void SetLocalPosition(const glm::vec2& position, bool bInformComponents = true);
+		/* Translates the gameobject by the specified amount
+		* @bInformComponents: whether to propagate the change to the GameObjects components */
 		void Translate(const glm::vec2& translation, bool bInformComponents = true);
 
+		/* The local Scale of this GameObject*/
 		inline glm::vec2& GetLocalScale() { return m_scale; }
+		/* Sets the local scale of this gameObject
+		* @bInformComponents: whether to propagate the change to the GameObjects components */
 		void SetLocalScale(const glm::vec2& scale, bool bInformComponents = true);
+		/* Scales this GameObject multiplicative by the amount
+		* @bInformComponents: whether to propagate the change to the GameObjects components */
 		void Scale(const glm::vec2& amount, bool bInformComponents = true);
 
+		/* The local rotation of this GameObject given in radians between -2PI and 2PI */
 		inline float& GetLocalRotation() { return m_rotation; }
+		/* Sets the local rotation of this gameObject
+		* @bInformComponents: whether to propagate the change to the GameObjects components */
 		void SetRotation(float rot, bool bInformComponents = true);
+		/* Rotates this GameObject additively by amount
+		* @bInformComponents: whether to propagate the change to the GameObjects components */
 		void Rotate(float amount, bool bInformComponents = true);
 
+		/* Sets the transform of this GameObject by applying translation,scaling & rotation */
 		void UpdateTransform(const glm::vec2& translation, const glm::vec2& scale, float rot);
 
+		/* Returns all GameObject this GameObject is parent of */
 		inline const std::vector<GameObject*>& GetChildren() { return m_children; }
 
+		/* Returns this GameObjects transform as a 4x4 Matrix*/
 		glm::mat4 GetLocalTransform() const;
+		/* Returns this GameObjects world position */
 		glm::vec2 GetWorldPosition() const;
+		/* Sets the world position of this gameObject
+		* @bInformComponents: whether to propagate the change to the GameObjects components */
 		void SetWorldPosition(const glm::vec2& pos, bool bInformComponents = true);
+		/* Returns the world scale of this GameObject */
 		glm::vec2 GetWorldScale() const;
-
-		// clamped between -2PI and 2PI
+		/* Returns the world rotation of this GameObject
+		* note: Parent rotations stack additively */
 		float GetWorldRotation() const;
-
+		/* Sets the world rotation of this gameObject
+		* @bInformComponents: whether to propagate the change to the GameObjects components */
 		void SetWorldRotation(float rot, bool bInformComponents = true);
+
+		/* Adds a child to the end of this GameObjects child list */
 		void AddChild(GameObject* obj);
+		/* Adds a child at a specified position */
 		void AddChild(std::vector<GameObject*>::const_iterator _where, GameObject* obj);
+		/* Removes a child by pointer*/
 		void RemoveChild(GameObject* obj);
+		/* Retrieves a child by name */
 		GameObject* GetChild(const std::string& name);
 
-		virtual void OnUpdate(float deltatime) {}
+		/* Visitor Pattern for traversal */
 		virtual bool Accept(Traverser& traverser);
 
+		// delete creation of GameObjects outside of World/SceneGraph
 		GameObject() = delete;
-		GameObject(GameObject* parent, const std::string& name);
+		GameObject(const GameObject& other) = delete;
+		GameObject& operator=(const GameObject& other) = delete;
+		GameObject(GameObject&& other) = delete;
+		GameObject& operator=(GameObject&& other) = delete;
 		~GameObject();
 
 	private:
@@ -116,10 +157,9 @@ namespace AIngine {
 		float m_rotation = 0.0f;
 		GameObject* m_parent;
 
+		/* SceneGraph is responsible for the creation of GameObjects */
+		friend class AIngine::Structures::SceneGraph;
 
-	protected:
-		friend class SceneGraph;
-
-		//~GameObject();
+		GameObject(GameObject* parent, const std::string& name);
 	};
 }
