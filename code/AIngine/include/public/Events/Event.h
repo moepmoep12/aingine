@@ -167,6 +167,13 @@ namespace AIngine::Events {
 
 			return *this;
 		}
+
+
+		Event &operator-=(const typename EventHandler::Func &handler) {
+			this->removeHandler(EventHandler{ handler });
+
+			return *this;
+		}
 	};
 
 	template<typename ReturnType, class ... Args>
