@@ -38,6 +38,7 @@ namespace AIngine::Editor {
 
 		void ShowSelectedNodeWidget(GameObject* node);
 		void ShowUserScripts(GameObject* node);
+		void PerformCopy();
 
 		// Creates a GUI for the scenegraph
 		class ImguiTreeTraverser : public AIngine::Traverser {
@@ -65,9 +66,10 @@ namespace AIngine::Editor {
 
 			void BeginDragSource();
 			void BeginDropTarget(GameObject& obj);
+			void CreateContextMenu(GameObject& node);
 
 		};
 
-		
+
 	};
 }

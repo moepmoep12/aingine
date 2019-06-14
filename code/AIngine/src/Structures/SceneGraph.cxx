@@ -375,9 +375,14 @@ namespace AIngine::Structures {
 	bool SceneGraph::CopyTraverser::Visit(GameObject & node)
 	{
 		GameObject& copy = m_sceneGraph.CopySingle(node, false);
-		GameObject* copiedParent = m_parentStack.back();
-		copy.SetParent(*copiedParent, false);
-		copy.GetParent()->AddChild(&copy);
+		if (m_parentStack.size() > 0) {
+			GameObject* copiedParent = m_parentStack.back();
+			copy.SetParent(*copiedParent, false);
+			copy.GetParent()->AddChild(&copy);
+		}
+		else {
+			Result = &copy;
+		}
 		return true;
 	}
 }

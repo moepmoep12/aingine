@@ -20,6 +20,7 @@ namespace AIngine::Editor {
 
 	static GameObject* s_selectedNode = nullptr;
 	static GameObject* s_DropTarget = nullptr;
+	static GameObject* s_CopySource = nullptr;
 
 	void AIngine::Editor::SceneGraphWidget::OnImGuiRender()
 	{
@@ -46,6 +47,8 @@ namespace AIngine::Editor {
 		ImguiTreeTraverser traverser;
 		traverser.Traverse(&m_sceneGraph.GetRoot());
 
+		PerformCopy();
+
 		ImGui::Columns(1);
 		ImGui::Separator();
 		ImGui::PopStyleVar();
@@ -70,7 +73,7 @@ namespace AIngine::Editor {
 			if (s_selectedNode && keyevent.GetKeyCode() == AIngine::KeyCodes::D && AIngine::Input::IsKeyPressed(AIngine::KeyCodes::LEFT_CONTROL))
 			{
 				if (&m_sceneGraph.GetRoot() != s_selectedNode)
-					m_sceneGraph.Copy(*s_selectedNode);
+					s_selectedNode = &m_sceneGraph.Copy(*s_selectedNode);
 			}
 		}
 	}
@@ -164,6 +167,15 @@ namespace AIngine::Editor {
 		ImGui::Separator();
 	}
 
+	void SceneGraphWidget::PerformCopy()
+	{
+		if (s_CopySource) {
+			if (&m_sceneGraph.GetRoot() != s_CopySource)
+				s_selectedNode = &m_sceneGraph.Copy(*s_CopySource);
+
+			s_CopySource = nullptr;
+		}
+	}
 	/*------------------------------------------- IMGUI TREE TRAVERSER -----------------------------------------------*/
 	/*----------------------------------------------------------------------------------------------------------------*/
 
@@ -212,16 +224,7 @@ namespace AIngine::Editor {
 		// create a inner node with children
 		bool node_open = ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
 
-
-		if (ImGui::BeginPopupContextItem()) {
-			if (ImGui::Selectable("Add GameObject")) {
-				AIngine::World::SpawnObject("NewGameObject", &node);
-			}
-			if (ImGui::Selectable("Delete")) {
-				m_ObjectToDelete = &node;
-			}
-			ImGui::EndPopup();
-		}
+		CreateContextMenu(node);
 
 		// check if selected
 		if (ImGui::IsItemClicked()) {
@@ -259,15 +262,7 @@ namespace AIngine::Editor {
 		// create leaf
 		ImGui::TreeNodeEx(&node, node_flags, node.GetName().c_str());
 
-		if (ImGui::BeginPopupContextItem()) {
-			if (ImGui::Selectable("Add GameObject")) {
-				AIngine::World::SpawnObject("NewGameObject", &node);
-			}
-			if (ImGui::Selectable("Delete")) {
-				m_ObjectToDelete = &node;
-			}
-			ImGui::EndPopup();
-		}
+		CreateContextMenu(node);
 
 		if (ImGui::IsItemClicked()) {
 			s_selectedNode = &node;
@@ -328,6 +323,22 @@ namespace AIngine::Editor {
 				}
 			}
 			ImGui::EndDragDropTarget();
+		}
+	}
+
+	void SceneGraphWidget::ImguiTreeTraverser::CreateContextMenu(GameObject & node)
+	{
+		if (ImGui::BeginPopupContextItem()) {
+			if (ImGui::Selectable("Add Child")) {
+				AIngine::World::SpawnObject("NewGameObject", &node);
+			}
+			if (ImGui::Selectable("Duplicate")) {
+				s_CopySource = &node;
+			}
+			if (ImGui::Selectable("Delete")) {
+				m_ObjectToDelete = &node;
+			}
+			ImGui::EndPopup();
 		}
 	}
 }
