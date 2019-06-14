@@ -38,5 +38,8 @@ namespace AIngine {
 		glm::vec2 m_localWorldSize = glm::vec2(0);
 		glm::vec2 m_parallaxFactor = glm::vec2(1);
 		AIngine::Rendering::Texture2D m_texture;
+
+	protected:
+		virtual Component* Copy( GameObject* const owner) const override;
 	};
 }
