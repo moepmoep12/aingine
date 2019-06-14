@@ -5,6 +5,10 @@
 
 namespace AIngine {
 
+	namespace Structures {
+		class SceneGraph;
+	}
+
 	class GameObject;
 
 	class Component {
@@ -33,8 +37,13 @@ namespace AIngine {
 	protected:
 		GameObject* m_owner;
 
+		friend class AIngine::Structures::SceneGraph;
+
+		virtual Component* Copy(GameObject* const owner) const { return nullptr; }
+
 	private:
 		std::string m_name;
 		bool m_isActive = true;
+
 	};
 }
