@@ -15,6 +15,12 @@ namespace CrappyBird {
 		soundComp->Play(0);
 	}
 
+	void BackGround::OnEnd()
+	{
+		SoundComponent* soundComp = m_owner->GetComponent<SoundComponent>();
+		soundComp->Stop(0);
+	}
+
 	void BackGround::OnEvent(AIngine::Events::EventData & e)
 	{
 	}
