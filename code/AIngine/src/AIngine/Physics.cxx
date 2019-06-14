@@ -264,6 +264,27 @@ namespace AIngine::Physics {
 		return nullptr;
 	}
 
+	Component * PhysicsComponent::Copy(GameObject * const owner) const
+	{
+		PhysicsComponent* copy = new PhysicsComponent(owner);
+		
+		switch (m_bodyInformation.shape) {
+		case PhysicsShape::e_Box:
+			copy->CreateBoxBody(m_properties, m_bodyInformation.type, m_bodyInformation.width, m_bodyInformation.height, m_bodyInformation.isTrigger);
+				break;
+
+		case PhysicsShape::e_Circle:
+			copy->CreateCircleBody(m_properties, m_bodyInformation.type, m_bodyInformation.radius, m_bodyInformation.isTrigger);
+			break;
+
+		case PhysicsShape::e_Polygon:
+			copy->CreatePolygonBody(m_properties, m_bodyInformation.type, m_bodyInformation.vertices, m_bodyInformation.verticesCount, m_bodyInformation.isTrigger);
+			break;
+		}
+
+		return std::move(copy);
+	}
+
 	glm::vec2 PhysicsComponent::GetVelocity() const {
 		b2Vec2 vel = m_body->GetLinearVelocity();
 		return glm::vec2(vel.x, vel.y);
