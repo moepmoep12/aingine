@@ -105,6 +105,9 @@ namespace AIngine::Physics {
 		CollisionEvent OnCollisionBegin;
 		CollisionEvent OnCollisionEnd;
 
+	protected:
+		virtual Component* Copy(GameObject* const owner) const override;
+
 	private:
 		b2Body* m_body;
 		b2Fixture* m_otherCollided;

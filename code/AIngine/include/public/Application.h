@@ -74,7 +74,7 @@ namespace AIngine {
 		// Callbacks
 		void OnWindowClose();
 		void OnWindowResize(unsigned int width, unsigned int height);
-		void OnViewportChanged(AIngine::Structures::Rectangle&);
+		void OnViewportChanged(AIngine::Structures::RectangleI&);
 		void PropagateEventData(AIngine::Events::EventData& e);
 		void OnEnterPlayMode();
 		void OnLeavePlayMode();

@@ -42,9 +42,9 @@ namespace AIngine {
 		static void CircleScreen(const glm::vec2& center, float radius, const glm::vec3& color);
 
 		static void BoxWorld(const glm::vec2* vertices, const glm::vec3 color);
-		static void BoxWorld(const AIngine::Structures::Rectangle& rect, const glm::vec3 color);
+		static void BoxWorld(const AIngine::Structures::RectangleI& rect, const glm::vec3 color);
 		static void BoxScreen(const glm::vec2* vertices, const glm::vec3 color);
-		static void BoxScreen(const AIngine::Structures::Rectangle& rect, const glm::vec3 color);
+		static void BoxScreen(const AIngine::Structures::RectangleI& rect, const glm::vec3 color);
 
 		static void PolygonWorld(const glm::vec2* vertices, unsigned int count, const glm::vec3& color);
 		static void PolygonScreen(const glm::vec2* vertices, unsigned int count, const glm::vec3& color);

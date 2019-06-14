@@ -60,7 +60,7 @@ namespace AIngine::Editor {
 
 		/* Calculates the available viewport size to be used for rendering the scene
 		* @returns : Returns the viewport Rectangle with a screen position & size */
-		AIngine::Structures::Rectangle CalculateViewportRect(const glm::vec2& windowSize) const;
+		AIngine::Structures::RectangleI CalculateViewportRect(const glm::vec2& windowSize) const;
 
 		/* Actives/Deactivates the frame counter in the top left corner*/
 		static void SetShowFramerate(bool active);

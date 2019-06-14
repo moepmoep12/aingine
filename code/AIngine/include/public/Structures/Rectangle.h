@@ -3,12 +3,13 @@
 #include <glm/glm.hpp>
 
 namespace AIngine::Structures {
+	template<typename T>
 	struct Rectangle {
 
 		Rectangle()
 			: x(0), y(0), width(0), height(0) {}
 
-		Rectangle(size_t x, size_t y, size_t width, size_t height)
+		Rectangle(T x, T y, T width, T height)
 			: x(x), y(y), width(width), height(height) {}
 
 		bool Contains(const glm::vec2& point) const {
@@ -30,8 +31,8 @@ namespace AIngine::Structures {
 
 		// Set position of the top left corner
 		void SetPosition(const glm::vec2& pos) {
-			x = (size_t)pos.x;
-			y = (size_t)pos.y;
+			x = (T)pos.x;
+			y = (T)pos.y;
 		}
 
 		glm::vec2 GetTopRight() const {
@@ -47,10 +48,10 @@ namespace AIngine::Structures {
 		}
 
 		glm::vec2 GetCenter() const {
-			return GetPosition() + glm::vec2(width / 2.0, height / 2.0);
+			return GetPosition() + glm::vec2(width / 2.0f, height / 2.0f);
 		}
 
-		size_t Area() const {
+		T Area() const {
 			return width * height;
 		}
 
@@ -61,6 +62,9 @@ namespace AIngine::Structures {
 			BottomLeft = 3
 		};
 
-		size_t x, y, width, height;
+		T x, y, width, height;
 	};
+
+	typedef Rectangle<float> RectangleF;
+	typedef Rectangle<int> RectangleI;
 }

@@ -639,7 +639,7 @@ namespace AIngine {
 		}
 	}
 
-	void Graphics::BoxWorld(const AIngine::Structures::Rectangle & rect, const glm::vec3 color)
+	void Graphics::BoxWorld(const AIngine::Structures::RectangleI & rect, const glm::vec3 color)
 	{
 		glm::vec2 vertices[4];
 		vertices[0] = rect.GetPosition();
@@ -667,7 +667,7 @@ namespace AIngine {
 		}
 	}
 
-	void Graphics::BoxScreen(const AIngine::Structures::Rectangle & rect, const glm::vec3 color)
+	void Graphics::BoxScreen(const AIngine::Structures::RectangleI & rect, const glm::vec3 color)
 	{
 		glm::vec2 vertices[4];
 		vertices[0] = rect.GetPosition();

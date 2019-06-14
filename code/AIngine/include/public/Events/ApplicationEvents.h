@@ -111,11 +111,11 @@ namespace AIngine::Events {
 	};
 
 	// ViewportChangedEvent
-	class  ViewportChangedEvent : public Event<void, AIngine::Structures::Rectangle&>
+	class  ViewportChangedEvent : public Event<void, AIngine::Structures::RectangleI&>
 	{
 	public:
 		class ViewportChangedEventData : public EventData {
-			ViewportChangedEventData(AIngine::Structures::Rectangle& viewportRect)
+			ViewportChangedEventData(AIngine::Structures::RectangleI& viewportRect)
 				: ViewportRect(viewportRect) {}
 
 			std::string ToString() const override
@@ -128,7 +128,7 @@ namespace AIngine::Events {
 			EVENT_CLASS_TYPE(ViewportChanged)
 				EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
-				AIngine::Structures::Rectangle& ViewportRect;
+				AIngine::Structures::RectangleI& ViewportRect;
 		};
 	};
 }

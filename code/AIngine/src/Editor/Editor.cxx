@@ -225,10 +225,10 @@ namespace AIngine::Editor {
 		m_widgets.push_back(new ToolbarWidget());
 	}
 
-	AIngine::Structures::Rectangle Editor::CalculateViewportRect(const glm::vec2& windowSize) const
+	AIngine::Structures::RectangleI Editor::CalculateViewportRect(const glm::vec2& windowSize) const
 	{
-		using Rectangle = AIngine::Structures::Rectangle;
-		using Corner = AIngine::Structures::Rectangle::Corner;
+		using Rectangle = AIngine::Structures::RectangleI;
+		using Corner = AIngine::Structures::RectangleI::Corner;
 
 		Rectangle viewportRect(0, m_widgets[3]->GetSize().y, windowSize.x, windowSize.y - m_widgets[3]->GetSize().y);
 
@@ -325,7 +325,7 @@ namespace AIngine::Editor {
 		glm::vec2 mouseScreenPos = glm::vec2(AIngine::Input::GetMousePosition().first, AIngine::Input::GetMousePosition().second);
 		glm::vec2 mouseWorldPos = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(mouseScreenPos);
 		glm::vec2 screenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(worldPosition);
-		AIngine::Structures::Rectangle vertexRectangle(screenPos.x - vertexSize, screenPos.y - vertexSize, 2 * vertexSize, 2 * vertexSize);
+		AIngine::Structures::RectangleI vertexRectangle(screenPos.x - vertexSize, screenPos.y - vertexSize, 2 * vertexSize, 2 * vertexSize);
 		bool bInteracted = false;
 
 		if (vertexRectangle.Contains(mouseScreenPos)) {
@@ -333,7 +333,7 @@ namespace AIngine::Editor {
 				glm::vec2 diff = mouseWorldPos - worldPosition;
 				worldPosition += diff;
 				screenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(worldPosition);
-				vertexRectangle = AIngine::Structures::Rectangle(screenPos.x - vertexSize, screenPos.y - vertexSize, 2 * vertexSize, 2 * vertexSize);
+				vertexRectangle = AIngine::Structures::RectangleI(screenPos.x - vertexSize, screenPos.y - vertexSize, 2 * vertexSize, 2 * vertexSize);
 				bInteracted = true;
 			}
 			AIngine::Graphics::Point(worldPosition, vertexSize, colorInteract);
@@ -459,4 +459,4 @@ namespace AIngine::Editor {
 }
 
 // initialize ViewportChangedEventHandler counter
-int AIngine::Events::EventHandler<void, AIngine::Structures::Rectangle&>::counter = 0;
+int AIngine::Events::EventHandler<void, AIngine::Structures::RectangleI&>::counter = 0;

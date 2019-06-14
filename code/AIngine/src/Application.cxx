@@ -116,7 +116,7 @@ namespace AIngine {
 #ifdef _DEBUG
 		m_editor = new AIngine::Editor::Editor();
 		PushOverlay(m_editor);
-		m_editor->OnViewportChangedEvent += [=](AIngine::Structures::Rectangle& viewport) {
+		m_editor->OnViewportChangedEvent += [=](AIngine::Structures::RectangleI& viewport) {
 			this->OnViewportChanged(viewport);
 		};
 		m_editor->OnEnterPlayModeEvent += [=]() {
@@ -320,7 +320,7 @@ namespace AIngine {
 			m_renderer->SetViewport();
 	}
 
-	void Application::OnViewportChanged(AIngine::Structures::Rectangle& viewport)
+	void Application::OnViewportChanged(AIngine::Structures::RectangleI& viewport)
 	{
 		m_viewport->Set(viewport.GetPosition(), viewport.width, viewport.height);
 		m_camera->SetZoom((float)m_window->GetWidth() / (float)m_world->GetBounds().y);

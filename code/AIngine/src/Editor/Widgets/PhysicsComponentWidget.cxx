@@ -165,7 +165,7 @@ namespace AIngine::Editor {
 		glm::vec2 mouseWorldPos = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(mouseScreenPos);
 		glm::vec2 vertexWorldPos = CalculateWorldPosition(localPosition, transform);
 		glm::vec2 vertexScreenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(vertexWorldPos);
-		AIngine::Structures::Rectangle vertexRectangle(vertexScreenPos.x - size, vertexScreenPos.y - size, 2 * size, 2 * size);
+		AIngine::Structures::RectangleF vertexRectangle(vertexScreenPos.x - size, vertexScreenPos.y - size, 2 * size, 2 * size);
 
 		if (vertexRectangle.Contains(mouseScreenPos))
 		{
@@ -183,7 +183,9 @@ namespace AIngine::Editor {
 			AIngine::Graphics::Point(vertexWorldPos, size, colorNormal);
 		}
 
-		AIngine::Graphics::BoxScreen(vertexRectangle, glm::vec3(1, 1, 0));
+		AIngine::Structures::RectangleI rect((int)vertexRectangle.x, (int)vertexRectangle.y, (int)vertexRectangle.width, (int)
+			vertexRectangle.height);
+		AIngine::Graphics::BoxScreen(rect, glm::vec3(1, 1, 0));
 	}
 
 	void PhysicsComponentWidget::CreateCircleUI(AIngine::Physics::PhysicsComponent * physComp)

@@ -26,8 +26,8 @@ namespace AIngine::Editor {
 		virtual bool IsWindowDocked() const { return m_isDocked; }
 		virtual bool WasWindowSizeChanged() const { return m_wasSizeChanged; }
 
-		virtual AIngine::Structures::Rectangle GetRectangle() const {
-			return AIngine::Structures::Rectangle(m_position.x, m_position.y, m_size.x, m_size.y);
+		virtual AIngine::Structures::RectangleI GetRectangle() const {
+			return AIngine::Structures::RectangleI((int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y);
 		}
 
 		virtual ~EditorWidget() {}
@@ -78,8 +78,8 @@ namespace ImGui {
 		temp.x = start.x + size.x;
 		temp.y = start.y + size.y;
 		const ImRect image_bb(start, temp);
-		start.x = window->DC.CursorPos.x + padding.x; 
-		start.y = window->DC.CursorPos.y + padding.y; 
+		start.x = window->DC.CursorPos.x + padding.x;
+		start.y = window->DC.CursorPos.y + padding.y;
 		start.x += size.x + innerSpacing;
 		if (size.y > textSize.y) start.y += (size.y - textSize.y)*.5f;
 		ItemSize(bb);

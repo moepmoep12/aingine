@@ -61,7 +61,7 @@ namespace AIngine::Editor {
 
 			// create vertex at the objects center to move it around with the mouse
 			if (activeGameObject != &AIngine::Editor::Editor::GetSceneGraph()->GetRoot())
-				AIngine::Editor::Editor::CreateMoveablePositionVertex(activeGameObject->GetLocalPosition(), 15, glm::vec3(0, 1, 0), glm::vec3(0, 0, 1));
+				AIngine::Editor::Editor::CreateMoveablePositionVertex(activeGameObject->m_position, 15, glm::vec3(0, 1, 0), glm::vec3(0, 0, 1));
 
 			glm::vec2 newPosition = activeGameObject->GetLocalPosition();
 			glm::vec newScale = activeGameObject->GetLocalScale();
