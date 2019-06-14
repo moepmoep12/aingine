@@ -9,13 +9,12 @@ namespace AIngine {
 
 	class Component {
 	public:
-		inline const std::string& GetName() { return m_name; }
+		inline  std::string GetName() const { return m_name; }
 		inline void SetName(const std::string& name) { m_name = name; }
 
 		inline bool IsActive() const { return m_isActive; }
 		virtual void SetActive(bool active) { m_isActive = active; }
 
-		virtual void OnStart() {}
 		virtual void OnEvent(AIngine::Events::EventData& e) {}
 		virtual void OnUpdate(float deltatime) {}
 		virtual void OnImguiRender() {}
