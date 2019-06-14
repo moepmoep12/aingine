@@ -125,6 +125,9 @@ namespace AIngine {
 		m_editor->OnLeavePlayModeEvent += [=]() {
 			this->OnLeavePlayMode();
 		};
+
+#else
+		OnEnterPlayMode();
 #endif
 
 		m_renderer->initRenderData();
@@ -177,8 +180,9 @@ namespace AIngine {
 
 		CORE_INFO("Shutting App down...");
 
-		OnAppShutDown();
-
+#ifndef _DEBUG
+		OnLeavePlayMode();
+#endif
 		// Clean up
 		m_window = NULL;
 		delete m_renderer;
@@ -218,6 +222,8 @@ namespace AIngine {
 	void Application::OnLeavePlayMode()
 	{
 		OnAppShutDown();
+		AIngine::Structures::OnEndTraverser onEndTraverser;
+		onEndTraverser.Traverse(&m_world->GetSceneGraph().GetRoot());
 	}
 
 	void Application::PushLayer(AIngine::Structures::Layer * layer)

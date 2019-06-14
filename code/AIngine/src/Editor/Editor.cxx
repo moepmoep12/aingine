@@ -157,6 +157,10 @@ namespace AIngine::Editor {
 		std::ofstream file(lastSceneFilePath);
 		file << m_currentSceneFilePath;
 		file.close();
+
+		if (m_isInPlayMode) {
+			OnLeavePlayModeEvent();
+		}
 	}
 
 
@@ -360,7 +364,7 @@ namespace AIngine::Editor {
 			// remember the path to the new scene
 			s_instance->m_currentSceneFilePath = std::filesystem::relative(path).string();
 
-			std::string sceneName =  s_instance->UpdateSceneTitle();
+			std::string sceneName = s_instance->UpdateSceneTitle();
 
 			CORE_INFO("Loaded ccene " + sceneName + " from " + path);
 		}
