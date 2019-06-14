@@ -267,11 +267,11 @@ namespace AIngine::Physics {
 	Component * PhysicsComponent::Copy(GameObject * const owner) const
 	{
 		PhysicsComponent* copy = new PhysicsComponent(owner);
-		
+
 		switch (m_bodyInformation.shape) {
 		case PhysicsShape::e_Box:
 			copy->CreateBoxBody(m_properties, m_bodyInformation.type, m_bodyInformation.width, m_bodyInformation.height, m_bodyInformation.isTrigger);
-				break;
+			break;
 
 		case PhysicsShape::e_Circle:
 			copy->CreateCircleBody(m_properties, m_bodyInformation.type, m_bodyInformation.radius, m_bodyInformation.isTrigger);
@@ -318,11 +318,13 @@ namespace AIngine::Physics {
 
 	void PhysicsComponent::SetCollision(bool collided, b2Fixture * other)
 	{
-		m_collided = collided;
-		m_otherCollided = other;
-		if (collided)
-			OnCollisionBegin(GetOtherCollider());
-		else OnCollisionEnd(GetOtherCollider());
+		if (IsActive()) {
+			m_collided = collided;
+			m_otherCollided = other;
+			if (collided)
+				OnCollisionBegin(GetOtherCollider());
+			else OnCollisionEnd(GetOtherCollider());
+		}
 	}
 
 }
