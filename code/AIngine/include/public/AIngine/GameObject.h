@@ -8,13 +8,17 @@
 
 namespace AIngine {
 
-	// forward declaration
+	// forward declarations
+
 	class Traverser;
-	class SceneGraph;
 	class Component;
 
 	namespace Structures {
 		class SceneGraph;
+	}
+
+	namespace Editor {
+		class TransformComponentWidget;
 	}
 
 	/// A GameObject represents an entity wihin a game
@@ -25,7 +29,7 @@ namespace AIngine {
 
 		/* Returns the component by type*/
 		template <class T>
-		inline T* GetComponent()
+		inline T* const GetComponent()
 		{
 			auto it = m_components.begin();
 
@@ -59,7 +63,7 @@ namespace AIngine {
 
 		/* Adds a new component of type T*/
 		template <class T>
-		inline T* AddComponent()
+		inline T* const AddComponent()
 		{
 			T* comp = new T(this);
 
@@ -76,11 +80,11 @@ namespace AIngine {
 		inline void SetName(const std::string& name) { m_name = name; }
 
 		/* The parent GameObject of this GameObject*/
-		inline GameObject* GetParent() { return m_parent; }
+		inline GameObject* const GetParent() { return m_parent; }
 		void SetParent(GameObject&  parent, bool bInformComponents = true);
 
 		/* Returns the local position of this GameObject*/
-		inline glm::vec2& GetLocalPosition() { return m_position; }
+		inline glm::vec2 GetLocalPosition() const { return m_position; }
 		/* Sets the local position of this gameObject
 		* @bInformComponents: whether to propagate the change to the GameObjects components */
 		void SetLocalPosition(const glm::vec2& position, bool bInformComponents = true);
@@ -89,7 +93,7 @@ namespace AIngine {
 		void Translate(const glm::vec2& translation, bool bInformComponents = true);
 
 		/* The local Scale of this GameObject*/
-		inline glm::vec2& GetLocalScale() { return m_scale; }
+		inline glm::vec2 GetLocalScale() const { return m_scale; }
 		/* Sets the local scale of this gameObject
 		* @bInformComponents: whether to propagate the change to the GameObjects components */
 		void SetLocalScale(const glm::vec2& scale, bool bInformComponents = true);
@@ -98,7 +102,7 @@ namespace AIngine {
 		void Scale(const glm::vec2& amount, bool bInformComponents = true);
 
 		/* The local rotation of this GameObject given in radians between -2PI and 2PI */
-		inline float& GetLocalRotation() { return m_rotation; }
+		inline float GetLocalRotation() const { return m_rotation; }
 		/* Sets the local rotation of this gameObject
 		* @bInformComponents: whether to propagate the change to the GameObjects components */
 		void SetRotation(float rot, bool bInformComponents = true);
@@ -159,6 +163,8 @@ namespace AIngine {
 
 		/* SceneGraph is responsible for the creation of GameObjects */
 		friend class AIngine::Structures::SceneGraph;
+
+		friend class AIngine::Editor::TransformComponentWidget;
 
 		GameObject(GameObject* parent, const std::string& name);
 	};

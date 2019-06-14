@@ -15,9 +15,9 @@ namespace AIngine::Editor {
 			glm::vec2 originalPosition = activeGameObject->GetLocalPosition();
 			glm::vec2 originalScale = activeGameObject->GetLocalScale();
 
-			float* position[] = { &activeGameObject->GetLocalPosition().x ,&activeGameObject->GetLocalPosition().y };
-			float* scale[] = { &activeGameObject->GetLocalScale().x ,&activeGameObject->GetLocalScale().y };
-			float* rot = &activeGameObject->GetLocalRotation();
+			float* position[] = { &activeGameObject->m_position.x ,&activeGameObject->m_position.y };
+			float* scale[] = { &activeGameObject->m_scale.x ,&activeGameObject->m_scale.y };
+			float* rot = &activeGameObject->m_rotation;
 			float rotDegree = activeGameObject->GetLocalRotation() * R2D;
 
 			const float translationSliderSpeed = 0.1f;
