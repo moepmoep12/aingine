@@ -27,9 +27,12 @@ namespace AIngine::Structures {
 
 		GameObject* const SpawnObject(const std::string& name = std::string("GameObject"), GameObject* parent = nullptr, const glm::vec2& position = glm::vec2(0.0f), const glm::vec2& scale = glm::vec2(1.0f), const float rotation = 0.0f);
 
+		GameObject& Copy(GameObject& other);
+
 		// Destroys the gameObject and its children by removing it from the scenegraph and freeing its memory
 		void DestroyObject(GameObject& gameobject);
 
+		/* Retrieves the GameObject via name */
 		GameObject* const GetGameObject(const std::string& name);
 
 	private:

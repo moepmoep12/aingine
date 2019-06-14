@@ -36,6 +36,18 @@ namespace AIngine::Structures {
 		return newObject;
 	}
 
+	GameObject & SceneGraph::Copy(GameObject & other)
+	{
+		GameObject& copy = *SpawnObject(other.GetName() + "(Copy)", other.GetParent(), other.GetLocalPosition(), other.GetLocalScale(), other.GetLocalRotation());
+
+		for (auto& comp : other.GetComponents()) {
+			Component* compCopy = comp->Copy(&copy);
+			if (compCopy)
+				copy.m_components.push_back(compCopy);
+		}
+		return copy;
+	}
+
 	void SceneGraph::DestroyObject(GameObject & gameobject)
 	{
 		DeleteTraverser deleteTraverser(m_gameObjectPool);

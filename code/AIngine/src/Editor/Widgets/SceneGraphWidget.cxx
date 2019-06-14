@@ -65,6 +65,12 @@ namespace AIngine::Editor {
 				deletetraverser.Traverse(s_selectedNode);
 				s_selectedNode = nullptr;
 			}
+
+			// duplicate
+			if (s_selectedNode && keyevent.GetKeyCode() == AIngine::KeyCodes::D && AIngine::Input::IsKeyPressed(AIngine::KeyCodes::LEFT_CONTROL))
+			{
+				m_sceneGraph.Copy(*s_selectedNode);
+			}
 		}
 	}
 
