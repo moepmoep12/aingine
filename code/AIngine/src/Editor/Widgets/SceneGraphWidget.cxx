@@ -69,7 +69,8 @@ namespace AIngine::Editor {
 			// duplicate
 			if (s_selectedNode && keyevent.GetKeyCode() == AIngine::KeyCodes::D && AIngine::Input::IsKeyPressed(AIngine::KeyCodes::LEFT_CONTROL))
 			{
-				m_sceneGraph.Copy(*s_selectedNode);
+				if (&m_sceneGraph.GetRoot() != s_selectedNode)
+					m_sceneGraph.Copy(*s_selectedNode);
 			}
 		}
 	}

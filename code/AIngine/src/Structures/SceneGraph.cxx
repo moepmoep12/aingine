@@ -38,14 +38,9 @@ namespace AIngine::Structures {
 
 	GameObject & SceneGraph::Copy(GameObject & other)
 	{
-		GameObject& copy = *SpawnObject(other.GetName() + "(Copy)", other.GetParent(), other.GetLocalPosition(), other.GetLocalScale(), other.GetLocalRotation());
-
-		for (auto& comp : other.GetComponents()) {
-			Component* compCopy = comp->Copy(&copy);
-			if (compCopy)
-				copy.m_components.push_back(compCopy);
-		}
-		return copy;
+		CopyTraverser copyTraverser(*this);
+		copyTraverser.Traverse(&other);
+		return *copyTraverser.Result;
 	}
 
 	void SceneGraph::DestroyObject(GameObject & gameobject)
@@ -67,6 +62,25 @@ namespace AIngine::Structures {
 		deleteTreeTraverser.Traverse(m_Root);
 		m_Root = new (m_gameObjectPool.Allocate()) GameObject(nullptr, std::string("Root"));
 
+	}
+
+	GameObject & SceneGraph::CopySingle(GameObject & other, bool keepParent)
+	{
+		GameObject& copy = *new (m_gameObjectPool.Allocate()) GameObject(keepParent ? other.m_parent : m_Root, other.GetName());
+		copy.SetLocalPosition(other.GetLocalPosition());
+		copy.SetLocalScale(other.GetLocalScale());
+		copy.SetRotation(other.GetLocalRotation());
+
+		if (keepParent) copy.GetParent()->AddChild(&copy);
+
+		for (auto& comp : other.GetComponents()) {
+			Component* compCopy = comp->Copy(&copy);
+			if (compCopy) {
+				copy.m_components.push_back(compCopy);
+				compCopy->SetActive(comp->IsActive());
+			}
+		}
+		return copy;
 	}
 
 	void SceneGraph::OnUpdate(float delta)
@@ -316,6 +330,54 @@ namespace AIngine::Structures {
 			Result = &node;
 			return false;
 		}
+		return true;
+	}
+
+	/********************************** Copy TRAVERSER ****************************************/
+
+
+	SceneGraph::CopyTraverser::CopyTraverser(SceneGraph & graph)
+		: m_sceneGraph(graph)
+	{
+	}
+
+	bool SceneGraph::CopyTraverser::Traverse(GameObject * root)
+	{
+		bool result = root->Accept(*this);
+		Result->SetParent(*root->GetParent());
+		Result->GetParent()->AddChild(Result);
+		return result;
+	}
+
+	bool SceneGraph::CopyTraverser::Enter(GameObject & node)
+	{
+		bool isFirst = m_parentStack.size() == 0;
+
+		GameObject& copy = m_sceneGraph.CopySingle(node, !isFirst);
+
+		if (m_parentStack.size() > 0) {
+			GameObject* copiedParent = m_parentStack.back();
+			copy.SetParent(*copiedParent, false);
+		}
+		m_parentStack.push_back(&copy);
+		return true;
+	}
+
+	bool SceneGraph::CopyTraverser::Leave(GameObject & node)
+	{
+		if (m_parentStack.size() == 1) {
+			Result = m_parentStack.back();
+		}
+		m_parentStack.pop_back();
+		return true;
+	}
+
+	bool SceneGraph::CopyTraverser::Visit(GameObject & node)
+	{
+		GameObject& copy = m_sceneGraph.CopySingle(node, false);
+		GameObject* copiedParent = m_parentStack.back();
+		copy.SetParent(*copiedParent, false);
+		copy.GetParent()->AddChild(&copy);
 		return true;
 	}
 }

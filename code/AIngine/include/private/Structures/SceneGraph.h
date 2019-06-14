@@ -40,6 +40,25 @@ namespace AIngine::Structures {
 		AIngine::Memory::Pool<GameObject> m_gameObjectPool = AIngine::Memory::Pool<GameObject>(1000);
 
 		void Reset();
+
+		GameObject& CopySingle(GameObject& other, bool keepParent = true);
+
+		// Traverses the SceneGrap from the given root node to create a copy
+		class CopyTraverser : public Traverser {
+		public:
+			CopyTraverser(SceneGraph& graph);
+			virtual bool Traverse(GameObject* root) override;
+			virtual bool Enter(GameObject & node) override;
+			virtual bool Leave(GameObject & node) override;
+			virtual bool Visit(GameObject & node) override;
+
+			GameObject* Result = nullptr;
+
+		private:
+			SceneGraph& m_sceneGraph;
+			std::vector<GameObject*> m_parentStack;
+		};
+
 	};
 
 	// Deletes the specified node and the subtree rooted at that node 
@@ -130,6 +149,7 @@ namespace AIngine::Structures {
 	private:
 		std::string m_name;
 	};
+
 
 }
 
