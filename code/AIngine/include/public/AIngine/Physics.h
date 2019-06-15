@@ -52,7 +52,7 @@ namespace AIngine::Physics {
 	};
 
 
-	class PhysicsComponent : public AIngine::Component {
+	class PhysicsComponent final : public AIngine::Component {
 	public:
 
 		class CollisionEvent : public AIngine::Events::Event<void, PhysicsComponent*> {

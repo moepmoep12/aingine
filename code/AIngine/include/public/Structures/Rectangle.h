@@ -4,7 +4,7 @@
 
 namespace AIngine::Structures {
 	template<typename T>
-	struct Rectangle {
+	struct Rectangle final {
 
 		Rectangle()
 			: x(0), y(0), width(0), height(0) {}

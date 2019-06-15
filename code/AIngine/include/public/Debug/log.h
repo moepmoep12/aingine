@@ -10,7 +10,7 @@
 
 namespace  AIngine {
 
-	class Log {
+	class Log final {
 
 	public:
 		Log();

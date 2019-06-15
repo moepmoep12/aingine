@@ -26,7 +26,7 @@ namespace AIngine {
 	};
 
 
-	class WindowsInput : public Input {
+	class WindowsInput final : public Input {
 	protected:
 		virtual bool IsKeyPressedImpl(int keycode) override;
 

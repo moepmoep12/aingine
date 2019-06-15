@@ -4,7 +4,7 @@
 #include <glm/fwd.hpp>
 #include <string>
 namespace AIngine::Rendering {
-	class GLShader {
+	class GLShader final {
 	public:
 		GLShader(std::string const &path, int type);
 
@@ -16,7 +16,7 @@ namespace AIngine::Rendering {
 		GLuint ID;
 	};
 
-	class GLShaderProgram {
+	class GLShaderProgram final {
 	public:
 		GLShaderProgram(std::string const &vertexPath, std::string const &fragmentPath);
 

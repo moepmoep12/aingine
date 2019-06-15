@@ -9,7 +9,7 @@ namespace AIngine::Rendering {
 
 	class Viewport;
 
-	class Camera {
+	class Camera final {
 
 		friend class AIngine::Editor::CameraWidget;
 

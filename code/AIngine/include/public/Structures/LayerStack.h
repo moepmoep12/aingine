@@ -5,7 +5,7 @@
 
 namespace AIngine::Structures {
 
-	class LayerStack {
+	class LayerStack final {
 
 	public:
 		LayerStack();

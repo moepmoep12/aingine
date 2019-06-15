@@ -17,7 +17,7 @@ namespace AIngine::Memory {
 		return 1024u * 1024u * v;
 	}
 
-	class Stack {
+	class Stack final {
 	public:
 		explicit Stack(size_t size) {
 		    if(size == 0)
@@ -68,7 +68,7 @@ namespace AIngine::Memory {
 	};
 
 	template<typename T>
-	class Pool {
+	class Pool final {
 		union FreeList {
 			T data;
 			FreeList *next;

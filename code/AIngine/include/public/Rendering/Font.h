@@ -15,7 +15,7 @@ namespace AIngine::Rendering {
 		unsigned int Advance;
 	};
 
-	class Font {
+	class Font final {
 	public:
 		explicit Font(const char* path, unsigned int size);
 		~Font();

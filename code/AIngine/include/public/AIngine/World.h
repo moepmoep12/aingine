@@ -29,7 +29,7 @@ namespace AIngine {
 }
 
 namespace AIngine {
-	class World : public AIngine::Structures::Layer {
+	class World final : public AIngine::Structures::Layer {
 
 		friend class AIngine::Editor::Editor;
 		friend class AIngine::Physics::PhysicsComponent;

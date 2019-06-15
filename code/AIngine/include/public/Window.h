@@ -44,7 +44,7 @@ namespace AIngine {
 
 	};
 
-	class Window
+	class Window final
 	{
 	public:
 		Window(const WindowConfig& config);

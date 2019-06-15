@@ -9,7 +9,7 @@ namespace AIngine::Editor {
 }
 
 namespace AIngine {
-	class SoundComponent : public Component {
+	class SoundComponent final : public Component {
 
 		friend class AIngine::Editor::SoundComponentWidget;
 

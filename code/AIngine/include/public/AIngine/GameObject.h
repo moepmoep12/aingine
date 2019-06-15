@@ -24,7 +24,7 @@ namespace AIngine {
 
 	/// A GameObject represents an entity wihin a game
    /// It acts as a container for Components
-	class GameObject {
+	class GameObject final {
 	public:
 		inline const std::vector<Component*>& GetComponents() { return m_components; }
 

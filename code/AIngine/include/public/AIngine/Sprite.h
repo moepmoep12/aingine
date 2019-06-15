@@ -9,7 +9,7 @@ namespace AIngine::Editor {
 }
 
 namespace AIngine {
-	class Sprite : public Component {
+	class Sprite final : public Component {
 
 		friend class AIngine::Editor::SpriteComponentWidget;
 

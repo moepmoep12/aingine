@@ -10,7 +10,7 @@
 
 namespace AIngine {
 
-	class Sound {
+	class Sound final {
 	public:
 		Sound(AIngine::Assets::SoundAsset& soundAsset);
 		Sound(const Sound& other);
@@ -52,7 +52,7 @@ namespace AIngine {
 		void ExtractName();
 	};
 
-	class SoundEngine : public AIngine::Structures::Layer {
+	class SoundEngine final : public AIngine::Structures::Layer {
 	public:
 		SoundEngine(HWND windowHandle);
 		virtual ~SoundEngine();

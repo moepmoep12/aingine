@@ -8,7 +8,7 @@ namespace AIngine {
 
 namespace AIngine::Rendering
 {
-	class Viewport {
+	class Viewport final {
 	public:
 
 		inline int GetViewportWidth() const { return m_width; }

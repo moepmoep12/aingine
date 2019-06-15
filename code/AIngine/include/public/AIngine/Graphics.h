@@ -13,7 +13,7 @@ namespace AIngine {
 	struct GLRenderTriangles;
 	struct GLText;
 
-	class Graphics {
+	class Graphics final {
 	public:
 		Graphics();
 		~Graphics();

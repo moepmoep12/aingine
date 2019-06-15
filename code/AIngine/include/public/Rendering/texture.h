@@ -7,7 +7,7 @@
 
 namespace AIngine::Rendering {
 
-	class Texture2D {
+	class Texture2D final {
 	public:
 		// Holds the ID of the texture object, used for all texture operations to reference to this particlar texture
 		GLuint ID = -1;

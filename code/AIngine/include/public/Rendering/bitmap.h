@@ -2,7 +2,7 @@
 
 #include <string>
 namespace AIngine::Rendering {
-	class Bitmap {
+	class Bitmap final {
 	public:
 		Bitmap(std::string const &filename);
 

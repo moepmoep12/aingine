@@ -50,7 +50,7 @@ namespace AIngine::Assets {
 
 	/******************************** BitMap *********************************************/
 
-	class BitmapAsset : public AssetBase
+	class BitmapAsset final : public AssetBase
 	{
 		friend class BitmapAssetFactory;
 
@@ -70,7 +70,7 @@ namespace AIngine::Assets {
 
 	};
 
-	class BitmapAssetFactory : public AssetFactory
+	class BitmapAssetFactory final : public AssetFactory
 	{
 		friend class AssetRegistry;
 
@@ -88,7 +88,7 @@ namespace AIngine::Assets {
 
 	/********************************** ShaderAsset ******************************************/
 
-	class ShaderAsset :public AssetBase
+	class ShaderAsset final : public AssetBase
 	{
 		friend class ShaderAssetFactory;
 
@@ -115,7 +115,7 @@ namespace AIngine::Assets {
 			: AssetBase(GetPath(vertexPath, fragmentPath)), m_shader(vertexPath, fragmentPath) {}
 	};
 
-	class ShaderAssetFactory : public AssetFactory {
+	class ShaderAssetFactory final : public AssetFactory {
 
 		friend class AssetRegistry;
 
@@ -147,7 +147,7 @@ namespace AIngine::Assets {
 	};
 
 	/********************************** SoundAsset ******************************************/
-	class SoundAsset :public AssetBase
+	class SoundAsset final :public AssetBase
 	{
 		friend class SoundAssetFactory;
 
@@ -170,7 +170,7 @@ namespace AIngine::Assets {
 		}
 	};
 
-	class SoundAssetFactory : public AssetFactory {
+	class SoundAssetFactory final : public AssetFactory {
 
 		friend class AssetRegistry;
 
@@ -186,7 +186,7 @@ namespace AIngine::Assets {
 
 	/********************************** FontAsset ******************************************/
 
-	class FontAsset :public AssetBase
+	class FontAsset final :public AssetBase
 	{
 		friend class FontAssetFactory;
 
@@ -203,7 +203,7 @@ namespace AIngine::Assets {
 			: AssetBase(path), m_font(path.c_str(), size) {}
 	};
 
-	class FontAssetFactory : public AssetFactory {
+	class FontAssetFactory final : public AssetFactory {
 
 		friend class AssetRegistry;
 
@@ -242,7 +242,7 @@ namespace AIngine::Assets {
 
 	/********************************** AssetRegistry ******************************************/
 
-	class AssetRegistry
+	class AssetRegistry final
 	{
 		using AssetMap = std::unordered_map<UID, std::unique_ptr<AssetBase>>;
 		using FactoryMap = std::unordered_map<std::type_index, std::unique_ptr<AssetFactory>>;

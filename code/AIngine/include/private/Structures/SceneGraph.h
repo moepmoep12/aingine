@@ -10,7 +10,7 @@ namespace AIngine::Editor {
 }
 
 namespace AIngine::Structures {
-	class SceneGraph : public Layer {
+	class SceneGraph final : public Layer {
 
 		friend class AIngine::Editor::SceneGraphWidget;
 		friend class AIngine::Editor::Editor;
