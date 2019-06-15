@@ -227,6 +227,8 @@ namespace AIngine::Editor::Serialization {
 		float width = 0.0f;
 		float height = 0.0f;
 		float32 radius = 0.0f;
+		std::vector<glm::vec2> vertices;
+		int vertexCount = 0;
 
 		switch (shape) {
 		case(Physics::PhysicsShape::e_Box):
@@ -234,17 +236,26 @@ namespace AIngine::Editor::Serialization {
 			height = (*j)[AttributeNames::PHYSICS_HEIGHT];
 			physComp->CreateBoxBody(properties, type, width, height, isTrigger);
 			break;
+
 		case(Physics::PhysicsShape::e_Circle):
 			radius = (*j)[AttributeNames::PHYSICS_RADIUS];
 			physComp->CreateCircleBody(properties, type, radius, isTrigger);
 			break;
+
+		case Physics::PhysicsShape::e_Edge:
+			for (auto& vertex : (*j)[AttributeNames::PHYSICS_VERTICES]) {
+				vertices.push_back(glm::vec2(vertex.at("x"), vertex.at("y")));
+			}
+			vertexCount = (*j)[AttributeNames::PHYSICS_VERTEXCOUNT];
+			physComp->CreateEdgeBody(properties, type, vertices[0], vertices[1], isTrigger);
+			break;
+
 		case(Physics::PhysicsShape::e_Polygon):
-			std::vector<glm::vec2> vertices;
 			for (auto& vertex : (*j)[AttributeNames::PHYSICS_VERTICES]) {
 				vertices.push_back(glm::vec2(vertex.at("x"), vertex.at("y")));
 			}
 
-			int vertexCount = (*j)[AttributeNames::PHYSICS_VERTEXCOUNT];
+			vertexCount = (*j)[AttributeNames::PHYSICS_VERTEXCOUNT];
 			physComp->CreatePolygonBody(properties, type, vertices.data(), vertexCount, isTrigger);
 			break;
 		}
@@ -430,7 +441,8 @@ namespace AIngine::Editor::Serialization {
 		else if (bodyInfo.shape == Physics::PhysicsShape::e_Circle) {
 			j[AttributeNames::PHYSICS_RADIUS] = bodyInfo.radius;
 		}
-		// polygon
+
+		// polygon or edge
 		else {
 		}
 

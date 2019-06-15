@@ -172,6 +172,7 @@ namespace AIngine::Physics {
 		if (m_body) {
 			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
 		}
+
 		m_properties = properties;
 		m_bodyInformation.shape = PhysicsShape::e_Edge;
 		m_bodyInformation.type = type;
@@ -205,6 +206,10 @@ namespace AIngine::Physics {
 		m_body = AIngine::World::CreateBody(bodyDef);
 		m_body->CreateFixture(&fixtureDef);
 		m_body->SetUserData(this);
+
+		m_bodyInformation.vertices[0] = p1Offset;
+		m_bodyInformation.vertices[1] = p2Offset;
+		m_bodyInformation.verticesCount = 2;
 	}
 
 	void PhysicsComponent::CreatePolygonBody(const PhysicsProperties & properties, PhysicsBodyType type, const glm::vec2 * vertices, unsigned int count, bool isTrigger)
