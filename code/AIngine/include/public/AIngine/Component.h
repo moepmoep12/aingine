@@ -35,14 +35,21 @@ namespace AIngine {
 
 		inline GameObject* GetOwner() { return m_owner; }
 
-		inline Component(GameObject* owner) : m_owner(owner) {}
-		inline virtual ~Component() {}
+		Component(const Component& other) = delete;
+		Component(Component&& other) = delete;
+		Component& operator=(const Component& other) = delete;
+		Component& operator=(Component&& other) = delete;
+
 
 	protected:
 		GameObject* m_owner;
 
 		friend class AIngine::Structures::SceneGraph;
 		friend class AIngine::Structures::UpdateTraverser;
+		friend class AIngine::GameObject;
+
+		inline Component() {}
+		inline virtual ~Component() {}
 
 		virtual Component* Copy(GameObject* const owner) const { return nullptr; }
 
@@ -50,6 +57,7 @@ namespace AIngine {
 		std::string m_name;
 		bool m_isEnabled = true;
 		bool m_wantsDestroy = false;
+
 
 	};
 }

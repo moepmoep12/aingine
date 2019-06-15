@@ -29,7 +29,6 @@ namespace AIngine {
 		inline float GetAlpha() const { return m_alpha;; }
 		inline void SetAlpha(GLfloat alpha) { m_alpha = alpha; }
 
-		Sprite(GameObject* owner);
 		virtual ~Sprite();
 
 	private:

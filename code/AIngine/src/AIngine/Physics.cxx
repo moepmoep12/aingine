@@ -4,10 +4,6 @@
 #include "AIngine/GameObject.h"
 
 namespace AIngine::Physics {
-	PhysicsComponent::PhysicsComponent(GameObject * owner) : Component(owner), m_body(nullptr)
-	{
-	}
-
 	PhysicsComponent::~PhysicsComponent()
 	{
 		if (m_body && AIngine::World::s_instance) {
@@ -271,7 +267,8 @@ namespace AIngine::Physics {
 
 	Component * PhysicsComponent::Copy(GameObject * const owner) const
 	{
-		PhysicsComponent* copy = new PhysicsComponent(owner);
+		PhysicsComponent* copy = new PhysicsComponent();
+		copy->m_owner = owner;
 
 		switch (m_bodyInformation.shape) {
 		case PhysicsShape::e_Box:

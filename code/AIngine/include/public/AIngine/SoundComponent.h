@@ -14,7 +14,6 @@ namespace AIngine {
 		friend class AIngine::Editor::SoundComponentWidget;
 
 	public:
-		SoundComponent(GameObject* owner);
 		virtual ~SoundComponent();
 
 		void Play(int index);

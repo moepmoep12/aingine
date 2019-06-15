@@ -2,11 +2,6 @@
 #include "AIngine/Sounds.h"
 
 namespace AIngine {
-	AIngine::SoundComponent::SoundComponent(GameObject * owner)
-		: Component(owner)
-	{
-	}
-
 	AIngine::SoundComponent::~SoundComponent()
 	{
 		for (auto& sound : m_sounds) {
@@ -91,7 +86,9 @@ namespace AIngine {
 
 	Component * SoundComponent::Copy(GameObject * const owner) const
 	{
-		SoundComponent* copy = new SoundComponent(owner);
+		SoundComponent* copy = new SoundComponent();
+		copy->m_owner = owner;
+
 		copy->SetName(GetName());
 
 		for (auto& sound : m_sounds) {

@@ -4,18 +4,14 @@
 
 namespace AIngine {
 
-	Sprite::Sprite(GameObject * owner)
-		: Component(owner)
-	{
-	}
-
 	Sprite::~Sprite()
 	{
 	}
 
 	Component * Sprite::Copy(GameObject* const owner) const
 	{
-		Sprite* copy = new Sprite(owner);
+		Sprite* copy = new Sprite();
+		copy->m_owner = owner;
 		copy->m_texture = m_texture;
 		copy->m_localWorldSize = m_localWorldSize;
 		copy->m_parallaxFactor = m_parallaxFactor;

@@ -66,7 +66,8 @@ namespace AIngine {
 		template <class T>
 		inline T* const AddComponent()
 		{
-			T* comp = new T(this);
+			T* comp = new T();
+			comp->m_owner = this;
 
 			m_components.push_back(comp);
 

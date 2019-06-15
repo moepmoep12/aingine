@@ -63,7 +63,6 @@ namespace AIngine::Physics {
 		friend class AIngine::Editor::PhysicsComponentWidget;
 
 	public:
-		PhysicsComponent(GameObject* owner);
 		virtual ~PhysicsComponent();
 
 		// inherited via Component
@@ -109,8 +108,8 @@ namespace AIngine::Physics {
 		virtual Component* Copy(GameObject* const owner) const override;
 
 	private:
-		b2Body* m_body;
-		b2Fixture* m_otherCollided;
+		b2Body* m_body = nullptr;
+		b2Fixture* m_otherCollided = nullptr;
 		bool m_collided = false;
 		PhysicsProperties m_properties;
 		PhysicsBodyInformation m_bodyInformation;

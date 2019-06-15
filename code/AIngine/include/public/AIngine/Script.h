@@ -7,7 +7,7 @@
 namespace AIngine {
 	class Script : public Component {
 	public:
-		Script(GameObject* owner) : Component(owner) { SetName(typeid(*this).name()); }
+		Script() { SetName(typeid(*this).name()); }
 		virtual ~Script() {}
 
 		virtual void OnStart() {}
@@ -24,7 +24,8 @@ namespace AIngine {
 
 		inline virtual Component* Copy(GameObject* const owner) const override
 		{
-			Script* copy = new Script(owner);
+			Script* copy = new Script();
+			copy->m_owner = owner;
 			copy->ScriptIndex = ScriptIndex;
 			copy->SetName(GetName());
 			return std::move(copy);
