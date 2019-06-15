@@ -3,8 +3,7 @@
 #include "CrappyBird.h"
 
 namespace CrappyBird {
-	BackGround::BackGround(AIngine::GameObject * owner)
-		: AIngine::Script(owner)
+	BackGround::BackGround()
 	{
 		SetName(typeid(*this).name());
 	}

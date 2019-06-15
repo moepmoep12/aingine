@@ -4,7 +4,7 @@
 
 namespace CrappyBird {
 	class Obstacles : public AIngine::Script {
-		Obstacles(AIngine::GameObject* owner);
+		Obstacles();
 		virtual void OnStart() override;
 		virtual void OnEvent(AIngine::Events::EventData& e) override;
 		virtual void Update(float deltatime) override;

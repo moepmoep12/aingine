@@ -2,8 +2,7 @@
 #include "AIngine/Core.h"
 
 namespace CrappyBird {
-	CrappyBird::Obstacles::Obstacles(GameObject * owner)
-		: Script(owner)
+	CrappyBird::Obstacles::Obstacles()
 	{
 		SetName(typeid(*this).name());
 	}

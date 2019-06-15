@@ -9,7 +9,7 @@ AIngine::Application* AIngine::CreateApplication() {
 	return new CrappyBird::CrappyBird();
 }
 
-std::vector<std::string> AIngine::ApplicationComponentNames = { "Player", "BackGround", "SpeedPickUp" };
+std::vector<std::string> AIngine::ApplicationComponentNames = { "Player", "BackGround", "PickUpFactory" };
 
 void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
 	switch (index) {
@@ -22,13 +22,13 @@ void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
 		break;
 
 	case 2:
-		obj->AddComponent<CrappyBird::SpeedPickUp>()->ScriptIndex = 2;
+		obj->AddComponent<CrappyBird::PickUpFactory>()->ScriptIndex = 2;
 	}
 }
 
 namespace CrappyBird {
 
-	float CrappyBird::s_GameSpeed = 0.5f;
+	float CrappyBird::s_GameSpeed = 2.5f;
 
 	CrappyBird::CrappyBird()
 	{

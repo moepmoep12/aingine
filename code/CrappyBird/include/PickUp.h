@@ -1,26 +1,54 @@
 #pragma once
-#include "AIngine/Script.h"
-#include "AIngine/Physics.h"
+#include "AIngine/Core.h"
+
+#include <vector>
 
 namespace CrappyBird {
-	class PickUp : public AIngine::Script {
+
+
+	class PickUp : public Script {
 	public:
-		PickUp(AIngine::GameObject* owner);
+		PickUp() { SetName(typeid(*this).name()); }
 		virtual void OnStart() override;
+		virtual void Update(float deltatime) override;
 
 		virtual void OnPickUp() {}
 
 	public:
 		bool Active = false;
+		bool Available = true;
+
+	protected:
+		void OnFinish();
 
 	private:
-		void OnCollision(AIngine::Physics::PhysicsComponent* other);
+		void OnCollision(PhysicsComponent* other);
+		AIngine::Events::EventHandler<void, PhysicsComponent*> m_collisionHandler;
 	};
 
+	class PickUpFactory : public Script {
+	public:
+		PickUpFactory() { SetName(typeid(*this).name()); }
+		virtual void OnStart() override;
+
+		void SpawnPickUpInArea(const AIngine::Structures::RectangleI& worldRect);
+
+	private:
+		GameObject* GetAvailableGameObject();
+	};
 
 	class SpeedPickUp : public PickUp {
 	public:
-		SpeedPickUp(AIngine::GameObject* owner) : PickUp(owner) {}
+		SpeedPickUp() { SetName(typeid(*this).name()); }
+		virtual void OnPickUp() override;
+		virtual void Update(float deltatime) override;
+
+		float Duration = 5;
+	};
+
+	class SlowSpeedPickUp : public PickUp {
+	public:
+		SlowSpeedPickUp() { SetName(typeid(*this).name()); }
 		virtual void OnPickUp() override;
 		virtual void Update(float deltatime) override;
 
