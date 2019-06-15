@@ -124,10 +124,12 @@ namespace AIngine::Events {
 		std::vector<std::unique_ptr<EventHandler>> handlers;
 
 		void notifyHandlers(Args... args) {
-			std::vector<std::unique_ptr<EventHandler>>::iterator func = this->handlers.begin();
-			for (; func != this->handlers.end(); ++func) {
-				if (*func != nullptr && (*func)->id != 0) {
-					(*(*func))(args...);
+			if (handlers.size() > 0) {
+				std::vector<std::unique_ptr<EventHandler>>::iterator func = this->handlers.begin();
+				for (; func != this->handlers.end(); ++func) {
+					if (*func != nullptr && (*func)->id != 0) {
+						(*(*func))(args...);
+					}
 				}
 			}
 		}
@@ -138,11 +140,13 @@ namespace AIngine::Events {
 
 		void removeHandler(const EventHandler &handler) {
 			std::vector<std::unique_ptr<EventHandler>>::iterator to_remove = this->handlers.begin();
-			for (; to_remove != this->handlers.end(); ++to_remove) {
+			while (to_remove != this->handlers.end()) {
 				if (*(*to_remove) == handler) {
 					this->handlers.erase(to_remove);
 					break;
 				}
+				else
+					to_remove++;
 			}
 		}
 
