@@ -200,7 +200,7 @@ namespace AIngine::Structures {
 			}
 			if (comp->m_wantsDestroy) {
 				it = node.m_components.erase(it);
-				node.RemoveComponent(comp);
+				delete comp;
 			}
 			else {
 				it++;
@@ -282,7 +282,7 @@ namespace AIngine::Structures {
 		auto it = node.GetComponents().begin();
 		while (it != node.GetComponents().end()) {
 			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
-			if (comp) comp->OnStart();
+			if (comp && comp->IsActive()) comp->OnStart();
 			it++;
 		}
 		return true;
