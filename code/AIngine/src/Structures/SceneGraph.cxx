@@ -2,6 +2,7 @@
 #include "AIngine/GameObject.h"
 #include "AIngine/Component.h"
 #include "AIngine/Script.h"
+#include "Application.h"
 
 #include "imgui.h"
 #include <sstream>
@@ -168,15 +169,26 @@ namespace AIngine::Structures {
 
 	bool UpdateTraverser::Enter(GameObject & node)
 	{
+		bool apprunning = Application::IsRunning();
 		auto it = node.GetComponents().begin();
 		while (it != node.GetComponents().end()) {
 			Component* comp = *it._Ptr;
 			if (comp->IsActive()) {
 				comp->OnUpdate(m_deltaTime);
 			}
+
+			AIngine::Script* script = dynamic_cast<AIngine::Script*>(comp);
+			if (script && apprunning) {
+				if (!script->m_startCalled) {
+					script->OnStart();
+					script->m_startCalled = true;
+				}
+				script->OnImguiRender();
+			}
+
 			if (comp->m_wantsDestroy) {
 				it = node.m_components.erase(it);
-				node.RemoveComponent(comp);
+				delete comp;
 			}
 			else {
 				it++;
@@ -192,12 +204,23 @@ namespace AIngine::Structures {
 
 	bool UpdateTraverser::Visit(GameObject & node)
 	{
+		bool apprunning = Application::IsRunning();
 		auto it = node.GetComponents().begin();
 		while (it != node.GetComponents().end()) {
 			Component* comp = *it._Ptr;
 			if (comp->IsActive()) {
 				comp->OnUpdate(m_deltaTime);
 			}
+
+			AIngine::Script* script = dynamic_cast<AIngine::Script*>(comp);
+			if (script && apprunning) {
+				if (!script->m_startCalled) {
+					script->OnStart();
+					script->m_startCalled = true;
+				}
+				script->OnImguiRender();
+			}
+
 			if (comp->m_wantsDestroy) {
 				it = node.m_components.erase(it);
 				delete comp;
@@ -271,7 +294,10 @@ namespace AIngine::Structures {
 		auto it = node.GetComponents().begin();
 		while (it != node.GetComponents().end()) {
 			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
-			if (comp && comp->IsActive()) comp->OnStart();
+			if (comp && comp->IsActive()) {
+				comp->OnStart();
+				comp->m_startCalled = true;
+			}
 			it++;
 		}
 		return true;
@@ -282,7 +308,10 @@ namespace AIngine::Structures {
 		auto it = node.GetComponents().begin();
 		while (it != node.GetComponents().end()) {
 			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
-			if (comp && comp->IsActive()) comp->OnStart();
+			if (comp && comp->IsActive()) {
+				comp->OnStart();
+				comp->m_startCalled = true;
+			}
 			it++;
 		}
 		return true;

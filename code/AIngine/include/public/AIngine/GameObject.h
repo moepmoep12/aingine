@@ -66,6 +66,9 @@ namespace AIngine {
 		template <class T>
 		inline T* const AddComponent()
 		{
+			if (GetComponent<T>())
+				return GetComponent<T>();
+
 			T* comp = new T();
 			comp->m_owner = this;
 
