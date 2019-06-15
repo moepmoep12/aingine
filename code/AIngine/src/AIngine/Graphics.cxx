@@ -595,10 +595,10 @@ namespace AIngine {
 		}
 	}
 
-	void Graphics::Text(const char * text, const glm::vec2 & screenPosition, const glm::vec2 & scale, const glm::vec3 & color, float alpha, AIngine::Rendering::Font* font)
+	void Graphics::Text(const std::string& text, const glm::vec2 & screenPosition, const glm::vec2 & scale, const glm::vec3 & color, float alpha, AIngine::Rendering::Font* font)
 	{
 		if (s_instance) {
-			s_instance->m_text->AddText(std::string(text), screenPosition, scale, color, alpha, font);
+			s_instance->m_text->AddText(text, screenPosition, scale, color, alpha, font);
 		}
 	}
 
