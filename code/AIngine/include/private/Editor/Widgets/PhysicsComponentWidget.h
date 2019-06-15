@@ -22,6 +22,7 @@ namespace AIngine::Editor {
 		void CreateCircleUI(AIngine::Physics::PhysicsComponent* physComp);
 		void CreateBoxUI(AIngine::Physics::PhysicsComponent* physComp);
 		void CreatePolygonUI(AIngine::Physics::PhysicsComponent* physComp);
+		void CreateEdgeUI(AIngine::Physics::PhysicsComponent* physComp);
 
 		glm::vec2 CalculateWorldPosition(const glm::vec2& localPos, const b2Transform& transform);
 	};

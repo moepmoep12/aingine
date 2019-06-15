@@ -21,6 +21,11 @@ namespace AIngine::Editor {
 				ImGui::Separator();
 
 				// Title
+				bool active = physComp->IsEnabled();
+				if (ImGui::Checkbox("Active##physcomp", &active)) {
+					physComp->SetEnabled(active);
+				}
+				ImGui::SameLine();
 				float textWidth = ImGui::CalcTextSize("Physics Component").x;
 				ImGui::SetCursorPosX((ImGui::GetWindowWidth() - textWidth) * 0.5f);
 				ImGui::TextColored(ImVec4(1, 1, 0, 1), "Physics Component");
@@ -105,6 +110,10 @@ namespace AIngine::Editor {
 				case PhysicsShape::e_Polygon:
 					CreatePolygonUI(physComp);
 					break;
+
+				case PhysicsShape::e_Edge:
+					CreateEdgeUI(physComp);
+					break;
 				}
 
 				ImGui::NewLine();
@@ -128,6 +137,10 @@ namespace AIngine::Editor {
 							physComp->CreateBoxBody(properties, bodyInfo.type, 1, 1, bodyInfo.isTrigger);
 						}
 						physComp->CreatePolygonBody(properties, bodyInfo.type, bodyInfo.vertices, bodyInfo.verticesCount, bodyInfo.isTrigger);
+						break;
+
+					case PhysicsShape::e_Edge:
+						physComp->CreateEdgeBody(properties, bodyInfo.type, bodyInfo.vertices[0], bodyInfo.vertices[1], bodyInfo.isTrigger);
 						break;
 					}
 				}
@@ -283,6 +296,39 @@ namespace AIngine::Editor {
 		}
 
 		AIngine::Graphics::PolygonWorld(vertices, bodyInfo.verticesCount, glm::vec3(0, 0, 1));
+	}
+
+	void PhysicsComponentWidget::CreateEdgeUI(AIngine::Physics::PhysicsComponent * physComp)
+	{
+		AIngine::Physics::PhysicsBodyInformation& bodyInfo = physComp->m_bodyInformation;
+		glm::vec2 vertices[AIngine::Physics::maxVertices];
+		int vertexUnderChangeIndex = -1;
+
+
+		// create dragfloat2 for each vertex to adjust its position
+		for (unsigned int i = 0; i < 2; i++) {
+			std::stringstream ss;
+			ss << "Vertex" << i << "##vertices";
+			float* pos[] = { &bodyInfo.vertices[i].x, &bodyInfo.vertices[i].y };
+			if (ImGui::DragFloat2(ss.str().c_str(), *pos, 0.01f) || ImGui::IsItemHovered()) {
+				vertexUnderChangeIndex = i;
+			}
+		}
+
+		// draw the vertices
+		for (unsigned int i = 0; i < 2; i++) {
+			const b2Transform& xf = physComp->m_body->GetTransform();
+			if (i == vertexUnderChangeIndex) {
+				CreateMoveableVertex(bodyInfo.vertices[i], xf, 7, glm::vec3(0, 1, 0), glm::vec3(0, 1, 0));
+			}
+			else {
+				CreateMoveableVertex(bodyInfo.vertices[i], xf, 7);
+			}
+			b2Vec2 result = b2Mul(xf, b2Vec2(bodyInfo.vertices[i].x, bodyInfo.vertices[i].y));
+			vertices[i] = glm::vec2(result.x, result.y);
+		}
+
+		AIngine::Graphics::Line(vertices[0], vertices[1], glm::vec3(0, 0, 1));
 	}
 
 	glm::vec2 PhysicsComponentWidget::CalculateWorldPosition(const glm::vec2 & localPos, const b2Transform & transform)
