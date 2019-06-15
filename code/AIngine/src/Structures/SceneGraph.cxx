@@ -77,9 +77,12 @@ namespace AIngine::Structures {
 			Component* compCopy = comp->Copy(&copy);
 			if (compCopy) {
 				copy.m_components.push_back(compCopy);
-				compCopy->SetActive(comp->IsActive());
+				compCopy->SetEnabled(comp->IsEnabled());
 			}
 		}
+
+		copy.SetActive(other.IsActive());
+
 		return copy;
 	}
 
@@ -166,13 +169,18 @@ namespace AIngine::Structures {
 	bool UpdateTraverser::Enter(GameObject & node)
 	{
 		auto it = node.GetComponents().begin();
-
 		while (it != node.GetComponents().end()) {
 			Component* comp = *it._Ptr;
 			if (comp->IsActive()) {
 				comp->OnUpdate(m_deltaTime);
 			}
-			it++;
+			if (comp->m_wantsDestroy) {
+				it = node.m_components.erase(it);
+				node.RemoveComponent(comp);
+			}
+			else {
+				it++;
+			}
 		}
 		return true;
 	}
@@ -185,13 +193,18 @@ namespace AIngine::Structures {
 	bool UpdateTraverser::Visit(GameObject & node)
 	{
 		auto it = node.GetComponents().begin();
-
 		while (it != node.GetComponents().end()) {
 			Component* comp = *it._Ptr;
 			if (comp->IsActive()) {
 				comp->OnUpdate(m_deltaTime);
 			}
-			it++;
+			if (comp->m_wantsDestroy) {
+				it = node.m_components.erase(it);
+				node.RemoveComponent(comp);
+			}
+			else {
+				it++;
+			}
 		}
 		return true;
 	}
@@ -258,7 +271,7 @@ namespace AIngine::Structures {
 		auto it = node.GetComponents().begin();
 		while (it != node.GetComponents().end()) {
 			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
-			if (comp) comp->OnStart();
+			if (comp && comp->IsActive()) comp->OnStart();
 			it++;
 		}
 		return true;
@@ -296,7 +309,7 @@ namespace AIngine::Structures {
 		auto it = node.GetComponents().begin();
 		while (it != node.GetComponents().end()) {
 			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
-			if (comp) comp->OnEnd();
+			if (comp && comp->IsActive()) comp->OnEnd();
 			it++;
 		}
 		return true;

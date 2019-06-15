@@ -1,5 +1,6 @@
 #pragma once
 #include "Events/Event.h"
+#include "GameObject.h"
 #include <string>
 #include <glm/glm.hpp>
 
@@ -7,17 +8,20 @@ namespace AIngine {
 
 	namespace Structures {
 		class SceneGraph;
+		class UpdateTraverser;
 	}
 
-	class GameObject;
 
 	class Component {
 	public:
 		inline  std::string GetName() const { return m_name; }
 		inline void SetName(const std::string& name) { m_name = name; }
 
-		inline bool IsActive() const { return m_isActive; }
-		virtual void SetActive(bool active) { m_isActive = active; }
+		inline bool IsEnabled() const { return m_isEnabled; }
+		virtual void SetEnabled(bool enabled) { m_isEnabled = enabled; }
+		inline bool IsActive() const { return m_isEnabled && m_owner->IsActive(); }
+
+		inline void Destroy() { m_wantsDestroy = true; }
 
 		virtual void OnEvent(AIngine::Events::EventData& e) {}
 		virtual void OnUpdate(float deltatime) {}
@@ -38,12 +42,14 @@ namespace AIngine {
 		GameObject* m_owner;
 
 		friend class AIngine::Structures::SceneGraph;
+		friend class AIngine::Structures::UpdateTraverser;
 
 		virtual Component* Copy(GameObject* const owner) const { return nullptr; }
 
 	private:
 		std::string m_name;
-		bool m_isActive = true;
+		bool m_isEnabled = true;
+		bool m_wantsDestroy = false;
 
 	};
 }

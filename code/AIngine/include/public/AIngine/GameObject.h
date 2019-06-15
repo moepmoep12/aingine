@@ -15,6 +15,7 @@ namespace AIngine {
 
 	namespace Structures {
 		class SceneGraph;
+		class UpdateTraverser;
 	}
 
 	namespace Editor {
@@ -78,6 +79,9 @@ namespace AIngine {
 		/* The name of this GameObject*/
 		inline const std::string& GetName() const { return m_name; }
 		inline void SetName(const std::string& name) { m_name = name; }
+
+		inline bool IsActive() const { return m_active; }
+		inline void SetActive(bool active) { m_active = active; }
 
 		/* The parent GameObject of this GameObject*/
 		inline GameObject* const GetParent() { return m_parent; }
@@ -159,10 +163,12 @@ namespace AIngine {
 		glm::vec2 m_position = glm::vec2(0.0f);
 		glm::vec2 m_scale = glm::vec2(1.0f);
 		float m_rotation = 0.0f;
+		bool m_active = true;
 		GameObject* m_parent;
 
 		/* SceneGraph is responsible for the creation of GameObjects */
 		friend class AIngine::Structures::SceneGraph;
+		friend class AIngine::Structures::UpdateTraverser;
 
 		friend class AIngine::Editor::TransformComponentWidget;
 

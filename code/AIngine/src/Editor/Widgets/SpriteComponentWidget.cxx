@@ -30,7 +30,7 @@ namespace AIngine::Editor {
 					std::string action = spriteComponent->IsActive() ? "Deactivate" : "Activate";
 					action.append("##spriteComp");
 					if (ImGui::Selectable(action.c_str())) {
-						spriteComponent->SetActive(!spriteComponent->IsActive());
+						spriteComponent->SetEnabled(!spriteComponent->IsActive());
 					}
 					if (ImGui::Selectable("Delete##spriteComp")) {
 						obj->RemoveComponent<AIngine::Sprite>();

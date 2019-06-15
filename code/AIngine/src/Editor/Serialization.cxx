@@ -30,6 +30,7 @@ namespace AIngine::Editor::Serialization {
 		const char* WORLD_TOPRIGHT = "topRight";
 
 		// GameObject
+		const char* GAMEOBJECT_ACTIVE = "a_active";
 		const char* GAMEOBJECT_NAME = "a_name";
 		const char* GAMEOBJECT_POSITION_X = "a_posX";
 		const char* GAMEOBJECT_POSITION_Y = "a_posY";
@@ -138,6 +139,7 @@ namespace AIngine::Editor::Serialization {
 				for (auto child : (*currentJson)[AttributeNames::GAMEOBJECT_CHILDREN]) {
 					std::string name = child.begin().key();
 					restoredObject = RestoreGameObject(&child[name], parent);
+					restoredObject->SetActive(child[name][AttributeNames::GAMEOBJECT_ACTIVE]);
 					// does it have any components?
 					if (child[name].contains(AttributeNames::GAMEOBJECT_COMPONENTS)) {
 						// restore Sprite
@@ -172,7 +174,7 @@ namespace AIngine::Editor::Serialization {
 
 		// all physComponetns have been restored, activate them
 		for (auto comp : physComponents)
-			comp->SetActive(true);
+			comp->SetEnabled(true);
 	}
 
 	AIngine::GameObject * Serializer::RestoreGameObject(const nlohmann::json* const j, AIngine::GameObject * parent)
@@ -207,7 +209,7 @@ namespace AIngine::Editor::Serialization {
 		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
 		texture.Generate(bitmap);
 
-		sprite->SetActive((*j)[AttributeNames::COMPONENT_ACTIVE]);
+		sprite->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
 
 	AIngine::Physics::PhysicsComponent* Serializer::RestorePhysics(const nlohmann::json * const j, AIngine::GameObject * obj)
@@ -247,7 +249,7 @@ namespace AIngine::Editor::Serialization {
 			break;
 		}
 
-		physComp->SetActive(false);
+		physComp->SetEnabled(false);
 
 		return physComp;
 	}
@@ -271,7 +273,7 @@ namespace AIngine::Editor::Serialization {
 			}
 		}
 
-		soundComp->SetActive((*j)[AttributeNames::COMPONENT_ACTIVE]);
+		soundComp->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 
 		return soundComp;
 	}
@@ -348,6 +350,7 @@ namespace AIngine::Editor::Serialization {
 		nlohmann::json outer;
 		nlohmann::json j;
 
+		j[AttributeNames::GAMEOBJECT_ACTIVE] = obj.IsActive();
 		j[AttributeNames::GAMEOBJECT_NAME] = obj.GetName();
 		j[AttributeNames::GAMEOBJECT_POSITION_X] = obj.GetLocalPosition().x;
 		j[AttributeNames::GAMEOBJECT_POSITION_Y] = obj.GetLocalPosition().y;
@@ -408,7 +411,7 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::TEXTURE_FILTER_MIN] = sprite.GetTexture().Filter_Min;
 		j[AttributeNames::TEXTURE_FILTER_MAX] = sprite.GetTexture().Filter_Max;
 		j[AttributeNames::TEXTURE_IMAGEFORMAT] = sprite.GetTexture().Image_Format;
-		j[AttributeNames::COMPONENT_ACTIVE] = sprite.IsActive();
+		j[AttributeNames::COMPONENT_ACTIVE] = sprite.IsEnabled();
 
 		return j;
 	}
@@ -439,7 +442,7 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::PHYSICS_DENSITY] = properties.density;
 		j[AttributeNames::PHYSICS_FRICTION] = properties.friction;
 		j[AttributeNames::PHYSICS_RESTITUTION] = properties.restitution;
-		j[AttributeNames::COMPONENT_ACTIVE] = physComp.IsActive();
+		j[AttributeNames::COMPONENT_ACTIVE] = physComp.IsEnabled();
 
 
 		return j;
@@ -463,7 +466,7 @@ namespace AIngine::Editor::Serialization {
 			outer[sound.GetName()] = j;
 		}
 
-		outer[AttributeNames::COMPONENT_ACTIVE] = soundComp.IsActive();
+		outer[AttributeNames::COMPONENT_ACTIVE] = soundComp.IsEnabled();
 
 		return outer;
 	}

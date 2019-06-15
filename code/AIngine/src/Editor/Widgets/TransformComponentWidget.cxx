@@ -26,6 +26,9 @@ namespace AIngine::Editor {
 
 			ImGui::Separator();
 
+			// active
+			ImGui::Checkbox("Active##gameobject", &activeGameObject->m_active);
+
 			// rename
 			static char str0[40] = "Enter Name";
 			if (ImGui::InputText("Name", str0, IM_ARRAYSIZE(str0))) {

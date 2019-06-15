@@ -26,9 +26,9 @@ namespace AIngine::Physics {
 		}
 	}
 
-	void PhysicsComponent::SetActive(bool active)
+	void PhysicsComponent::SetEnabled(bool active)
 	{
-		Component::SetActive(active);
+		Component::SetEnabled(active);
 
 		if (m_body) {
 			//m_body->SetActive(active);
