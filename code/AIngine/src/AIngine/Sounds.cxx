@@ -95,7 +95,7 @@ void AIngine::Sound::ExtractName()
 /*********************************** SOUND ENGINE *************************************************************/
 
 AIngine::SoundEngine::SoundEngine(HWND windowHandle)
-	: m_windowHandle(windowHandle)
+	: m_windowHandle(windowHandle), Layer("SoundEngine")
 {
 }
 

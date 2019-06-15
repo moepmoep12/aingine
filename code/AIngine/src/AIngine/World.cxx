@@ -87,7 +87,7 @@ namespace AIngine {
 	}
 
 	World::World(const glm::vec4 & bounds, const glm::vec2 & gravity)
-		: m_bounds(bounds), m_gravity(gravity)
+		: m_bounds(bounds), m_gravity(gravity), Layer("World")
 	{
 		ASSERT(!s_instance, "An entity of type World already exists!");
 		s_instance = this;

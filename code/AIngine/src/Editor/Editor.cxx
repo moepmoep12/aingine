@@ -206,8 +206,8 @@ namespace AIngine::Editor {
 		return Path.substr(first, last - first).c_str();
 	}
 
-	Editor::Editor()
-		: m_app(AIngine::Application::Get())
+	Editor::Editor() 
+		: m_app(AIngine::Application::Get()), Layer("Editor")
 	{
 		ASSERT(!s_instance, "Editor already running");
 		s_instance = this;
