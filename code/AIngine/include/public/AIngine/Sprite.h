@@ -21,7 +21,7 @@ namespace AIngine {
 		inline void SetParallaxFactor(const glm::vec2& factor) { m_parallaxFactor = factor; }
 
 		inline  AIngine::Rendering::Texture2D&  GetTexture() { return m_texture; }
-		//inline void SetTexture(AIngine::Rendering::Texture2D& texture) { m_texture = texture; SetName(texture.FileName); }
+		inline void SetTexture(const AIngine::Rendering::Texture2D& texture) { m_texture = texture; SetName(texture.FileName); }
 
 		inline glm::vec3 GetColor() const { return m_color; }
 		inline void SetColor(const glm::vec3& color) { m_color = color;; }
@@ -39,6 +39,6 @@ namespace AIngine {
 		AIngine::Rendering::Texture2D m_texture;
 
 	protected:
-		virtual Component* Copy( GameObject* const owner) const override;
+		virtual Component* Copy(GameObject* const owner) const override;
 	};
 }
