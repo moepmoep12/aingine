@@ -16,13 +16,12 @@
 #include "AIngine/SoundComponent.h"
 #include "AIngine/Graphics.h"
 #include "AIngine/Script.h"
-#include "World.h"
-#include "Sounds.h"
 #include "Rendering/Font.h"
+#include "Sounds.h"
+#include "World.h"
+#include "AIngine/Math.h"
 
 #include <glm/glm.hpp>
-
-
 
 
 typedef AIngine::SoundEngine SoundEngine;
