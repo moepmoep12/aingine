@@ -93,14 +93,17 @@ namespace AIngine::Editor {
 
 		/* Checks whether a docked Editor widget changed its size in the last frame to be able to adjust the viewport accordingly*/
 		bool DidAnyDockedWidgetChangeSize() const;
+		/* Callbacks*/
 		bool OnKeyPressed(AIngine::Events::KeyPressedEvent::KeyPressedEventData& e);
 		bool OnWindowResized(AIngine::Events::WindowResizeEvent::WindowResizeEventData& e);
 		bool OnMouseScrolled(AIngine::Events::MouseScrolledEvent::MouseScrolledEventData& e);
-		void MoveCamera(float delta);
 		void OnWindowClose();
+
+		void MoveCamera(float delta);
 		void LoadLastScene();
 		void SaveOpenScene();
 		std::string UpdateSceneTitle();
+
 		Editor();
 
 	private:
