@@ -72,6 +72,9 @@ namespace AIngine::Editor {
 			(*it._Ptr)->OnImGuiRender();
 			it++;
 		}
+
+		if (m_showingFpsGraph) DrawFpsGraph(m_app.GetDeltaTime());
+
 	}
 
 	bool Editor::OnKeyPressed(AIngine::Events::KeyPressedEvent::KeyPressedEventData & e)
@@ -302,6 +305,12 @@ namespace AIngine::Editor {
 			s_instance->m_displayingFramerate = active;
 	}
 
+	void Editor::SetShowFpsGraph(bool show)
+	{
+		if (s_instance)
+			s_instance->m_showingFpsGraph = show;
+	}
+
 	void Editor::ResetSceneGraph()
 	{
 		m_app.m_world->GetSceneGraph().Reset();
@@ -412,6 +421,24 @@ namespace AIngine::Editor {
 		std::stringstream ss;
 		ss << "FPS: " << (int)(1.0f / delta);
 		AIngine::Graphics::Text(ss.str().c_str(), glm::vec2(0, 0), glm::vec2(0.75));
+	}
+
+	void Editor::DrawFpsGraph(float delta) const
+	{
+		static std::vector<float> fpsqueue;
+		struct Funcs
+		{
+			static float Get(void*, int i) { return fpsqueue[i]; }
+
+		};
+
+		if (fpsqueue.size() >= 200) {
+			fpsqueue.erase(fpsqueue.begin());
+		}
+		fpsqueue.push_back(1.0f / delta);
+		float(*func)(void*, int) = Funcs::Get;
+
+		ImGui::PlotLines("FPS", func, NULL, fpsqueue.size(), 0, NULL, 0, 65, ImVec2(0, 80));
 	}
 
 	bool Editor::DidAnyDockedWidgetChangeSize() const

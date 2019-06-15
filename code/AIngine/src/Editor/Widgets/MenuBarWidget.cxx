@@ -71,6 +71,7 @@ namespace AIngine::Editor {
 				bool showPhys = AIngine::World::IsDebugPhysicsDrawn();
 				bool showFps = AIngine::Editor::Editor::IsFramerateDisplayed();
 				bool outlineAnimation = AIngine::Rendering::SpriteRenderer::AnimateOutline;
+				bool showFPSGraph = AIngine::Editor::Editor::IsFpsGraphVisible();
 
 				if (ImGui::MenuItem("Show Physics Debug Rendering", "F1", &showPhys, true))
 				{
@@ -86,6 +87,12 @@ namespace AIngine::Editor {
 				{
 					AIngine::Rendering::SpriteRenderer::SetAnimateOutlineActive(outlineAnimation);
 				}
+
+				if (ImGui::MenuItem("Show FPS Graph", "F4", &showFPSGraph, true)) {
+					AIngine::Editor::Editor::SetShowFpsGraph(showFPSGraph);
+				}
+
+
 
 				ImGui::EndMenu();
 			}

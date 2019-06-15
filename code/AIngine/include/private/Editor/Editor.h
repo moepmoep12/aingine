@@ -66,6 +66,10 @@ namespace AIngine::Editor {
 		static void SetShowFramerate(bool active);
 		static inline bool IsFramerateDisplayed() { if (s_instance) return s_instance->m_displayingFramerate; else return false; }
 
+		/* Activates/Deactivates the fps graph*/
+		static void SetShowFpsGraph(bool show);
+		static inline bool IsFpsGraphVisible() { if (s_instance) return s_instance->m_showingFpsGraph; else return false; }
+
 		static inline void SetSelectedObjects(const std::vector<AIngine::GameObject*>& selectedObjects) { if (s_instance) s_instance->m_selectedObjects = selectedObjects; }
 		static inline const std::vector<AIngine::GameObject*>* GetSelectedObjects() { if (s_instance) return &s_instance->m_selectedObjects; else return nullptr; }
 
@@ -87,9 +91,12 @@ namespace AIngine::Editor {
 
 		AIngine::Events::Event<void> OnEnterPlayModeEvent;
 		AIngine::Events::Event<void> OnLeavePlayModeEvent;
+
+
 	private:
 		void ResetSceneGraph();
 		void DisplayFramerate(float delta) const;
+		void DrawFpsGraph(float delta) const;
 
 		/* Checks whether a docked Editor widget changed its size in the last frame to be able to adjust the viewport accordingly*/
 		bool DidAnyDockedWidgetChangeSize() const;
@@ -107,7 +114,8 @@ namespace AIngine::Editor {
 		Editor();
 
 	private:
-		bool m_displayingFramerate = true;
+		bool m_displayingFramerate = false;
+		bool m_showingFpsGraph = false;
 		static Editor* s_instance;
 		AIngine::Application& m_app;
 		std::vector<EditorWidget*> m_widgets;
