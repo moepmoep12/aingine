@@ -137,8 +137,6 @@ namespace AIngine::Editor {
 		ImGui::TextColored(ImVec4(1, 1, 0, 1), "User Scripts");
 		ImGui::NewLine();
 
-		ImGui::Separator();
-		ImGui::Columns(2);
 		AIngine::Script* scriptToRemove = nullptr;
 
 		for (auto& it = node->GetComponents().begin(); it != node->GetComponents().end(); it++) {
@@ -153,16 +151,12 @@ namespace AIngine::Editor {
 					else
 						ImGui::EndPopup();
 				}
-				ImGui::NextColumn();
-				ImGui::Text(std::to_string(script->ScriptIndex).c_str());
-				ImGui::NextColumn();
 			}
 		}
 		if (scriptToRemove) {
 			node->RemoveComponent(scriptToRemove);
 		}
 
-		ImGui::EndColumns();
 		ImGui::NewLine();
 		ImGui::Separator();
 	}
