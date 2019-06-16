@@ -104,6 +104,9 @@ namespace AIngine::Editor {
 					break;
 
 				case PhysicsShape::e_Box:
+					if (bodyInfo.width == 0 || bodyInfo.height == 0) {
+						physComp->CreateBoxBody(properties, bodyInfo.type, 1, 1, bodyInfo.isTrigger);
+					}
 					CreateBoxUI(physComp);
 					break;
 
@@ -112,6 +115,9 @@ namespace AIngine::Editor {
 					break;
 
 				case PhysicsShape::e_Edge:
+					if (bodyInfo.verticesCount < 2) {
+						physComp->CreateEdgeBody(properties, bodyInfo.type, glm::vec2(-0.5, 0), glm::vec2(0.5, 0));
+					}
 					CreateEdgeUI(physComp);
 					break;
 				}
