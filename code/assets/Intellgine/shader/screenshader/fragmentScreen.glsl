@@ -1,9 +1,9 @@
-#version 330 core
+#version 430 core
 in vec2 TexCoords;
 out vec4 color;
 
-uniform sampler2D image;
-uniform vec3 spriteColor;
+layout (location = 4) uniform sampler2D image;
+layout (location = 5) uniform vec3 spriteColor;
 
 void main()
 {    
