@@ -131,4 +131,34 @@ namespace AIngine::Events {
 				AIngine::Structures::RectangleI& ViewportRect;
 		};
 	};
+
+	// EnterPlayMode
+	class EnterPlayModeEventData : public EventData {
+		
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "Enter Playmode Event";
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(EnterPlayMode)
+			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+	};
+
+	// ExitPlayMode
+	class ExitPlayModeEventData : public EventData {
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "Exit Playmode Event";
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(ExitPlayMode)
+			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+	};
+
+
 }

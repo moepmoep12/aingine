@@ -17,7 +17,7 @@ namespace AIngine::Events {
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		ViewportChanged,
-		AppTick, AppUpdate, AppRender,
+		EnterPlayMode, ExitPlayMode,
 		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
