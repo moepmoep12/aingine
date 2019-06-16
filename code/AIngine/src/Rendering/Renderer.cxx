@@ -50,8 +50,8 @@ namespace AIngine::Rendering {
 		glm::mat4 projection = Camera::Get().GetProjectionMatrix();
 
 		// configure shader
-		m_shader->SetInteger("image", 0, true);
-		m_shader->SetMatrix4("projection", projection);
+		m_shader->SetInteger(4, 0, true);
+		m_shader->SetMatrix4(2, projection);
 
 		// load outlineShader
 		std::string vs("assets/Intellgine/shader/screenshader/vertexScreen.glsl");
@@ -60,7 +60,7 @@ namespace AIngine::Rendering {
 		std::string path;
 		path.append(vs).append(";").append(fs);
 		m_outlineShader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
-		m_outlineShader->SetInteger("image", 0, true);
+		m_outlineShader->SetInteger(0, 0, true);
 
 		SetViewport();
 
@@ -86,7 +86,7 @@ namespace AIngine::Rendering {
 		textureSize.y *= gameObject.GetLocalScale().y;
 
 		m_matrixStack.push_back(m_modelMatrix);
-		shader->SetMatrix4("view", Camera::Get().GetViewMatrix(sprite.GetParallaxFactor()));
+		shader->SetMatrix4(3 /*viewmatrix*/, Camera::Get().GetViewMatrix(sprite.GetParallaxFactor()));
 
 		// we position & rotate around the center
 		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(gameObject.GetLocalPosition(), 0.0f));
@@ -95,8 +95,8 @@ namespace AIngine::Rendering {
 		m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(textureSize, 1.0f));
 
 		// configure shader
-		shader->SetMatrix4("model", m_modelMatrix);
-		shader->SetVector3f("spriteColor", sprite.GetColor());
+		shader->SetMatrix4(1 /*model*/, m_modelMatrix);
+		shader->SetVector3f(5 /*spriteColor*/, sprite.GetColor());
 
 		// draw
 		glActiveTexture(GL_TEXTURE0);
@@ -161,8 +161,8 @@ namespace AIngine::Rendering {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 		// configure shader
-		m_shader->SetMatrix4("projection", Camera::Get().GetProjectionMatrix(), true);
-		m_outlineShader->SetMatrix4("projection", Camera::Get().GetProjectionMatrix(), true);
+		m_shader->SetMatrix4(2 /*projection*/, Camera::Get().GetProjectionMatrix(), true);
+		m_outlineShader->SetMatrix4(2 /*projection*/, Camera::Get().GetProjectionMatrix(), true);
 
 		m_matrixStack.clear();
 		m_additiveRotation = 0;
