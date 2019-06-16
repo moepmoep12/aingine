@@ -1,8 +1,6 @@
 #include "Structures/SceneGraph.h"
 #include "AIngine/GameObject.h"
 #include "AIngine/Component.h"
-#include "AIngine/Script.h"
-#include "Application.h"
 
 #include "imgui.h"
 #include <sstream>
@@ -169,21 +167,11 @@ namespace AIngine::Structures {
 
 	bool UpdateTraverser::Enter(GameObject & node)
 	{
-		bool apprunning = Application::IsRunning();
 		auto it = node.GetComponents().begin();
 		while (it != node.GetComponents().end()) {
 			Component* comp = *it._Ptr;
 			if (comp->IsActive()) {
 				comp->OnUpdate(m_deltaTime);
-			}
-
-			AIngine::Script* script = dynamic_cast<AIngine::Script*>(comp);
-			if (script && apprunning) {
-				if (!script->m_startCalled) {
-					script->OnStart();
-					script->m_startCalled = true;
-				}
-				script->OnImguiRender();
 			}
 
 			if (comp->m_wantsDestroy) {
@@ -204,21 +192,11 @@ namespace AIngine::Structures {
 
 	bool UpdateTraverser::Visit(GameObject & node)
 	{
-		bool apprunning = Application::IsRunning();
 		auto it = node.GetComponents().begin();
 		while (it != node.GetComponents().end()) {
 			Component* comp = *it._Ptr;
 			if (comp->IsActive()) {
 				comp->OnUpdate(m_deltaTime);
-			}
-
-			AIngine::Script* script = dynamic_cast<AIngine::Script*>(comp);
-			if (script && apprunning) {
-				if (!script->m_startCalled) {
-					script->OnStart();
-					script->m_startCalled = true;
-				}
-				script->OnImguiRender();
 			}
 
 			if (comp->m_wantsDestroy) {
@@ -282,70 +260,7 @@ namespace AIngine::Structures {
 		return true;
 	}
 
-	/********************************** OnStart TRAVERSER ****************************************/
-
-	bool OnStartTraverser::Traverse(GameObject * root)
-	{
-		return root->Accept(*this);
-	}
-
-	bool OnStartTraverser::Enter(GameObject & node)
-	{
-		auto it = node.GetComponents().begin();
-		while (it != node.GetComponents().end()) {
-			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
-			if (comp && comp->IsActive()) {
-				comp->OnStart();
-				comp->m_startCalled = true;
-			}
-			it++;
-		}
-		return true;
-	}
-
-	bool OnStartTraverser::Visit(GameObject & node)
-	{
-		auto it = node.GetComponents().begin();
-		while (it != node.GetComponents().end()) {
-			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
-			if (comp && comp->IsActive()) {
-				comp->OnStart();
-				comp->m_startCalled = true;
-			}
-			it++;
-		}
-		return true;
-	}
-
-	/********************************** OnEnd TRAVERSER ****************************************/
-
-	bool OnEndTraverser::Traverse(GameObject * root)
-	{
-		return root->Accept(*this);
-	}
-	bool OnEndTraverser::Enter(GameObject & node)
-	{
-		auto it = node.GetComponents().begin();
-		while (it != node.GetComponents().end()) {
-			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
-			if (comp) comp->OnEnd();
-			it++;
-		}
-		return true;
-	}
-	bool OnEndTraverser::Visit(GameObject & node)
-	{
-		auto it = node.GetComponents().begin();
-		while (it != node.GetComponents().end()) {
-			AIngine::Script* comp = dynamic_cast<AIngine::Script*>(*it._Ptr);
-			if (comp && comp->IsActive()) comp->OnEnd();
-			it++;
-		}
-		return true;
-	}
-
 	/********************************** SEARCHFORNAME TRAVERSER ****************************************/
-
 
 	SearchForNameTraverser::SearchForNameTraverser(const std::string & name)
 		: m_name(name)

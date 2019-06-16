@@ -214,16 +214,19 @@ namespace AIngine {
 
 	void Application::OnEnterPlayMode()
 	{
+		PropagateEventData(AIngine::Events::EnterPlayModeEventData());
 		OnAppStartUp();
-		AIngine::Structures::OnStartTraverser onStartTraverser;
-		onStartTraverser.Traverse(&m_world->GetSceneGraph().GetRoot());
+		//AIngine::Structures::OnStartTraverser onStartTraverser;
+		//onStartTraverser.Traverse(&m_world->GetSceneGraph().GetRoot());
+
 	}
 
 	void Application::OnLeavePlayMode()
 	{
+		PropagateEventData(AIngine::Events::ExitPlayModeEventData());
 		OnAppShutDown();
-		AIngine::Structures::OnEndTraverser onEndTraverser;
-		onEndTraverser.Traverse(&m_world->GetSceneGraph().GetRoot());
+		//AIngine::Structures::OnEndTraverser onEndTraverser;
+		//onEndTraverser.Traverse(&m_world->GetSceneGraph().GetRoot());
 	}
 
 	void Application::PushLayer(AIngine::Structures::Layer * layer)

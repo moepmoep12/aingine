@@ -2,6 +2,7 @@
 #include "Rendering/Renderer.h"
 #include "Structures/memory.h"
 #include "Structures/Layer.h"
+
 #include <vector>
 
 namespace AIngine::Editor {
@@ -115,24 +116,6 @@ namespace AIngine::Structures {
 
 	private:
 		AIngine::Events::EventData& m_eventData;
-	};
-
-	// Traverses the SceneGraph to call the Startmethod of Scripting components
-	class OnStartTraverser : public Traverser {
-	public:
-		virtual bool Traverse(GameObject* root) override;
-		virtual bool Enter(GameObject & node) override;
-		virtual bool Leave(GameObject & node) override { return true; }
-		virtual bool Visit(GameObject & node) override;
-	};
-
-	// Traverses the SceneGraph to call the Startmethod of Scripting components
-	class OnEndTraverser : public Traverser {
-	public:
-		virtual bool Traverse(GameObject* root) override;
-		virtual bool Enter(GameObject & node) override;
-		virtual bool Leave(GameObject & node) override { return true; }
-		virtual bool Visit(GameObject & node) override;
 	};
 
 	// Traverses the SceneGraph to look for a GameObject with specified name
