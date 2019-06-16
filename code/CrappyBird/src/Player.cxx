@@ -13,23 +13,28 @@ namespace CrappyBird {
 		m_originalGameSpeed = CrappyBird::s_GameSpeed;
 	}
 
+	Player::~Player()
+	{
+	}
+
+	glm::vec2 Player::GetSize()
+	{
+		return glm::vec2(1.4, 0.7);
+	}
+
 	void Player::OnStart()
 	{
+		GetOwner()->GetComponent<PhysicsComponent>()->SetFixedRotation(true);
 		m_spawnPos = GetOwner()->GetLocalPosition();
 		m_physBody = m_owner->GetComponent<AIngine::Physics::PhysicsComponent>();
-		m_pickUpFactory = AIngine::World::GetGameObject("PickUpFactory")->GetComponent<PickUpFactory>();
-		glm::vec4 bounds = AIngine::World::GetBounds();
-		AIngine::Structures::RectangleI nextScreen(bounds.y, 0, bounds.y, bounds.w / 2.0f);
-		m_pickUpFactory->SpawnPickUpInArea(nextScreen);
-
-		OnEnterNewScreen += [=]() {
-			DEBUG_INFO(this->m_distanceTraveled);
-		};
+		m_collisionHandler = AIngine::Events::EventHandler<void, PhysicsComponent*>(std::bind(&Player::OnCollision, this, std::placeholders::_1));
+		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin += m_collisionHandler;
 	}
 
 	void Player::OnEnd()
 	{
 		CrappyBird::s_GameSpeed = m_originalGameSpeed;
+		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin -= m_collisionHandler;
 	}
 
 	void Player::OnEvent(AIngine::Events::EventData & e)
@@ -59,11 +64,17 @@ namespace CrappyBird {
 
 		if (m_distanceTraveled >= CurrentScreenIndex * 10) {
 			CurrentScreenIndex++;
-			OnEnterNewScreen();
+			glm::vec4 bounds = AIngine::World::GetBounds();
+			AIngine::Structures::RectangleI nextScreen(bounds.y, 0, bounds.y, bounds.w / 2.0f);
+			OnEnterNewScreen(nextScreen);
 		}
 	}
 
-	Player::~Player()
+
+	void Player::OnCollision(PhysicsComponent * other)
 	{
+		if (other->GetOwner()->GetName() == "Obstacle") {
+			GetOwner()->SetActive(false);
+		}
 	}
 }

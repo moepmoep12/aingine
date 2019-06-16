@@ -15,6 +15,7 @@ namespace CrappyBird {
 		virtual void OnAppEvent(AIngine::Events::EventData& e) override {}
 
 		static float s_GameSpeed;
+		const static float s_originalGameSpeed;
 
 		CrappyBird();
 		virtual ~CrappyBird();

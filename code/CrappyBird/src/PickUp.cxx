@@ -1,6 +1,6 @@
 #include "PickUp.h"
 #include "CrappyBird.h"
-#include "Player.h"
+#include "Player.h""
 
 #include <random>
 #include <time.h>
@@ -9,35 +9,53 @@ namespace CrappyBird {
 
 	static const float pickUpRadius = 0.2f;
 
-	void PickUpFactory::OnStart()
+	PickUpFactory::PickUpFactory()
 	{
+		SetName(typeid(*this).name());
 		srand(time(NULL));
-		AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>()->OnEnterNewScreen += [=]() {
-			glm::vec4 bounds = AIngine::World::GetBounds();
-			AIngine::Structures::RectangleI nextScreen(bounds.y, 0, bounds.y, bounds.w / 2.0f);
-			this->SpawnPickUpInArea(nextScreen);
-		};
 	}
 
-	void PickUpFactory::SpawnPickUpInArea(const AIngine::Structures::RectangleI & worldRect)
+	void PickUpFactory::OnStart()
+	{
+		//m_newScreenHandler = AIngine::Events::EventHandler<void, AIngine::Structures::RectangleI&>(std::bind(&PickUpFactory::SpawnPickUpInArea, this, std::placeholders::_1));
+
+		//AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>()->OnEnterNewScreen += m_newScreenHandler;
+	}
+
+	void PickUpFactory::OnEnd()
+	{
+		//AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>()->OnEnterNewScreen -= m_newScreenHandler;
+	}
+
+	void PickUpFactory::SpawnPickUp(const glm::vec2 & pos)
 	{
 		GameObject* availableObj = GetAvailableGameObject();
 		if (availableObj) {
-			glm::vec2 min = worldRect.GetPosition() + glm::vec2(pickUpRadius);
-			glm::vec2 bottomRight = worldRect.GetMax() + glm::vec2(-pickUpRadius, -pickUpRadius);
-
-			float x = min.x + static_cast <float> (rand()) / static_cast <float> (RAND_MAX / bottomRight.x);
-			float y = min.y + static_cast <float> (rand()) / static_cast <float> (RAND_MAX / bottomRight.y);
-			glm::vec2 spawnPos = glm::vec2(x, y);
-
-			availableObj->SetLocalPosition(spawnPos);
-			availableObj->AddComponent<SpeedPickUp>();
+			availableObj->SetLocalPosition(pos);
+			AddPickUpScript(*availableObj);
 			availableObj->SetActive(true);
 		}
-		else {
-
-		}
 	}
+
+	//void PickUpFactory::SpawnPickUpInArea(const AIngine::Structures::RectangleI & worldRect)
+	//{
+	//	GameObject* availableObj = GetAvailableGameObject();
+	//	if (availableObj) {
+	//		glm::vec2 min = worldRect.GetPosition() + glm::vec2(2 * pickUpRadius);
+	//		glm::vec2 bottomRight = worldRect.GetMax() + glm::vec2(-2 * pickUpRadius, -2 * pickUpRadius);
+
+	//		float x = min.x + static_cast <float> (rand()) / static_cast <float> (RAND_MAX / bottomRight.x);
+	//		float y = min.y + static_cast <float> (rand()) / static_cast <float> (RAND_MAX / bottomRight.y);
+	//		glm::vec2 spawnPos = glm::vec2(x, y);
+
+	//		availableObj->SetLocalPosition(spawnPos);
+	//		AddPickUpScript(*availableObj);
+	//		availableObj->SetActive(true);
+	//	}
+	//	else {
+
+	//	}
+	//}
 
 	GameObject* PickUpFactory::GetAvailableGameObject()
 	{
@@ -47,16 +65,38 @@ namespace CrappyBird {
 		}
 		return nullptr;
 	}
+
+	void PickUpFactory::AddPickUpScript(GameObject & obj)
+	{
+		int value = rand() % 3;
+
+		switch (value) {
+		case 0:
+			obj.AddComponent<SpeedPickUp>();
+			break;
+
+		case 1:
+			obj.AddComponent<SlowSpeedPickUp>();
+			break;
+
+		case 2:
+			if (AIngine::World::GetGameObject("PlayerRocket")->GetLocalScale().x == 1)
+				obj.AddComponent<ShrinkPickUp>();
+			break;
+		}
+	}
+
 	/******************************** PICKUP ******************************************/
 
 
 	void PickUp::OnStart()
 	{
 		m_collisionHandler = AIngine::Events::EventHandler<void, PhysicsComponent*>(std::bind(&PickUp::OnCollision, this, std::placeholders::_1));
+		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin += m_collisionHandler;
 		GetOwner()->SetActive(true);
 		GetOwner()->GetComponent<Sprite>()->SetEnabled(true);
 		GetOwner()->GetComponent<PhysicsComponent>()->SetEnabled(true);
-		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin += m_collisionHandler;
+		Start();
 	}
 
 	void PickUp::Update(float deltatime)
@@ -72,6 +112,14 @@ namespace CrappyBird {
 		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin -= this->m_collisionHandler;
 		GetOwner()->SetActive(false);
 		Destroy();
+	}
+
+	void PickUp::ResetSprite()
+	{
+		GetOwner()->GetComponent<Sprite>()->SetLocalWorldSize(glm::vec2(2 * pickUpRadius));
+		GetOwner()->GetComponent<Sprite>()->SetColor(glm::vec3(1));
+		GetOwner()->SetRotation(0);
+		GetOwner()->GetComponent<Sprite>()->SetTexture(AIngine::Rendering::Texture2D(Assets::Load<BitmapAsset>("assets/Intellgine/textures/Circle.png")->GetBitmap()));
 	}
 
 	void PickUp::OnCollision(AIngine::Physics::PhysicsComponent * other)
@@ -106,12 +154,21 @@ namespace CrappyBird {
 			PickUp::Update(deltatime);
 	}
 
+	void SpeedPickUp::Start()
+	{
+		ResetSprite();
+		GetOwner()->GetComponent<Sprite>()->SetTexture(AIngine::Rendering::Texture2D(Assets::Load<BitmapAsset>("assets/CrappyBird/textures/fast-forward.png")->GetBitmap()));
+	}
+
 	/******************************** SLOWSPEED PICKUP ******************************************/
 
 	void SlowSpeedPickUp::OnPickUp()
 	{
 		Active = true;
-		CrappyBird::s_GameSpeed -= 1.5f;
+		if (CrappyBird::s_GameSpeed > CrappyBird::s_originalGameSpeed - m_value) {
+			CrappyBird::s_GameSpeed -= m_value;
+			m_appliedReduction = m_value;
+		}
 		GetOwner()->GetComponent<Sprite>()->SetEnabled(false);
 	}
 
@@ -120,11 +177,63 @@ namespace CrappyBird {
 		if (Active) {
 			Duration -= deltatime;
 			if (Duration <= 0) {
-				CrappyBird::s_GameSpeed += 1.5f;
+				CrappyBird::s_GameSpeed += m_appliedReduction;
 				OnFinish();
 			}
 		}
 		else
 			PickUp::Update(deltatime);
+	}
+
+	void SlowSpeedPickUp::Start()
+	{
+		ResetSprite();
+		GetOwner()->GetComponent<Sprite>()->SetTexture(AIngine::Rendering::Texture2D(Assets::Load<BitmapAsset>("assets/CrappyBird/textures/fast-forward.png")->GetBitmap()));
+		GetOwner()->GetComponent<Sprite>()->SetColor(glm::vec3(1, 0, 1));
+		GetOwner()->SetRotation(M_PI);
+	}
+
+	/******************************** ShrinkPickUp PICKUP ******************************************/
+
+	void ShrinkPickUp::OnPickUp()
+	{
+		Active = true;
+		GetOwner()->GetComponent<Sprite>()->SetEnabled(false);
+	}
+
+	void ShrinkPickUp::Update(float deltatime)
+	{
+		if (Active)
+		{
+			m_currentLerpTime += deltatime * direction;
+
+			if (direction == 1 && m_currentLerpTime > AnimDuration) {
+				m_currentEffectDuration += deltatime;
+				if (m_currentEffectDuration >= EffectDuration) {
+					m_currentLerpTime = AnimDuration;
+					direction = -1;
+				}
+				else return;
+			}
+
+			if (direction == -1 && m_currentLerpTime < 0) {
+				AIngine::World::GetGameObject("PlayerRocket")->SetLocalScale(glm::vec2(1));
+				OnFinish();
+				return;
+			}
+
+			float t = 1.0f + AIngine::Math::SinErp(m_currentLerpTime / AnimDuration);
+
+			AIngine::World::GetGameObject("PlayerRocket")->SetLocalScale(glm::vec2(t));
+		}
+
+		else {
+			PickUp::Update(deltatime);
+		}
+	}
+
+	void ShrinkPickUp::Start()
+	{
+		ResetSprite();
 	}
 }

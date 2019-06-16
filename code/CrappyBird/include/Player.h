@@ -1,7 +1,5 @@
 #pragma once
-#include "AIngine/Script.h"
-#include "AIngine/GameObject.h"
-#include "AIngine/Physics.h"
+#include "AIngine/Core.h"
 #include "PickUp.h"
 
 namespace CrappyBird {
@@ -17,11 +15,14 @@ namespace CrappyBird {
 		virtual void OnGUI() override;
 		virtual ~Player();
 
-		AIngine::Events::Event<void> OnEnterNewScreen;
-
+		AIngine::Events::Event<void, AIngine::Structures::RectangleI&> OnEnterNewScreen;
+		AIngine::Events::EventHandler<void, PhysicsComponent*> m_collisionHandler;
+		glm::vec2 GetSize();
 		int CurrentScreenIndex = 1;
 
 	private:
+		void OnCollision(PhysicsComponent* other);
+
 		AIngine::Physics::PhysicsComponent* m_physBody;
 		PickUpFactory* m_pickUpFactory;
 		float m_originalGameSpeed = 0;
