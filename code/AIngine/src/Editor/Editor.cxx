@@ -206,7 +206,7 @@ namespace AIngine::Editor {
 		return Path.substr(first, last - first).c_str();
 	}
 
-	Editor::Editor() 
+	Editor::Editor()
 		: m_app(AIngine::Application::Get()), Layer("Editor")
 	{
 		ASSERT(!s_instance, "Editor already running");
@@ -426,6 +426,7 @@ namespace AIngine::Editor {
 	void Editor::DrawFpsGraph(float delta) const
 	{
 		static std::vector<float> fpsqueue;
+		static float max = 0;
 		struct Funcs
 		{
 			static float Get(void*, int i) { return fpsqueue[i]; }
@@ -435,10 +436,13 @@ namespace AIngine::Editor {
 		if (fpsqueue.size() >= 200) {
 			fpsqueue.erase(fpsqueue.begin());
 		}
-		fpsqueue.push_back(1.0f / delta);
+		float fps = 1.0f / delta;
+		if (fps > max)
+			max = fps;
+		fpsqueue.push_back(fps);
 		float(*func)(void*, int) = Funcs::Get;
 
-		ImGui::PlotLines("FPS", func, NULL, fpsqueue.size(), 0, NULL, 0, 65, ImVec2(0, 80));
+		ImGui::PlotLines("FPS", func, NULL, fpsqueue.size(), 0, NULL, 0, max, ImVec2(0, 80));
 	}
 
 	bool Editor::DidAnyDockedWidgetChangeSize() const
