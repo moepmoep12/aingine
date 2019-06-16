@@ -60,11 +60,23 @@ namespace AIngine::Rendering {
 			this->Use();
 		glUniform1f(glGetUniformLocation(this->ID, name), value);
 	}
+	void GLShaderProgram::SetFloat(GLint location, GLfloat value, GLboolean useShader)
+	{
+		if (useShader)
+			this->Use();
+		glUniform1f(location, value);
+	}
 	void GLShaderProgram::SetInteger(const GLchar *name, GLint value, GLboolean useShader)
 	{
 		if (useShader)
 			this->Use();
 		glUniform1i(glGetUniformLocation(this->ID, name), value);
+	}
+	void GLShaderProgram::SetInteger(GLint location, GLint value, GLboolean useShader)
+	{
+		if (useShader)
+			this->Use();
+		glUniform1i(location, value);
 	}
 	void GLShaderProgram::SetVector2f(const GLchar *name, GLfloat x, GLfloat y, GLboolean useShader)
 	{
@@ -72,11 +84,23 @@ namespace AIngine::Rendering {
 			this->Use();
 		glUniform2f(glGetUniformLocation(this->ID, name), x, y);
 	}
+	void GLShaderProgram::SetVector2f(GLint location, GLfloat x, GLfloat y, GLboolean useShader)
+	{
+		if (useShader)
+			this->Use();
+		glUniform2f(location, x, y);
+	}
 	void GLShaderProgram::SetVector2f(const GLchar *name, const glm::vec2 &value, GLboolean useShader)
 	{
 		if (useShader)
 			this->Use();
 		glUniform2f(glGetUniformLocation(this->ID, name), value.x, value.y);
+	}
+	void GLShaderProgram::SetVector2f(GLint location, const glm::vec2 & value, GLboolean useShader)
+	{
+		if (useShader)
+			this->Use();
+		glUniform2f(location, value.x, value.y);
 	}
 	void GLShaderProgram::SetVector3f(const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLboolean useShader)
 	{
@@ -84,11 +108,23 @@ namespace AIngine::Rendering {
 			this->Use();
 		glUniform3f(glGetUniformLocation(this->ID, name), x, y, z);
 	}
+	void GLShaderProgram::SetVector3f(GLint location, GLfloat x, GLfloat y, GLfloat z, GLboolean useShader)
+	{
+		if (useShader)
+			this->Use();
+		glUniform3f(location, x, y, z);
+	}
 	void GLShaderProgram::SetVector3f(const GLchar *name, const glm::vec3 &value, GLboolean useShader)
 	{
 		if (useShader)
 			this->Use();
 		glUniform3f(glGetUniformLocation(this->ID, name), value.x, value.y, value.z);
+	}
+	void GLShaderProgram::SetVector3f(GLint location, const glm::vec3 & value, GLboolean useShader)
+	{
+		if (useShader)
+			this->Use();
+		glUniform3f(location, value.x, value.y, value.z);
 	}
 	void GLShaderProgram::SetVector4f(const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w, GLboolean useShader)
 	{
@@ -96,17 +132,34 @@ namespace AIngine::Rendering {
 			this->Use();
 		glUniform4f(glGetUniformLocation(this->ID, name), x, y, z, w);
 	}
+	void GLShaderProgram::SetVector4f(GLint location, GLfloat x, GLfloat y, GLfloat z, GLfloat w, GLboolean useShader)
+	{
+		if (useShader)
+			this->Use();
+		glUniform4f(location, x, y, z, w);
+	}
 	void GLShaderProgram::SetVector4f(const GLchar *name, const glm::vec4 &value, GLboolean useShader)
 	{
 		if (useShader)
 			this->Use();
-		glUniform4f(glGetUniformLocation(this->ID, name), value.x, value.y, value.z, value.w);
+	}
+	void GLShaderProgram::SetVector4f(GLint location, const glm::vec4 & value, GLboolean useShader)
+	{
+		if (useShader)
+			this->Use();
+		glUniform4f(location, value.x, value.y, value.z, value.w);
 	}
 	void GLShaderProgram::SetMatrix4(const GLchar *name, const glm::mat4 &matrix, GLboolean useShader)
 	{
 		if (useShader)
 			this->Use();
-		glUniformMatrix4fv(glGetUniformLocation(this->ID, name), 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	void GLShaderProgram::SetMatrix4(GLint location, const glm::mat4 & matrix, GLboolean useShader)
+	{
+		if (useShader)
+			this->Use();
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 	GLuint GLShaderProgram::GetID() {
