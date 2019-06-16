@@ -258,6 +258,15 @@ namespace AIngine::Physics {
 		}
 	}
 
+	void PhysicsComponent::AdjustBoxShape(float width, float height)
+	{
+		if (m_bodyInformation.shape == PhysicsShape::e_Box && m_body) {
+			b2Fixture* fixture = m_body->GetFixtureList();
+			b2PolygonShape* shape = (b2PolygonShape*)fixture->GetShape();
+			shape->SetAsBox(width / 2.0f, height / 2.0f);
+		}
+	}
+
 	PhysicsComponent* PhysicsComponent::GetOtherCollider() {
 		if (m_otherCollided) {
 			return static_cast<PhysicsComponent*>(m_otherCollided->GetBody()->GetUserData());
@@ -327,6 +336,19 @@ namespace AIngine::Physics {
 				OnCollisionBegin(GetOtherCollider());
 			else OnCollisionEnd(GetOtherCollider());
 		}
+	}
+
+	bool PhysicsComponent::IsFixedRotation() const
+	{
+		if (m_body)
+			return m_body->IsFixedRotation();
+		return false;
+	}
+
+	void PhysicsComponent::SetFixedRotation(bool fixed)
+	{
+		if (m_body)
+			m_body->SetFixedRotation(fixed);
 	}
 
 }

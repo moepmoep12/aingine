@@ -72,11 +72,12 @@ namespace AIngine::Physics {
 		virtual void OnOwnerLocalPositionChanged(const glm::vec2& position) override;
 		virtual void OnOwnerLocalRotationChanged(const float& rot) override;
 
-		//void CreateBody(b2BodyDef& bodydef, b2FixtureDef& fixtureDef);
 		void CreateCircleBody(const PhysicsProperties& properties, PhysicsBodyType type, float radius, bool isTrigger = false);
 		void CreateBoxBody(const PhysicsProperties& properties, PhysicsBodyType type, float width, float height, bool isTrigger = false);
 		void CreateEdgeBody(const PhysicsProperties& properties, PhysicsBodyType type, const glm::vec2& p1Offset, const glm::vec2& p2Offset, bool isTrigger = false);
 		void CreatePolygonBody(const PhysicsProperties& properties, PhysicsBodyType type, const glm::vec2* vertices, unsigned int count, bool isTrigger = false);
+
+		void AdjustBoxShape(float width, float height);
 
 		void ApplyForce(const glm::vec2& force, const glm::vec2& point);
 		void ApplyForce(const b2Vec2& force, const b2Vec2& point);
@@ -90,6 +91,9 @@ namespace AIngine::Physics {
 
 		inline glm::vec2 GetOffset() const { return m_offset; }
 		inline void SetOffset(const glm::vec2& offset) { m_offset = offset; }
+
+		bool IsFixedRotation() const;
+		void SetFixedRotation(bool fixed);
 
 		inline const PhysicsProperties& GetProperties() const { return m_properties; }
 		inline const PhysicsBodyInformation& GetBodyInformation() const { return m_bodyInformation; }
