@@ -1,9 +1,9 @@
-#version 330 core
+#version 430 core
 //from learnopengl.com
 layout (location = 0) in vec4 vertex; // <vec2 pos, vec2 tex>
-out vec2 TexCoords;
+layout (location = 1) uniform mat4 projection;
 
-uniform mat4 projection;
+out vec2 TexCoords;
 
 void main()
 {

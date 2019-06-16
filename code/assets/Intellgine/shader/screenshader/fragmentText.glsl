@@ -1,11 +1,11 @@
-#version 330 core
+#version 430 core
 //from learnopengl.com
 in vec2 TexCoords;
 out vec4 color;
 
-uniform sampler2D text;
-uniform vec3 textColor;
-uniform float alpha = 1.0f;
+layout(location = 2) uniform sampler2D text;
+layout(location = 3) uniform vec3 textColor;
+layout(location = 4) uniform float alpha = 1.0f;
 
 void main()
 {    

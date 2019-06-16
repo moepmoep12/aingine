@@ -98,8 +98,8 @@ namespace AIngine {
 
 			glm::mat4 projection = AIngine::Rendering::Camera::Get().GetProjectionMatrix();
 			glm::mat4 view = AIngine::Rendering::Camera::Get().GetViewMatrix();
-			m_shader->SetMatrix4("projectionMatrix", projection, true);
-			m_shader->SetMatrix4("view", view);
+			m_shader->SetMatrix4(3/*projectionMatrix*/, projection, true);
+			m_shader->SetMatrix4(4 /*"view"*/, view);
 
 			glBindVertexArray(m_vaoId);
 
@@ -215,8 +215,8 @@ namespace AIngine {
 
 			glm::mat4 projection = AIngine::Rendering::Camera::Get().GetProjectionMatrix();
 			glm::mat4 view = AIngine::Rendering::Camera::Get().GetViewMatrix();
-			m_shader->SetMatrix4("projectionMatrix", projection, true);
-			m_shader->SetMatrix4("view", view);
+			m_shader->SetMatrix4(2 /*"projectionMatrix"*/, projection, true);
+			m_shader->SetMatrix4(3 /*"view"*/, view);
 
 			glBindVertexArray(m_vaoId);
 
@@ -317,8 +317,8 @@ namespace AIngine {
 
 			glm::mat4 projection = AIngine::Rendering::Camera::Get().GetProjectionMatrix();
 			glm::mat4 view = AIngine::Rendering::Camera::Get().GetViewMatrix();
-			m_shader->SetMatrix4("projectionMatrix", projection, true);
-			m_shader->SetMatrix4("view", view);
+			m_shader->SetMatrix4(2 /*"projectionMatrix"*/, projection, true);
+			m_shader->SetMatrix4(3 /*"view"*/, view);
 			glm::vec2 screenPos = projection * view *  glm::vec4(glm::vec2(m_vertices[0].x, m_vertices[0].y), 0, 1);
 
 			glBindVertexArray(m_vaoId);
@@ -375,7 +375,7 @@ namespace AIngine {
 			std::string path;
 			path.append(vs).append(";").append(fs);
 			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
-			m_shader->SetInteger("text", 0, false);
+			m_shader->SetInteger(2 /*"text"*/, 0, false);
 			std::stringstream ss;
 			ss << "assets/Intellgine/fonts/arial.ttf";
 			ss << "\n";
@@ -429,7 +429,7 @@ namespace AIngine {
 				return;
 
 			glm::mat4 projection = AIngine::Rendering::Camera::Get().GetProjectionMatrix();
-			m_shader->SetMatrix4("projection", projection, true);
+			m_shader->SetMatrix4(1 /*"projection"*/, projection, true);
 			glActiveTexture(GL_TEXTURE0);
 			glBindVertexArray(m_vao);
 
@@ -440,8 +440,8 @@ namespace AIngine {
 
 			for (TextElement& textElement : textStack)
 			{
-				m_shader->SetVector3f("textColor", textElement.color);
-				m_shader->SetFloat("alpha", textElement.alpha);
+				m_shader->SetVector3f(3 /*"textColor"*/, textElement.color);
+				m_shader->SetFloat(4 /*"alpha"*/, textElement.alpha);
 				GLfloat x = textElement.position.x;
 				GLfloat y = textElement.position.y;
 
@@ -686,23 +686,27 @@ namespace AIngine {
 
 	void Graphics::PolygonWorld(const glm::vec2 * vertices, unsigned int count, const glm::vec3 & color)
 	{
-		glm::vec2 p1 = vertices[count - 1];
-		for (unsigned int i = 0; i < count; ++i)
-		{
-			glm::vec2 p2 = vertices[i];
-			Line(p1, p2, color);
-			p1 = p2;
+		if (count > 1) {
+			glm::vec2 p1 = vertices[count - 1];
+			for (unsigned int i = 0; i < count; ++i)
+			{
+				glm::vec2 p2 = vertices[i];
+				Line(p1, p2, color);
+				p1 = p2;
+			}
 		}
 	}
 
 	void Graphics::PolygonScreen(const glm::vec2 * vertices, unsigned int count, const glm::vec3 & color)
 	{
-		glm::vec2 p1 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[4 - 1]);
-		for (unsigned int i = 0; i < count; ++i)
-		{
-			glm::vec2 p2 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[i]);
-			Line(p1, p2, color);
-			p1 = p2;
+		if (count > 1) {
+			glm::vec2 p1 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[4 - 1]);
+			for (unsigned int i = 0; i < count; ++i)
+			{
+				glm::vec2 p2 = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vertices[i]);
+				Line(p1, p2, color);
+				p1 = p2;
+			}
 		}
 	}
 
