@@ -67,7 +67,7 @@ namespace AIngine {
 		glm::vec2 m_gravity;
 		AIngine::Rendering::PhysicsRenderer* m_physRenderer;
 		Physics::ContactListener* m_contactListener;
-		bool m_isPhysicsDebugDrawn;
+		bool m_isPhysicsDebugDrawn = false;
 
 	private:
 		void CreateWorldBounds();

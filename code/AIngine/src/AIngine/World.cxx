@@ -100,13 +100,12 @@ namespace AIngine {
 		m_physRenderer = new AIngine::Rendering::PhysicsRenderer();
 		m_physRenderer->SetFlags(b2Draw::e_shapeBit /*+ b2Draw::e_centerOfMassBit*/);
 		m_physicsWorld->SetDebugDraw(m_physRenderer);
-		m_isPhysicsDebugDrawn = true;
 #endif
 
 		m_contactListener = new Physics::ContactListener();
 		m_physicsWorld->SetContactListener(m_contactListener);
 
-		CreateWorldBounds();
+		//CreateWorldBounds();
 	}
 
 	World::World(float bottomLeft, float bottomRight, float topLeft, float topRight, const glm::vec2 & gravity)
