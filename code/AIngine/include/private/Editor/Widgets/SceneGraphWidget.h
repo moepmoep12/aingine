@@ -6,6 +6,7 @@
 #include "Editor/Widgets/PhysicsComponentWidget.h"
 #include "Editor/Widgets/AddComponentWidget.h"
 #include "Editor/Widgets/SoundComponentWidget.h"
+#include "Editor/Widgets/ParticleEmitterWidget.h"
 
 #include <unordered_map>
 
@@ -35,6 +36,7 @@ namespace AIngine::Editor {
 		PhysicsComponentWidget* m_physCompWidget;
 		AddComponentWidget* m_addComponentWidget;
 		SoundComponentWidget* m_soundComponentWidget;
+		ParticleEmitterWidget* m_particleEmitterWidget;
 
 		void ShowSelectedNodeWidget(GameObject* node);
 		void ShowUserScripts(GameObject* node);

@@ -3,6 +3,7 @@
 #include "AIngine/Sprite.h"
 #include "AIngine/Physics.h"
 #include "AIngine/SoundComponent.h"
+#include "AIngine/ParticleEmitter.h"
 #include "Application.h"
 
 #include <vector>
@@ -67,8 +68,13 @@ namespace AIngine::Editor {
 									obj->AddComponent<AIngine::SoundComponent>();
 									break;
 								}
+							case 3:
+								if (!obj->GetComponent<AIngine::ParticleEmitter>()) {
+									obj->AddComponent<AIngine::ParticleEmitter>();
+									break;
+								}
 							default:
-								AIngine::OnAddComponent(obj, i - 3);
+								AIngine::OnAddComponent(obj, i - 4);
 								break;
 							}
 						}

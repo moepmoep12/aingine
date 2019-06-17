@@ -9,8 +9,8 @@
 #include "AIngine/World.h"
 #include "AIngine/Sprite.h"
 #include "AIngine/SoundComponent.h"
+#include "AIngine/ParticleEmitter.h"
 #include "AIngine/Script.h"
-#include "Application.h"
 
 #include <fstream>
 #include <vector>
@@ -46,6 +46,7 @@ namespace AIngine::Editor::Serialization {
 		const char* COMPONENT_PHYSICS = "physics";
 		const char* COMPONENT_SOUND = "soundComponent";
 		const char* COMPONENT_SCRIPT = "script";
+		const char* COMPONENT_PARTICLEEMITTER = "particleemitter";
 
 		// Script
 		const char* SCRIPT_INDEX = "index";
@@ -91,6 +92,7 @@ namespace AIngine::Editor::Serialization {
 		const char* SOUND_PATH = "path";
 		const char* SOUND_VLEFT = "volumeLeft";
 		const char* SOUND_VRIGHT = "volumeRight";
+
 	}
 
 	void Serializer::SerializeSceneGraph(const std::string & path)
@@ -154,6 +156,10 @@ namespace AIngine::Editor::Serialization {
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SOUND)) {
 							RestorySoundComponent(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SOUND], restoredObject);
 						}
+						// restore particleEmitter
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_PARTICLEEMITTER)) {
+							RestoreParticleEmitter(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PARTICLEEMITTER], restoredObject);
+						}
 
 						//restore scripts
 						RestoreScripts(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SCRIPT], restoredObject);
@@ -210,6 +216,22 @@ namespace AIngine::Editor::Serialization {
 		texture.Generate(bitmap);
 
 		sprite->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
+	}
+
+	void Serializer::RestoreParticleEmitter(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		AIngine::ParticleEmitter* emitter = obj->AddComponent<AIngine::ParticleEmitter>();
+		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
+		AIngine::Rendering::Texture2D& texture = emitter->GetTexture();
+
+		texture.Wrap_S = (*j)[AttributeNames::TEXTURE_WRAP_S];
+		texture.Wrap_T = (*j)[AttributeNames::TEXTURE_WRAP_T];
+		texture.Filter_Min = (*j)[AttributeNames::TEXTURE_FILTER_MIN];
+		texture.Filter_Max = (*j)[AttributeNames::TEXTURE_FILTER_MAX];
+		texture.Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
+		texture.Generate(bitmap);
+
+		emitter->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
 
 	AIngine::Physics::PhysicsComponent* Serializer::RestorePhysics(const nlohmann::json * const j, AIngine::GameObject * obj)
@@ -381,9 +403,16 @@ namespace AIngine::Editor::Serialization {
 			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PHYSICS] = SerializePhysicsComponent(*physComp);
 		}
 
+		// serialize soundcomp
 		AIngine::SoundComponent* soundComp = obj.GetComponent<AIngine::SoundComponent>();
 		if (soundComp) {
 			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SOUND] = SerializeSoundComponent(*soundComp);
+		}
+
+		// serialize emitter
+		AIngine::ParticleEmitter* emitter = obj.GetComponent<AIngine::ParticleEmitter>();
+		if (emitter) {
+			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PARTICLEEMITTER] = SerializeParticleEmitter(*emitter);
 		}
 
 		j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SCRIPT] = SerializeScripts(obj);
@@ -481,6 +510,20 @@ namespace AIngine::Editor::Serialization {
 		outer[AttributeNames::COMPONENT_ACTIVE] = soundComp.IsEnabled();
 
 		return outer;
+	}
+
+	nlohmann::json SceneGraphSerializer::SerializeParticleEmitter(AIngine::ParticleEmitter & emitter)
+	{
+		nlohmann::json j;
+		j[AttributeNames::COMPONENT_ACTIVE] = emitter.IsEnabled();
+		j[AttributeNames::TEXTURE_PATH] = std::filesystem::relative(emitter.GetTexture().FileName).string();
+		j[AttributeNames::TEXTURE_WRAP_S] = emitter.GetTexture().Wrap_S;
+		j[AttributeNames::TEXTURE_WRAP_T] = emitter.GetTexture().Wrap_T;
+		j[AttributeNames::TEXTURE_FILTER_MIN] = emitter.GetTexture().Filter_Min;
+		j[AttributeNames::TEXTURE_FILTER_MAX] = emitter.GetTexture().Filter_Max;
+		j[AttributeNames::TEXTURE_IMAGEFORMAT] = emitter.GetTexture().Image_Format;
+
+		return j;
 	}
 
 }

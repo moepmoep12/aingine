@@ -23,6 +23,7 @@ set(AINGINE_HEADER
 		include/public/AIngine/KeyCodes.h
 		include/public/AIngine/Macros.h
 		include/public/AIngine/Math.h
+		include/public/AIngine/ParticleEmitter.h
 		include/public/AIngine/Physics.h
 		include/public/AIngine/Script.h
 		include/public/AIngine/SoundComponent.h
@@ -54,6 +55,7 @@ set(AINGINE_HEADER
 		include/private/Editor/Widgets/ComponentWidget.h
 		include/private/Editor/Widgets/LogWidget.h
 		include/private/Editor/Widgets/MenuBarWidget.h
+		include/private/Editor/Widgets/ParticleEmitterWidget.h
 		include/private/Editor/Widgets/PhysicsComponentWidget.h
 		include/private/Editor/Widgets/PopUps.h
 		include/private/Editor/Widgets/SceneGraphWidget.h
@@ -61,6 +63,7 @@ set(AINGINE_HEADER
 		include/private/Editor/Widgets/SpriteComponentWidget.h
 		include/private/Editor/Widgets/ToolbarWidget.h
 		include/private/Editor/Widgets/TransformComponentWidget.h
+		include/private/Rendering/ParticleRenderer.h
 		include/private/Rendering/PhysicsRenderer.h
 		include/private/Rendering/Renderer.h
 		include/private/Structures/SceneGraph.h
@@ -75,6 +78,7 @@ set(AINGINE_SRC
 		src/AIngine/GameObject.cxx
 		src/AIngine/Graphics.cxx
 		src/AIngine/Input.cxx
+		src/AIngine/ParticleEmitter.cxx
 		src/AIngine/Physics.cxx
 		src/AIngine/SoundComponent.cxx
 		src/AIngine/Sounds.cxx
@@ -88,6 +92,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/AddComponentWidget.cxx
 		src/Editor/Widgets/CameraWidget.cxx
 		src/Editor/Widgets/MenuBarWidget.cxx
+		src/Editor/Widgets/ParticleEmitterWidget.cxx
 		src/Editor/Widgets/PhysicsComponentWidget.cxx
 		src/Editor/Widgets/PopUps.cxx
 		src/Editor/Widgets/SceneGraphWidget.cxx
@@ -98,6 +103,7 @@ set(AINGINE_SRC
 		src/Rendering/bitmap.cxx
 		src/Rendering/Camera.cxx
 		src/Rendering/Font.cxx
+		src/Rendering/ParticleRenderer.cxx
 		src/Rendering/PhysicsRenderer.cxx
 		src/Rendering/Renderer.cxx
 		src/Rendering/shader.cxx

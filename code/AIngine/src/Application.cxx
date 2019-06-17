@@ -8,6 +8,7 @@
 #include "AIngine/Sounds.h"
 #include "Rendering/Font.h"
 #include "AIngine/Script.h"
+#include "Rendering/ParticleRenderer.h"
 
 #include <memory>
 
@@ -92,6 +93,9 @@ namespace AIngine {
 
 		// create camera
 		m_camera = new AIngine::Rendering::Camera(*m_viewport, glm::vec2(m_bounds.y - m_bounds.x, m_bounds.z - m_bounds.w));
+
+		// create particle renderer
+		m_particleRenderer = new AIngine::Rendering::ParticleRenderer();
 	}
 
 	Application::~Application()
@@ -163,6 +167,7 @@ namespace AIngine {
 
 			// scene rendering
 			m_renderer->Traverse(&m_world->GetSceneGraph().GetRoot());
+			m_particleRenderer->Traverse(&m_world->GetSceneGraph().GetRoot());
 
 			// ui rendering
 			m_imGuiLayer->OnBegin();
@@ -189,7 +194,7 @@ namespace AIngine {
 		delete m_camera;
 		delete m_Graphics;
 		delete m_viewport;
-
+		delete m_particleRenderer;
 
 #ifdef _DEBUG
 		m_layerStack.PopOverlay(m_editor);
@@ -333,7 +338,7 @@ namespace AIngine {
 
 	std::vector<std::string> GetAvailableComponentNames()
 	{
-		std::vector<std::string> result = { "Sprite", "Physics", "Sound" };
+		std::vector<std::string> result = { "Sprite", "Physics", "Sound", "ParticleEmitter" };
 
 		for (auto& it = ApplicationComponentNames.begin(); it != ApplicationComponentNames.end(); it++) {
 			result.push_back(*it._Ptr);

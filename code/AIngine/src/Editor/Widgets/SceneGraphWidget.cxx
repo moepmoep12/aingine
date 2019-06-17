@@ -14,6 +14,7 @@
 #include "AIngine/World.h"
 #include "AIngine/SoundComponent.h"
 #include "AIngine/Script.h"
+#include "AIngine/ParticleEmitter.h"
 
 
 namespace AIngine::Editor {
@@ -85,6 +86,7 @@ namespace AIngine::Editor {
 		delete m_physCompWidget;
 		delete m_addComponentWidget;
 		delete m_soundComponentWidget;
+		delete m_particleEmitterWidget;
 	}
 
 
@@ -96,6 +98,7 @@ namespace AIngine::Editor {
 		m_physCompWidget = new PhysicsComponentWidget();
 		m_addComponentWidget = new AddComponentWidget();
 		m_soundComponentWidget = new SoundComponentWidget();
+		m_particleEmitterWidget = new ParticleEmitterWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
@@ -120,6 +123,11 @@ namespace AIngine::Editor {
 			AIngine::SoundComponent* soundComp = node->GetComponent<AIngine::SoundComponent>();
 			if (soundComp) {
 				m_soundComponentWidget->Render({ node });
+			}
+
+			AIngine::ParticleEmitter* emitter = node->GetComponent<AIngine::ParticleEmitter>();
+			if (emitter) {
+				m_particleEmitterWidget->Render({ node });
 			}
 
 			ShowUserScripts(node);
