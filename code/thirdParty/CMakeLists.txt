@@ -51,7 +51,6 @@ add_subdirectory("${THIRD_PARTY_DIR}/json/")
 add_subdirectory("${THIRD_PARTY_DIR}/nativefiledialog-cmake/")
 add_subdirectory("${THIRD_PARTY_DIR}/xcsrlib/")
 add_subdirectory("${THIRD_PARTY_DIR}/freetype2/")
-add_subdirectory("${THIRD_PARTY_DIR}/SplineLibrary/")
 
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 
