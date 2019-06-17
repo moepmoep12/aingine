@@ -101,6 +101,7 @@ namespace AIngine::Physics {
 		//query data
 
 		glm::vec2 GetVelocity() const;
+		float GetInertia() const;
 
 		PhysicsComponent* GetOtherCollider();
 

@@ -301,6 +301,13 @@ namespace AIngine::Physics {
 		return glm::vec2(vel.x, vel.y);
 	}
 
+	float PhysicsComponent::GetInertia() const
+	{
+		if (m_body)
+			return m_body->GetInertia();
+		return 0.0f;
+	}
+
 
 	void PhysicsComponent::ApplyForce(const glm::vec2 & force, const glm::vec2 & point)
 	{
