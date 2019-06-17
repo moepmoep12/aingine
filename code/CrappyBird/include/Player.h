@@ -11,7 +11,7 @@ namespace CrappyBird {
 		virtual void OnStart() override;
 		virtual void Update(float deltatime) override;
 		virtual void OnEnd() override;
-		virtual void OnEvent(AIngine::Events::EventData& e) override;
+		virtual void OnEventData(AIngine::Events::EventData& e) override;
 		virtual void OnGUI() override;
 		virtual ~Player();
 
@@ -22,11 +22,17 @@ namespace CrappyBird {
 
 	private:
 		void OnCollision(PhysicsComponent* other);
+		void SpawnParticle(Particle& particle, const glm::vec2& pos);
+		void UpdateParticle(Particle& particle);
 
 		AIngine::Physics::PhysicsComponent* m_physBody;
 		PickUpFactory* m_pickUpFactory;
 		float m_originalGameSpeed = 0;
 		float m_distanceTraveled = 0;
 		glm::vec2 m_spawnPos;
+
+		ParticleEmitter* m_emitter;
+		AIngine::ParticleEmitter::SpawnParticleHandler OnSpawnParticleHandler;
+		AIngine::ParticleEmitter::UpdateParticleHandler OnUpdateParticleHandler;
 	};
 }

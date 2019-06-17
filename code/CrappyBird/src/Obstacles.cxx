@@ -28,7 +28,7 @@ namespace CrappyBird {
 		for (auto& child : GetOwner()->GetChildren()) {
 			if (child->IsActive()) {
 				child->Translate(glm::vec2(-CrappyBird::s_GameSpeed * deltatime, 0), true);
-				if (child->GetWorldPosition().x < -2 * child->GetComponent<Obstacle>()->GetRectangle().width) {
+				if (child->GetWorldPosition().x < -child->GetComponent<Obstacle>()->GetRectangle().width) {
 					child->RemoveComponent<Obstacle>();
 					child->SetActive(false);
 				}

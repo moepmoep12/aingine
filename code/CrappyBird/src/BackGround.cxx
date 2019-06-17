@@ -20,11 +20,6 @@ namespace CrappyBird {
 		soundComp->Stop(0);
 	}
 
-	void BackGround::OnEvent(AIngine::Events::EventData & e)
-	{
-	}
-
-
 	void BackGround::Update(float deltatime)
 	{
 		static const glm::vec4 bounds = AIngine::World::GetBounds();

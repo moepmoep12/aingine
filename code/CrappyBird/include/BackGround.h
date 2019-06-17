@@ -8,7 +8,6 @@ namespace CrappyBird {
 		virtual void OnStart() override;
 		virtual void OnEnd() override;
 		virtual void Update(float deltatime) override;
-		virtual void OnEvent(AIngine::Events::EventData& e) override;
 		virtual ~BackGround();
 	};
 }

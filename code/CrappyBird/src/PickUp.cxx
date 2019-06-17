@@ -37,26 +37,6 @@ namespace CrappyBird {
 		}
 	}
 
-	//void PickUpFactory::SpawnPickUpInArea(const AIngine::Structures::RectangleI & worldRect)
-	//{
-	//	GameObject* availableObj = GetAvailableGameObject();
-	//	if (availableObj) {
-	//		glm::vec2 min = worldRect.GetPosition() + glm::vec2(2 * pickUpRadius);
-	//		glm::vec2 bottomRight = worldRect.GetMax() + glm::vec2(-2 * pickUpRadius, -2 * pickUpRadius);
-
-	//		float x = min.x + static_cast <float> (rand()) / static_cast <float> (RAND_MAX / bottomRight.x);
-	//		float y = min.y + static_cast <float> (rand()) / static_cast <float> (RAND_MAX / bottomRight.y);
-	//		glm::vec2 spawnPos = glm::vec2(x, y);
-
-	//		availableObj->SetLocalPosition(spawnPos);
-	//		AddPickUpScript(*availableObj);
-	//		availableObj->SetActive(true);
-	//	}
-	//	else {
-
-	//	}
-	//}
-
 	GameObject* PickUpFactory::GetAvailableGameObject()
 	{
 		for (auto& child : GetOwner()->GetChildren()) {

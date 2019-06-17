@@ -17,5 +17,6 @@ namespace CrappyBird {
 		GetOwner()->SetLocalPosition(rect.GetCenter());
 		GetOwner()->GetComponent<Sprite>()->SetLocalWorldSize(glm::vec2(rect.width, rect.height));
 		GetOwner()->GetComponent<PhysicsComponent>()->AdjustBoxShape(rect.width, rect.height);
+		m_rect = rect;
 	}
 }
