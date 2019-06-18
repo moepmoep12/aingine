@@ -23,17 +23,16 @@ namespace AIngine {
 		inline  AIngine::Rendering::Texture2D&  GetTexture() { return m_texture; }
 		inline void SetTexture(const AIngine::Rendering::Texture2D& texture) { m_texture = texture; SetName(texture.FileName); }
 
-		inline glm::vec3 GetColor() const { return m_color; }
-		inline void SetColor(const glm::vec3& color) { m_color = color;; }
+		inline glm::vec4 GetColor() const { return m_color; }
+		inline void SetColor(const glm::vec4& color) { m_color = color;; }
 
-		inline float GetAlpha() const { return m_alpha;; }
-		inline void SetAlpha(GLfloat alpha) { m_alpha = alpha; }
+		inline float GetAlpha() const { return m_color.w;; }
+		inline void SetAlpha(GLfloat alpha) { m_color.w = alpha; }
 
 		virtual ~Sprite();
 
 	private:
-		float m_alpha = 1.0f;
-		glm::vec3 m_color = glm::vec3(1);
+		glm::vec4 m_color = glm::vec4(1);
 		glm::vec2 m_localWorldSize = glm::vec2(0);
 		glm::vec2 m_parallaxFactor = glm::vec2(1);
 		AIngine::Rendering::Texture2D m_texture;

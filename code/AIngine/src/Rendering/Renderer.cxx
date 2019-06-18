@@ -96,7 +96,7 @@ namespace AIngine::Rendering {
 
 		// configure shader
 		shader->SetMatrix4(1 /*model*/, m_modelMatrix);
-		shader->SetVector3f(5 /*spriteColor*/, sprite.GetColor());
+		shader->SetVector4f(5 /*spriteColor*/, sprite.GetColor());
 
 		// draw
 		glActiveTexture(GL_TEXTURE0);

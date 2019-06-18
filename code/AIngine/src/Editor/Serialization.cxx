@@ -247,7 +247,7 @@ namespace AIngine::Editor::Serialization {
 		texture.Filter_Max = (*j)[AttributeNames::TEXTURE_FILTER_MAX];
 		texture.Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
 		sprite->SetLocalWorldSize(size);
-		sprite->SetColor(color);
+		sprite->SetColor(glm::vec4(color, (*j)[AttributeNames::SPRITE_ALPHA]));
 		sprite->SetParallaxFactor(parallax);
 
 		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
@@ -482,6 +482,7 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::SPRITE_COLOR_R] = sprite.GetColor().x;
 		j[AttributeNames::SPRITE_COLOR_G] = sprite.GetColor().y;
 		j[AttributeNames::SPRITE_COLOR_B] = sprite.GetColor().z;
+		j[AttributeNames::SPRITE_ALPHA] = sprite.GetColor().w;
 		j[AttributeNames::SPRITE_SIZE_X] = sprite.GetLocalWorldSize().x;
 		j[AttributeNames::SPRITE_SIZE_Y] = sprite.GetLocalWorldSize().y;
 		j[AttributeNames::SPRITE_PARALLAX_X] = sprite.GetParallaxFactor().x;

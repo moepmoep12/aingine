@@ -16,7 +16,6 @@ namespace AIngine {
 		copy->m_localWorldSize = m_localWorldSize;
 		copy->m_parallaxFactor = m_parallaxFactor;
 		copy->m_color = m_color;
-		copy->m_alpha = m_alpha;
 		return std::move(copy);
 	}
 }

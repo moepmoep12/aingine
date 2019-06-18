@@ -18,7 +18,7 @@ namespace AIngine::Editor {
 				ImGui::Separator();
 				static float dragSpeed = 0.1f;
 				float* size[] = { &spriteComponent->m_localWorldSize.x ,&spriteComponent->m_localWorldSize.y };
-				float* color[] = { &spriteComponent->m_color.x,&spriteComponent->m_color.y ,&spriteComponent->m_color.z };
+				float* color[] = { &spriteComponent->m_color.x,&spriteComponent->m_color.y ,&spriteComponent->m_color.z, &spriteComponent->m_color.w };
 				float* parallax[] = { &spriteComponent->m_parallaxFactor.x, &spriteComponent->m_parallaxFactor.y };
 
 				// Title
@@ -47,7 +47,7 @@ namespace AIngine::Editor {
 
 				// Color
 				ImGui::Indent();
-				ImGui::ColorEdit3("Color", *color, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
+				ImGui::ColorEdit4("Color", *color, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
 				ImGui::Unindent();
 				ImGui::DragFloat2("Parallax Factor", *parallax, 0.02f, -100.0f, 100.0f);
 
