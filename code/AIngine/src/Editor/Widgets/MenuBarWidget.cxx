@@ -97,11 +97,6 @@ namespace AIngine::Editor {
 				ImGui::EndMenu();
 			}
 
-			static bool play = AIngine::Editor::Editor::GetIsInPlayMode();
-			if (ImGui::Checkbox("Play", &play)) {
-				AIngine::Editor::Editor::SetIsInPlayMode(play);
-			}
-
 			ImGui::EndMainMenuBar();
 		}
 

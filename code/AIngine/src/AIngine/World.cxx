@@ -4,7 +4,7 @@
 #include "AIngine/Physics.h"
 #include "Structures/SceneGraph.h"
 #include "Rendering/PhysicsRenderer.h"
-#include "Editor/Editor.h"
+#include "Application.h"
 
 
 namespace AIngine {
@@ -69,7 +69,7 @@ namespace AIngine {
 	{
 		m_sceneGraph->OnUpdate(delta);
 
-		if ((AIngine::Editor::Editor::GetIsInPlayMode()))
+		if ((AIngine::Application::IsRunning()))
 			m_physicsWorld->Step(1.0f / 60.0f, 8, 3);
 
 		if (m_isPhysicsDebugDrawn)

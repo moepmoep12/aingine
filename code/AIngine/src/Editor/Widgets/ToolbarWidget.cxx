@@ -22,6 +22,11 @@ namespace AIngine::Editor {
 		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["pause"] = AIngine::Rendering::Texture2D(*bitmap);
 
+		// stopIcon
+		path = "assets/Intellgine/textures/Editor/stop.png";
+		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
+		m_Icons["stop"] = AIngine::Rendering::Texture2D(*bitmap);
+
 		// openIcon
 		path = "assets/Intellgine/textures/Editor/open.png";
 		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
@@ -70,15 +75,42 @@ namespace AIngine::Editor {
 		ImGui::Columns(1);
 
 		bool isInPlayMode = AIngine::Editor::Editor::GetIsInPlayMode();
-		std::string icon = isInPlayMode ? "pause" : "play";
+		bool isGamePaused = AIngine::Editor::Editor::IsPaused();
+		std::string icon;
+		// game hasn't started yet or is paused
+		if (!isInPlayMode && !isGamePaused || isInPlayMode && isGamePaused)
+			icon = "play";
+		// game is running 
+		if (isInPlayMode && !isGamePaused)
+			icon = "pause";
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 10));
 
 		// enter/exit playmode
 		if (ImGui::ImageButton((ImTextureID)m_Icons[icon].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
 		{
-			AIngine::Editor::Editor::SetIsInPlayMode(!isInPlayMode);
+			// start game
+			if (!isInPlayMode && !isGamePaused)
+				AIngine::Editor::Editor::SetIsInPlayMode(true);
+
+			// resume
+			if (isInPlayMode && isGamePaused)
+				AIngine::Editor::Editor::SetPaused(false);
+
+			// pause
+			if (isInPlayMode && !isGamePaused)
+				AIngine::Editor::Editor::SetPaused(true);
 		}
+
+		ImVec4 stopTintColor = isInPlayMode ? ImVec4(1, 1, 1, 1) : ImVec4(0.2, 0.2, 0.2, 1);
+		if (ImGui::ImageButton((ImTextureID)m_Icons["stop"].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, stopTintColor))
+		{
+			if (isInPlayMode) {
+				AIngine::Editor::Editor::SetIsInPlayMode(false);
+				AIngine::Editor::Editor::SetPaused(false);
+			}
+		}
+
 
 		// create new scene
 		if (ImGui::ImageButton((ImTextureID)m_Icons["new"].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))

@@ -75,8 +75,13 @@ namespace AIngine::Editor {
 
 		virtual ~Editor() override;
 
+		static inline bool IsGameRunning() { if (s_instance) return s_instance->m_isInPlayMode && !s_instance->m_isGamePaused; else return true; }
+
 		static inline bool GetIsInPlayMode() { if (s_instance) return s_instance->m_isInPlayMode; else return true; }
 		static void SetIsInPlayMode(bool value);
+
+		static inline bool IsPaused() { if (s_instance) return s_instance->m_isGamePaused; else return false; }
+		static inline void SetPaused(bool pause) { if (s_instance) s_instance->m_isGamePaused = pause; }
 
 		static inline std::string GetCurrentSceneFilePath() { if (s_instance) return s_instance->m_currentSceneFilePath; else return std::string(); }
 		//static void SetCurrentSceneFilePath(const std::string& path) { if (s_instance) s_instance->m_currentSceneFilePath = path; }
@@ -122,6 +127,7 @@ namespace AIngine::Editor {
 		std::vector<AIngine::GameObject*> m_selectedObjects;
 		AIngine::Events::ViewportChangedEvent OnViewportChangedEvent;
 		bool m_isInPlayMode = false;
+		bool m_isGamePaused = false;
 		std::string m_currentSceneFilePath;
 	};
 }

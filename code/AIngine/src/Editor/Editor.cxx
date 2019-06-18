@@ -422,7 +422,7 @@ namespace AIngine::Editor {
 	{
 		std::stringstream ss;
 		ss << "FPS: " << (int)(1.0f / delta);
-		AIngine::Graphics::Text(ss.str().c_str(), glm::vec2(0, 0), glm::vec2(0.75));
+		AIngine::Graphics::Text(ss.str().c_str(), glm::vec2(0, 5), glm::vec2(0.5));
 	}
 
 	void Editor::DrawFpsGraph(float delta) const

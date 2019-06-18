@@ -157,7 +157,7 @@ namespace AIngine {
 			// handle user input
 			m_window->PollInput();
 
-			if ((AIngine::Editor::Editor::GetIsInPlayMode()))
+			if ((AIngine::Editor::Editor::IsGameRunning()))
 				// update game
 				OnAppUpdate();
 
@@ -211,7 +211,7 @@ namespace AIngine {
 				break;
 		}
 
-		if ((AIngine::Editor::Editor::GetIsInPlayMode()))
+		if ((AIngine::Editor::Editor::IsGameRunning()))
 			// propagate it to the game
 			OnAppEvent(e);
 
@@ -261,7 +261,7 @@ namespace AIngine {
 
 	bool Application::IsRunning()
 	{
-		return AIngine::Editor::Editor::GetIsInPlayMode();
+		return AIngine::Editor::Editor::IsGameRunning();
 	}
 
 	void Application::RegisterCallbacks()
