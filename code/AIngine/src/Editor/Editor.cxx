@@ -226,6 +226,8 @@ namespace AIngine::Editor {
 		m_widgets.push_back(new CameraWidget(*m_app.m_camera));
 		m_widgets.push_back(new MenubarWidget());
 		m_widgets.push_back(new ToolbarWidget());
+
+		AIngine::Editor::Serialization::Serializer::LoadEditorSettings();
 	}
 
 	AIngine::Structures::RectangleI Editor::CalculateViewportRect(const glm::vec2& windowSize) const
@@ -425,6 +427,11 @@ namespace AIngine::Editor {
 
 	void Editor::DrawFpsGraph(float delta) const
 	{
+		static bool firstFrame = true;
+		if (firstFrame) {
+			firstFrame = false;
+			return;
+		}
 		static std::vector<float> fpsqueue;
 		static float max = 0;
 		struct Funcs
@@ -460,12 +467,15 @@ namespace AIngine::Editor {
 
 	Editor::~Editor()
 	{
-		s_instance = nullptr;
 
 		for (unsigned int i = 0; i < m_widgets.size(); i++) {
 			delete m_widgets[i];
 		}
 		m_widgets.clear();
+
+		AIngine::Editor::Serialization::Serializer::SaveEditorSettings();
+
+		s_instance = nullptr;
 	}
 
 	void Editor::SetIsInPlayMode(bool value)

@@ -29,6 +29,12 @@ namespace AIngine::Editor::Serialization {
 		const char* WORLD_TOPLEFT = "topleft";
 		const char* WORLD_TOPRIGHT = "topRight";
 
+		// Editor settings
+		const char* EDITOR_PHYSRENDERING = "physrendering";
+		const char* EDITOR_SHOWFPS = "showFPS";
+		const char* EDITOR_SHOWFPSGRAPH = "showFPSGraph";
+		const char* EDITOR_OUTLINEANIM = "outlineAnimation";
+
 		// GameObject
 		const char* GAMEOBJECT_ACTIVE = "a_active";
 		const char* GAMEOBJECT_NAME = "a_name";
@@ -181,6 +187,35 @@ namespace AIngine::Editor::Serialization {
 		// all physComponetns have been restored, activate them
 		for (auto comp : physComponents)
 			comp->SetEnabled(true);
+	}
+
+	static const char* editorSettingsPath = "editorSettings.ini";
+
+	void Serializer::SaveEditorSettings()
+	{
+		nlohmann::json j;
+		j[AttributeNames::EDITOR_PHYSRENDERING] = AIngine::World::IsDebugPhysicsDrawn();
+		j[AttributeNames::EDITOR_SHOWFPSGRAPH] = AIngine::Editor::Editor::IsFpsGraphVisible();
+		j[AttributeNames::EDITOR_SHOWFPS] = AIngine::Editor::Editor::IsFramerateDisplayed();
+		std::string result = j.dump();
+		std::ofstream file;
+		file.open(editorSettingsPath);
+		file << result;
+		file.close();
+	}
+
+	void Serializer::LoadEditorSettings()
+	{
+		// open the file
+		std::ifstream file;
+		file.open(editorSettingsPath);
+		if (file.fail()) return;
+		nlohmann::json j = nlohmann::json::parse(file);
+		file.close();
+
+		AIngine::World::SetPhysicsDebugDrawActive(j[AttributeNames::EDITOR_PHYSRENDERING]);
+		AIngine::Editor::Editor::SetShowFpsGraph(j[AttributeNames::EDITOR_SHOWFPSGRAPH]);
+		AIngine::Editor::Editor::SetShowFramerate(j[AttributeNames::EDITOR_SHOWFPS]);
 	}
 
 	AIngine::GameObject * Serializer::RestoreGameObject(const nlohmann::json* const j, AIngine::GameObject * parent)

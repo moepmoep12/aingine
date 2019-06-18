@@ -27,6 +27,8 @@ namespace AIngine::Editor::Serialization
 	public:
 		static void SerializeSceneGraph(const std::string& path);
 		static void DeserializeSceneGraph(const std::string& path);
+		static void SaveEditorSettings();
+		static void LoadEditorSettings();
 
 	private:
 		static AIngine::GameObject* RestoreGameObject(const nlohmann::json* const j, AIngine::GameObject* parent);
