@@ -178,9 +178,10 @@ namespace AIngine {
 
 		friend class AIngine::Editor::TransformComponentWidget;
 
+		// private Constructor to be used by the SceneGraph
 		GameObject(GameObject* parent, const std::string& name);
 
-
+		// The UpdateTraverser traverses the scenegraph to update every active gameobject & component
 		class UpdateTraverser : private Traverser {
 		public:
 			UpdateTraverser(float deltaTime);

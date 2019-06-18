@@ -4,9 +4,6 @@
 #include <random>
 #include <time.h>
 
-#include <chrono>
-#include"AIngine/Graphics.h"
-
 namespace AIngine {
 
 	ParticleEmitter::ParticleEmitter()
@@ -147,8 +144,6 @@ namespace AIngine {
 	{
 		if (!AIngine::Application::IsRunning()) return;
 
-		std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-
 		for (int i = 0; i < m_amount; ++i)
 		{
 			Particle& p = this->m_particles[i];
@@ -158,28 +153,14 @@ namespace AIngine {
 				UpdateParticleEvent(p);
 			}
 		}
-
-		std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
-
-		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
-		AIngine::Graphics::Text("ParticleUpdate: " + std::to_string((int)duration), glm::vec2(5, 30), glm::vec2(1), glm::vec3(0, 1, 0));
 	}
 
 	void ParticleEmitter::Update(float delta, int particlesToSpawn)
 	{
-		std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-
 		for (int i = 0; i < particlesToSpawn; i++) {
 			int availableParticle = GetAvailableParticle();
 			SpawnParticleEvent(m_particles[availableParticle], m_localSpawnPosition);
 		}
-
-		std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
-
-		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
-		AIngine::Graphics::Text("SpawnParticle: " + std::to_string((int)duration), glm::vec2(5, 70), glm::vec2(1), glm::vec3(0, 1, 0));
 	}
 
 	int s_lastParticleUsed = 0;
