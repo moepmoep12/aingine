@@ -35,7 +35,7 @@ namespace AIngine::Editor {
 				ImGui::NewLine();
 
 				int amount = emitter->GetAmount();
-				if(ImGui::SliderInt("Particle Amount", &amount, 1, 10000)) 
+				if(ImGui::InputInt("Particle Amount", &amount)) 
 				{
 					emitter->SetAmount(amount);
 				}

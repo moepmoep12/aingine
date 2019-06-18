@@ -9,6 +9,10 @@
 
 namespace AIngine {
 
+	namespace Editor {
+		class ParticleEmitterWidget;
+	}
+
 	struct Particle {
 		// Rotation in radians
 		float Lifetime, Rotation, AngularVelocity;
@@ -25,6 +29,7 @@ namespace AIngine {
 	class ParticleEmitter : public Component {
 	public:
 		ParticleEmitter();
+		virtual ~ParticleEmitter();
 
 		inline  AIngine::Rendering::Texture2D&  GetTexture() { return m_texture; }
 		inline void SetTexture(const AIngine::Rendering::Texture2D& texture) { m_texture = texture; SetName(texture.FileName); }
@@ -50,10 +55,20 @@ namespace AIngine {
 
 		GLuint BlendFunc = GL_ONE;
 
+		GLuint m_vao;
+		GLuint m_offsetVBO;
+		GLuint m_sizeVBO;
+		GLuint m_rotationVBO;
+		GLuint m_ColorVBO;
+
+		enum { maxParticles = 10000 };
+
 	protected:
 		int GetAvailableParticle() const;
 
 	private:
+		friend class AIngine::Editor::ParticleEmitterWidget;
+
 		bool m_startCalled = false;
 		AIngine::Rendering::Texture2D m_texture;
 		std::vector<Particle> m_particles;

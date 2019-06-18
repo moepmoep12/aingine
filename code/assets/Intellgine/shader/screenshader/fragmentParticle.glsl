@@ -1,11 +1,11 @@
 #version 430 core
 in vec2 TexCoords;
+in vec4 fColor;
 out vec4 color;
 
-layout (location = 4) uniform sampler2D image;
-layout (location = 5) uniform vec4 Color;
+layout (location = 8) uniform sampler2D image;
 
 void main()
 {    
-    color = Color * texture(image, TexCoords);
+    color = fColor * texture(image, TexCoords);
 } 

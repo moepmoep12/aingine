@@ -28,7 +28,7 @@ namespace AIngine::Rendering {
 		GLShaderProgram* m_shader;
 		std::vector<glm::mat4> m_matrixStack;
 		glm::mat4 m_modelMatrix = glm::mat4(1.0f);
-		unsigned int m_vao;
+		//unsigned int m_vao;
 		float m_additiveRotation = 0.0f;
 	};
 }

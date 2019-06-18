@@ -99,6 +99,9 @@ namespace AIngine::Editor::Serialization {
 		const char* SOUND_VLEFT = "volumeLeft";
 		const char* SOUND_VRIGHT = "volumeRight";
 
+		// ParticleEmitter
+		const char* PARTICLEEMITTER_AMOUNT = "amount";
+
 	}
 
 	void Serializer::SerializeSceneGraph(const std::string & path)
@@ -265,6 +268,8 @@ namespace AIngine::Editor::Serialization {
 		texture.Filter_Max = (*j)[AttributeNames::TEXTURE_FILTER_MAX];
 		texture.Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
 		texture.Generate(bitmap);
+
+		emitter->SetAmount((*j)[AttributeNames::PARTICLEEMITTER_AMOUNT]);
 
 		emitter->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
@@ -557,6 +562,7 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::TEXTURE_FILTER_MIN] = emitter.GetTexture().Filter_Min;
 		j[AttributeNames::TEXTURE_FILTER_MAX] = emitter.GetTexture().Filter_Max;
 		j[AttributeNames::TEXTURE_IMAGEFORMAT] = emitter.GetTexture().Image_Format;
+		j[AttributeNames::PARTICLEEMITTER_AMOUNT] = emitter.GetAmount();
 
 		return j;
 	}
