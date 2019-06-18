@@ -21,20 +21,25 @@
 #include "Sounds.h"
 #include "World.h"
 #include "AIngine/Math.h"
+#include "Rendering/texture.h"
 
 #include <glm/glm.hpp>
 
+/* Engine systems*/
 
 typedef AIngine::SoundEngine SoundEngine;
 typedef AIngine::Sound Sound;
 typedef AIngine::Graphics Graphics;
 typedef AIngine::Input Input;
 
+/* Assets */
+
 typedef AIngine::Assets::AssetRegistry Assets;
 typedef AIngine::Assets::BitmapAsset BitmapAsset;
 typedef AIngine::Assets::SoundAsset SoundAsset;
 typedef AIngine::Assets::FontAsset FontAsset;
 
+/* Component typedefs*/
 
 typedef AIngine::GameObject GameObject;
 typedef AIngine::Physics::PhysicsComponent PhysicsComponent;
@@ -42,6 +47,10 @@ typedef AIngine::Sprite Sprite;
 typedef AIngine::Script Script;
 typedef AIngine::SoundComponent SoundComponent;
 typedef AIngine::ParticleEmitter ParticleEmitter;
+
+/* Misc*/
+
 typedef AIngine::Particle Particle;
+typedef AIngine::Rendering::Texture2D Texture2D;
 
 
