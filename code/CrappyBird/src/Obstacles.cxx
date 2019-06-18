@@ -241,7 +241,12 @@ namespace CrappyBird
 			}
 		}
 
-		//static std::normal_distribution<float> distribution(1.0f, 1.0f);
+		static std::normal_distribution<float> pickUpDistribution(0.0f, 1.0f);
+
+
+		int pickUpIndex = rand() % (path.size() - 1);
+		m_pickUpFactory->SpawnPickUp(path[pickUpIndex]->rectangle.GetCenter());
+
 
 		//float spawnAmount = distribution(generator);
 

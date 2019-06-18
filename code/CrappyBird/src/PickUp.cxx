@@ -32,7 +32,7 @@ namespace CrappyBird {
 		GameObject* availableObj = GetAvailableGameObject();
 		if (availableObj) {
 			availableObj->SetLocalPosition(pos);
-			AddPickUpScript(*availableObj);
+			AddEffect(*availableObj->GetComponent<PickUp>());
 			availableObj->SetActive(true);
 		}
 	}
@@ -46,174 +46,68 @@ namespace CrappyBird {
 		return nullptr;
 	}
 
-	void PickUpFactory::AddPickUpScript(GameObject & obj)
+	void PickUpFactory::AddEffect(PickUp & obj)
 	{
-		//int value = rand() % 3;
+		int value = rand() % 2;
 
-		//switch (value) {
-		//case 0:
-		//	obj.AddComponent<SpeedPickUp>();
-		//	break;
+		switch (value) {
+		case 0:
+			obj.m_Effect = SpeedEffect();
+			break;
 
-		//case 1:
-		//	obj.AddComponent<SlowSpeedPickUp>();
-		//	break;
+		case 1:
+			obj.m_Effect = SlowEffect();
+			break;
 
-		//case 2:
-		//	if (AIngine::World::GetGameObject("PlayerRocket")->GetLocalScale().x == 1)
-		//		obj.AddComponent<ShrinkPickUp>();
-		//	break;
-		//}
+
+		}
+
+		Sprite* sprite = obj.GetOwner()->GetComponent<Sprite>();
+		sprite->SetTexture(obj.m_Effect.Texture);
+		sprite->SetColor(obj.m_Effect.Color);
+		obj.GetOwner()->SetRotation(obj.m_Effect.Rotation);
 	}
 
 	/******************************** PICKUP ******************************************/
 
 
+	PickUp::PickUp()
+	{
+		SetName(typeid(*this).name());
+	}
+
 	void PickUp::OnStart()
 	{
+		// create event handler
 		m_collisionHandler = AIngine::Events::EventHandler<void, PhysicsComponent*>(std::bind(&PickUp::OnCollision, this, std::placeholders::_1));
+		// register callback
 		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin += m_collisionHandler;
-		GetOwner()->SetActive(true);
-		GetOwner()->GetComponent<Sprite>()->SetEnabled(true);
-		GetOwner()->GetComponent<PhysicsComponent>()->SetEnabled(true);
-		Start();
+
+		m_player = AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>();
+	}
+
+	void PickUp::OnEnd()
+	{
+		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin -= this->m_collisionHandler;
+		GetOwner()->SetActive(false);
 	}
 
 	void PickUp::Update(float deltatime)
 	{
 		GetOwner()->Translate(glm::vec2(-CrappyBird::s_GameSpeed  *deltatime, 0), true);
-		if (GetOwner()->GetLocalPosition().x <= -pickUpRadius) {
-			OnFinish();
+
+		// the pickUp is now beyond the player
+		if (GetOwner()->GetLocalPosition().x <= -pickUpRadius)
+		{
+			GetOwner()->SetActive(false);
 		}
-	}
-
-	void PickUp::OnFinish()
-	{
-		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin -= this->m_collisionHandler;
-		GetOwner()->SetActive(false);
-		Destroy();
-	}
-
-	void PickUp::ResetSprite()
-	{
-		GetOwner()->GetComponent<Sprite>()->SetLocalWorldSize(glm::vec2(2 * pickUpRadius));
-		GetOwner()->GetComponent<Sprite>()->SetColor(glm::vec4(1));
-		GetOwner()->SetRotation(0);
-		GetOwner()->GetComponent<Sprite>()->SetTexture(AIngine::Rendering::Texture2D(Assets::Load<BitmapAsset>("assets/Intellgine/textures/Circle.png")->GetBitmap()));
 	}
 
 	void PickUp::OnCollision(AIngine::Physics::PhysicsComponent * other)
 	{
 		if (other->GetOwner()->GetName() == "PlayerRocket") {
-			GetOwner()->GetComponent<PhysicsComponent>()->SetEnabled(false);
-			GetOwner()->GetComponent<Sprite>()->SetEnabled(false);
-			this->OnPickUp();
+			m_player->AddEffect(m_Effect);
+			GetOwner()->SetActive(false);
 		}
-	}
-
-	/******************************** SPEED PICKUP ******************************************/
-
-	void SpeedPickUp::OnPickUp()
-	{
-		Active = true;
-		CrappyBird::s_GameSpeed += 2.0f;
-		DEBUG_INFO("Increased speed to {0}", CrappyBird::s_GameSpeed);
-	}
-
-	void SpeedPickUp::Update(float deltatime)
-	{
-		if (Active) {
-			Duration -= deltatime;
-			if (Duration <= 0) {
-				CrappyBird::s_GameSpeed -= 2.0f;
-				DEBUG_INFO("Reduced speed to {0}", CrappyBird::s_GameSpeed);
-				OnFinish();
-			}
-		}
-		else
-			PickUp::Update(deltatime);
-	}
-
-	void SpeedPickUp::Start()
-	{
-		ResetSprite();
-		GetOwner()->GetComponent<Sprite>()->SetTexture(AIngine::Rendering::Texture2D(Assets::Load<BitmapAsset>("assets/CrappyBird/textures/fast-forward.png")->GetBitmap()));
-	}
-
-	/******************************** SLOWSPEED PICKUP ******************************************/
-
-	void SlowSpeedPickUp::OnPickUp()
-	{
-		Active = true;
-		if (CrappyBird::s_GameSpeed > CrappyBird::s_originalGameSpeed - m_value) {
-			CrappyBird::s_GameSpeed -= m_value;
-			m_appliedReduction = m_value;
-		}
-		GetOwner()->GetComponent<Sprite>()->SetEnabled(false);
-	}
-
-	void SlowSpeedPickUp::Update(float deltatime)
-	{
-		if (Active) {
-			Duration -= deltatime;
-			if (Duration <= 0) {
-				CrappyBird::s_GameSpeed += m_appliedReduction;
-				OnFinish();
-			}
-		}
-		else
-			PickUp::Update(deltatime);
-	}
-
-	void SlowSpeedPickUp::Start()
-	{
-		ResetSprite();
-		GetOwner()->GetComponent<Sprite>()->SetTexture(AIngine::Rendering::Texture2D(Assets::Load<BitmapAsset>("assets/CrappyBird/textures/fast-forward.png")->GetBitmap()));
-		GetOwner()->GetComponent<Sprite>()->SetColor(glm::vec4(1, 0, 1,1));
-		GetOwner()->SetRotation(M_PI);
-	}
-
-	/******************************** ShrinkPickUp PICKUP ******************************************/
-
-	void ShrinkPickUp::OnPickUp()
-	{
-		Active = true;
-		GetOwner()->GetComponent<Sprite>()->SetEnabled(false);
-	}
-
-	void ShrinkPickUp::Update(float deltatime)
-	{
-		if (Active)
-		{
-			m_currentLerpTime += deltatime * direction;
-
-			if (direction == 1 && m_currentLerpTime > AnimDuration) {
-				m_currentEffectDuration += deltatime;
-				if (m_currentEffectDuration >= EffectDuration) {
-					m_currentLerpTime = AnimDuration;
-					direction = -1;
-				}
-				else return;
-			}
-
-			if (direction == -1 && m_currentLerpTime < 0) {
-				AIngine::World::GetGameObject("PlayerRocket")->SetLocalScale(glm::vec2(1));
-				OnFinish();
-				return;
-			}
-
-			float t = 1.0f + AIngine::Math::SinErp(m_currentLerpTime / AnimDuration);
-
-			AIngine::World::GetGameObject("PlayerRocket")->SetLocalScale(glm::vec2(t));
-		}
-
-		else {
-			PickUp::Update(deltatime);
-		}
-	}
-
-	void ShrinkPickUp::Start()
-	{
-		ResetSprite();
 	}
 }
