@@ -7,7 +7,9 @@
 namespace CrappyBird {
 	class Obstacles : public AIngine::Script {
 	public:
-		Obstacles() { SetName(typeid(*this).name()); }
+		Obstacles();
+		virtual ~Obstacles();
+
 		virtual void OnStart() override;
 		virtual void OnEnd() override;
 		virtual void Update(float deltatime) override;
@@ -20,6 +22,7 @@ namespace CrappyBird {
 		int m_lastObstacleHeight = -1;
 
 	private:
+		std::vector<AIngine::Rendering::Texture2D> m_obstacleTextures;
 		AIngine::Events::EventHandler<void, AIngine::Structures::RectangleI&> m_newScreenHandler;
 		Player* m_player;
 		PickUpFactory* m_pickUpFactory;

@@ -36,7 +36,7 @@ namespace CrappyBird {
 	{
 		GetOwner()->GetComponent<PhysicsComponent>()->SetFixedRotation(true);
 		m_spawnPos = GetOwner()->GetLocalPosition();
-		m_physBody = m_owner->GetComponent<AIngine::Physics::PhysicsComponent>();
+		m_physBody = GetOwner()->GetComponent<AIngine::Physics::PhysicsComponent>();
 		m_collisionHandler = AIngine::Events::EventHandler<void, PhysicsComponent*>(std::bind(&Player::OnCollision, this, std::placeholders::_1));
 		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin += m_collisionHandler;
 

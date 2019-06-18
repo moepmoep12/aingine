@@ -48,22 +48,22 @@ namespace CrappyBird {
 
 	void PickUpFactory::AddPickUpScript(GameObject & obj)
 	{
-		int value = rand() % 3;
+		//int value = rand() % 3;
 
-		switch (value) {
-		case 0:
-			obj.AddComponent<SpeedPickUp>();
-			break;
+		//switch (value) {
+		//case 0:
+		//	obj.AddComponent<SpeedPickUp>();
+		//	break;
 
-		case 1:
-			obj.AddComponent<SlowSpeedPickUp>();
-			break;
+		//case 1:
+		//	obj.AddComponent<SlowSpeedPickUp>();
+		//	break;
 
-		case 2:
-			if (AIngine::World::GetGameObject("PlayerRocket")->GetLocalScale().x == 1)
-				obj.AddComponent<ShrinkPickUp>();
-			break;
-		}
+		//case 2:
+		//	if (AIngine::World::GetGameObject("PlayerRocket")->GetLocalScale().x == 1)
+		//		obj.AddComponent<ShrinkPickUp>();
+		//	break;
+		//}
 	}
 
 	/******************************** PICKUP ******************************************/
@@ -97,7 +97,7 @@ namespace CrappyBird {
 	void PickUp::ResetSprite()
 	{
 		GetOwner()->GetComponent<Sprite>()->SetLocalWorldSize(glm::vec2(2 * pickUpRadius));
-		GetOwner()->GetComponent<Sprite>()->SetColor(glm::vec3(1));
+		GetOwner()->GetComponent<Sprite>()->SetColor(glm::vec4(1));
 		GetOwner()->SetRotation(0);
 		GetOwner()->GetComponent<Sprite>()->SetTexture(AIngine::Rendering::Texture2D(Assets::Load<BitmapAsset>("assets/Intellgine/textures/Circle.png")->GetBitmap()));
 	}
@@ -169,7 +169,7 @@ namespace CrappyBird {
 	{
 		ResetSprite();
 		GetOwner()->GetComponent<Sprite>()->SetTexture(AIngine::Rendering::Texture2D(Assets::Load<BitmapAsset>("assets/CrappyBird/textures/fast-forward.png")->GetBitmap()));
-		GetOwner()->GetComponent<Sprite>()->SetColor(glm::vec3(1, 0, 1));
+		GetOwner()->GetComponent<Sprite>()->SetColor(glm::vec4(1, 0, 1,1));
 		GetOwner()->SetRotation(M_PI);
 	}
 

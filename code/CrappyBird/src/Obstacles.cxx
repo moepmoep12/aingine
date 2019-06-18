@@ -8,7 +8,25 @@
 #include <random>
 #include <time.h>
 
-namespace CrappyBird {
+namespace CrappyBird
+{
+	Obstacles::Obstacles()
+	{
+		SetName(typeid(*this).name());
+		// load obstacle textures
+		for (int i = 1; i < 7; i++) {
+			std::string path;
+			path += "assets/CrappyBird/textures/set8_example_";
+			path += std::to_string(i);
+			path += ".png";
+			m_obstacleTextures.push_back(AIngine::Rendering::Texture2D(Assets::Load<BitmapAsset>(path)->GetBitmap()));
+		}
+	}
+
+	Obstacles::~Obstacles()
+	{
+		m_obstacleTextures.clear();
+	}
 
 	void Obstacles::OnStart()
 	{
@@ -47,9 +65,13 @@ namespace CrappyBird {
 
 	void Obstacles::SpawnObstaclesInArea(const AIngine::Structures::RectangleI & worldRect)
 	{
+		static std::default_random_engine generator;
+		static std::normal_distribution<double> distribution(0, 0.25);
+
 		glm::vec2 playerSize(2, 1);
 		int QuadrantsX = floor((float)worldRect.width / playerSize.x);
 		int QuadrantsY = floor((float)worldRect.height / playerSize.y);
+		int textureIndex = rand() % (m_obstacleTextures.size() - 1);
 
 		if (m_lastObstacleHeight == -1) {
 			m_lastObstacleHeight = rand() % QuadrantsY;
@@ -77,6 +99,8 @@ namespace CrappyBird {
 		std::vector<glm::vec2> Options;
 		std::vector<Quadrant*> path;
 
+		// loop for creating a player path through the next screen
+		// a player path consists of quadrants where no obstacle can spawn
 		while (index < QuadrantsX - 1)
 		{
 			if (index >= 0) {
@@ -147,6 +171,8 @@ namespace CrappyBird {
 			Options.clear();
 		}
 
+		// now spawn the obstacles
+		float rotation = distribution(generator);
 		int pathHeightIndex = 0;
 		float maxHeight = 0;
 		float minHeight = 0;
@@ -172,6 +198,7 @@ namespace CrappyBird {
 			GameObject* obj = GetAvailableObstacle();
 			if (obj) {
 				obj->SetActive(true);
+				obj->GetComponent<Sprite>()->SetTexture(m_obstacleTextures[textureIndex]);
 				obj->AddComponent<Obstacle>()->Set(AIngine::Structures::RectangleF
 					{
 						map[i][0].rectangle.x,
@@ -179,6 +206,7 @@ namespace CrappyBird {
 						map[i][0].rectangle.width,
 						chosenHeight
 					});
+				obj->SetRotation(rotation);
 			}
 		}
 
@@ -201,6 +229,7 @@ namespace CrappyBird {
 			GameObject* obj = GetAvailableObstacle();
 			if (obj) {
 				obj->SetActive(true);
+				obj->GetComponent<Sprite>()->SetTexture(m_obstacleTextures[textureIndex]);
 				obj->AddComponent<Obstacle>()->Set(AIngine::Structures::RectangleF
 					{
 						map[i][0].rectangle.x,
@@ -208,19 +237,19 @@ namespace CrappyBird {
 						map[i][0].rectangle.width,
 						chosenHeight
 					});
+				obj->SetRotation(rotation);
 			}
 		}
 
-		std::normal_distribution<float> distribution(1.0f, 1.0f);
-		std::default_random_engine generator;
+		//static std::normal_distribution<float> distribution(1.0f, 1.0f);
 
-		float spawnAmount = distribution(generator);
+		//float spawnAmount = distribution(generator);
 
-		for (float i = 0; i < spawnAmount; i++) {
-			int pickUpIndex = rand() % (path.size() - 1);
-			m_pickUpFactory->SpawnPickUp(path[pickUpIndex]->rectangle.GetCenter());
-			path.erase(path.begin() + pickUpIndex);
-		}
+		//for (float i = 0; i < spawnAmount; i++) {
+		//	int pickUpIndex = rand() % (path.size() - 1);
+		//	m_pickUpFactory->SpawnPickUp(path[pickUpIndex]->rectangle.GetCenter());
+		//	path.erase(path.begin() + pickUpIndex);
+		//}
 	}
 
 	GameObject * Obstacles::GetAvailableObstacle()
