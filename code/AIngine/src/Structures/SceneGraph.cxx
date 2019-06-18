@@ -87,13 +87,13 @@ namespace AIngine::Structures {
 
 	void SceneGraph::OnUpdate(float delta)
 	{
-		UpdateTraverser updateTraverser(delta);
+		AIngine::GameObject::UpdateTraverser updateTraverser(delta);
 		updateTraverser.Traverse(m_Root);
 	}
 
 	void SceneGraph::OnEvent(AIngine::Events::EventData & e)
 	{
-		EventTraverser et(e);
+		AIngine::GameObject::EventTraverser et(e);
 		et.Traverse(m_Root);
 	}
 
@@ -152,114 +152,65 @@ namespace AIngine::Structures {
 	/********************************** UPDATE TRAVERSER ****************************************/
 
 
-	UpdateTraverser::UpdateTraverser(float deltaTime) : m_deltaTime(deltaTime)
-	{
-	}
+	//UpdateTraverser::UpdateTraverser(float deltaTime) : m_deltaTime(deltaTime)
+	//{
+	//}
 
-	UpdateTraverser::~UpdateTraverser()
-	{
-	}
+	//UpdateTraverser::~UpdateTraverser()
+	//{
+	//}
 
-	bool UpdateTraverser::Traverse(GameObject * root)
-	{
-		return	root->Accept(*this);
-	}
+	//bool UpdateTraverser::Traverse(GameObject * root)
+	//{
+	//	return	root->Accept(*this);
+	//}
 
-	bool UpdateTraverser::Enter(GameObject & node)
-	{
-		auto it = node.GetComponents().begin();
-		while (it != node.GetComponents().end()) {
-			Component* comp = *it._Ptr;
-			if (comp->IsActive()) {
-				comp->OnUpdate(m_deltaTime);
-			}
+	//bool UpdateTraverser::Enter(GameObject & node)
+	//{
+	//	auto it = node.GetComponents().begin();
+	//	while (it != node.GetComponents().end()) {
+	//		Component* comp = *it._Ptr;
+	//		if (comp->IsActive()) {
+	//			comp->OnUpdate(m_deltaTime);
+	//		}
 
-			if (comp->m_wantsDestroy) {
-				it = node.m_components.erase(it);
-				delete comp;
-			}
-			else {
-				it++;
-			}
-		}
-		return true;
-	}
+	//		if (comp->m_wantsDestroy) {
+	//			it = node.m_components.erase(it);
+	//			delete comp;
+	//		}
+	//		else {
+	//			it++;
+	//		}
+	//	}
+	//	return true;
+	//}
 
-	bool UpdateTraverser::Leave(GameObject & node)
-	{
-		return true;
-	}
+	//bool UpdateTraverser::Leave(GameObject & node)
+	//{
+	//	return true;
+	//}
 
-	bool UpdateTraverser::Visit(GameObject & node)
-	{
-		auto it = node.GetComponents().begin();
-		while (it != node.GetComponents().end()) {
-			Component* comp = *it._Ptr;
-			if (comp->IsActive()) {
-				comp->OnUpdate(m_deltaTime);
-			}
+	//bool UpdateTraverser::Visit(GameObject & node)
+	//{
+	//	auto it = node.GetComponents().begin();
+	//	while (it != node.GetComponents().end()) {
+	//		Component* comp = *it._Ptr;
+	//		if (comp->IsActive()) {
+	//			comp->OnUpdate(m_deltaTime);
+	//		}
 
-			if (comp->m_wantsDestroy) {
-				it = node.m_components.erase(it);
-				delete comp;
-			}
-			else {
-				it++;
-			}
-		}
-		return true;
-	}
+	//		if (comp->m_wantsDestroy) {
+	//			it = node.m_components.erase(it);
+	//			delete comp;
+	//		}
+	//		else {
+	//			it++;
+	//		}
+	//	}
+	//	return true;
+	//}
 
-	/********************************** EVENT TRAVERSER ****************************************/
-
-
-	EventTraverser::EventTraverser(AIngine::Events::EventData & e)
-		:m_eventData(e)
-	{
-	}
-
-	EventTraverser::~EventTraverser()
-	{
-	}
-
-	bool EventTraverser::Traverse(GameObject * root)
-	{
-		return root->Accept(*this);
-	}
-
-	bool EventTraverser::Enter(GameObject & node)
-	{
-		auto it = node.GetComponents().begin();
-
-		while (it != node.GetComponents().end()) {
-			Component* comp = *it._Ptr;
-			if (comp->IsActive()) {
-				comp->OnEvent(m_eventData);
-			}
-			it++;
-		}
-		return true;
-	}
-
-	bool EventTraverser::Leave(GameObject & node)
-	{
-		return false;
-	}
-
-	bool EventTraverser::Visit(GameObject & node)
-	{
-		auto it = node.GetComponents().begin();
-
-		while (it != node.GetComponents().end()) {
-			Component* comp = *it._Ptr;
-			if (comp->IsActive()) {
-				comp->OnEvent(m_eventData);
-			}
-			it++;
-		}
-		return true;
-	}
-
+	
 	/********************************** SEARCHFORNAME TRAVERSER ****************************************/
 
 	SearchForNameTraverser::SearchForNameTraverser(const std::string & name)

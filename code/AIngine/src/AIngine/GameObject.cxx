@@ -2,6 +2,7 @@
 #include "AIngine/Component.h"
 #include "Structures/Traverser.h"
 #include "AIngine/Constants.h"
+#include "Events/Event.h"
 
 namespace AIngine {
 	glm::vec2 GameObject::GetWorldPosition() const
@@ -242,4 +243,118 @@ namespace AIngine {
 		}
 		m_components.clear();
 	}
+
+
+	/********************************** UPDATE TRAVERSER ****************************************/
+
+
+	GameObject::UpdateTraverser::UpdateTraverser(float deltaTime) : m_deltaTime(deltaTime)
+	{
+	}
+
+	GameObject::UpdateTraverser::~UpdateTraverser()
+	{
+	}
+
+	bool GameObject::UpdateTraverser::Traverse(GameObject * root)
+	{
+		return	root->Accept(*this);
+	}
+
+	bool GameObject::UpdateTraverser::Enter(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+		while (it != node.GetComponents().end()) {
+			Component* comp = *it._Ptr;
+			if (comp->IsActive()) {
+				comp->OnUpdate(m_deltaTime);
+			}
+
+			if (comp->m_wantsDestroy) {
+				it = node.m_components.erase(it);
+				delete comp;
+			}
+			else {
+				it++;
+			}
+		}
+		return true;
+	}
+
+	bool GameObject::UpdateTraverser::Leave(GameObject & node)
+	{
+		return true;
+	}
+
+	bool GameObject::UpdateTraverser::Visit(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+		while (it != node.GetComponents().end()) {
+			Component* comp = *it._Ptr;
+			if (comp->IsActive()) {
+				comp->OnUpdate(m_deltaTime);
+			}
+
+			if (comp->m_wantsDestroy) {
+				it = node.m_components.erase(it);
+				delete comp;
+			}
+			else {
+				it++;
+			}
+		}
+		return true;
+	}
+
+	/********************************** EVENT TRAVERSER ****************************************/
+
+
+	GameObject::EventTraverser::EventTraverser(AIngine::Events::EventData & e)
+		:m_eventData(e)
+	{
+	}
+
+	GameObject::EventTraverser::~EventTraverser()
+	{
+	}
+
+	bool GameObject::EventTraverser::Traverse(GameObject * root)
+	{
+		return root->Accept(*this);
+	}
+
+	bool  GameObject::EventTraverser::Enter(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+
+		while (it != node.GetComponents().end()) {
+			Component* comp = *it._Ptr;
+			if (comp->IsActive()) {
+				comp->OnEvent(m_eventData);
+			}
+			it++;
+		}
+		return true;
+	}
+
+	bool  GameObject::EventTraverser::Leave(GameObject & node)
+	{
+		return false;
+	}
+
+	bool GameObject::EventTraverser::Visit(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+
+		while (it != node.GetComponents().end()) {
+			Component* comp = *it._Ptr;
+			if (comp->IsActive()) {
+				comp->OnEvent(m_eventData);
+			}
+			it++;
+		}
+		return true;
+	}
+
+
 }

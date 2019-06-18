@@ -82,42 +82,6 @@ namespace AIngine::Structures {
 		AIngine::Memory::Pool<GameObject>* m_gameObjectPool;
 	};
 
-	// Traverses the SceneGraph to call the Update() method of each active Component of each GameObject
-	class UpdateTraverser : public Traverser {
-	public:
-
-		UpdateTraverser(float deltaTime);
-		virtual ~UpdateTraverser();
-
-		// Inherited via Traverser
-
-		virtual bool Traverse(GameObject* root) override;
-
-		virtual bool Enter(GameObject & node) override;
-		virtual bool Leave(GameObject & node) override;
-		virtual bool Visit(GameObject & node) override;
-
-	private:
-		float m_deltaTime;
-	};
-
-	// Traverses the SceneGraph to propagate events
-	class EventTraverser : public Traverser {
-	public:
-		EventTraverser(AIngine::Events::EventData& e);
-		virtual ~EventTraverser();
-
-		// Inherited via Traverser
-
-		virtual bool Traverse(GameObject* root) override;
-		virtual bool Enter(GameObject & node) override;
-		virtual bool Leave(GameObject & node) override;
-		virtual bool Visit(GameObject & node) override;
-
-	private:
-		AIngine::Events::EventData& m_eventData;
-	};
-
 	// Traverses the SceneGraph to look for a GameObject with specified name
 	class SearchForNameTraverser : public Traverser {
 	public:

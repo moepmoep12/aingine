@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Structures/Traverser.h"
+
 #include <vector>
 #include <string>
 #include <typeinfo>
@@ -9,17 +11,18 @@
 namespace AIngine {
 
 	// forward declarations
-
-	class Traverser;
 	class Component;
 
 	namespace Structures {
 		class SceneGraph;
-		class UpdateTraverser;
 	}
 
 	namespace Editor {
 		class TransformComponentWidget;
+	}
+
+	namespace Events {
+		class EventData;
 	}
 
 	/// A GameObject represents an entity wihin a game
@@ -172,10 +175,42 @@ namespace AIngine {
 
 		/* SceneGraph is responsible for the creation of GameObjects */
 		friend class AIngine::Structures::SceneGraph;
-		friend class AIngine::Structures::UpdateTraverser;
 
 		friend class AIngine::Editor::TransformComponentWidget;
 
 		GameObject(GameObject* parent, const std::string& name);
+
+
+		class UpdateTraverser : private Traverser {
+		public:
+			UpdateTraverser(float deltaTime);
+			virtual ~UpdateTraverser();
+
+			// Inherited via Traverser
+			virtual bool Traverse(GameObject* root) override;
+			virtual bool Enter(GameObject & node) override;
+			virtual bool Leave(GameObject & node) override;
+			virtual bool Visit(GameObject & node) override;
+
+		private:
+			float m_deltaTime;
+		};
+
+		// Traverses the SceneGraph to propagate events
+		class EventTraverser : private Traverser {
+		public:
+			EventTraverser(AIngine::Events::EventData& e);
+			virtual ~EventTraverser();
+
+			// Inherited via Traverser
+
+			virtual bool Traverse(GameObject* root) override;
+			virtual bool Enter(GameObject & node) override;
+			virtual bool Leave(GameObject & node) override;
+			virtual bool Visit(GameObject & node) override;
+
+		private:
+			AIngine::Events::EventData& m_eventData;
+		};
 	};
 }

@@ -1,7 +1,8 @@
 #pragma once
-#include "AIngine/GameObject.h"
 
 namespace AIngine {
+
+	class GameObject;
 
 	class Traverser {
 	public:
