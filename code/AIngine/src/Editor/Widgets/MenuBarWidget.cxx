@@ -26,17 +26,17 @@ namespace AIngine::Editor {
 				ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 				if (ImGui::MenuItem("New##scene"))
 				{
-					PopUps::OpenScenePopUpForNewScene();
+					PopUps::OpenPopUpForNewScene();
 				}
-				PopUps::SaveSceneForNewScenePopUp();
+				PopUps::CreatePopUpForSavingChangesMadeSceneWhenCreatingNewScene();
 
 				// load scene
 				ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 				if (ImGui::MenuItem("Open")) {
 
-					PopUps::OpenScenePopUpForLoadScene();
+					PopUps::OpenPopUpForLoadScene();
 				}
-				PopUps::SaveSceneForLoadScenePopUp();
+				PopUps::CreatePopUpForSavingChangesMadeSceneWhenLoadingScene();
 
 				// save open scene at existing path
 				if (ImGui::MenuItem("Save", "STRG + S", false, !AIngine::Editor::Editor::GetCurrentSceneFilePath().empty()))
@@ -49,6 +49,12 @@ namespace AIngine::Editor {
 				{
 					AIngine::Editor::Editor::SaveSceneToFile();
 				}
+
+				ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+				if (ImGui::MenuItem("Scene Build Order")) {
+					PopUps::OpenPopUpForBuildScenes();
+				}
+				PopUps::CreatePopUpForBuildScenes();
 
 				ImGui::EndMenu();
 			}

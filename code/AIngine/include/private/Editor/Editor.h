@@ -93,7 +93,8 @@ namespace AIngine::Editor {
 		static inline std::string GetCurrentSceneFilePath() { if (s_instance) return s_instance->m_currentSceneFilePath; else return std::string(); }
 		//static void SetCurrentSceneFilePath(const std::string& path) { if (s_instance) s_instance->m_currentSceneFilePath = path; }
 
-		static inline std::vector<Scene>* GetBuildScenes() { if (s_instance) return &s_instance->m_BuildScenes; else return nullptr; }
+		static  std::vector<Scene>* GetBuildScenes() { if (s_instance) return &s_instance->m_BuildScenes; else return nullptr; }
+		static std::vector<Scene> LoadBuildScenes();
 		static bool ContainsScene(const std::string &name);
 		static void SaveBuildScenes();
 		static void AddCurrentSceneToBuild();
@@ -113,6 +114,7 @@ namespace AIngine::Editor {
 
 	private:
 		void ResetSceneGraph();
+		static void ResetSceneGraph(AIngine::Application* app);
 		void DisplayFramerate(float delta) const;
 		void DrawFpsGraph(float delta) const;
 

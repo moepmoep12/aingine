@@ -2,9 +2,12 @@
 
 namespace AIngine::Editor::PopUps
 {
-	void OpenScenePopUpForNewScene();
-	void SaveSceneForNewScenePopUp();
+	void OpenPopUpForNewScene();
+	void CreatePopUpForSavingChangesMadeSceneWhenCreatingNewScene();
 
-	void OpenScenePopUpForLoadScene();
-	void SaveSceneForLoadScenePopUp();
+	void OpenPopUpForLoadScene();
+	void CreatePopUpForSavingChangesMadeSceneWhenLoadingScene();
+
+	void OpenPopUpForBuildScenes();
+	void CreatePopUpForBuildScenes();
 }

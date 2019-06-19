@@ -115,16 +115,16 @@ namespace AIngine::Editor {
 		// create new scene
 		if (ImGui::ImageButton((ImTextureID)m_Icons["new"].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
 		{
-			PopUps::OpenScenePopUpForNewScene();
+			PopUps::OpenPopUpForNewScene();
 		}
-		PopUps::SaveSceneForNewScenePopUp();
+		PopUps::CreatePopUpForSavingChangesMadeSceneWhenCreatingNewScene();
 
 		// load scene
 		if (ImGui::ImageButton((ImTextureID)m_Icons["open"].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
 		{
-			PopUps::OpenScenePopUpForLoadScene();
+			PopUps::OpenPopUpForLoadScene();
 		}
-		PopUps::SaveSceneForLoadScenePopUp();
+		PopUps::CreatePopUpForSavingChangesMadeSceneWhenLoadingScene();
 
 		// save scene
 		if (ImGui::ImageButton((ImTextureID)m_Icons["save"].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
