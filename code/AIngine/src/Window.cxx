@@ -108,6 +108,12 @@ glm::vec2 AIngine::Window::GetMonitorResolution() const
 	return glm::vec2(mode->width, mode->height);
 }
 
+float AIngine::Window::GetAspectRatio() const
+{
+	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	return (float)mode->width / (float)mode->height;
+}
+
 HWND AIngine::Window::GetWin32Window() const
 {
 	return glfwGetWin32Window(m_window);
@@ -266,8 +272,8 @@ void AIngine::Window::SetGLFWCallbacks()
 // Initialize static counter
 namespace AIngine::Events {
 	int EventHandler<void>::counter = 0;
-	int EventHandler<void,unsigned int,unsigned int>::counter = 0;
-	int EventHandler<void,float,float>::counter = 0;
-	int EventHandler<void,int>::counter = 0;
+	int EventHandler<void, unsigned int, unsigned int>::counter = 0;
+	int EventHandler<void, float, float>::counter = 0;
+	int EventHandler<void, int>::counter = 0;
 	int EventHandler<void, AIngine::KeyCodes>::counter = 0;
 }

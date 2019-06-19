@@ -62,11 +62,12 @@ namespace AIngine {
 		inline unsigned int GetRightEdge() const { return m_rightEdge; }
 		inline unsigned int GetTopEdge() const { return m_topEdge; }
 		inline unsigned int GetBottomEdge() const { return m_bottomEdge; }
-		inline unsigned int GetX() const { return m_windowData.XPos;; }
-		inline unsigned int GetY() const { return m_windowData.YPos; }
+		inline  int GetX() const { return m_windowData.XPos; }
+		inline  int GetY() const { return m_windowData.YPos; }
 		inline bool IsWindowActive() const { return !glfwWindowShouldClose(m_window); }
 		virtual void* GetNativeWindow() const { return m_window; }
 		glm::vec2 GetMonitorResolution() const;
+		float GetAspectRatio() const;
 		HWND GetWin32Window() const;
 		void SetWindowTitle(const char* title);
 		void AppendWindowTitle(const char* append);
