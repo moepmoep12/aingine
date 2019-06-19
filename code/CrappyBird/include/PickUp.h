@@ -4,6 +4,7 @@
 #include "Player.h"
 
 #include <vector>
+#include <memory>
 
 namespace CrappyBird {
 
@@ -11,14 +12,14 @@ namespace CrappyBird {
 	class PickUp : public Script {
 	public:
 		PickUp();
-
+		virtual ~PickUp();
 		// inherited via Script
 		virtual void OnStart() override;
 		virtual void OnEnd() override;
 		virtual void Update(float deltatime) override;
 
 
-		Effect m_Effect;
+		std::unique_ptr<Effect> m_Effect;
 
 	private:
 		/* Callback*/

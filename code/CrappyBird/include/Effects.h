@@ -7,12 +7,12 @@ namespace CrappyBird {
 
 	class Effect {
 	public:
-		Effect() : Age(0), Duration(0), Rotation(0), Color(1) {}
+		Effect() : Age(0), Duration(0), Rotation(0), Color(1), m_player(nullptr) {}
 		Effect(const Effect& other);
 		Effect(Effect&& other);
 		Effect& operator=(const Effect& other);
 		Effect& operator=(Effect&& other);
-		virtual ~Effect() {}
+		virtual ~Effect() { Texture.~Texture2D(); }
 
 		virtual bool Start(Player* player) { return true; }
 		virtual void Update(float delta) {}
@@ -24,6 +24,9 @@ namespace CrappyBird {
 		Texture2D Texture;
 		glm::vec4 Color = glm::vec4(1);
 		float Rotation;
+
+	protected:
+		Player* m_player;
 	};
 
 
@@ -47,5 +50,20 @@ namespace CrappyBird {
 
 	private:
 		float SpeedIncrease = 1.0f;
+	};
+
+	class ShrinkEffect : public Effect {
+	public:
+		ShrinkEffect();
+
+		virtual bool Start(Player* player) override;
+		virtual void Update(float delta) override;
+		virtual void End() override;
+
+	private:
+		const float animDuration = 0.5f;
+		const glm::vec2 destScale = glm::vec2(0.6f);
+		const glm::vec2 scaleSpeed = destScale / animDuration;
+		glm::vec2 verticesScaleSpeed[AIngine::Physics::maxVertices];
 	};
 }

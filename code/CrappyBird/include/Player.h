@@ -24,7 +24,9 @@ namespace CrappyBird {
 		glm::vec2 GetSize();
 
 		// returns all effects that affect the player
-		const std::vector<Effect>& GetActiveEffects() const { return m_activeEffects; }
+		const std::vector<std::unique_ptr<Effect>>& GetActiveEffects() const { return m_activeEffects; }
+
+		std::vector<glm::vec2> GetOriginalPhysVertices() const;
 
 		/* returns the effect of the given type if in the activeEffect list*/
 		template<class T>
@@ -33,8 +35,8 @@ namespace CrappyBird {
 
 			while (it != m_activeEffects.end())
 			{
-				if (typeid(T) == typeid(&*it._Ptr)) {
-					return dynamic_cast<T*>(&*it._Ptr);
+				if (typeid(T) == typeid(*it._Ptr->get())) {
+					return dynamic_cast<T*>(it._Ptr->get());
 				}
 				it++;
 			}
@@ -43,7 +45,7 @@ namespace CrappyBird {
 		}
 
 		/* adds a effect */
-		void AddEffect(Effect effect);
+		void AddEffect(std::unique_ptr<Effect> effect);
 
 		// the index of the screen the player is currently in
 		int CurrentScreenIndex = 1;
@@ -55,7 +57,9 @@ namespace CrappyBird {
 		void OnUpdateParticle(Particle& particle);
 
 		// all effects currently affecting the player
-		std::vector<Effect> m_activeEffects;
+		std::vector<std::unique_ptr<Effect>> m_activeEffects;
+
+		std::vector<glm::vec2> m_originalVertices;
 
 		// the physical body of the rocket
 		AIngine::Physics::PhysicsComponent* m_physBody;

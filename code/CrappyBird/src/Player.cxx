@@ -25,10 +25,15 @@ namespace CrappyBird {
 		return glm::vec2(1.4, 0.7);
 	}
 
-	void Player::AddEffect(Effect  effect)
+	std::vector<glm::vec2> Player::GetOriginalPhysVertices() const
 	{
-		if (effect.Start(this))
-			m_activeEffects.push_back(effect);
+		return m_originalVertices;
+	}
+
+	void Player::AddEffect(std::unique_ptr<Effect>  effect)
+	{
+		if (effect->Start(this))
+			m_activeEffects.push_back(std::move(effect));
 	}
 
 	void Player::OnStart()
@@ -46,6 +51,10 @@ namespace CrappyBird {
 		m_physBody->OnCollisionBegin += OnCollisionEventHandler;
 		m_emitter->SpawnParticleEvent += OnSpawnParticleHandler;
 		m_emitter->UpdateParticleEvent += OnUpdateParticleHandler;
+
+		for (int i = 0; i < m_physBody->GetBodyInformation().verticesCount; i++) {
+			m_originalVertices.push_back(m_physBody->GetBodyInformation().vertices[i]);
+		}
 	}
 
 	void Player::OnEnd()
@@ -102,15 +111,15 @@ namespace CrappyBird {
 		// update Effects
 		auto& it = m_activeEffects.begin();
 		while (it != m_activeEffects.end()) {
-			Effect& effect = *it._Ptr;
-			effect.Age += deltatime;
+			std::unique_ptr<Effect>* effect = it._Ptr;
+			effect->get()->Age += deltatime;
 
-			if (effect.Age >= effect.Duration) {
-				effect.End();
+			if (effect->get()->Age >= effect->get()->Duration) {
+				effect->get()->End();
 				it = m_activeEffects.erase(it);
 			}
 			else {
-				effect.Update(deltatime);
+				effect->get()->Update(deltatime);
 				it++;
 			}
 		}
@@ -129,11 +138,11 @@ namespace CrappyBird {
 
 	void Player::OnSpawnParticle(Particle & particle, const glm::vec2 & pos)
 	{
-		static std::vector<glm::vec2> m_splinePoints = {
-			glm::vec2(-0.19,-0.08),
-			glm::vec2(-0.15, -0.01),
-			glm::vec2(-0.12, 0.1),
-			glm::vec2(-0.13,0.2)
+		std::vector<glm::vec2> m_splinePoints = {
+		   glm::vec2(-0.19,-0.08) * GetOwner()->GetLocalScale(),
+		   glm::vec2(-0.15, -0.01)  * GetOwner()->GetLocalScale(),
+		   glm::vec2(-0.12, 0.1)  * GetOwner()->GetLocalScale(),
+		   glm::vec2(-0.13,0.2)  * GetOwner()->GetLocalScale()
 		};
 		static std::default_random_engine generator;
 		static std::normal_distribution<double> distribution(1.5, 1.0);

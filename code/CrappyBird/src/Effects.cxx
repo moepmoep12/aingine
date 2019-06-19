@@ -100,4 +100,69 @@ namespace CrappyBird {
 	{
 		CrappyBird::s_GameSpeed -= SpeedIncrease;
 	}
+
+	/*************************************** SHRINK EFFECT ***********************************************************/
+
+	ShrinkEffect::ShrinkEffect()
+	{
+		Texture = Texture2D(Assets::Load<BitmapAsset>("assets/CrappyBird/textures/reduce.png")->GetBitmap());
+		Rotation = 0;
+		Color = glm::vec4(1);
+		Duration = 5;
+	}
+
+	bool ShrinkEffect::Start(Player * player)
+	{
+		ShrinkEffect* effect = player->GetEffect<ShrinkEffect>();
+		if (!effect) {
+			m_player = player;
+			PhysicsComponent* physcomp = m_player->GetOwner()->GetComponent<PhysicsComponent>();
+			static auto originalVertices = m_player->GetOriginalPhysVertices();
+
+			for (int i = 0; i < physcomp->GetBodyInformation().verticesCount; i++) {
+				verticesScaleSpeed[i] = ( destScale * originalVertices[i]) / animDuration;
+			}
+
+			return true;
+		}
+
+		else {
+			effect->Duration += Duration;
+			return false;
+		}
+	}
+
+	void ShrinkEffect::Update(float delta)
+	{
+		if (Age < animDuration) {
+			m_player->GetOwner()->Scale(-scaleSpeed * delta);
+			PhysicsComponent* physcomp = m_player->GetOwner()->GetComponent<PhysicsComponent>();
+			std::vector<glm::vec2> vertices;
+
+			for (int i = 0; i < physcomp->GetBodyInformation().verticesCount; i++) {
+				vertices.push_back(physcomp->GetBodyInformation().vertices[i]);
+				vertices[i] -= verticesScaleSpeed[i] * delta;
+			}
+
+			physcomp->AdjustPolyShape(&vertices[0], physcomp->GetBodyInformation().verticesCount);
+
+		}
+		if (Age > Duration - animDuration) {
+			m_player->GetOwner()->Scale(scaleSpeed * delta);
+			PhysicsComponent* physcomp = m_player->GetOwner()->GetComponent<PhysicsComponent>();
+			std::vector<glm::vec2> vertices;
+
+			for (int i = 0; i < physcomp->GetBodyInformation().verticesCount; i++) {
+				vertices.push_back(physcomp->GetBodyInformation().vertices[i]);
+				vertices[i] += verticesScaleSpeed[i] * delta;
+			}
+
+			physcomp->AdjustPolyShape(&vertices[0], physcomp->GetBodyInformation().verticesCount);
+		}
+	}
+
+	void ShrinkEffect::End()
+	{
+		m_player->GetOwner()->SetLocalScale(glm::vec2(1));
+	}
 }

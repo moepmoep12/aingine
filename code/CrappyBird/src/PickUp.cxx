@@ -48,24 +48,27 @@ namespace CrappyBird {
 
 	void PickUpFactory::AddEffect(PickUp & obj)
 	{
-		int value = rand() % 2;
+		int value = rand() % 3;
 
 		switch (value) {
 		case 0:
-			obj.m_Effect = SpeedEffect();
+			obj.m_Effect = std::make_unique<SpeedEffect>();
 			break;
 
 		case 1:
-			obj.m_Effect = SlowEffect();
+			obj.m_Effect = std::make_unique<SlowEffect>();
 			break;
 
+		case 2:
+			obj.m_Effect = std::make_unique<ShrinkEffect>();
+			break;
 
 		}
 
 		Sprite* sprite = obj.GetOwner()->GetComponent<Sprite>();
-		sprite->SetTexture(obj.m_Effect.Texture);
-		sprite->SetColor(obj.m_Effect.Color);
-		obj.GetOwner()->SetRotation(obj.m_Effect.Rotation);
+		sprite->SetTexture(obj.m_Effect->Texture);
+		sprite->SetColor(obj.m_Effect->Color);
+		obj.GetOwner()->SetRotation(obj.m_Effect->Rotation);
 	}
 
 	/******************************** PICKUP ******************************************/
@@ -74,6 +77,10 @@ namespace CrappyBird {
 	PickUp::PickUp()
 	{
 		SetName(typeid(*this).name());
+	}
+
+	PickUp::~PickUp()
+	{
 	}
 
 	void PickUp::OnStart()
@@ -106,7 +113,8 @@ namespace CrappyBird {
 	void PickUp::OnCollision(AIngine::Physics::PhysicsComponent * other)
 	{
 		if (other->GetOwner()->GetName() == "PlayerRocket") {
-			m_player->AddEffect(m_Effect);
+			m_player->AddEffect(std::move(m_Effect));
+			m_Effect = nullptr;
 			GetOwner()->SetActive(false);
 		}
 	}
