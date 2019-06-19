@@ -133,6 +133,7 @@ namespace AIngine {
 #else
 		AIngine::Structures::Rectangle viewportRect = AIngine::Structures::RectangleI(m_window->GetX(), 0, m_window->GetWidth(), m_window->GetHeight());
 		OnViewportChanged(viewportRect);
+		LoadScene(0);
 		OnEnterPlayMode();
 #endif
 
@@ -259,6 +260,17 @@ namespace AIngine {
 			return m_editor->IsAnyUIElementHovered();
 		else
 			return false;
+	}
+
+	void Application::LoadScene(int index)
+	{
+		if (s_instance) {
+			std::vector<AIngine::Editor::Scene> scenes = AIngine::Editor::Editor::LoadBuildScenes();
+			if (index < scenes.size()) {
+				AIngine::Editor::Editor::ResetSceneGraph(s_instance);
+				AIngine::Editor::Editor::LoadScene(scenes[index].Name);
+			}
+		}
 	}
 
 	bool Application::IsRunning()

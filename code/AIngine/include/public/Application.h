@@ -54,6 +54,8 @@ namespace AIngine {
 		inline static Application& Get() { return *s_instance; }
 		inline const Window& GetWindow() const { return *m_window; }
 
+		static void LoadScene(int index);
+
 		static bool IsRunning();
 	protected:
 

@@ -353,6 +353,11 @@ namespace AIngine::Editor {
 		m_app.m_world->GetSceneGraph().Reset();
 	}
 
+	void Editor::ResetSceneGraph(AIngine::Application * app)
+	{
+		app->m_world->m_sceneGraph->Reset();
+	}
+
 	AIngine::Structures::SceneGraph * Editor::GetSceneGraph()
 	{
 		if (s_instance) {
@@ -379,6 +384,11 @@ namespace AIngine::Editor {
 				s_instance->EnterFullScreenMode();
 			}
 		}
+	}
+
+	std::vector<Scene> Editor::LoadBuildScenes()
+	{
+		return AIngine::Editor::Serialization::Serializer::LoadBuildScenes();
 	}
 
 	bool Editor::ContainsScene(const std::string & name)
@@ -461,6 +471,9 @@ namespace AIngine::Editor {
 			s_instance->UpdateSceneTitle();
 
 			CORE_INFO("Loaded ccene " + sceneName + " from " + path);
+		}
+		else {
+			AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(path);
 		}
 	}
 
