@@ -128,7 +128,7 @@ namespace AIngine {
 
 	void GameObject::SetRotation(float rot, bool bInformComponents)
 	{
-		m_rotation = std::fmodf(m_rotation + rot, 2 * M_PI);
+		m_rotation = std::fmodf( rot, 2 * M_PI);
 		if (bInformComponents) {
 			auto it = m_components.begin();
 			while (it != m_components.end()) {

@@ -78,6 +78,7 @@ namespace AIngine::Physics {
 		void CreatePolygonBody(const PhysicsProperties& properties, PhysicsBodyType type, const glm::vec2* vertices, unsigned int count, bool isTrigger = false);
 
 		void AdjustBoxShape(float width, float height);
+		void AdjustPolyShape(const glm::vec2* vertices, unsigned int count);
 
 		void ApplyForce(const glm::vec2& force, const glm::vec2& point);
 		void ApplyForce(const b2Vec2& force, const b2Vec2& point);

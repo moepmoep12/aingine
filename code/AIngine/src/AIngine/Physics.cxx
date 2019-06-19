@@ -264,6 +264,38 @@ namespace AIngine::Physics {
 			b2Fixture* fixture = m_body->GetFixtureList();
 			b2PolygonShape* shape = (b2PolygonShape*)fixture->GetShape();
 			shape->SetAsBox(width / 2.0f, height / 2.0f);
+
+			//  clock wise
+			b2Vec2 topleft = b2Vec2(-width / 2.0f, -height / 2.0f);
+			m_bodyInformation.vertices[0] = glm::vec2(topleft.x, topleft.y);
+
+			b2Vec2 topRight = b2Vec2(width / 2.0f, -height / 2.0f);
+			m_bodyInformation.vertices[1] = glm::vec2(topRight.x, topRight.y);
+
+			b2Vec2 bottomRight = b2Vec2(width / 2.0f, height / 2.0f);
+			m_bodyInformation.vertices[2] = glm::vec2(bottomRight.x, bottomRight.y);
+
+			b2Vec2 bottomLeft = b2Vec2(-width / 2.0f, height / 2.0f);
+			m_bodyInformation.vertices[3] = glm::vec2(bottomLeft.x, bottomLeft.y);
+		}
+	}
+
+	void PhysicsComponent::AdjustPolyShape(const glm::vec2 * vertices, unsigned int count)
+	{
+		if (m_bodyInformation.shape == PhysicsShape::e_Polygon && m_body && count >= 3) {
+			b2Fixture* fixture = m_body->GetFixtureList();
+			b2PolygonShape* shape = (b2PolygonShape*)fixture->GetShape();
+			b2Vec2 Vertices[maxVertices];
+			for (unsigned int i = 0; i < count; i++) {
+				Vertices[i] = b2Vec2(vertices[i].x, vertices[i].y);
+			}
+			shape->Set(Vertices, count);
+
+			// Box2D might adjust the vertices in order to fit properly, thus we need to update ours
+			for (unsigned int i = 0; i < count; i++) {
+				m_bodyInformation.vertices[i] = glm::vec2(shape->m_vertices[i].x, shape->m_vertices[i].y);
+			}
+			m_bodyInformation.verticesCount = count;
 		}
 	}
 
