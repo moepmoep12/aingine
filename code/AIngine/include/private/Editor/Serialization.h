@@ -19,6 +19,10 @@ namespace AIngine {
 	namespace Physics {
 		class PhysicsComponent;
 	}
+
+	namespace Editor {
+		struct Scene;
+	}
 }
 
 namespace AIngine::Editor::Serialization
@@ -29,6 +33,8 @@ namespace AIngine::Editor::Serialization
 		static void DeserializeSceneGraph(const std::string& path);
 		static void SaveEditorSettings();
 		static void LoadEditorSettings();
+		static std::vector<Scene> LoadBuildScenes();
+		static void SaveBuildScenes(const std::vector<Scene>& scenes);
 
 	private:
 		static AIngine::GameObject* RestoreGameObject(const nlohmann::json* const j, AIngine::GameObject* parent);

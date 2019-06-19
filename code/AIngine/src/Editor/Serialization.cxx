@@ -35,6 +35,10 @@ namespace AIngine::Editor::Serialization {
 		const char* EDITOR_SHOWFPSGRAPH = "showFPSGraph";
 		const char* EDITOR_OUTLINEANIM = "outlineAnimation";
 
+		// Scene
+		const char* SCENE_NAME = "name";
+		const char* SCENE_PATH = "path";
+
 		// GameObject
 		const char* GAMEOBJECT_ACTIVE = "a_active";
 		const char* GAMEOBJECT_NAME = "a_name";
@@ -192,7 +196,7 @@ namespace AIngine::Editor::Serialization {
 			comp->SetEnabled(true);
 	}
 
-	static const char* editorSettingsPath = "editorSettings.ini";
+	static const char* editorSettingsPath = "Editor/Settings.ini";
 
 	void Serializer::SaveEditorSettings()
 	{
@@ -219,6 +223,48 @@ namespace AIngine::Editor::Serialization {
 		AIngine::World::SetPhysicsDebugDrawActive(j[AttributeNames::EDITOR_PHYSRENDERING]);
 		AIngine::Editor::Editor::SetShowFpsGraph(j[AttributeNames::EDITOR_SHOWFPSGRAPH]);
 		AIngine::Editor::Editor::SetShowFramerate(j[AttributeNames::EDITOR_SHOWFPS]);
+	}
+
+	static const std::string s_BuildScenesPath = "Editor/ScenesBuild.json";
+
+	std::vector<Scene> Serializer::LoadBuildScenes()
+	{
+		std::vector<Scene> scenes;
+
+		// open the file
+		std::ifstream file;
+		file.open(s_BuildScenesPath);
+		if (file.fail()) return scenes;
+		nlohmann::json j = nlohmann::json::parse(file);
+		file.close();
+
+
+		for (auto& scene : j) {
+			scenes.push_back(Scene{
+				scene.at(AttributeNames::SCENE_NAME),
+				scene.at(AttributeNames::SCENE_PATH)
+				});
+		}
+
+		return scenes;
+	}
+
+	void Serializer::SaveBuildScenes(const std::vector<Scene>& scenes)
+	{
+		nlohmann::json outer;
+
+		for (auto& scene : scenes) {
+			nlohmann::json j;
+			j[AttributeNames::SCENE_NAME] = scene.Name;
+			j[AttributeNames::SCENE_PATH] = std::filesystem::canonical(scene.Path).string();
+			outer.push_back(j);
+		}
+
+		std::string result = outer.dump();
+		std::ofstream file;
+		file.open(s_BuildScenesPath);
+		file << result;
+		file.close();
 	}
 
 	AIngine::GameObject * Serializer::RestoreGameObject(const nlohmann::json* const j, AIngine::GameObject * parent)

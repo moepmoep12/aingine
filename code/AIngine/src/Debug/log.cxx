@@ -19,13 +19,15 @@ namespace AIngine {
 
 	void Log::Init()
 	{
+		CreateDirectory("Editor", NULL);
+
 		spdlog::set_pattern("%^[%T] %n: %v%$");
 
 		auto logSink = (spdlog::sink_ptr) std::make_shared<AIngine::Editor::LogWidgetSink_st>();
 
 		s_coreLogger = spdlog::stdout_color_mt("Core");
 		s_coreLogger->set_level(spdlog::level::trace);
-		
+
 		s_clientLogger = spdlog::stdout_color_mt("App");
 		s_clientLogger->set_level(spdlog::level::trace);
 
@@ -34,7 +36,7 @@ namespace AIngine {
 
 
 #ifdef LOG_TO_FILE
-		auto sink = (spdlog::sink_ptr) std::make_shared < spdlog::sinks::basic_file_sink_mt>("log.txt",true);
+		auto sink = (spdlog::sink_ptr) std::make_shared < spdlog::sinks::basic_file_sink_mt>("Editor/log.txt", true);
 		s_coreLogger->sinks().push_back(sink);
 		s_clientLogger->sinks().push_back(sink);
 #endif
