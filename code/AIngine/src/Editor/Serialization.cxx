@@ -16,6 +16,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <filesystem>
+#include <algorithm>
 
 namespace AIngine::Editor::Serialization {
 
@@ -612,6 +613,74 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::PARTICLEEMITTER_AMOUNT] = emitter.GetAmount();
 
 		return j;
+	}
+
+	std::vector<std::string> ExtractPathsFromScene(const std::string & sceneFilePath)
+	{
+		std::vector<std::string> result;
+
+		using json = nlohmann::json;
+
+		// open the file
+		std::ifstream file;
+		file.open(sceneFilePath);
+		if (file.fail()) return result;
+		json j = json::parse(file);
+		file.close();
+
+
+		json* currentJson = &j["Root"];
+		std::vector<json*> openJsons;
+		openJsons.push_back(currentJson);
+
+		while (openJsons.size() > 0) {
+
+			currentJson = openJsons[0];
+
+			if ((*currentJson).contains(AttributeNames::GAMEOBJECT_CHILDREN)) {
+				int index = 0;
+				for (auto child : (*currentJson)[AttributeNames::GAMEOBJECT_CHILDREN]) {
+					std::string name = child.begin().key();
+					// does it have any components?
+					if (child[name].contains(AttributeNames::GAMEOBJECT_COMPONENTS)) {
+						// texturepath
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SPRITE)) {
+							std::string path = child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SPRITE][AttributeNames::TEXTURE_PATH];
+							if (std::find(result.begin(), result.end(), path) == result.end())
+								result.push_back(path);
+						}
+						// sound path
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SOUND)) {
+
+							for (auto& sound : child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SOUND]) {
+								if (sound.contains(AttributeNames::SOUND_PATH)) {
+									std::string path = sound.at(AttributeNames::SOUND_PATH);
+									if (std::find(result.begin(), result.end(), path) == result.end())
+										result.push_back(path);
+								}
+							}
+
+						}
+						// texturepath
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_PARTICLEEMITTER)) {
+							std::string path = child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PARTICLEEMITTER][AttributeNames::TEXTURE_PATH];
+							if (std::find(result.begin(), result.end(), path) == result.end())
+								result.push_back(path);
+						}
+					}
+
+					// does it have children?
+					if (child[name].contains(AttributeNames::GAMEOBJECT_CHILDREN)) {
+						openJsons.push_back(&(*currentJson)[AttributeNames::GAMEOBJECT_CHILDREN][index][name]);
+					}
+					index++;
+				}
+			}
+
+			openJsons.erase(openJsons.begin());
+
+		}
+		return result;
 	}
 
 }

@@ -27,6 +27,8 @@ namespace AIngine {
 
 namespace AIngine::Editor::Serialization
 {
+	std::vector<std::string> ExtractPathsFromScene(const std::string& sceneFilePath);
+
 	class Serializer {
 	public:
 		static void SerializeSceneGraph(const std::string& path);

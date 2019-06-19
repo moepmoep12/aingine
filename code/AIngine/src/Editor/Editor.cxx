@@ -20,6 +20,7 @@
 #include <fstream>
 #include <filesystem>
 #include <nfd.h>
+#include <algorithm>
 
 namespace AIngine::Editor {
 
@@ -572,6 +573,24 @@ namespace AIngine::Editor {
 		AIngine::Editor::Serialization::Serializer::SaveEditorSettings();
 
 		s_instance = nullptr;
+	}
+
+	void Editor::Build()
+	{
+		if (s_instance) {
+			if (s_instance->m_BuildScenes.size() == 0) return;
+
+			std::vector<std::string> Result;
+
+			for (auto& scene : s_instance->m_BuildScenes) {
+
+				auto result = AIngine::Editor::Serialization::ExtractPathsFromScene(scene.Path);
+				for (auto& path : result) {
+					if (std::find(Result.begin(), Result.end(), path) == Result.end())
+						Result.push_back(path);
+				}
+			}
+		}
 	}
 
 	void Editor::SetIsInPlayMode(bool value)

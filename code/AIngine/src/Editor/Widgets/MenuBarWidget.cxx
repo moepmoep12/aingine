@@ -50,11 +50,6 @@ namespace AIngine::Editor {
 					AIngine::Editor::Editor::SaveSceneToFile();
 				}
 
-				ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
-				if (ImGui::MenuItem("Scene Build Order")) {
-					PopUps::OpenPopUpForBuildScenes();
-				}
-				PopUps::CreatePopUpForBuildScenes();
 
 				ImGui::EndMenu();
 			}
@@ -99,6 +94,21 @@ namespace AIngine::Editor {
 				}
 
 
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Build")) {
+
+				ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+				if (ImGui::MenuItem("Scene Build Order")) {
+					PopUps::OpenPopUpForBuildScenes();
+				}
+				PopUps::CreatePopUpForBuildScenes();
+
+				if (ImGui::MenuItem("Build##build")) {
+					AIngine::Editor::Editor::Build();
+				}
 
 				ImGui::EndMenu();
 			}

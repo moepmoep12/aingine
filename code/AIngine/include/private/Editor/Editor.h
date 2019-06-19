@@ -79,6 +79,8 @@ namespace AIngine::Editor {
 
 		virtual ~Editor() override;
 
+		static void Build();
+
 		static inline bool IsGameRunning() { if (s_instance) return s_instance->m_isInPlayMode && !s_instance->m_isGamePaused; else return true; }
 
 		static inline bool GetIsInPlayMode() { if (s_instance) return s_instance->m_isInPlayMode; else return true; }
