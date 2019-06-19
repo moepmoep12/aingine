@@ -112,7 +112,7 @@ namespace AIngine::Editor::Serialization {
 	{
 		SceneGraphSerializer serializer;
 		serializer.Traverse(&AIngine::Editor::Editor::GetSceneGraph()->GetRoot());
-		std::string result = serializer.Result.dump();
+		std::string result = serializer.Result.dump(0);
 		std::ofstream file;
 		file.open(path);
 		file << result;
