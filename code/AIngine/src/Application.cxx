@@ -131,6 +131,8 @@ namespace AIngine {
 		};
 
 #else
+		AIngine::Structures::Rectangle viewportRect = AIngine::Structures::RectangleI(m_window->GetX(), 0, m_window->GetWidth(), m_window->GetHeight());
+		OnViewportChanged(viewportRect);
 		OnEnterPlayMode();
 #endif
 
@@ -330,7 +332,7 @@ namespace AIngine {
 
 	void Application::OnViewportChanged(AIngine::Structures::RectangleI& viewport)
 	{
-		m_viewport->Set(viewport.GetPosition(), viewport.width, viewport.height);
+		m_viewport->Set(viewport.GetPosition(), viewport.width, viewport.height, true);
 		m_camera->SetZoom((float)m_window->GetWidth() / (float)m_world->GetBounds().y);
 		m_renderer->SetViewport();
 		CORE_INFO("Viewport Size Changed To ({0} | {1}) at Position ({2} | {3})", m_viewport->m_width, m_viewport->m_height, m_viewport->m_x, m_viewport->m_y);

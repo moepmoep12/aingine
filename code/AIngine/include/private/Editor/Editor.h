@@ -21,6 +21,10 @@ namespace AIngine {
 
 namespace AIngine::Editor {
 
+	struct Scene {
+		std::string Name, Path;
+	};
+
 	// forward declaration
 	class EditorWidget;
 
@@ -83,8 +87,16 @@ namespace AIngine::Editor {
 		static inline bool IsPaused() { if (s_instance) return s_instance->m_isGamePaused; else return false; }
 		static inline void SetPaused(bool pause) { if (s_instance) s_instance->m_isGamePaused = pause; }
 
+		static inline bool IsFullScreenPlayMode() { if (s_instance) return s_instance->m_isFullScreen; else return true; }
+		static void SetFullScreenPlayMode(bool bFullsceen);
+
 		static inline std::string GetCurrentSceneFilePath() { if (s_instance) return s_instance->m_currentSceneFilePath; else return std::string(); }
 		//static void SetCurrentSceneFilePath(const std::string& path) { if (s_instance) s_instance->m_currentSceneFilePath = path; }
+
+		static inline std::vector<Scene>* GetBuildScenes() { if (s_instance) return &s_instance->m_BuildScenes; else return nullptr; }
+		static bool ContainsScene(const std::string &name);
+		static void SaveBuildScenes();
+		static void AddCurrentSceneToBuild();
 
 		static bool CreateMoveablePositionVertex(glm::vec2& worldPosition, float vertexSize, const glm::vec3& colorInteract = glm::vec3(0, 1, 0), const glm::vec3& colorNormal = glm::vec3(1, 0, 0));
 
@@ -93,6 +105,7 @@ namespace AIngine::Editor {
 		static void SaveScene(const std::string& path);
 		static void LoadSceneFromFile();
 		static bool SaveSceneToFile();
+		static std::string GetCurrentSceneName();
 
 		AIngine::Events::Event<void> OnEnterPlayModeEvent;
 		AIngine::Events::Event<void> OnLeavePlayModeEvent;
@@ -112,19 +125,26 @@ namespace AIngine::Editor {
 		void OnWindowClose();
 
 		void MoveCamera(float delta);
+
 		void LoadLastScene();
 		void SaveOpenScene();
-		std::string UpdateSceneTitle();
+
+		void UpdateSceneTitle();
+
+		void EnterFullScreenMode();
+		void LeaveFullScreenMode();
 
 		Editor();
 
 	private:
 		bool m_displayingFramerate = false;
 		bool m_showingFpsGraph = false;
+		bool m_isFullScreen = false;
 		static Editor* s_instance;
 		AIngine::Application& m_app;
 		std::vector<EditorWidget*> m_widgets;
 		std::vector<AIngine::GameObject*> m_selectedObjects;
+		std::vector<Scene> m_BuildScenes;
 		AIngine::Events::ViewportChangedEvent OnViewportChangedEvent;
 		bool m_isInPlayMode = false;
 		bool m_isGamePaused = false;

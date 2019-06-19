@@ -65,16 +65,17 @@ namespace AIngine::Editor {
 
 	void Editor::OnImGuiRender()
 	{
+		// don't draw widgets if in fullscreen mode
+		if (!m_isFullScreen) {
+			auto it = m_widgets.begin();
 
-		auto it = m_widgets.begin();
+			while (it != m_widgets.end()) {
+				(*it._Ptr)->OnImGuiRender();
+				it++;
+			}
 
-		while (it != m_widgets.end()) {
-			(*it._Ptr)->OnImGuiRender();
-			it++;
+			if (m_showingFpsGraph) DrawFpsGraph(m_app.GetDeltaTime());
 		}
-
-		if (m_showingFpsGraph) DrawFpsGraph(m_app.GetDeltaTime());
-
 	}
 
 	bool Editor::OnKeyPressed(AIngine::Events::KeyPressedEvent::KeyPressedEventData & e)
@@ -91,13 +92,24 @@ namespace AIngine::Editor {
 			m_displayingFramerate = !m_displayingFramerate;
 		}
 
+		if (e.GetKeyCode() == AIngine::KeyCodes::F4)
+		{
+			SetFullScreenPlayMode(!m_isFullScreen);
+		}
+
 		return false;
 	}
 
 	bool Editor::OnWindowResized(AIngine::Events::WindowResizeEvent::WindowResizeEventData & e)
 	{
-		AIngine::Structures::Rectangle viewportRect = CalculateViewportRect(glm::vec2(m_app.GetWindow().GetWidth(), m_app.GetWindow().GetHeight()));
+		AIngine::Structures::RectangleI viewportRect;
+		if (m_isFullScreen)
+			viewportRect = AIngine::Structures::RectangleI(m_app.GetWindow().GetX(), m_app.GetWindow().GetY(), e.GetWidth(), e.GetHeight());
+		else
+			viewportRect = CalculateViewportRect(glm::vec2(m_app.GetWindow().GetWidth(), m_app.GetWindow().GetHeight()));
+
 		OnViewportChangedEvent(viewportRect);
+
 		return true;
 	}
 
@@ -152,7 +164,7 @@ namespace AIngine::Editor {
 	}
 
 	// the path to the file that contains the path to the scene that was last opened
-	static const std::string lastSceneFilePath = "scenes.txt";
+	static const std::string lastSceneFilePath = "Editor/lastScene.json";
 
 	void Editor::OnWindowClose()
 	{
@@ -195,16 +207,24 @@ namespace AIngine::Editor {
 		AIngine::Editor::Serialization::Serializer::SerializeSceneGraph(m_currentSceneFilePath);
 	}
 
-	std::string Editor::UpdateSceneTitle()
+	std::string Editor::GetCurrentSceneName()
 	{
-		std::string Path(std::filesystem::canonical(m_currentSceneFilePath).string());
-		size_t first = Path.find_last_of('\\') + 1;
-		size_t last = Path.find_last_of('.');
-		std::string sceneName = " | ";
-		sceneName.append(Path.substr(first, last - first).c_str());
-		m_app.m_window->AppendWindowTitle(sceneName.c_str());
-		return Path.substr(first, last - first).c_str();
+		if (s_instance) {
+			std::string Path(std::filesystem::canonical(s_instance->m_currentSceneFilePath).string());
+			size_t first = Path.find_last_of('\\') + 1;
+			size_t last = Path.find_last_of('.');
+			return Path.substr(first, last - first).c_str();
+		}
+		return "";
 	}
+
+	void Editor::UpdateSceneTitle()
+	{
+		std::string sceneName = " | ";
+		sceneName.append(GetCurrentSceneName());
+		m_app.m_window->AppendWindowTitle(sceneName.c_str());
+	}
+
 
 	Editor::Editor()
 		: m_app(AIngine::Application::Get()), Layer("Editor")
@@ -228,6 +248,21 @@ namespace AIngine::Editor {
 		m_widgets.push_back(new ToolbarWidget());
 
 		AIngine::Editor::Serialization::Serializer::LoadEditorSettings();
+		m_BuildScenes = AIngine::Editor::Serialization::Serializer::LoadBuildScenes();
+	}
+
+	void Editor::EnterFullScreenMode()
+	{
+		m_isFullScreen = true;
+		AIngine::Structures::Rectangle viewportRect = AIngine::Structures::RectangleI(m_app.GetWindow().GetX(), 0, m_app.GetWindow().GetWidth(), m_app.GetWindow().GetHeight());
+		OnViewportChangedEvent(viewportRect);
+	}
+
+	void Editor::LeaveFullScreenMode()
+	{
+		m_isFullScreen = false;
+		AIngine::Structures::Rectangle viewportRect = CalculateViewportRect(glm::vec2(m_app.GetWindow().GetWidth(), m_app.GetWindow().GetHeight()));
+		OnViewportChangedEvent(viewportRect);
 	}
 
 	AIngine::Structures::RectangleI Editor::CalculateViewportRect(const glm::vec2& windowSize) const
@@ -331,6 +366,53 @@ namespace AIngine::Editor {
 		return ImGui::IsAnyWindowHovered();
 	}
 
+	void Editor::SetFullScreenPlayMode(bool bFullsceen)
+	{
+		if (s_instance) {
+			// leave fullscreen mode
+			if (s_instance->m_isFullScreen && !bFullsceen) {
+				s_instance->LeaveFullScreenMode();
+			}
+
+			// enter fullscreen mode
+			if (!s_instance->m_isFullScreen && bFullsceen) {
+				s_instance->EnterFullScreenMode();
+			}
+		}
+	}
+
+	bool Editor::ContainsScene(const std::string & name)
+	{
+		if (s_instance) {
+			for (auto& it = s_instance->m_BuildScenes.begin(); it != s_instance->m_BuildScenes.end(); it++) {
+				if (it->Name == name)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	void Editor::SaveBuildScenes()
+	{
+		if (s_instance) {
+			AIngine::Editor::Serialization::Serializer::SaveBuildScenes(s_instance->m_BuildScenes);
+		}
+	}
+
+	void Editor::AddCurrentSceneToBuild()
+	{
+		if (s_instance)
+		{
+			s_instance->m_BuildScenes.push_back(Scene
+				{
+					s_instance->GetCurrentSceneName(),
+					std::filesystem::canonical(s_instance->m_currentSceneFilePath).string()
+				});
+		}
+	}
+
 	bool Editor::CreateMoveablePositionVertex(glm::vec2 & worldPosition, float vertexSize, const glm::vec3 & colorInteract, const glm::vec3 & colorNormal)
 	{
 		glm::vec2 mouseScreenPos = glm::vec2(AIngine::Input::GetMousePosition().first, AIngine::Input::GetMousePosition().second);
@@ -375,7 +457,8 @@ namespace AIngine::Editor {
 			// remember the path to the new scene
 			s_instance->m_currentSceneFilePath = std::filesystem::relative(path).string();
 
-			std::string sceneName = s_instance->UpdateSceneTitle();
+			std::string sceneName = s_instance->GetCurrentSceneName();
+			s_instance->UpdateSceneTitle();
 
 			CORE_INFO("Loaded ccene " + sceneName + " from " + path);
 		}

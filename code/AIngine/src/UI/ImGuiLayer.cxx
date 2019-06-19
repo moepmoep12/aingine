@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "AIngine/KeyCodes.h"
 #include "Debug/log.h"
+#include "Editor/Editor.h"
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
 #include "examples/imgui_impl_opengl3.cpp"
@@ -106,7 +107,8 @@ namespace AIngine::UI {
 
 		// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
 		// because it would be confusing to have two docking targets within each others.
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+		ImGuiWindowFlags window_flags =  ImGuiWindowFlags_NoDocking;
+		if (!AIngine::Editor::Editor::IsFullScreenPlayMode()) window_flags |= ImGuiWindowFlags_MenuBar;
 		if (opt_fullscreen)
 		{
 			ImGuiViewport* viewport = ImGui::GetMainViewport();
