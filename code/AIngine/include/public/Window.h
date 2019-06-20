@@ -72,6 +72,8 @@ namespace AIngine {
 		void SetWindowTitle(const char* title);
 		void AppendWindowTitle(const char* append);
 		void SetWindowSize(int w, int h);
+		void SetWindowSizeLimits(int wMin, int wMax, int hMin, int hMax);
+		void SetWindowResize(bool enabled);
 		inline WindowData& GetWindowData() { return m_windowData; }
 
 		static Window* Create(const WindowConfig& config = WindowConfig());

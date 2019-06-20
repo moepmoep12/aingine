@@ -37,7 +37,7 @@ AIngine::Window::Window(const WindowConfig & config)
 	m_window = glfwCreateWindow((int)m_config.Width, (int)m_config.Height, m_config.Title.c_str(), nullptr, nullptr);
 
 	ASSERT(m_window, "Could not create window");
-
+	
 	glfwMakeContextCurrent(m_window);
 	glfwSetWindowUserPointer(m_window, &m_windowData);
 	SetVSync(true);
@@ -136,6 +136,16 @@ void AIngine::Window::SetWindowSize(int w, int h)
 {
 	glfwSetWindowSize(m_window, w, h);
 	glfwGetWindowSize(m_window, &m_windowData.Width, &m_windowData.Height);
+}
+
+void AIngine::Window::SetWindowSizeLimits(int wMin, int wMax, int hMin, int hMax)
+{
+	glfwSetWindowSizeLimits(m_window, wMin, wMax, hMin, hMax);
+}
+
+void AIngine::Window::SetWindowResize(bool enabled)
+{
+	glfwWindowHint(GLFW_RESIZABLE, enabled);
 }
 
 AIngine::Window* AIngine::Window::Create(const WindowConfig & config)
