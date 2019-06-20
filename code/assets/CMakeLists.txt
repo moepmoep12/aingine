@@ -39,16 +39,16 @@ add_custom_target(Assets ALL
     ${BMP}
     )
      
-# custom_output will always be rebuilt because it depends on always_rebuild
-add_custom_command(
-    OUTPUT copy_assets
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    "${ASSET_DIR}"
-    $<TARGET_FILE_DIR:Game>/assets/
-    COMMENT "Copying Assets: ${ASSET_DIR}" 
-    DEPENDS
-    always_rebuild
-    )
+# # custom_output will always be rebuilt because it depends on always_rebuild
+# add_custom_command(
+    # OUTPUT copy_assets
+    # COMMAND ${CMAKE_COMMAND} -E copy_directory
+    # "${ASSET_DIR}"
+    # $<TARGET_FILE_DIR:Game>/assets/
+    # COMMENT "Copying Assets: ${ASSET_DIR}" 
+    # DEPENDS
+    # always_rebuild
+    # )
 
 # Dummy output which is never actually produced. Anything that depends on
 # this will always be rebuilt.
