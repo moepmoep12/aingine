@@ -139,10 +139,6 @@ namespace AIngine {
 
 		m_renderer->initRenderData();
 
-		if ((AIngine::Editor::Editor::GetIsInPlayMode())) {
-			OnAppStartUp();
-		}
-
 		CORE_INFO("App is running!");
 
 		m_isRunning = true;
