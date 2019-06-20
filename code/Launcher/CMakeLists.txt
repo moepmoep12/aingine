@@ -8,10 +8,13 @@
 
 set(LAUNCHER_SRC 
     src/Launcher.cxx
+    src/LauncherGUI.cxx
     )
 
 set(LAUNCHER_HEADER
     include/Launcher.h
+    include/LauncherGUI.h
+    include/Project.h
     )
 
 # Add Executable Target 

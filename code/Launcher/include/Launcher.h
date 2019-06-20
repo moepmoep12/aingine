@@ -1,14 +1,28 @@
 #pragma once
 #include "AIngine/Core.h"
+#include "Project.h"
 
-class Launcher : public AIngine::Application {
-public:
-	Launcher();
+namespace ProjectLauncher {
 
-	// Inherited via Application
-	virtual void OnAppStartUp() override {}
-	virtual void OnAppShutDown() override {}
-	virtual void OnAppUpdate() override {}
-	virtual void OnAppEvent(AIngine::Events::EventData& e) override {}
+	class Launcher : public AIngine::Application {
+	public:
+		Launcher();
 
-};
+		// Inherited via Application
+		virtual void OnAppStartUp() override;
+		virtual void OnAppShutDown() override;
+		virtual void OnAppUpdate() override;
+		virtual void OnAppEvent(AIngine::Events::EventData& e) override {}
+
+		static std::vector<Project>* GetProjects();
+
+	private:
+		void LoadProjectsFromFile();
+		void SaveProjectsToFile();
+
+	private:
+		static Launcher* s_instance;
+		static const char* PROJECTSFILEPATH;
+		std::vector<Project> m_projects;
+	};
+}
