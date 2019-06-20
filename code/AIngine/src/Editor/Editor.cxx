@@ -21,6 +21,7 @@
 #include <filesystem>
 #include <nfd.h>
 #include <algorithm>
+#include <stdlib.h>
 
 namespace AIngine::Editor {
 
@@ -589,6 +590,26 @@ namespace AIngine::Editor {
 					if (std::find(Result.begin(), Result.end(), path) == Result.end())
 						Result.push_back(path);
 				}
+			}
+
+			nfdchar_t *outPath = NULL;
+			nfdresult_t result = NFD_PickFolder("", &outPath);
+
+			if (result == NFD_OKAY)
+			{
+				std::stringstream command;
+
+				//// move to correct hard drive
+				//command << outPath[0] << ":" << " && ";
+
+				//// move to folder
+				//command << "cd " << outPath << " && ";
+
+				//// build
+				//command << "cmake --build . --target " << s_instance->m_app.GetProjectName() << " --config Release";
+				//system(command.str().c_str());
+
+				free(outPath);
 			}
 		}
 	}
