@@ -74,6 +74,7 @@ namespace AIngine {
 		void SetWindowSize(int w, int h);
 		void SetWindowSizeLimits(int wMin, int wMax, int hMin, int hMax);
 		void SetWindowResize(bool enabled);
+		void Close();
 		inline WindowData& GetWindowData() { return m_windowData; }
 
 		static Window* Create(const WindowConfig& config = WindowConfig());

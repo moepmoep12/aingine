@@ -148,6 +148,11 @@ void AIngine::Window::SetWindowResize(bool enabled)
 	glfwWindowHint(GLFW_RESIZABLE, enabled);
 }
 
+void AIngine::Window::Close()
+{
+	glfwSetWindowShouldClose(m_window, true);
+}
+
 AIngine::Window* AIngine::Window::Create(const WindowConfig & config)
 {
 	return new Window(config);
