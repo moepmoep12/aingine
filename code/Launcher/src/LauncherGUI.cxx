@@ -3,6 +3,7 @@
 #include "AIngine/Core.h"
 
 #include "imgui.h"
+#include <nfd.h>
 
 
 namespace ProjectLauncher {
@@ -45,21 +46,60 @@ namespace ProjectLauncher {
 
 			ImGui::Separator();
 
+			static bool bCreatingProject = false;
 			static const ImVec2 buttonSize = ImVec2(120, 60);
 			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 0));
 
 			ImGui::SetCursorPosY(325);
 
-			if (ImGui::Button("Create", buttonSize)) {
+			if (ImGui::Button("Create", buttonSize))
+			{
+				bCreatingProject = !bCreatingProject;
+			}
 
+			if (bCreatingProject) {
+				ImGui::OpenPopup("PickProjectName");
+				if (ImGui::BeginPopupModal("PickProjectName", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(20, 20));
+
+					ImGui::Text("Enter project name");
+
+					static char str[40] = "MyProject";
+
+					if (ImGui::InputText("", str, IM_ARRAYSIZE(str)));
+
+					if (ImGui::Button("Create##newproject")) 
+					{
+						nfdchar_t *outPath = NULL;
+						nfdresult_t result = NFD_PickFolder("", &outPath);
+
+						if (result == NFD_OKAY)
+						{
+							bCreatingProject = false;
+							Launcher::CreateNewProject(str, outPath);
+							ImGui::CloseCurrentPopup();
+						}
+					}
+
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel##createproject")) {
+						bCreatingProject = false;
+						ImGui::CloseCurrentPopup();
+					}
+
+					ImGui::PopStyleVar();
+					ImGui::EndPopup();
+				}
 			}
 
 			ImGui::SameLine();
 
 			if (s_selectedProject)
 			{
-				if (ImGui::Button("Open", buttonSize)) {
-
+				if (ImGui::Button("Open", buttonSize))
+				{
 				}
 			}
 			else {

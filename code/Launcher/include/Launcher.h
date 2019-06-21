@@ -15,6 +15,7 @@ namespace ProjectLauncher {
 		virtual void OnAppEvent(AIngine::Events::EventData& e) override {}
 
 		static std::vector<Project>* GetProjects();
+		static void CreateNewProject(const std::string& name, const std::string& path);
 
 	private:
 		void LoadProjectsFromFile();

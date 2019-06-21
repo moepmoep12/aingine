@@ -68,6 +68,27 @@ namespace ProjectLauncher {
 		return nullptr;
 	}
 
+	void Launcher::CreateNewProject(const std::string & name, const std::string & path)
+	{
+		if (s_instance)
+		{
+			s_instance->m_projects.push_back(Project
+				{
+					name,
+					path
+				});
+
+			// copy files
+
+			// run cmake build
+
+			// open VS Solution
+
+			// finally, close the launcher
+			s_instance->ShutDown();
+		}
+	}
+
 	void Launcher::LoadProjectsFromFile()
 	{
 		using json = nlohmann::json;
