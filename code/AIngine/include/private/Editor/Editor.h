@@ -62,6 +62,8 @@ namespace AIngine::Editor {
 		/* Returns wheter any UI element is currently hovered with the mouse */
 		static bool IsAnyUIElementHovered();
 
+		static std::string GetResourceDirectory();
+
 		/* Calculates the available viewport size to be used for rendering the scene
 		* @returns : Returns the viewport Rectangle with a screen position & size */
 		AIngine::Structures::RectangleI CalculateViewportRect(const glm::vec2& windowSize) const;
@@ -138,6 +140,8 @@ namespace AIngine::Editor {
 		void EnterFullScreenMode();
 		void LeaveFullScreenMode();
 
+		void LoadProjectData();
+
 		Editor();
 
 	private:
@@ -153,5 +157,7 @@ namespace AIngine::Editor {
 		bool m_isInPlayMode = false;
 		bool m_isGamePaused = false;
 		std::string m_currentSceneFilePath;
+		std::string m_resourceFolderPath;
+		std::string m_projectName;
 	};
 }

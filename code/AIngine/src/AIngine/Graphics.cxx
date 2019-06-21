@@ -25,9 +25,7 @@ namespace AIngine {
 			std::string vs("assets/Intellgine/shader/debug/vertexPoints.glsl");
 			std::string fs("assets/Intellgine/shader/debug/fragment.glsl");
 
-			std::string path;
-			path.append(vs).append(";").append(fs);
-			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
+			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs,fs))->GetShader();
 
 			m_vertexAttribute = 0;
 			m_colorAttribute = 1;
@@ -149,9 +147,7 @@ namespace AIngine {
 			std::string vs("assets/Intellgine/shader/debug/vertex.glsl");
 			std::string fs("assets/Intellgine/shader/debug/fragment.glsl");
 
-			std::string path;
-			path.append(vs).append(";").append(fs);
-			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
+			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs, fs))->GetShader();
 
 			m_vertexAttribute = 0;
 			m_colorAttribute = 1;
@@ -258,9 +254,7 @@ namespace AIngine {
 			std::string vs("assets/Intellgine/shader/debug/vertex.glsl");
 			std::string fs("assets/Intellgine/shader/debug/fragment.glsl");
 
-			std::string path;
-			path.append(vs).append(";").append(fs);
-			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
+			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs, fs))->GetShader();
 
 			m_vertexAttribute = 0;
 			m_colorAttribute = 1;
@@ -372,9 +366,8 @@ namespace AIngine {
 			// load shader
 			std::string vs("assets/Intellgine/shader/screenshader/vertexText.glsl");
 			std::string fs("assets/Intellgine/shader/screenshader/fragmentText.glsl");
-			std::string path;
-			path.append(vs).append(";").append(fs);
-			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
+
+			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs, fs))->GetShader();
 			m_shader->SetInteger(2 /*"text"*/, 0, false);
 			std::stringstream ss;
 			ss << "assets/Intellgine/fonts/arial.ttf";

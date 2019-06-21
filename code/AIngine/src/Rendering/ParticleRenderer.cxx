@@ -36,9 +36,8 @@ namespace AIngine::Rendering {
 		// load Shader
 		std::string vs("assets/Intellgine/shader/screenshader/vertexParticle.glsl");
 		std::string fs("assets/Intellgine/shader/screenshader/fragmentParticle.glsl");
-		std::string path;
-		path.append(vs).append(";").append(fs);
-		m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
+
+		m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs, fs))->GetShader();
 	}
 
 	ParticleRenderer::~ParticleRenderer()

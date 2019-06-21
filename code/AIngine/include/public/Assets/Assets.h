@@ -6,6 +6,8 @@
 #include <vector>
 #include <sstream>
 #include <filesystem>
+#include <algorithm>
+#include <filesystem>
 
 #include "Rendering/bitmap.h"
 #include "Rendering/shader.h"
@@ -81,12 +83,21 @@ namespace AIngine::Assets {
 
 		virtual std::unique_ptr<AssetBase> LoadAsset(std::string const & path) override
 		{
-			return std::unique_ptr<BitmapAsset>(new BitmapAsset(path));
+			return std::unique_ptr<BitmapAsset>(new BitmapAsset(std::filesystem::canonical(path).string()));
 		};
 	};
 
 
 	/********************************** ShaderAsset ******************************************/
+
+	inline std::string ShaderPath(const std::string& vertexPath, const std::string& fragmentPath)
+	{
+		std::stringstream ss;
+		ss << '\n';
+		ss << vertexPath << '\n';
+		ss << fragmentPath << '\n';
+		return ss.str();
+	}
 
 	class ShaderAsset final : public AssetBase
 	{
@@ -125,24 +136,50 @@ namespace AIngine::Assets {
 	protected:
 		virtual std::unique_ptr<AssetBase> LoadAsset(std::string const & path) override
 		{
-			std::vector<std::string> paths;
-			split(path, ';', paths);
+			std::vector<std::string> paths = SplitPath(path);
 			return std::unique_ptr<ShaderAsset>(new ShaderAsset(paths[0], paths[1]));
 		}
 
-		void split(const std::string& s, char c,
-			std::vector<std::string>& v) {
-			std::string::size_type i = 0;
-			std::string::size_type j = s.find(c);
+		//void split(const std::string& s, char c,
+		//	std::vector<std::string>& v) {
+		//	std::string::size_type i = 0;
+		//	std::string::size_type j = s.find(c);
 
-			while (j != std::string::npos) {
-				v.push_back(s.substr(i, j - i));
-				i = ++j;
-				j = s.find(c, j);
+		//	while (j != std::string::npos) {
+		//		v.push_back(s.substr(i, j - i));
+		//		i = ++j;
+		//		j = s.find(c, j);
 
-				if (j == std::string::npos)
-					v.push_back(s.substr(i, s.length()));
+		//		if (j == std::string::npos)
+		//			v.push_back(s.substr(i, s.length()));
+		//	}
+		//}
+
+		std::vector<std::string> SplitPath(const std::string& path) 
+		{
+			std::vector<std::string> result;
+			std::istringstream s(path);
+			unsigned int i = 0;
+			std::string resourceFolderPath;
+			for (std::string line; std::getline(s, line); )
+			{
+				switch (i) {
+				case 0:
+					resourceFolderPath = line;
+					resourceFolderPath.erase(std::remove(resourceFolderPath.begin(), resourceFolderPath.end(), '\n'), resourceFolderPath.end());
+					break;
+				case 1:
+					//std::replace(line.begin(), line.end(), '/', '\\');
+					result.push_back(std::filesystem::canonical(resourceFolderPath + line).string());
+					break;
+				case 2:
+					//std::replace(line.begin(), line.end(), '/', '\\');
+					result.push_back(std::filesystem::canonical(resourceFolderPath + line).string());
+					break;
+				}
+				i++;
 			}
+			return result;
 		}
 	};
 
@@ -180,7 +217,7 @@ namespace AIngine::Assets {
 	protected:
 		virtual std::unique_ptr<AssetBase> LoadAsset(std::string const & path) override
 		{
-			return std::unique_ptr<SoundAsset>(new SoundAsset(path));
+			return std::unique_ptr<SoundAsset>(new SoundAsset(std::filesystem::canonical(path).string()));
 		}
 	};
 
@@ -227,7 +264,7 @@ namespace AIngine::Assets {
 			{
 				switch (i) {
 				case 0:
-					*outpath = line;
+					*outpath = std::filesystem::canonical(line).string();
 					break;
 				case 1:
 					*size = std::stoi(line);
@@ -284,7 +321,13 @@ namespace AIngine::Assets {
 		static T * Load(std::string const & path)
 		{
 			if (s_instance) {
-				return (T*)s_instance->Load(path, std::type_index(typeid(T)));
+				std::filesystem::path p(path);
+				std::string result;
+				if (p.is_relative())
+					result = s_instance->m_resourceFolderPath + path;
+				else
+					result = path;
+				return (T*)s_instance->Load(result, std::type_index(typeid(T)));
 			}
 			else return nullptr;
 		}
@@ -305,5 +348,6 @@ namespace AIngine::Assets {
 		AssetMap assets;
 		FactoryMap factories;
 		static AssetRegistry* s_instance;
+		std::string m_resourceFolderPath;
 	};
 }

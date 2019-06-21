@@ -57,9 +57,7 @@ namespace AIngine::Rendering {
 		std::string vs("assets/Intellgine/shader/screenshader/vertexScreen.glsl");
 		std::string fs("assets/Intellgine/shader/debug/fragmentOutline.glsl");
 
-		std::string path;
-		path.append(vs).append(";").append(fs);
-		m_outlineShader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(path)->GetShader();
+		m_outlineShader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs, fs))->GetShader();
 		m_outlineShader->SetInteger(0, 0, true);
 
 		SetViewport();
