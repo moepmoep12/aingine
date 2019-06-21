@@ -72,6 +72,8 @@ namespace AIngine {
 		virtual void OnAppEvent(AIngine::Events::EventData& e) {}
 
 
+		void ShutDown();
+
 	private:
 		void RegisterCallbacks();
 		// Callbacks

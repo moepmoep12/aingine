@@ -170,4 +170,9 @@ option(AINGINE_LOG_TO_FILE "Should the log be written to a file?" ON)
 if(AINGINE_LOG_TO_FILE)
 	add_definitions(-DLOG_TO_FILE)
 endif()
+
+option(AINGINE_EDITOR "Build Editor?" OFF)
+if(AINGINE_EDITOR)
+	add_definitions(-DEDITOR)
+endif()
 	

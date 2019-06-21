@@ -96,7 +96,7 @@ namespace AIngine {
 		m_sceneGraph = new AIngine::Structures::SceneGraph();
 
 		// when we're in Release don't do debug drawing
-#ifdef _DEBUG 
+#ifdef EDITOR 
 		m_physRenderer = new AIngine::Rendering::PhysicsRenderer();
 		m_physRenderer->SetFlags(b2Draw::e_shapeBit /*+ b2Draw::e_centerOfMassBit*/);
 		m_physicsWorld->SetDebugDraw(m_physRenderer);
@@ -119,7 +119,7 @@ namespace AIngine {
 		delete m_physicsWorld;
 		delete m_sceneGraph;
 		delete m_contactListener;
-#ifdef _DEBUG
+#ifdef EDITOR
 		if (m_physRenderer) delete m_physRenderer;
 #endif
 	}

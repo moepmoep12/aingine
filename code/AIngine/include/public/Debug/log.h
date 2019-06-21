@@ -29,7 +29,7 @@ namespace  AIngine {
 }
 
 
-#ifdef _DEBUG
+#ifdef EDITOR
 	#define CORE_ERROR(...)  ::AIngine::Log::GetCoreLogger()->error(__VA_ARGS__)
 	#define CORE_WARN(...)   ::AIngine::Log::GetCoreLogger()->warn(__VA_ARGS__)
 	#define CORE_TRACE(...)  ::AIngine::Log::GetCoreLogger()->trace(__VA_ARGS__)
@@ -42,7 +42,7 @@ namespace  AIngine {
 //#define CORE_FATAL(...)  ::AIngine::Log::GetCoreLogger()->fatal(__VA_ARGS__)
 #endif
 
-#ifdef _DEBUG
+#ifdef EDITOR
 	#define DEBUG_ERROR(...)  ::AIngine::Log::GetClientLogger()->error(__VA_ARGS__)
 	#define DEBUG_WARN(...)   ::AIngine::Log::GetClientLogger()->warn(__VA_ARGS__)
 	#define DEBUG_TRACE(...)  ::AIngine::Log::GetClientLogger()->trace(__VA_ARGS__)

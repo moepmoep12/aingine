@@ -91,7 +91,7 @@ namespace AIngine::UI {
 
 	void ImGuiLayer::OnImGuiRender()
 	{
-#ifdef _DEBUG
+#ifdef EDITOR
 		//static bool show = true;
 		//ImGui::ShowDemoWindow(&show);
 		CreateDockSpace(true);

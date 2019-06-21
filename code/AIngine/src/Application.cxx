@@ -117,7 +117,7 @@ namespace AIngine {
 		m_world->GetSceneGraph().GetRoot().RemoveComponent<Script>();
 
 		// create Editor if we're in Debug
-#ifdef _DEBUG
+#ifdef EDITOR
 		m_editor = new AIngine::Editor::Editor();
 		PushOverlay(m_editor);
 		m_editor->OnViewportChangedEvent += [=](AIngine::Structures::RectangleI& viewport) {
@@ -184,7 +184,7 @@ namespace AIngine {
 
 		CORE_INFO("Shutting App down...");
 
-#ifndef _DEBUG
+#ifndef EDITOR
 		OnLeavePlayMode();
 #endif
 		// Clean up
@@ -195,7 +195,7 @@ namespace AIngine {
 		delete m_viewport;
 		delete m_particleRenderer;
 
-#ifdef _DEBUG
+#ifdef EDITOR
 		m_layerStack.PopOverlay(m_editor);
 		delete m_editor;
 #endif
@@ -272,6 +272,11 @@ namespace AIngine {
 	bool Application::IsRunning()
 	{
 		return AIngine::Editor::Editor::IsGameRunning();
+	}
+
+	void Application::ShutDown()
+	{
+		m_window->Close();
 	}
 
 	void Application::RegisterCallbacks()
