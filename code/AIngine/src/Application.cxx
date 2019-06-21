@@ -111,11 +111,6 @@ namespace AIngine {
 		m_world = new World(m_bounds, m_gravity);
 		PushLayer(m_world);
 
-		// in order to compile the template we need to dummy-call it
-		m_world->GetSceneGraph().GetRoot().AddComponent<Script>();
-		m_world->GetSceneGraph().GetRoot().GetComponent<Script>();
-		m_world->GetSceneGraph().GetRoot().RemoveComponent<Script>();
-
 		// create Editor if we're in Debug
 #ifdef EDITOR
 		m_editor = new AIngine::Editor::Editor();
@@ -133,6 +128,7 @@ namespace AIngine {
 #else
 		AIngine::Structures::Rectangle viewportRect = AIngine::Structures::RectangleI(m_window->GetX(), 0, m_window->GetWidth(), m_window->GetHeight());
 		OnViewportChanged(viewportRect);
+		// we're in release, load default scene
 		LoadScene(0);
 		OnEnterPlayMode();
 #endif
@@ -185,6 +181,7 @@ namespace AIngine {
 		CORE_INFO("Shutting App down...");
 
 #ifndef EDITOR
+		// if we're in editor the editor will call shutdown
 		OnLeavePlayMode();
 #endif
 		// Clean up
@@ -194,11 +191,6 @@ namespace AIngine {
 		delete m_Graphics;
 		delete m_viewport;
 		delete m_particleRenderer;
-
-#ifdef EDITOR
-		m_layerStack.PopOverlay(m_editor);
-		delete m_editor;
-#endif
 	}
 
 	void Application::PropagateEventData(AIngine::Events::EventData & e)
@@ -213,24 +205,18 @@ namespace AIngine {
 		if ((AIngine::Editor::Editor::IsGameRunning()))
 			// propagate it to the game
 			OnAppEvent(e);
-
 	}
 
 	void Application::OnEnterPlayMode()
 	{
 		PropagateEventData(AIngine::Events::EnterPlayModeEventData());
 		OnAppStartUp();
-		//AIngine::Structures::OnStartTraverser onStartTraverser;
-		//onStartTraverser.Traverse(&m_world->GetSceneGraph().GetRoot());
-
 	}
 
 	void Application::OnLeavePlayMode()
 	{
 		PropagateEventData(AIngine::Events::ExitPlayModeEventData());
 		OnAppShutDown();
-		//AIngine::Structures::OnEndTraverser onEndTraverser;
-		//onEndTraverser.Traverse(&m_world->GetSceneGraph().GetRoot());
 	}
 
 	void Application::PushLayer(AIngine::Structures::Layer * layer)
