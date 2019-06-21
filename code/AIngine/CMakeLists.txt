@@ -132,7 +132,7 @@ set(THIRD_PARTY_DIR "${CMAKE_SOURCE_DIR}/thirdParty")
 
 
 target_include_directories(Engine PUBLIC include/public)
-target_include_directories(Engine PRIVATE include/private)
+include_directories(Engine PRIVATE include/private)
 
 
 target_link_libraries(Engine

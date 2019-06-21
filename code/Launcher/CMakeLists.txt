@@ -15,6 +15,7 @@ set(LAUNCHER_HEADER
     include/Launcher.h
     include/LauncherGUI.h
     include/Project.h
+    include/TemplateFiles.h
     )
 
 # Add Executable Target 

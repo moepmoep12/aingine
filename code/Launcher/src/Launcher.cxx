@@ -2,6 +2,7 @@
 #include "Launcher.h"
 #include "EntryPoint.h"
 #include "LauncherGUI.h"
+#include "TemplateFiles.h"
 
 #include <nlohmann/json.hpp>
 #include <fstream>
@@ -75,9 +76,9 @@ namespace ProjectLauncher {
 			s_instance->m_projects.push_back(Project
 				{
 					name,
-					path
+					std::filesystem::canonical(path).string()
 				});
-
+			std::string header = GetHeaderTemplate(name);
 			// copy files
 
 			// run cmake build

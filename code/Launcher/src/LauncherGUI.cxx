@@ -18,7 +18,9 @@ namespace ProjectLauncher {
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 15));
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.25, 0.25, 0.25, 1));
 
+
 		CreateDockSpace(true);
+
 
 		if (ImGui::Begin("Projects", &open, 0))
 		{
@@ -69,7 +71,7 @@ namespace ProjectLauncher {
 
 					if (ImGui::InputText("", str, IM_ARRAYSIZE(str)));
 
-					if (ImGui::Button("Create##newproject")) 
+					if (ImGui::Button("Create##newproject"))
 					{
 						nfdchar_t *outPath = NULL;
 						nfdresult_t result = NFD_PickFolder("", &outPath);
