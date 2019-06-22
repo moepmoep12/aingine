@@ -16,7 +16,7 @@ namespace CrappyBird
 		// load obstacle textures
 		for (int i = 1; i < 7; i++) {
 			std::string path;
-			path += "assets/CrappyBird/textures/set8_example_";
+			path += "CrappyBird/textures/set8_example_";
 			path += std::to_string(i);
 			path += ".png";
 			m_obstacleTextures.push_back(AIngine::Rendering::Texture2D(Assets::Load<BitmapAsset>(path)->GetBitmap()));

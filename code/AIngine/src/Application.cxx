@@ -66,8 +66,8 @@ namespace AIngine {
 		}
 
 		// load shader
-		std::string vertexPath("assets/Intellgine/shader/screenshader/vertexScreen.glsl");
-		std::string fragPath("assets/Intellgine/shader/screenshader/fragmentScreen.glsl");
+		std::string vertexPath("AIngine/shader/screenshader/vertexScreen.glsl");
+		std::string fragPath("AIngine/shader/screenshader/fragmentScreen.glsl");
 
 		AIngine::Assets::ShaderAsset* shaderAsset = m_assetRegistry.Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vertexPath,fragPath));
 
@@ -75,7 +75,7 @@ namespace AIngine {
 		m_renderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());
 
 		//load basic white texture
-		std::string path = std::string("assets/Intellgine/textures/White.png");
+		std::string path = std::string("AIngine/textures/White.png");
 		AIngine::Assets::BitmapAsset* bitmap = m_assetRegistry.Load<AIngine::Assets::BitmapAsset>(path);
 
 		// create Graphics API

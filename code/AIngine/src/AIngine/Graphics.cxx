@@ -22,8 +22,8 @@ namespace AIngine {
 	{
 		void Create()
 		{
-			std::string vs("assets/Intellgine/shader/debug/vertexPoints.glsl");
-			std::string fs("assets/Intellgine/shader/debug/fragment.glsl");
+			std::string vs("AIngine/shader/debug/vertexPoints.glsl");
+			std::string fs("AIngine/shader/debug/fragment.glsl");
 
 			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs,fs))->GetShader();
 
@@ -144,8 +144,8 @@ namespace AIngine {
 	{
 		void Create()
 		{
-			std::string vs("assets/Intellgine/shader/debug/vertex.glsl");
-			std::string fs("assets/Intellgine/shader/debug/fragment.glsl");
+			std::string vs("AIngine/shader/debug/vertex.glsl");
+			std::string fs("AIngine/shader/debug/fragment.glsl");
 
 			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs, fs))->GetShader();
 
@@ -251,8 +251,8 @@ namespace AIngine {
 	{
 		void Create()
 		{
-			std::string vs("assets/Intellgine/shader/debug/vertex.glsl");
-			std::string fs("assets/Intellgine/shader/debug/fragment.glsl");
+			std::string vs("AIngine/shader/debug/vertex.glsl");
+			std::string fs("AIngine/shader/debug/fragment.glsl");
 
 			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs, fs))->GetShader();
 
@@ -362,15 +362,15 @@ namespace AIngine {
 		};
 
 		void Create() {
-			//"assets/Intellgine/fonts/arial.ttf"
+			//"AIngine/fonts/arial.ttf"
 			// load shader
-			std::string vs("assets/Intellgine/shader/screenshader/vertexText.glsl");
-			std::string fs("assets/Intellgine/shader/screenshader/fragmentText.glsl");
+			std::string vs("AIngine/shader/screenshader/vertexText.glsl");
+			std::string fs("AIngine/shader/screenshader/fragmentText.glsl");
 
 			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs, fs))->GetShader();
 			m_shader->SetInteger(2 /*"text"*/, 0, false);
 			std::stringstream ss;
-			ss << "assets/Intellgine/fonts/arial.ttf";
+			ss << "AIngine/fonts/arial.ttf";
 			ss << "\n";
 			ss << "50";
 			m_standardFont = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::FontAsset>(ss.str())->GetFont();

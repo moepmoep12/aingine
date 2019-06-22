@@ -13,32 +13,32 @@ namespace AIngine::Editor {
 		// load icons
 
 		// playIcon
-		std::string path = "assets/Intellgine/textures/Editor/play.png";
+		std::string path = "AIngine/textures/Editor/play.png";
 		AIngine::Rendering::Bitmap* bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["play"] = AIngine::Rendering::Texture2D(*bitmap);
 
 		// pauseIcon
-		path = "assets/Intellgine/textures/Editor/pause.png";
+		path = "AIngine/textures/Editor/pause.png";
 		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["pause"] = AIngine::Rendering::Texture2D(*bitmap);
 
 		// stopIcon
-		path = "assets/Intellgine/textures/Editor/stop.png";
+		path = "AIngine/textures/Editor/stop.png";
 		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["stop"] = AIngine::Rendering::Texture2D(*bitmap);
 
 		// openIcon
-		path = "assets/Intellgine/textures/Editor/open.png";
+		path = "AIngine/textures/Editor/open.png";
 		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["open"] = AIngine::Rendering::Texture2D(*bitmap);
 
 		// createNewIcon
-		path = "assets/Intellgine/textures/Editor/add-file.png";
+		path = "AIngine/textures/Editor/add-file.png";
 		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["new"] = AIngine::Rendering::Texture2D(*bitmap);
 
 		// saveIcon
-		path = "assets/Intellgine/textures/Editor/save.png";
+		path = "AIngine/textures/Editor/save.png";
 		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["save"] = AIngine::Rendering::Texture2D(*bitmap);
 	}

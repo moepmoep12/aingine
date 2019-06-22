@@ -9,22 +9,22 @@
 namespace AIngine::Editor {
 	SoundComponentWidget::SoundComponentWidget()
 	{
-		std::string path = "assets/Intellgine/textures/Editor/add-1.png";
+		std::string path = "AIngine/textures/Editor/add-1.png";
 		AIngine::Rendering::Bitmap* bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["add"] = AIngine::Rendering::Texture2D(*bitmap);
 
 		// playIcon
-		path = "assets/Intellgine/textures/Editor/play.png";
+		path = "AIngine/textures/Editor/play.png";
 		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["play"] = AIngine::Rendering::Texture2D(*bitmap);
 
 		// pauseIcon
-		path = "assets/Intellgine/textures/Editor/pause.png";
+		path = "AIngine/textures/Editor/pause.png";
 		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["pause"] = AIngine::Rendering::Texture2D(*bitmap);
 
 		// stopIcon
-		path = "assets/Intellgine/textures/Editor/stop.png";
+		path = "AIngine/textures/Editor/stop.png";
 		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["stop"] = AIngine::Rendering::Texture2D(*bitmap);
 	}

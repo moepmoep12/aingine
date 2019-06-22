@@ -281,6 +281,7 @@ namespace AIngine::Editor {
 
 		m_projectName = j.at("name");
 		m_resourceFolderPath = j.at("path");
+		m_resourceFolderPath.append("Resources\\");
 	}
 
 	AIngine::Structures::RectangleI Editor::CalculateViewportRect(const glm::vec2& windowSize) const
@@ -402,7 +403,9 @@ namespace AIngine::Editor {
 			if (file.fail()) return "";
 			nlohmann::json j = nlohmann::json::parse(file);
 			file.close();
-			return j.at("path");
+			std::string path = j.at("path");
+			path.append("Resources\\");
+			return path;
 		}
 
 		return std::string();

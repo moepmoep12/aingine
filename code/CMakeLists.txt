@@ -27,7 +27,7 @@ add_subdirectory(thirdParty)
 # --- Targets developed in this project
 #
 
-add_subdirectory(assets) 
+add_subdirectory(Resources) 
 add_subdirectory(AIngine) 
 add_subdirectory(Launcher) 
 add_subdirectory(CrappyBird) 

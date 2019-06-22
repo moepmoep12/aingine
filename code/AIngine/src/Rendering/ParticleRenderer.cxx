@@ -34,8 +34,8 @@ namespace AIngine::Rendering {
 		//glBindVertexArray(0);
 
 		// load Shader
-		std::string vs("assets/Intellgine/shader/screenshader/vertexParticle.glsl");
-		std::string fs("assets/Intellgine/shader/screenshader/fragmentParticle.glsl");
+		std::string vs("AIngine/shader/screenshader/vertexParticle.glsl");
+		std::string fs("AIngine/shader/screenshader/fragmentParticle.glsl");
 
 		m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs, fs))->GetShader();
 	}
