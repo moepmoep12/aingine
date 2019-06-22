@@ -74,6 +74,7 @@ namespace AIngine {
 		void SetWindowSize(int w, int h);
 		void SetWindowSizeLimits(int wMin, int wMax, int hMin, int hMax);
 		void SetWindowResize(bool enabled);
+		void SetWindowPosition(const glm::vec2& pos);
 		void Close();
 		inline WindowData& GetWindowData() { return m_windowData; }
 

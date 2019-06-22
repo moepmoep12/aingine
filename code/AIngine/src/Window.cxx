@@ -148,9 +148,19 @@ void AIngine::Window::SetWindowResize(bool enabled)
 	glfwWindowHint(GLFW_RESIZABLE, enabled);
 }
 
+void AIngine::Window::SetWindowPosition(const glm::vec2 & pos)
+{
+	glfwSetWindowPos(m_window, pos.x, pos.y);
+	glfwGetWindowSize(m_window, &m_windowData.Width, &m_windowData.Height);
+	glfwGetWindowFrameSize(m_window, &m_leftEdge, &m_topEdge, &m_rightEdge, &m_bottomEdge);
+	glfwGetWindowPos(m_window, &m_windowData.XPos, &m_windowData.YPos);
+	m_windowData.OnWindowMovedEvent(pos.x, pos.y);
+}
+
 void AIngine::Window::Close()
 {
 	glfwSetWindowShouldClose(m_window, true);
+	m_windowData.OnWindowClosedEvent();
 }
 
 AIngine::Window* AIngine::Window::Create(const WindowConfig & config)
