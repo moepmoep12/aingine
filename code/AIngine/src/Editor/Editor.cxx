@@ -392,7 +392,7 @@ namespace AIngine::Editor {
 
 	std::string Editor::GetResourceDirectory()
 	{
-		if (s_instance) 
+		if (s_instance)
 		{
 			return s_instance->m_resourceFolderPath;
 		}
@@ -408,6 +408,37 @@ namespace AIngine::Editor {
 			return path;
 		}
 
+		return std::string();
+	}
+
+	std::string AIngine::Editor::Editor::GetProjectDirectory()
+	{
+		// open the file
+		std::ifstream file;
+		file.open(s_projectFilePath);
+		if (file.fail()) return "";
+		nlohmann::json j = nlohmann::json::parse(file);
+		file.close();
+		std::string path = j.at("path");
+		return path;
+	}
+
+	std::string Editor::GetProjectName()
+	{
+		if (s_instance)
+		{
+			return s_instance->m_projectName;
+		}
+		else {
+			// open the file
+			std::ifstream file;
+			file.open(s_projectFilePath);
+			if (file.fail()) return "";
+			nlohmann::json j = nlohmann::json::parse(file);
+			file.close();
+
+			return j.at("name");
+		}
 		return std::string();
 	}
 

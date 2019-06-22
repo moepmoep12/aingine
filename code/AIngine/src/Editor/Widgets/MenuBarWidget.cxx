@@ -4,6 +4,7 @@
 #include "AIngine/World.h"
 #include "Structures/SceneGraph.h"
 #include "Editor/Widgets/PopUps.h"
+#include "Editor/ScriptingAPI.h"
 
 #include <string>
 #include <nfd.h>
@@ -108,6 +109,33 @@ namespace AIngine::Editor {
 
 				if (ImGui::MenuItem("Build##build")) {
 					AIngine::Editor::Editor::Build();
+				}
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Scripts")) {
+
+				ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+				if (ImGui::MenuItem("Add Script")) {
+					ImGui::OpenPopup("PickScriptName");
+				}
+
+				if (ImGui::BeginPopupModal("PickScriptName", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+				{
+					ImGui::Text("Enter Script name");
+
+					static char str[40] = "NewScript";
+
+					if (ImGui::InputText("", str, IM_ARRAYSIZE(str)));
+
+					if (ImGui::Button("Create##newscript"))
+					{
+						AIngine::Editor::Scripting::AddScript(str);
+						ImGui::CloseCurrentPopup();
+					}
+
+					ImGui::EndPopup();
 				}
 
 				ImGui::EndMenu();

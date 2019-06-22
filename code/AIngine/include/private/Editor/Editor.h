@@ -63,6 +63,8 @@ namespace AIngine::Editor {
 		static bool IsAnyUIElementHovered();
 
 		static std::string GetResourceDirectory();
+		static std::string GetProjectDirectory();
+		static std::string GetProjectName();
 
 		/* Calculates the available viewport size to be used for rendering the scene
 		* @returns : Returns the viewport Rectangle with a screen position & size */

@@ -48,6 +48,7 @@ set(AINGINE_HEADER
 		include/public/Structures/Traverser.h
 		include/public/UI/ImGuiLayer.h	
 		include/private/Editor/Editor.h
+		include/private/Editor/ScriptingAPI.h
 		include/private/Editor/Serialization.h
 		include/private/Editor/Widgets/AddComponentWidget.h
 		include/private/Editor/Widgets/EditorWidget.h
@@ -88,6 +89,7 @@ set(AINGINE_SRC
 		src/Debug/gl_error.cxx
 		src/Debug/log.cxx
 		src/Editor/Editor.cxx
+		src/Editor/ScriptingAPI.cxx
 		src/Editor/Serialization.cxx
 		src/Editor/Widgets/AddComponentWidget.cxx
 		src/Editor/Widgets/CameraWidget.cxx
