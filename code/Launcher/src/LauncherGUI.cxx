@@ -79,7 +79,10 @@ namespace ProjectLauncher {
 						if (result == NFD_OKAY)
 						{
 							bCreatingProject = false;
-							Launcher::CreateNewProject(str, outPath);
+							std::string p;
+							p.append(outPath).append("\\").append(str);
+							if (!Launcher::IsProjectDir(p))
+								Launcher::CreateNewProject(str, outPath);
 							ImGui::CloseCurrentPopup();
 							free(outPath);
 						}
@@ -99,10 +102,25 @@ namespace ProjectLauncher {
 
 			ImGui::SameLine();
 
+			if (ImGui::Button("Add existing", buttonSize)) {
+				static const nfdchar_t *filterList = "proj";
+				nfdchar_t *outPath = NULL;
+				nfdresult_t result = NFD_OpenDialog(filterList, NULL, &outPath);
+
+				if (result == NFD_OKAY)
+				{
+					Launcher::LoadProject(outPath);
+					free(outPath);
+				}
+			}
+
+			ImGui::SameLine();
+
 			if (s_selectedProject)
 			{
 				if (ImGui::Button("Open", buttonSize))
 				{
+					Launcher::OpenProject(*s_selectedProject);
 				}
 			}
 			else {
@@ -121,6 +139,7 @@ namespace ProjectLauncher {
 							Launcher::GetProjects()->erase(it);
 							break;
 						}
+						it++;
 					}
 				}
 			}

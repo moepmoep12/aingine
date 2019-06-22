@@ -3,11 +3,14 @@
 #include "EntryPoint.h"
 #include "LauncherGUI.h"
 #include "TemplateFiles.h"
+//#include "ef"
 
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <ctime>
 #include <filesystem>
+#include <stdlib.h>
+
 
 AIngine::Application* AIngine::CreateApplication() {
 	return new ProjectLauncher::Launcher();
@@ -21,22 +24,29 @@ namespace ProjectLauncher {
 
 	Launcher* Launcher::s_instance = nullptr;
 
+	static const glm::vec2 s_windowSize = glm::vec2(600, 400);
+
 	Launcher::Launcher()
 	{
 		s_instance = this;
 
 		GLFWmonitor* primary = glfwGetPrimaryMonitor();
 		const GLFWvidmode* mode = glfwGetVideoMode(primary);
-		m_window->SetWindowSize(600, 400);
+		m_window->SetWindowSize(s_windowSize.x, s_windowSize.y);
 		m_window->SetWindowTitle("Launcher");
-		m_window->SetWindowSizeLimits(600, 600, 400, 400);
+		m_window->SetWindowSizeLimits(s_windowSize.x, s_windowSize.y, s_windowSize.x, s_windowSize.y);
 		m_window->SetWindowResize(false);
 		PushOverlay(new LauncherGUI());
+
+		LoadProjectsFromFile();
 	}
 
 	void Launcher::OnAppStartUp()
 	{
-		LoadProjectsFromFile();
+		static const glm::vec2 monitorRes = m_window->GetMonitorResolution();
+		static glm::vec2 pos = monitorRes * 0.5f;
+		pos -= s_windowSize;
+		m_window->SetWindowPosition(pos);
 	}
 
 	void Launcher::OnAppShutDown()
@@ -47,8 +57,8 @@ namespace ProjectLauncher {
 	void Launcher::OnAppUpdate()
 	{
 		// keep constant window size
-		if (m_window->GetWidth() != 600 || m_window->GetHeight() != 400)
-			m_window->SetWindowSize(600, 400);
+		if (m_window->GetWidth() != s_windowSize.x || m_window->GetHeight() != s_windowSize.y)
+			m_window->SetWindowSize(s_windowSize.x, s_windowSize.y);
 	}
 
 
@@ -59,6 +69,33 @@ namespace ProjectLauncher {
 		const char* PROJECT_NAME = "name";
 		const char* PROJECT_PATH = "path";
 		const char* PROJECT_DATE = "lastUsed";
+		const char* PROJECT_SCRIPTS = "scripts";
+	}
+
+	bool Launcher::ContainsProject(const std::string & name)
+	{
+		if (s_instance) {
+			for (auto& project : s_instance->m_projects)
+			{
+				if (project.Name == name)
+					return true;
+			}
+		}
+		return false;
+	}
+
+	bool Launcher::IsProjectDir(const std::string & path)
+	{
+		if (!std::filesystem::is_directory(path)) return false;
+
+		if (s_instance) {
+			for (auto& project : s_instance->m_projects)
+			{
+				if (project.AbsolutePath == path)
+					return true;
+			}
+		}
+		return false;
 	}
 
 	std::vector<Project>* Launcher::GetProjects()
@@ -73,20 +110,61 @@ namespace ProjectLauncher {
 	{
 		if (s_instance)
 		{
+			std::string projectPath = path + "\\" + name + "\\";
+
+			// Create folders
+			CreateDirectories(projectPath);
+
+			// copy folders
+			CopyDirectories(projectPath);
+
+			// Create Files
+			CreateTemplateFiles(name, projectPath);
+
+			// Create Project File
+			CreateProjectFile(name, projectPath);
+
+			// Create Scripting File
+			CreateScriptingFile(projectPath + "code\\src\\");
+
+			// run cmake build
+			RunCMake(name, projectPath);
+
+			// open VS Solution
+			OpenVSSolution(name, projectPath);
+
 			s_instance->m_projects.push_back(Project
 				{
 					name,
 					std::filesystem::canonical(path).string()
 				});
-			std::string header = GetHeaderTemplate(name);
-			std::string src = GetSourceTemplate(name);
-			// copy files
+		}
+	}
 
-			// run cmake build
+	void Launcher::LoadProject(const std::string & path)
+	{
+		if (std::filesystem::exists(path)) {
+			using json = nlohmann::json;
 
-			// open VS Solution
+			std::ifstream file;
+			file.open(path);
+			if (file.fail()) return;
 
-			// finally, close the launcher
+			json j = json::parse(file);
+			file.close();
+
+			s_instance->m_projects.push_back(Project
+				{
+					j[AttributeNames::PROJECT_NAME],
+					j[AttributeNames::PROJECT_PATH]
+				});
+		}
+	}
+
+	void Launcher::OpenProject(const Project & proj)
+	{
+		if (s_instance) {
+			OpenVSSolution(proj.Name, proj.AbsolutePath);
 			s_instance->ShutDown();
 		}
 	}
@@ -103,11 +181,14 @@ namespace ProjectLauncher {
 		file.close();
 
 		for (auto& project : j) {
-			m_projects.push_back(Project
-				{
-					project[AttributeNames::PROJECT_NAME],
-					project[AttributeNames::PROJECT_PATH]
-				});
+			std::string path = project[AttributeNames::PROJECT_PATH];
+			if (std::filesystem::is_directory(std::filesystem::path(path))) {
+				m_projects.push_back(Project
+					{
+						project[AttributeNames::PROJECT_NAME],
+						project[AttributeNames::PROJECT_PATH]
+					});
+			}
 		}
 	}
 
@@ -119,9 +200,7 @@ namespace ProjectLauncher {
 		{
 			nlohmann::json j;
 			j[AttributeNames::PROJECT_NAME] = project.Name;
-			j[AttributeNames::PROJECT_PATH] = std::filesystem::canonical(project.AbsolutePath).string();
-			//std::time_t time = std::chrono::system_clock::to_time_t(project.LastUsed);
-			//j[AttributeNames::PROJECT_DATE] = std::ctime(&time);
+			j[AttributeNames::PROJECT_PATH] = std::filesystem::canonical(project.AbsolutePath).string() + "\\";
 			outer.push_back(j);
 		}
 
@@ -129,5 +208,108 @@ namespace ProjectLauncher {
 		file.open(PROJECTSFILEPATH);
 		file << outer.dump(0);
 		file.close();
+	}
+	void Launcher::CreateDirectories(const std::string & path)
+	{
+		// create folders
+		std::string codePath = path + "code";
+
+		std::filesystem::create_directories(std::filesystem::path(codePath + "\\include"));
+		std::filesystem::create_directories(std::filesystem::path(codePath + "\\src"));
+		std::filesystem::create_directories(std::filesystem::path(path + "lib"));
+		std::filesystem::create_directories(std::filesystem::path(path + "Resources"));
+		std::filesystem::create_directories(std::filesystem::path(path + "out\\CMake"));
+	}
+	void Launcher::CopyDirectories(const std::string & path)
+	{
+		std::string resourceDir = Application::GetResourceDirectory();
+		std::string libDir = resourceDir + "Launcher\\lib";
+		std::string engineResDir = resourceDir + "Launcher\\AIngine";
+		static const std::filesystem::copy_options copyOptions = std::filesystem::copy_options::recursive | std::filesystem::copy_options::update_existing;
+		std::filesystem::copy(libDir, path + "lib", copyOptions);
+		std::filesystem::copy(engineResDir, path + "Resources\\AIngine", copyOptions);
+	}
+
+	void Launcher::CreateTemplateFiles(const std::string & name, const std::string & path)
+	{
+		std::string header = GetHeaderTemplate(name);
+		std::string src = GetSourceTemplate(name);
+		std::string cmakeList = GetCMakeListTemplate(name);
+
+		std::string headerFilePath = path + "code\\include\\" + name + ".h";
+		std::string sourceFilePath = path + "code\\src\\" + name + ".cxx";
+		std::string cmakelistFilePath = path + "CMakeLists.txt";
+
+		std::ofstream file;
+		file.open(headerFilePath);
+		file << header;
+		file.close();
+
+		file.open(sourceFilePath);
+		file << src;
+		file.close();
+
+		file.open(cmakelistFilePath);
+		file << cmakeList;
+		file.close();
+	}
+
+	void Launcher::CreateProjectFile(const std::string & name, const std::string & path)
+	{
+		nlohmann::json j;
+		j[AttributeNames::PROJECT_NAME] = name;
+		j[AttributeNames::PROJECT_PATH] = std::filesystem::canonical(path).string() + "\\";
+		j[AttributeNames::PROJECT_SCRIPTS] = std::vector<std::string>();
+		std::ofstream file;
+		file.open(path + name + ".proj");
+		file << j.dump(0);
+		file.close();
+	}
+
+	void Launcher::CreateScriptingFile(const std::string & path)
+	{
+		std::string p = path + "\\Scripting_generated.cxx";
+		std::ofstream file;
+		file.open(p);
+		file
+			<< "#include \"AIngine/Core.h\"" << '\n'
+			<< "#include \"AIngine/GameObject.h\"" << '\n'
+			<< "#include <vector>" << '\n'
+			<< "#include <string>" << '\n'
+			<< '\n'
+			<< "std::vector<std::string> AIngine::ApplicationComponentNames = {" << '\n'
+			<< "};" << '\n'
+			<< '\n'
+			<< "void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {" << '\n'
+			<< "	switch (index) {" << '\n'
+			<< "	}" << '\n'
+			<< "}";
+		file.close();
+	}
+
+	void Launcher::RunCMake(const std::string & name, const std::string & path)
+	{
+		std::string cmakeBinPath = path + "out\\CMake";
+		std::stringstream command;
+		// cd to the correct drive
+		command << path[0] << ":" << " &&";
+		// move to folder
+		command << "cd " << cmakeBinPath << " && ";
+		// run cmake
+		command << "cmake " << "-G \"Visual Studio 15 2017 Win64\" " << path;
+
+		system(command.str().c_str());
+	}
+
+	void Launcher::OpenVSSolution(const std::string & name, const std::string & path)
+	{
+		std::string cmakeBinPath = path + "out\\CMake";
+		std::stringstream command;
+		// cd to the correct drive
+		command << path[0] << ":" << " &&";
+		// move to folder
+		command << "cd " << cmakeBinPath << " && ";
+		command << name << ".sln";
+		system(command.str().c_str());
 	}
 }

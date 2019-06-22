@@ -14,12 +14,23 @@ namespace ProjectLauncher {
 		virtual void OnAppUpdate() override;
 		virtual void OnAppEvent(AIngine::Events::EventData& e) override {}
 
+		static bool ContainsProject(const std::string& name);
+		static bool IsProjectDir(const std::string& path);
 		static std::vector<Project>* GetProjects();
 		static void CreateNewProject(const std::string& name, const std::string& path);
+		static void LoadProject(const std::string& path);
+		static void OpenProject(const Project& proj);
 
 	private:
 		void LoadProjectsFromFile();
 		void SaveProjectsToFile();
+		static void CreateDirectories(const std::string& path);
+		static void CopyDirectories(const std::string& path);
+		static void CreateTemplateFiles(const std::string& name, const std::string& path);
+		static void CreateProjectFile(const std::string& name, const std::string& path);
+		static void CreateScriptingFile(const std::string& path);
+		static void RunCMake(const std::string& name, const std::string& path);
+		static void OpenVSSolution(const std::string& name, const std::string& path);
 
 	private:
 		static Launcher* s_instance;
