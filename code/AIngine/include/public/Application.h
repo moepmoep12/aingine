@@ -57,6 +57,7 @@ namespace AIngine {
 		static void LoadScene(int index);
 
 		static bool IsRunning();
+		static std::string GetResourceDirectory();
 	protected:
 
 		WindowConfig m_windowConfig;

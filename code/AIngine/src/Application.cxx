@@ -176,10 +176,8 @@ namespace AIngine {
 
 		CORE_INFO("Shutting App down...");
 
-#ifndef EDITOR
-		// if we're in editor the editor will call shutdown
-		OnLeavePlayMode();
-#endif
+		//OnLeavePlayMode();
+
 		// Clean up
 		m_window = NULL;
 		delete m_renderer;
@@ -254,6 +252,11 @@ namespace AIngine {
 	bool Application::IsRunning()
 	{
 		return AIngine::Editor::Editor::IsGameRunning();
+	}
+
+	std::string Application::GetResourceDirectory()
+	{
+		return AIngine::Editor::Editor::GetResourceDirectory();
 	}
 
 	void Application::ShutDown()
