@@ -19,7 +19,7 @@ namespace ProjectLauncher {
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.25, 0.25, 0.25, 1));
 
 
-		CreateDockSpace(true);
+		//CreateDockSpace(true);
 
 
 		if (ImGui::Begin("Projects", &open, 0))
@@ -81,6 +81,7 @@ namespace ProjectLauncher {
 							bCreatingProject = false;
 							Launcher::CreateNewProject(str, outPath);
 							ImGui::CloseCurrentPopup();
+							free(outPath);
 						}
 					}
 

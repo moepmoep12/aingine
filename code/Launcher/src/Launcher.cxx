@@ -79,6 +79,7 @@ namespace ProjectLauncher {
 					std::filesystem::canonical(path).string()
 				});
 			std::string header = GetHeaderTemplate(name);
+			std::string src = GetSourceTemplate(name);
 			// copy files
 
 			// run cmake build
