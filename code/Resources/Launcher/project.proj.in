@@ -1,0 +1,5 @@
+{
+"name" : "Launcher",
+"path" : "@InstallPath@",
+"scripts" : null
+}
