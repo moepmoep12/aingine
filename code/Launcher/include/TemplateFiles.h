@@ -34,7 +34,6 @@ namespace ProjectLauncher {
 		ss
 			<< "#include " << '"' << projectName << ".h" << '"' << '\n'
 			<< "#include \"EntryPoint.h\" // Do not remove" << '\n'
-			<< "#include \"Scripting_generated.h\" // Do not remove" << '\n'
 			<< '\n'
 			<< "// Define the extern declaration" << '\n'
 			<< "AIngine::Application* AIngine::CreateApplication() {" << '\n'
