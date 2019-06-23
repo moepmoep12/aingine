@@ -48,7 +48,7 @@ add_subdirectory("${THIRD_PARTY_DIR}/tinyobjloader/")
 add_subdirectory("${THIRD_PARTY_DIR}/spdlog/")
 add_subdirectory("${THIRD_PARTY_DIR}/Box2D-cmake/")
 add_subdirectory("${THIRD_PARTY_DIR}/json/")
-add_subdirectory("${THIRD_PARTY_DIR}/nativefiledialog-cmake/")
+add_subdirectory("${THIRD_PARTY_DIR}/nativefiledialog/")
 add_subdirectory("${THIRD_PARTY_DIR}/xcsrlib/")
 add_subdirectory("${THIRD_PARTY_DIR}/freetype2/")
 
@@ -64,7 +64,14 @@ add_library(cute_sound INTERFACE
 						${CUTE_SOUND_HEADER}
 						)
 include_directories(cute_sound PUBLIC ${CUTE_SOUND_INCLUDE_DIR})
-target_include_directories(cute_sound INTERFACE ${CUTE_SOUND_INCLUDE_DIR})
+target_include_directories(cute_sound INTERFACE 
+						$<BUILD_INTERFACE:${CUTE_SOUND_INCLUDE_DIR}>
+						"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+install(TARGETS cute_sound EXPORT Engine DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+# install(EXPORT cute_sound DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cute_sound"
+								# FILE cute_sound-config.cmake)
+install(DIRECTORY ${CUTE_SOUND_INCLUDE_DIR} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+														FILES_MATCHING PATTERN *.h)	
 
 #
 # --- Nothings/STB header-only libs (manual) --- ##################
@@ -81,7 +88,13 @@ add_library(stb INTERFACE
 						${STD_HEADER}
 						)
 include_directories(stb PUBLIC ${STB_INCLUDE_DIR})
-target_include_directories(stb INTERFACE ${STB_INCLUDE_DIR})					
+target_include_directories(stb INTERFACE 
+						$<BUILD_INTERFACE:${STB_INCLUDE_DIR}>
+						"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+install(TARGETS stb EXPORT Engine DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+# install(EXPORT stb DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/stb"
+								# FILE stb-config.cmake)
+install(DIRECTORY ${STB_INCLUDE_DIR} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})						
 
 #
 # --- IMGUI --- ###############################################
@@ -101,7 +114,13 @@ add_library(imgui STATIC
 							${IMGUI_INCLUDE_DIR}/imstb_truetype.h
 							)
 include_directories(imgui PUBLIC ${IMGUI_INCLUDE_DIR})							
-target_include_directories(imgui INTERFACE ${IMGUI_INCLUDE_DIR}) 
+target_include_directories(imgui INTERFACE 
+						$<BUILD_INTERFACE:${IMGUI_INCLUDE_DIR}>
+						"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+install(TARGETS imgui EXPORT Engine DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+# install(EXPORT imgui DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/imgui"
+								# FILE imgui-config.cmake)
+install(DIRECTORY ${IMGUI_INCLUDE_DIR} DESTINATION	${CMAKE_INSTALL_INCLUDEDIR})							
 
 #
 # --- Box2D -- #####################
