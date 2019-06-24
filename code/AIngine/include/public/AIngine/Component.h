@@ -19,7 +19,17 @@ namespace AIngine {
 
 		inline bool IsEnabled() const { return m_isEnabled; }
 		virtual void SetEnabled(bool enabled) { m_isEnabled = enabled; }
-		inline bool IsActive() const { return m_isEnabled && m_owner->IsActive(); }
+		inline bool IsActive() const {
+			GameObject* parent = m_owner->GetParent();
+			bool isTreeActive = m_owner->IsActive();
+
+			while (parent) {
+				isTreeActive &= parent->IsActive();
+				parent = parent->GetParent();
+			}
+
+			return m_isEnabled && isTreeActive;
+		}
 
 		inline void Destroy() { m_wantsDestroy = true; }
 
