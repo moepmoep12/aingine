@@ -121,7 +121,7 @@ namespace ProjectLauncher {
 			CreateDirectories(projectPath);
 
 			// copy folders
-			//CopyDirectories(projectPath);
+			CopyDirectories(projectPath);
 
 			// Create Files
 			CreateTemplateFiles(name, projectPath);
@@ -224,15 +224,18 @@ namespace ProjectLauncher {
 		std::filesystem::create_directories(std::filesystem::path(path + "lib"));
 		std::filesystem::create_directories(std::filesystem::path(path + "Resources"));
 		std::filesystem::create_directories(std::filesystem::path(path + "out\\CMake"));
+		std::filesystem::create_directories(std::filesystem::path(path + "out\\bin\\Debug"));
+		std::filesystem::create_directories(std::filesystem::path(path + "out\\bin\\Release"));
+		std::filesystem::create_directories(std::filesystem::path(path + "out\\bin\\RelWithDebInfo"));
+
 	}
 	void Launcher::CopyDirectories(const std::string & path)
 	{
-		std::string resourceDir = Application::GetResourceDirectory();
-		std::string libDir = resourceDir + "Launcher\\lib";
-		std::string engineResDir = resourceDir + "Launcher\\AIngine";
+		std::string imguiFilePath = Application::GetInstallPath() + "Resources\\AIngine\\imgui.ini";
 		static const std::filesystem::copy_options copyOptions = std::filesystem::copy_options::recursive | std::filesystem::copy_options::update_existing;
-		std::filesystem::copy(libDir, path + "lib", copyOptions);
-		std::filesystem::copy(engineResDir, path + "Resources\\AIngine", copyOptions);
+		std::filesystem::copy(imguiFilePath, path + "out\\bin\\Debug", copyOptions);
+		std::filesystem::copy(imguiFilePath, path + "out\\bin\\Release", copyOptions);
+		std::filesystem::copy(imguiFilePath, path + "out\\bin\\RelWithDebInfo", copyOptions);
 	}
 
 	void Launcher::CreateTemplateFiles(const std::string & name, const std::string & path)

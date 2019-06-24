@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 project(CrappyBird VERSION 1.0 LANGUAGES CXX)
 
-set(CMAKE_INSTALL_PREFIX "I:\\AIngine" CACHE PATH "Install path of AIngine " FORCE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/out/CMake/Modules/")
 
 
@@ -86,7 +85,3 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT $
 #-- Copy project File
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/project.proj COPYONLY)
 
-#-- Copy imgui.ini
-configure_file(I:/AIngine//Resources/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/imgui.ini COPYONLY)
-configure_file(I:/AIngine//Resources/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/imgui.ini COPYONLY)
-configure_file(I:/AIngine//Resources/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ReleaseWithDebInfo/imgui.ini COPYONLY)

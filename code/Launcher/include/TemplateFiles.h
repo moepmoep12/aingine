@@ -90,7 +90,6 @@ namespace ProjectLauncher {
 			<< "cmake_minimum_required(VERSION 3.13 FATAL_ERROR)" << '\n'
 			<< "project(" << projectname << " VERSION 1.0 LANGUAGES CXX)" << '\n'
 			<< '\n'
-			<< "set(CMAKE_INSTALL_PREFIX " << std::filesystem::canonical(installpath) << " CACHE PATH \"Install path of AIngine \" FORCE)" << '\n'
 			<< "set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} \"${CMAKE_SOURCE_DIR}/out/CMake/Modules/\")" << '\n'
 			<< '\n'
 			<< '\n'
@@ -153,12 +152,7 @@ namespace ProjectLauncher {
 			<< "set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})" << '\n'
 			<< '\n'
 			<< "#-- Copy project File" << '\n'
-			<< "configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/project.proj COPYONLY)" << '\n'
-			<< '\n'
-			<< "#-- Copy imgui.ini" << '\n'
-			<< "configure_file(" << installpath << "Resources/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/imgui.ini COPYONLY)" << '\n'
-			<< "configure_file(" << installpath << "Resources/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/imgui.ini COPYONLY)" << '\n'
-			<< "configure_file(" << installpath << "Resources/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ReleaseWithDebInfo/imgui.ini COPYONLY)";
+			<< "configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/project.proj COPYONLY)" << '\n';
 
 		return ss.str();
 	}
