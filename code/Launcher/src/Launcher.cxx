@@ -156,6 +156,8 @@ namespace ProjectLauncher {
 			if (file.fail()) return;
 
 			json j = json::parse(file);
+			j[AttributeNames::PROJECT_PATH] = std::filesystem::canonical(path).string() + "\\";
+			j[AttributeNames::ENGINE_INSTALLPATH] = std::filesystem::canonical(s_instance->m_installpath).string() + "\\";
 			file.close();
 
 			s_instance->m_projects.push_back(Project
@@ -163,6 +165,12 @@ namespace ProjectLauncher {
 					j[AttributeNames::PROJECT_NAME],
 					j[AttributeNames::PROJECT_PATH]
 				});
+
+			std::ofstream writeFile;
+			writeFile.open(path);
+			if (writeFile.fail()) return;
+			writeFile << j.dump(0);
+			writeFile.close();
 		}
 	}
 
