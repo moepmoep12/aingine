@@ -36,6 +36,7 @@ namespace AIngine {
 		// create asset factories
 		{
 			m_assetRegistry.m_resourceFolderPath = AIngine::Editor::Editor::GetResourceDirectory();
+			m_assetRegistry.m_engineInstallPath = AIngine::Editor::Editor::GetEngineInstallDirectory();
 			using namespace AIngine::Assets;
 
 			m_assetRegistry.RegisterFactory<ShaderAsset>(
@@ -262,6 +263,11 @@ namespace AIngine {
 	void Application::ShutDown()
 	{
 		m_window->Close();
+	}
+
+	std::string Application::GetInstallPath()
+	{
+		return AIngine::Editor::Editor::GetEngineInstallDirectory();
 	}
 
 	void Application::RegisterCallbacks()

@@ -155,7 +155,7 @@ namespace AIngine::Assets {
 		//	}
 		//}
 
-		std::vector<std::string> SplitPath(const std::string& path) 
+		std::vector<std::string> SplitPath(const std::string& path)
 		{
 			std::vector<std::string> result;
 			std::istringstream s(path);
@@ -323,7 +323,13 @@ namespace AIngine::Assets {
 			if (s_instance) {
 				std::filesystem::path p(path);
 				std::string result;
-				if (p.is_relative())
+
+				// Is it an engine resource?
+				if (path.find("AIngine") != std::string::npos) {
+					result = s_instance->m_engineInstallPath + "Resources\\" + path;
+				}
+
+				else if (p.is_relative())
 					result = s_instance->m_resourceFolderPath + path;
 				else
 					result = path;
@@ -349,5 +355,6 @@ namespace AIngine::Assets {
 		FactoryMap factories;
 		static AssetRegistry* s_instance;
 		std::string m_resourceFolderPath;
+		std::string m_engineInstallPath;
 	};
 }

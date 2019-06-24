@@ -53,7 +53,6 @@ namespace AIngine::Editor {
 	{
 		AIngine::Events::EventDispatcher dispatcher(e);
 
-		// call the OnWindowClose function if its a windowclose event
 		dispatcher.Dispatch<AIngine::Events::KeyPressedEvent::KeyPressedEventData>(BIND_EVENT_TO_FN(Editor::OnKeyPressed));
 		dispatcher.Dispatch<AIngine::Events::MouseScrolledEvent::MouseScrolledEventData>(BIND_EVENT_TO_FN(Editor::OnMouseScrolled));
 
@@ -282,6 +281,7 @@ namespace AIngine::Editor {
 		m_projectName = j.at("name");
 		m_resourceFolderPath = j.at("path");
 		m_resourceFolderPath.append("Resources\\");
+		m_engineInstallDir = j.at("installPath");
 	}
 
 	AIngine::Structures::RectangleI Editor::CalculateViewportRect(const glm::vec2& windowSize) const
@@ -388,6 +388,26 @@ namespace AIngine::Editor {
 	bool Editor::IsAnyUIElementHovered()
 	{
 		return ImGui::IsAnyWindowHovered();
+	}
+
+	std::string Editor::GetEngineInstallDirectory()
+	{
+		if (s_instance)
+		{
+			return s_instance->m_engineInstallDir;
+		}
+		else {
+			// open the file
+			std::ifstream file;
+			file.open(s_projectFilePath);
+			if (file.fail()) return "";
+			nlohmann::json j = nlohmann::json::parse(file);
+			file.close();
+			std::string path = j.at("installPath");
+			return path;
+		}
+
+		return std::string();
 	}
 
 	std::string Editor::GetResourceDirectory()

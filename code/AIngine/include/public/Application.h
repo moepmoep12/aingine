@@ -74,6 +74,7 @@ namespace AIngine {
 
 
 		void ShutDown();
+		static std::string GetInstallPath();
 
 	private:
 		void RegisterCallbacks();

@@ -62,13 +62,11 @@ namespace AIngine::Editor {
 		/* Returns wheter any UI element is currently hovered with the mouse */
 		static bool IsAnyUIElementHovered();
 
+		static std::string GetEngineInstallDirectory();
 		static std::string GetResourceDirectory();
 		static std::string GetProjectDirectory();
 		static std::string GetProjectName();
 
-		/* Calculates the available viewport size to be used for rendering the scene
-		* @returns : Returns the viewport Rectangle with a screen position & size */
-		AIngine::Structures::RectangleI CalculateViewportRect(const glm::vec2& windowSize) const;
 
 		/* Actives/Deactivates the frame counter in the top left corner*/
 		static void SetShowFramerate(bool active);
@@ -132,6 +130,10 @@ namespace AIngine::Editor {
 		bool OnMouseScrolled(AIngine::Events::MouseScrolledEvent::MouseScrolledEventData& e);
 		void OnWindowClose();
 
+		/* Calculates the available viewport size to be used for rendering the scene
+		* @returns : Returns the viewport Rectangle with a screen position & size */
+		AIngine::Structures::RectangleI CalculateViewportRect(const glm::vec2& windowSize) const;
+
 		void MoveCamera(float delta);
 
 		void LoadLastScene();
@@ -161,5 +163,6 @@ namespace AIngine::Editor {
 		std::string m_currentSceneFilePath;
 		std::string m_resourceFolderPath;
 		std::string m_projectName;
+		std::string m_engineInstallDir;
 	};
 }
