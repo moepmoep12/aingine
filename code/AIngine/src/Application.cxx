@@ -70,7 +70,7 @@ namespace AIngine {
 		std::string vertexPath("AIngine/shader/screenshader/vertexScreen.glsl");
 		std::string fragPath("AIngine/shader/screenshader/fragmentScreen.glsl");
 
-		AIngine::Assets::ShaderAsset* shaderAsset = m_assetRegistry.Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vertexPath,fragPath));
+		AIngine::Assets::ShaderAsset* shaderAsset = m_assetRegistry.Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vertexPath, fragPath));
 
 		// create sprite renderer
 		m_renderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());
@@ -173,6 +173,12 @@ namespace AIngine {
 
 			// finish the frame
 			m_window->OnUpdate();
+
+			// Scene loading after updating the scenegraph
+			if (m_wantsLoadLevel) {
+				LoadScene(m_sceneToLoadIndex);
+				m_wantsLoadLevel = false;
+			}
 		}
 
 		CORE_INFO("Shutting App down...");
@@ -242,10 +248,22 @@ namespace AIngine {
 	void Application::LoadScene(int index)
 	{
 		if (s_instance) {
-			std::vector<AIngine::Editor::Scene> scenes = AIngine::Editor::Editor::LoadBuildScenes();
-			if (index < scenes.size()) {
-				AIngine::Editor::Editor::ResetSceneGraph(s_instance);
-				AIngine::Editor::Editor::LoadScene(scenes[index].Name);
+			if (s_instance->m_wantsLoadLevel) {
+				s_instance->m_wantsLoadLevel = false;
+				std::vector<AIngine::Editor::Scene> scenes = AIngine::Editor::Editor::LoadBuildScenes();
+				if (index < scenes.size()) {
+					if (s_instance->m_editor)
+						AIngine::Editor::Editor::SetIsInPlayMode(false);
+					else {
+						s_instance->PropagateEventData(AIngine::Events::ExitPlayModeEventData());
+					}
+					AIngine::Editor::Editor::ResetSceneGraph(s_instance);
+					AIngine::Editor::Editor::LoadScene(scenes[index].Path);
+				}
+			}
+			else {
+				s_instance->m_wantsLoadLevel = true;
+				s_instance->m_sceneToLoadIndex = index;
 			}
 		}
 	}

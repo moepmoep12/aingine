@@ -90,6 +90,8 @@ namespace AIngine {
 	private:
 		AIngine::Editor::Editor* m_editor;
 		bool m_isRunning = false;
+		bool m_wantsLoadLevel = false;
+		int m_sceneToLoadIndex = 0;
 		AIngine::Structures::LayerStack m_layerStack;
 		AIngine::UI::ImGuiLayer* m_imGuiLayer;
 		AIngine::Assets::AssetRegistry m_assetRegistry;
