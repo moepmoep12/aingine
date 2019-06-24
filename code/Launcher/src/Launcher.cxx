@@ -3,7 +3,6 @@
 #include "EntryPoint.h"
 #include "LauncherGUI.h"
 #include "TemplateFiles.h"
-//#include "ef"
 
 #include <nlohmann/json.hpp>
 #include <fstream>
@@ -39,6 +38,12 @@ namespace ProjectLauncher {
 		PushOverlay(new LauncherGUI());
 
 		LoadProjectsFromFile();
+		m_installpath = Application::GetInstallPath();
+	}
+
+	Launcher::~Launcher()
+	{
+		SaveProjectsToFile();
 	}
 
 	void Launcher::OnAppStartUp()
@@ -51,7 +56,6 @@ namespace ProjectLauncher {
 
 	void Launcher::OnAppShutDown()
 	{
-		SaveProjectsToFile();
 	}
 
 	void Launcher::OnAppUpdate()
@@ -70,6 +74,7 @@ namespace ProjectLauncher {
 		const char* PROJECT_PATH = "path";
 		const char* PROJECT_DATE = "lastUsed";
 		const char* PROJECT_SCRIPTS = "scripts";
+		const char* ENGINE_INSTALLPATH = "installPath";
 	}
 
 	bool Launcher::ContainsProject(const std::string & name)
@@ -106,7 +111,7 @@ namespace ProjectLauncher {
 		return nullptr;
 	}
 
-	void Launcher::CreateNewProject(const std::string & name, const std::string & path)
+	void Launcher::CreateNewProject(const std::string & name, const std::string & path, unsigned int bit)
 	{
 		if (s_instance)
 		{
@@ -128,7 +133,7 @@ namespace ProjectLauncher {
 			CreateScriptingFile(projectPath + "code\\src\\");
 
 			// run cmake build
-			RunCMake(name, projectPath);
+			RunCMake(name, projectPath, bit);
 
 			// open VS Solution
 			OpenVSSolution(name, projectPath);
@@ -136,7 +141,7 @@ namespace ProjectLauncher {
 			s_instance->m_projects.push_back(Project
 				{
 					name,
-					std::filesystem::canonical(path).string()
+					std::filesystem::canonical(projectPath).string()
 				});
 		}
 	}
@@ -200,7 +205,7 @@ namespace ProjectLauncher {
 		{
 			nlohmann::json j;
 			j[AttributeNames::PROJECT_NAME] = project.Name;
-			j[AttributeNames::PROJECT_PATH] = std::filesystem::canonical(project.AbsolutePath).string() + "\\";
+			j[AttributeNames::PROJECT_PATH] = std::filesystem::canonical(project.AbsolutePath).string();
 			outer.push_back(j);
 		}
 
@@ -234,7 +239,7 @@ namespace ProjectLauncher {
 	{
 		std::string header = GetHeaderTemplate(name);
 		std::string src = GetSourceTemplate(name);
-		std::string cmakeList = GetCMakeListTemplate(name);
+		std::string cmakeList = GetCMakeListTemplate(name, Application::GetInstallPath());
 
 		std::string headerFilePath = path + "code\\include\\" + name + ".h";
 		std::string sourceFilePath = path + "code\\src\\" + name + ".cxx";
@@ -260,6 +265,7 @@ namespace ProjectLauncher {
 		j[AttributeNames::PROJECT_NAME] = name;
 		j[AttributeNames::PROJECT_PATH] = std::filesystem::canonical(path).string() + "\\";
 		j[AttributeNames::PROJECT_SCRIPTS] = std::vector<std::string>();
+		j[AttributeNames::ENGINE_INSTALLPATH] = std::filesystem::canonical(s_instance->m_installpath).string() + "\\";
 		std::ofstream file;
 		file.open(path + name + ".proj");
 		file << j.dump(0);
@@ -287,7 +293,7 @@ namespace ProjectLauncher {
 		file.close();
 	}
 
-	void Launcher::RunCMake(const std::string & name, const std::string & path)
+	void Launcher::RunCMake(const std::string & name, const std::string & path, unsigned int bit)
 	{
 		std::string cmakeBinPath = path + "out\\CMake";
 		std::stringstream command;
@@ -296,14 +302,17 @@ namespace ProjectLauncher {
 		// move to folder
 		command << "cd " << cmakeBinPath << " && ";
 		// run cmake
-		command << "cmake " << "-G \"Visual Studio 15 2017 Win64\" " << path;
+		command << "cmake " << "-G \"Visual Studio 15 2017 ";
+		if (bit == 64)
+			command << "Win" << bit;
+		command << "\" " << " -DCMAKE_INSTALL_PREFIX=" << std::filesystem::canonical(Application::GetInstallPath()).string() << " " << path;
 
 		system(command.str().c_str());
 	}
 
 	void Launcher::OpenVSSolution(const std::string & name, const std::string & path)
 	{
-		std::string cmakeBinPath = path + "out\\CMake";
+		std::string cmakeBinPath = path + "\\out\\CMake";
 		std::stringstream command;
 		// cd to the correct drive
 		command << path[0] << ":" << " &&";

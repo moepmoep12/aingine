@@ -31,6 +31,7 @@ namespace ProjectLauncher {
 				static const ImVec2 selectableSize = ImVec2(0, 40);
 				std::stringstream ss;
 
+				// project name
 				ss << project.Name << '\n' << '\n';
 				ss << "   " << project.AbsolutePath;
 
@@ -59,6 +60,7 @@ namespace ProjectLauncher {
 				bCreatingProject = !bCreatingProject;
 			}
 
+			// Creating a new project
 			if (bCreatingProject) {
 				ImGui::OpenPopup("PickProjectName");
 				if (ImGui::BeginPopupModal("PickProjectName", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
@@ -71,6 +73,22 @@ namespace ProjectLauncher {
 
 					if (ImGui::InputText("", str, IM_ARRAYSIZE(str)));
 
+					static const int choosableModes[] = { 64,32 };
+					static const char* modeNames[] = { "64bit","32bit" };
+					static int currentIndex = 0;
+
+					if (ImGui::BeginCombo("Mode", modeNames[currentIndex])) {
+						for (int i = 0; i < IM_ARRAYSIZE(modeNames); i++) {
+							bool isSelected = choosableModes[i] == choosableModes[currentIndex];
+							if (ImGui::Selectable(modeNames[i], isSelected)) {
+								currentIndex = i;
+							}
+							if (isSelected)
+								ImGui::SetItemDefaultFocus();
+						}
+						ImGui::EndCombo();
+					}
+
 					if (ImGui::Button("Create##newproject"))
 					{
 						nfdchar_t *outPath = NULL;
@@ -82,7 +100,7 @@ namespace ProjectLauncher {
 							std::string p;
 							p.append(outPath).append("\\").append(str);
 							if (!Launcher::IsProjectDir(p))
-								Launcher::CreateNewProject(str, outPath);
+								Launcher::CreateNewProject(str, outPath, choosableModes[currentIndex]);
 							ImGui::CloseCurrentPopup();
 							free(outPath);
 						}
@@ -129,6 +147,7 @@ namespace ProjectLauncher {
 
 			ImGui::SameLine();
 
+			// Delete Project
 			if (s_selectedProject) {
 				if (ImGui::Button("Delete", buttonSize))
 				{
