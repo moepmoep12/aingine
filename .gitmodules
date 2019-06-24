@@ -20,12 +20,15 @@
 [submodule "code/thirdParty/json"]
 	path = code/thirdParty/json
 	url = https://github.com/nlohmann/json.git	
-[submodule "code/thirdParty/nativefiledialog-cmake"]
-	path = code/thirdParty/nativefiledialog-cmake
-	url = https://github.com/aarcangeli/nativefiledialog-cmake.git
+[submodule "code/thirdParty/nativefiledialog"]
+	path = code/thirdParty/nativefiledialog
+	url = https://github.com/moepmoep12/nativefiledialog-cmake.git
 [submodule "code/thirdParty/xcsrlib"]
 	path = code/thirdParty/xcsrlib
 	url = https://github.com/moepmoep12/xxr.git
 [submodule "code/thirdParty/freetype2"]
 	path = code/thirdParty/freetype2
 	url = https://github.com/aseprite/freetype2.git
+[submodule "code/thirdParty/Box2D"]
+	path = code/thirdParty/Box2D
+	url = https://github.com/moepmoep12/Box2D-cmake.git
