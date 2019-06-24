@@ -426,7 +426,7 @@ namespace AIngine::Editor::Serialization {
 
 		if (node.GetName() != "Root") {
 			(*m_children).push_back(serializedObject);
-			m_prevChildren.push_back( m_children);
+			m_prevChildren.push_back(m_children);
 			size_t count = (*m_children).size();
 			m_children = &(*m_children)[count - 1][node.GetName()]["c_children"];
 		}
@@ -526,7 +526,7 @@ namespace AIngine::Editor::Serialization {
 	{
 		nlohmann::json j;
 
-		j[AttributeNames::TEXTURE_PATH] = std::filesystem::relative(sprite.GetTexture().FileName, AIngine::Editor::Editor::GetResourceDirectory()).string();
+		j[AttributeNames::TEXTURE_PATH] = SerializePath(sprite.GetTexture().FileName);
 		j[AttributeNames::SPRITE_COLOR_R] = sprite.GetColor().x;
 		j[AttributeNames::SPRITE_COLOR_G] = sprite.GetColor().y;
 		j[AttributeNames::SPRITE_COLOR_B] = sprite.GetColor().z;
@@ -588,7 +588,7 @@ namespace AIngine::Editor::Serialization {
 			const AIngine::Sound& sound = *it._Ptr;
 			j[AttributeNames::SOUND_DELAY] = sound.GetDelay();
 			j[AttributeNames::SOUND_LOOPED] = sound.IsLooping();
-			j[AttributeNames::SOUND_PATH] = std::filesystem::relative(sound.GetPath(), AIngine::Editor::Editor::GetResourceDirectory()).string();
+			j[AttributeNames::SOUND_PATH] = SerializePath(sound.GetPath());
 			j[AttributeNames::SOUND_PAN] = sound.GetPan();
 			j[AttributeNames::SOUND_PITCH] = sound.GetPitch();
 			j[AttributeNames::SOUND_VLEFT] = sound.GetVolume().first;
@@ -605,7 +605,7 @@ namespace AIngine::Editor::Serialization {
 	{
 		nlohmann::json j;
 		j[AttributeNames::COMPONENT_ACTIVE] = emitter.IsEnabled();
-		j[AttributeNames::TEXTURE_PATH] = std::filesystem::relative(emitter.GetTexture().FileName, AIngine::Editor::Editor::GetResourceDirectory()).string();
+		j[AttributeNames::TEXTURE_PATH] = SerializePath(emitter.GetTexture().FileName);
 		j[AttributeNames::TEXTURE_WRAP_S] = emitter.GetTexture().Wrap_S;
 		j[AttributeNames::TEXTURE_WRAP_T] = emitter.GetTexture().Wrap_T;
 		j[AttributeNames::TEXTURE_FILTER_MIN] = emitter.GetTexture().Filter_Min;
@@ -614,6 +614,17 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::PARTICLEEMITTER_AMOUNT] = emitter.GetAmount();
 
 		return j;
+	}
+
+	std::string SceneGraphSerializer::SerializePath(const std::string & path)
+	{
+		// it's an Engine resource and thus relative to the install dir
+		if (path.find("AIngine") != std::string::npos) {
+			return std::filesystem::relative(path, AIngine::Editor::Editor::GetEngineInstallDirectory() + "\\" + "Resources").string();
+		}
+		else return std::filesystem::relative(path, AIngine::Editor::Editor::GetResourceDirectory()).string();
+
+		return std::string();
 	}
 
 	std::vector<std::string> ExtractPathsFromScene(const std::string & sceneFilePath)

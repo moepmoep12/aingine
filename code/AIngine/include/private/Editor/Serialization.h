@@ -69,6 +69,8 @@ namespace AIngine::Editor::Serialization
 		nlohmann::json* m_children;
 		std::vector<AIngine::GameObject*> m_spawnedObjects;
 
+		std::string SerializePath(const std::string& path);
+
 	};
 
 }
