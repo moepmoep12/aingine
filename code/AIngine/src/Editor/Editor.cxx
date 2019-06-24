@@ -267,7 +267,7 @@ namespace AIngine::Editor {
 		OnViewportChangedEvent(viewportRect);
 	}
 
-	const char* s_projectFilePath = "../project.proj";
+	const char* s_projectFilePath = "project.proj";
 
 	void Editor::LoadProjectData()
 	{

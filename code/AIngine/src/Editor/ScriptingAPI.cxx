@@ -166,7 +166,7 @@ namespace AIngine::Editor::Scripting {
 			<< "		// Inherited via Script" << '\n'
 			<< "		virtual void OnStart() override;" << '\n'
 			<< "		virtual void OnEnd() override;" << '\n'
-			<< "		virtual void OnUpdate(float delta) override;" << '\n'
+			<< "		virtual void Update(float delta) override;" << '\n'
 			<< "		virtual void OnEventData(AIngine::Events::EventData& e) override;" << '\n'
 			<< "	};" << '\n'
 			<< "}";

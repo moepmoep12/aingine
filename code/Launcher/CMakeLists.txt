@@ -59,4 +59,4 @@ install(FILES  ${CMAKE_SOURCE_DIR}/Resources/Launcher/imgui.ini DESTINATION "lau
 #configure file
 set(InstallPath "${CMAKE_INSTALL_PREFIX}//")
 configure_file(${CMAKE_SOURCE_DIR}/Resources/Launcher/project.proj.in ${CMAKE_SOURCE_DIR}/Resources/Launcher/project.proj @ONLY)
-install(FILES ${CMAKE_SOURCE_DIR}/Resources/Launcher/project.proj DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(FILES ${CMAKE_SOURCE_DIR}/Resources/Launcher/project.proj DESTINATION ${CMAKE_INSTALL_PREFIX}/launcher)
