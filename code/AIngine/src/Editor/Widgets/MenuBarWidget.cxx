@@ -118,25 +118,15 @@ namespace AIngine::Editor {
 
 				ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 				if (ImGui::MenuItem("Add Script")) {
-					ImGui::OpenPopup("PickScriptName");
+					PopUps::OpenPopUpForEnterScriptName();
 				}
+				PopUps::CreatePopUpForEnterScriptName();
 
-				if (ImGui::BeginPopupModal("PickScriptName", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-				{
-					ImGui::Text("Enter Script name");
-
-					static char str[40] = "NewScript";
-
-					if (ImGui::InputText("", str, IM_ARRAYSIZE(str)));
-
-					if (ImGui::Button("Create##newscript"))
-					{
-						AIngine::Editor::Scripting::AddScript(str);
-						ImGui::CloseCurrentPopup();
-					}
-
-					ImGui::EndPopup();
+				ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+				if (ImGui::MenuItem("Manage Scripts")) {
+					PopUps::OpenPopUpForScriptManagement();
 				}
+				PopUps::CreatePopUpForScriptManagement();
 
 				ImGui::EndMenu();
 			}

@@ -10,4 +10,10 @@ namespace AIngine::Editor::PopUps
 
 	void OpenPopUpForBuildScenes();
 	void CreatePopUpForBuildScenes();
+
+	void OpenPopUpForEnterScriptName();
+	void CreatePopUpForEnterScriptName();
+
+	void OpenPopUpForScriptManagement();
+	void CreatePopUpForScriptManagement();
 }

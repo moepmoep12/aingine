@@ -79,6 +79,40 @@ namespace AIngine::Editor::Scripting {
 		f.close();
 	}
 
+	void RemoveScript(const std::string & name)
+	{
+		static const std::string projectname = AIngine::Editor::Editor::GetProjectName();
+		static const std::string projectDir = AIngine::Editor::Editor::GetProjectDirectory();
+		std::vector<std::string> componentNames;
+		std::string projectFilePath = AIngine::Editor::Editor::GetProjectDirectory() + projectname + ".proj";
+
+		std::ifstream projectFile;
+		projectFile.open(projectFilePath);
+		if (projectFile.fail()) return;
+		// read existing scripts in the project
+		nlohmann::json j = nlohmann::json::parse(projectFile);
+		projectFile.close();
+
+		for (auto& scriptname : j.at("scripts")) {
+			if (scriptname != name)
+				componentNames.push_back(scriptname);
+		}
+
+		// replace the list of scripts with one less
+		j.at("scripts") = componentNames;
+
+		// write back
+		std::ofstream f;
+		f.open(projectFilePath);
+		f << j.dump(0);
+		f.close();
+
+		// update the extern script methods
+		f.open(projectDir + "code\\src\\Scripting_generated.cxx");
+		f << GenerateExternScriptMethods(componentNames, projectname);
+		f.close();
+	}
+
 	std::string GenerateExternScriptMethods(const std::vector<std::string>& scriptNames, const std::string& projectname)
 	{
 		std::stringstream Template;
@@ -166,7 +200,7 @@ namespace AIngine::Editor::Scripting {
 			<< "	}" << '\n'
 			<< '\n'
 			<< "	// Update is called once per frame" << '\n'
-			<< "	void " + name + "::OnUpdate(float delta)" << '\n'
+			<< "	void " + name + "::Update(float delta)" << '\n'
 			<< "	{" << '\n'
 			<< "	}" << '\n'
 			<< '\n'
@@ -176,5 +210,25 @@ namespace AIngine::Editor::Scripting {
 			<< "	}" << '\n'
 			<< "}";
 		return ss.str();
+	}
+
+	std::vector<std::string> GetScriptNames()
+	{
+		static const std::string projectname = AIngine::Editor::Editor::GetProjectName();
+		static const std::string projectFilePath = AIngine::Editor::Editor::GetProjectDirectory() + projectname + ".proj";
+		std::vector<std::string> componentNames;
+
+		std::ifstream projectFile;
+		projectFile.open(projectFilePath);
+		if (projectFile.fail()) return componentNames;
+		// read existing scripts in the project
+		nlohmann::json j = nlohmann::json::parse(projectFile);
+		projectFile.close();
+
+		for (auto& scriptname : j.at("scripts")) {
+			componentNames.push_back(scriptname);
+		}
+
+		return componentNames;
 	}
 }
