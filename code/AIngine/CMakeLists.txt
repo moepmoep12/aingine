@@ -1,5 +1,5 @@
 #
-# --Engine
+# -- AIngine
 #
 
 # Define the header/sources explicitly, 
@@ -148,22 +148,22 @@ set(AINGINE_SRC
 
 find_package(OpenGL REQUIRED)
 
-add_library(Engine STATIC ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
+add_library(AIngine STATIC ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
 
-set_target_properties(Engine PROPERTIES
+set_target_properties(AIngine PROPERTIES
         CXX_STANDARD 17
         CXX_EXTENSIONS OFF)
 		
 set(THIRD_PARTY_DIR "${CMAKE_SOURCE_DIR}/thirdParty")
 
-target_include_directories(Engine PUBLIC 
+target_include_directories(AIngine PUBLIC 
 						$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/public>
 						$<INSTALL_INTERFACE:include/AIngine>)
 #target_include_directories(Engine PUBLIC include/public)
-include_directories(Engine PRIVATE include/private)
+include_directories(AIngine PRIVATE include/private)
 
 
-target_link_libraries(Engine
+target_link_libraries(AIngine
         glad
         glfw
         OpenGL::GL
@@ -185,9 +185,9 @@ target_link_libraries(Engine
 # --- Code Editor
 #
 
-assign_source_group(${AINGINE_HEADER} ${AINGINE_SRC})
+assign_source_group( ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
 
-set_target_properties(Engine PROPERTIES FOLDER AIngine)
+set_target_properties(AIngine PROPERTIES FOLDER AIngine)
 
 
 #
@@ -207,9 +207,9 @@ endif()
 #
 # --- Install
 #
-install(TARGETS Engine freetype EXPORT Engine DESTINATION "lib/AIngine")
+install(TARGETS AIngine freetype EXPORT Engine DESTINATION "lib/AIngine")
 install(EXPORT Engine DESTINATION "lib/AIngine"
-									FILE engine-config.cmake)
+									FILE aingine-config.cmake)
 
 # Header Files
 install(FILES ${AINGINE_HEADER}  DESTINATION "include/AIngine")

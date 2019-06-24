@@ -84,12 +84,13 @@ namespace ProjectLauncher {
 		return ss.str();
 	}
 
-	inline std::string GetCMakeListTemplate(const std::string& projectname) {
+	inline std::string GetCMakeListTemplate(const std::string& projectname, const std::string& installpath) {
 		std::stringstream ss;
 		ss
 			<< "cmake_minimum_required(VERSION 3.13 FATAL_ERROR)" << '\n'
 			<< "project(" << projectname << " VERSION 1.0 LANGUAGES CXX)" << '\n'
 			<< '\n'
+			<< "set(CMAKE_INSTALL_PREFIX " << std::filesystem::canonical(installpath) << " CACHE PATH \"Install path of AIngine \" FORCE)" << '\n'
 			<< "set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} \"${CMAKE_SOURCE_DIR}/out/CMake/Modules/\")" << '\n'
 			<< '\n'
 			<< '\n'
@@ -122,8 +123,8 @@ namespace ProjectLauncher {
 			<< "find_package(nlohmann_json REQUIRED)" << '\n'
 			<< "find_package(cxxopts REQUIRED)" << '\n'
 			<< "find_package(OpenGL REQUIRED)" << '\n'
-			<< "find_package(Engine REQUIRED)" << '\n'
-			<< "target_link_libraries(${PROJECT_NAME} Engine)" << '\n'
+			<< "find_package(AIngine REQUIRED)" << '\n'
+			<< "target_link_libraries(${PROJECT_NAME} AIngine)" << '\n'
 			<< '\n'
 			<< "#-- Add include path" << '\n'
 			<< "include_directories(${CMAKE_CURRENT_SOURCE_DIR}/code/include)" << '\n'

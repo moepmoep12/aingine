@@ -35,7 +35,7 @@ set_target_properties(CrappyBird PROPERTIES
 
 target_include_directories(CrappyBird PRIVATE include)
   
-target_link_libraries(CrappyBird Engine)
+target_link_libraries(CrappyBird AIngine)
 
 #
 # --- Code Editor Configuration
