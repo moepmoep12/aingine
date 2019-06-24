@@ -1,0 +1,92 @@
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
+project(CrappyBird VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_INSTALL_PREFIX "I:\\AIngine" CACHE PATH "Install path of AIngine " FORCE)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/out/CMake/Modules/")
+
+
+#--- Source Files
+set(SRC
+    code/src/Player.cxx
+    code/src/BackGround.cxx
+    code/src/Obstacles.cxx
+    code/src/Obstacle.cxx
+    code/src/BackGround.cxx
+    code/src/BackGround.cxx
+    code/src/PickUpFactory.cxx
+    code/src/Obstacles.cxx
+    code/src/PickUp.cxx
+    code/src/Effects.cxx
+    code/src/${PROJECT_NAME}.cxx
+    code/src/Scripting_generated.cxx
+     )
+
+set(HEADER
+    code/include/Player.h
+    code/include/BackGround.h
+    code/include/Obstacles.h
+    code/include/Obstacle.h
+    code/include/BackGround.h
+    code/include/BackGround.h
+    code/include/PickUpFactory.h
+    code/include/Obstacles.h
+    code/include/PickUp.h
+    code/include/Effects.h
+	   code/include/${PROJECT_NAME}.h
+    )
+
+#
+# --- Output Configuration
+#
+set(OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/out")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_DIR}/lib")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_DIR}/lib")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_DIR}/bin")
+
+# Add Executable Target
+add_executable(${PROJECT_NAME} ${HEADER} ${SRC})
+
+#--- LIBRARIES
+find_package(glfw3 REQUIRED)
+find_package(tinyobjloader REQUIRED)
+find_package(glm REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(cxxopts REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(AIngine REQUIRED)
+target_link_libraries(${PROJECT_NAME} AIngine)
+
+#-- Add include path
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/code/include)
+
+
+#--- PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
+CXX_STANDARD 17
+CXX_EXTENSIONS OFF)
+
+#
+# --- Code Editor Configuration
+#
+if (WIN32)
+# Configure VS Project
+set_target_properties(${PROJECT_NAME}
+PROPERTIES
+VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)")
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+PROPERTY
+VS_STARTUP_PROJECT ${PROJECT_NAME})
+endif()
+
+
+# Set as Startup Project
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
+
+#-- Copy project File
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/project.proj COPYONLY)
+
+#-- Copy imgui.ini
+configure_file(I:/AIngine//Resources/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/imgui.ini COPYONLY)
+configure_file(I:/AIngine//Resources/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/imgui.ini COPYONLY)
+configure_file(I:/AIngine//Resources/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ReleaseWithDebInfo/imgui.ini COPYONLY)

@@ -1,0 +1,12 @@
+{
+"installPath": "I:\\AIngine\\",
+"name": "CrappyBird",
+"path": "I:\\gl3-02-schmidt\\code\\Projects\\CrappyBird\\",
+"scripts": [
+"Player",
+"BackGround",
+"PickUpFactory",
+"Obstacles",
+"PickUp"
+]
+}

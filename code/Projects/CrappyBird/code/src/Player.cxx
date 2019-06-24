@@ -1,23 +1,16 @@
 #include "Player.h"
-#include "AIngine/Input.h"
-#include "Events/Event.h"
-#include "Events/InputEvents.h"
 #include "CrappyBird.h"
 
-#include <typeinfo>
 #include <random>
-#include <vector>
 
 namespace CrappyBird {
 
+	// Constructor
 	Player::Player()
 	{
+		// In order for the editor to display the scripts name correctly
 		SetName(typeid(*this).name());
 		m_originalGameSpeed = CrappyBird::s_GameSpeed;
-	}
-
-	Player::~Player()
-	{
 	}
 
 	glm::vec2 Player::GetSize()
@@ -36,6 +29,7 @@ namespace CrappyBird {
 			m_activeEffects.push_back(std::move(effect));
 	}
 
+	// Start is called when gameplay starts for this script
 	void Player::OnStart()
 	{
 		m_emitter = GetOwner()->GetComponent<ParticleEmitter>();
@@ -57,6 +51,7 @@ namespace CrappyBird {
 		}
 	}
 
+	// End is called when gameplay ends for this script
 	void Player::OnEnd()
 	{
 		// restore original gamespeed
@@ -70,6 +65,47 @@ namespace CrappyBird {
 		m_activeEffects.clear();
 	}
 
+	// Update is called once per frame
+	void Player::Update(float delta)
+	{
+		// basic fire
+		m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 20);
+
+		if (AIngine::Input::IsMouseButtonPressed(0)) {
+			// accelerate
+			m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 75);
+			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -0.075f));
+		}
+
+		// update score
+		m_distanceTraveled += CrappyBird::s_GameSpeed * delta;
+
+		// check if new screen has been entered and fire event
+		if (m_distanceTraveled >= CurrentScreenIndex * 10) {
+			CurrentScreenIndex++;
+			glm::vec4 bounds = AIngine::World::GetBounds();
+			AIngine::Structures::RectangleI nextScreen(bounds.y, 0, bounds.y, bounds.w / 2.0f);
+			OnEnterNewScreen(nextScreen);
+		}
+
+		// update Effects
+		auto& it = m_activeEffects.begin();
+		while (it != m_activeEffects.end()) {
+			std::unique_ptr<Effect>* effect = it._Ptr;
+			effect->get()->Age += delta;
+
+			if (effect->get()->Age >= effect->get()->Duration) {
+				effect->get()->End();
+				it = m_activeEffects.erase(it);
+			}
+			else {
+				effect->get()->Update(delta);
+				it++;
+			}
+		}
+	}
+
+	// Callback for events
 	void Player::OnEventData(AIngine::Events::EventData & e)
 	{
 		// key pressed
@@ -85,47 +121,6 @@ namespace CrappyBird {
 		ss << "Score: " << (int)m_distanceTraveled;
 		Graphics::Text(ss.str(), glm::vec2(10, 20), glm::vec2(2));
 	}
-
-	void Player::Update(float deltatime)
-	{
-		// basic fire
-		m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 20);
-
-		if (AIngine::Input::IsMouseButtonPressed(0)) {
-			// accelerate
-			m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 75);
-			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -0.075f));
-		}
-
-		// update score
-		m_distanceTraveled += CrappyBird::s_GameSpeed * deltatime;
-
-		// check if new screen has been entered and fire event
-		if (m_distanceTraveled >= CurrentScreenIndex * 10) {
-			CurrentScreenIndex++;
-			glm::vec4 bounds = AIngine::World::GetBounds();
-			AIngine::Structures::RectangleI nextScreen(bounds.y, 0, bounds.y, bounds.w / 2.0f);
-			OnEnterNewScreen(nextScreen);
-		}
-
-		// update Effects
-		auto& it = m_activeEffects.begin();
-		while (it != m_activeEffects.end()) {
-			std::unique_ptr<Effect>* effect = it._Ptr;
-			effect->get()->Age += deltatime;
-
-			if (effect->get()->Age >= effect->get()->Duration) {
-				effect->get()->End();
-				it = m_activeEffects.erase(it);
-			}
-			else {
-				effect->get()->Update(deltatime);
-				it++;
-			}
-		}
-
-	}
-
 
 	void Player::OnCollision(PhysicsComponent * other)
 	{

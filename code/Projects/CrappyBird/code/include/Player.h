@@ -3,17 +3,13 @@
 #include "Effects.h"
 
 namespace CrappyBird {
-	class Player : public AIngine::Script
-	{
+	class Player : public AIngine::Script {
 	public:
-
 		Player();
-		virtual ~Player();
-
-		// inherited via Script
+		// Inherited via Script
 		virtual void OnStart() override;
-		virtual void Update(float deltatime) override;
 		virtual void OnEnd() override;
+		virtual void Update(float delta) override;
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
 		virtual void OnGUI() override;
 
@@ -75,5 +71,6 @@ namespace CrappyBird {
 		AIngine::ParticleEmitter::SpawnParticleHandler OnSpawnParticleHandler;
 		AIngine::ParticleEmitter::UpdateParticleHandler OnUpdateParticleHandler;
 		AIngine::Events::EventHandler<void, PhysicsComponent*> OnCollisionEventHandler;
+
 	};
 }

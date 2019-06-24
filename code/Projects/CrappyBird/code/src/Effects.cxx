@@ -48,7 +48,7 @@ namespace CrappyBird {
 
 	SlowEffect::SlowEffect()
 	{
-		Texture = Texture2D(Assets::Load<BitmapAsset>("CrappyBird/textures/fast-forward.png")->GetBitmap());
+		Texture = Texture2D(Assets::Load<BitmapAsset>("textures/fast-forward.png")->GetBitmap());
 		Rotation = M_PI;
 		Color = glm::vec4(1, 0, 1, 1);
 		Duration = 5;
@@ -76,7 +76,7 @@ namespace CrappyBird {
 
 	SpeedEffect::SpeedEffect()
 	{
-		Texture = Texture2D(Assets::Load<BitmapAsset>("CrappyBird/textures/fast-forward.png")->GetBitmap());
+		Texture = Texture2D(Assets::Load<BitmapAsset>("textures/fast-forward.png")->GetBitmap());
 		Rotation = 0;
 		Color = glm::vec4(1);
 		Duration = 5;
@@ -105,7 +105,7 @@ namespace CrappyBird {
 
 	ShrinkEffect::ShrinkEffect()
 	{
-		Texture = Texture2D(Assets::Load<BitmapAsset>("CrappyBird/textures/reduce.png")->GetBitmap());
+		Texture = Texture2D(Assets::Load<BitmapAsset>("textures/reduce.png")->GetBitmap());
 		Rotation = 0;
 		Color = glm::vec4(1);
 		Duration = 5;
@@ -120,7 +120,7 @@ namespace CrappyBird {
 			static auto originalVertices = m_player->GetOriginalPhysVertices();
 
 			for (int i = 0; i < physcomp->GetBodyInformation().verticesCount; i++) {
-				verticesScaleSpeed[i] = ( destScale * originalVertices[i]) / animDuration;
+				verticesScaleSpeed[i] = (destScale * originalVertices[i]) / animDuration;
 			}
 
 			return true;

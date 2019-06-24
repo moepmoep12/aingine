@@ -27,11 +27,8 @@ add_subdirectory(thirdParty)
 # --- Targets developed in this project
 #
 
-add_subdirectory(Resources) 
 add_subdirectory(AIngine) 
 add_subdirectory(Launcher) 
-add_subdirectory(CrappyBird) 
-
 
 # Use folders in VisualStudio / XCode
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

@@ -1,5 +1,4 @@
 #include "Obstacles.h"
-#include "Player.h"
 #include "CrappyBird.h"
 #include "Obstacle.h"
 
@@ -8,15 +7,18 @@
 #include <random>
 #include <time.h>
 
-namespace CrappyBird
-{
+namespace CrappyBird {
+
+	// Constructor
 	Obstacles::Obstacles()
 	{
+		// In order for the editor to display the scripts name correctly
 		SetName(typeid(*this).name());
+
 		// load obstacle textures
 		for (int i = 1; i < 7; i++) {
 			std::string path;
-			path += "CrappyBird/textures/set8_example_";
+			path += "textures/set8_example_";
 			path += std::to_string(i);
 			path += ".png";
 			m_obstacleTextures.push_back(AIngine::Rendering::Texture2D(Assets::Load<BitmapAsset>(path)->GetBitmap()));
@@ -28,6 +30,7 @@ namespace CrappyBird
 		m_obstacleTextures.clear();
 	}
 
+	// Start is called when gameplay starts for this script
 	void Obstacles::OnStart()
 	{
 		m_newScreenHandler = AIngine::Events::EventHandler<void, AIngine::Structures::RectangleI&>(std::bind(&Obstacles::SpawnObstaclesInArea, this, std::placeholders::_1));
@@ -36,22 +39,29 @@ namespace CrappyBird
 		m_pickUpFactory = AIngine::World::GetGameObject("PickUpFactory")->GetComponent<PickUpFactory>();
 	}
 
+	// End is called when gameplay ends for this script
 	void Obstacles::OnEnd()
 	{
 		m_player->OnEnterNewScreen -= m_newScreenHandler;
 	}
 
-	void Obstacles::Update(float deltatime)
+	// Update is called once per frame
+	void Obstacles::Update(float delta)
 	{
 		for (auto& child : GetOwner()->GetChildren()) {
 			if (child->IsActive()) {
-				child->Translate(glm::vec2(-CrappyBird::s_GameSpeed * deltatime, 0), true);
+				child->Translate(glm::vec2(-CrappyBird::s_GameSpeed * delta, 0), true);
 				if (child->GetWorldPosition().x < -child->GetComponent<Obstacle>()->GetRectangle().width) {
 					child->RemoveComponent<Obstacle>();
 					child->SetActive(false);
 				}
 			}
 		}
+	}
+
+	// Callback for events
+	void Obstacles::OnEventData(AIngine::Events::EventData & e)
+	{
 	}
 
 	struct Quadrant {
@@ -61,7 +71,6 @@ namespace CrappyBird
 		bool isPlayerPath = false;
 		bool isClosed = false;
 	};
-
 
 	void Obstacles::SpawnObstaclesInArea(const AIngine::Structures::RectangleI & worldRect)
 	{
@@ -265,5 +274,4 @@ namespace CrappyBird
 		}
 		return nullptr;
 	}
-
 }

@@ -3,21 +3,17 @@
 #include "Effects.h"
 #include "Player.h"
 
-#include <vector>
 #include <memory>
 
 namespace CrappyBird {
-
-
-	class PickUp : public Script {
+	class PickUp : public AIngine::Script {
 	public:
 		PickUp();
-		virtual ~PickUp();
-		// inherited via Script
+		// Inherited via Script
 		virtual void OnStart() override;
 		virtual void OnEnd() override;
-		virtual void Update(float deltatime) override;
-
+		virtual void Update(float delta) override;
+		virtual void OnEventData(AIngine::Events::EventData& e) override;
 
 		std::unique_ptr<Effect> m_Effect;
 
@@ -29,22 +25,5 @@ namespace CrappyBird {
 		AIngine::Events::EventHandler<void, PhysicsComponent*> m_collisionHandler;
 
 		Player* m_player;
-
 	};
-
-	class PickUpFactory : public Script {
-	public:
-		PickUpFactory();
-
-		// inherited via Script
-		virtual void OnStart() override;
-		virtual void OnEnd() override;
-
-		void SpawnPickUp(const glm::vec2& pos);
-
-	private:
-		GameObject* GetAvailableGameObject();
-		void AddEffect(PickUp& obj);
-	};
-
 }

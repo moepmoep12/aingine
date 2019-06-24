@@ -1,0 +1,30 @@
+{
+"Root": {
+"a_active": true,
+"a_name": "Root",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null
+},
+"c_children": [
+{
+"Root": {
+"a_active": true,
+"a_name": "Root",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null
+}
+}
+}
+]
+}
+}

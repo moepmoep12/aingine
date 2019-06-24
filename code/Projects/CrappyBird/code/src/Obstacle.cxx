@@ -1,6 +1,14 @@
 #include "Obstacle.h"
-
 namespace CrappyBird {
+
+	// Constructor
+	Obstacle::Obstacle()
+	{
+		// In order for the editor to display the scripts name correctly
+		SetName(typeid(*this).name());
+	}
+
+	// Start is called when gameplay starts for this script
 	void Obstacle::OnStart()
 	{
 		glm::vec2 pos = GetOwner()->GetWorldPosition();
@@ -18,5 +26,20 @@ namespace CrappyBird {
 		GetOwner()->GetComponent<Sprite>()->SetLocalWorldSize(glm::vec2(rect.width, rect.height));
 		GetOwner()->GetComponent<PhysicsComponent>()->AdjustBoxShape(rect.width, rect.height);
 		m_rect = rect;
+	}
+
+	// End is called when gameplay ends for this script
+	void Obstacle::OnEnd()
+	{
+	}
+
+	// Update is called once per frame
+	void Obstacle::Update(float delta)
+	{
+	}
+
+	// Callback for events
+	void Obstacle::OnEventData(AIngine::Events::EventData & e)
+	{
 	}
 }
