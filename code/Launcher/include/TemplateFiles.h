@@ -156,9 +156,9 @@ namespace ProjectLauncher {
 			<< "configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/project.proj COPYONLY)" << '\n'
 			<< '\n'
 			<< "#-- Copy imgui.ini" << '\n'
-			<< "configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lib/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/imgui.ini COPYONLY)" << '\n'
-			<< "configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lib/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/imgui.ini COPYONLY)" << '\n'
-			<< "configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lib/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ReleaseWithDebInfo/imgui.ini COPYONLY)";
+			<< "configure_file(" << installpath << "Resources/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/imgui.ini COPYONLY)" << '\n'
+			<< "configure_file(" << installpath << "Resources/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/imgui.ini COPYONLY)" << '\n'
+			<< "configure_file(" << installpath << "Resources/AIngine/imgui.ini  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ReleaseWithDebInfo/imgui.ini COPYONLY)";
 
 		return ss.str();
 	}

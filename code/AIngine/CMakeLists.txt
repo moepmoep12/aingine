@@ -220,6 +220,7 @@ install(FILES ${AINGINE_HEADER_EVENTS} DESTINATION "include/AIngine/Events")
 install(FILES ${AINGINE_HEADER_RENDERING} DESTINATION "include/AIngine/Rendering")
 install(FILES ${AINGINE_HEADER_STRUCTURES} DESTINATION "include/AIngine/Structures")
 install(FILES ${AINGINE_HEADER_UI} DESTINATION "include/AIngine/UI")
+install(FILES ${CMAKE_SOURCE_DIR}/Resources/AIngine/imgui.ini DESTINATION "Resources/AIngine")
 
 # Resource Folder
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/Resources/AIngine DESTINATION Resources)

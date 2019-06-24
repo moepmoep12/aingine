@@ -121,7 +121,7 @@ namespace ProjectLauncher {
 			CreateDirectories(projectPath);
 
 			// copy folders
-			CopyDirectories(projectPath);
+			//CopyDirectories(projectPath);
 
 			// Create Files
 			CreateTemplateFiles(name, projectPath);
