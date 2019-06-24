@@ -31,7 +31,7 @@ namespace AIngine {
 		int ScriptIndex = 0;
 
 	private:
-		virtual void OnUpdate(float deltatime) override
+		inline virtual void OnUpdate(float deltatime) override
 		{
 			if (AIngine::Application::IsRunning())
 			{
@@ -43,10 +43,10 @@ namespace AIngine {
 				Update(deltatime);
 			}
 		}
-		virtual void OnImguiRender() { if (AIngine::Application::IsRunning())  OnGUI(); }
+		inline virtual void OnImGuiRender() override { if (AIngine::Application::IsRunning())  OnGUI(); }
 
 		/* OnEvent propagates events*/
-		virtual void OnEvent(AIngine::Events::EventData& e) override
+		inline virtual void OnEvent(AIngine::Events::EventData& e) override
 		{
 			if (typeid(e) == typeid(AIngine::Events::EnterPlayModeEventData)) {
 				if (!m_startCalled) {

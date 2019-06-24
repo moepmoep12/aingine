@@ -128,7 +128,7 @@ namespace AIngine {
 
 	void GameObject::SetRotation(float rot, bool bInformComponents)
 	{
-		m_rotation = std::fmodf( rot, 2 * M_PI);
+		m_rotation = std::fmodf(rot, 2 * M_PI);
 		if (bInformComponents) {
 			auto it = m_components.begin();
 			while (it != m_components.end()) {
@@ -356,5 +356,37 @@ namespace AIngine {
 		return true;
 	}
 
+	/********************************** ONGUI TRAVERSER ****************************************/
+
+	bool GameObject::OnGUITraverser::Traverse(GameObject * root)
+	{
+		return	root->Accept(*this);
+	}
+
+	bool GameObject::OnGUITraverser::Enter(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+		while (it != node.GetComponents().end()) {
+			Component* comp = *it._Ptr;
+			if (comp->IsActive()) {
+				comp->OnImGuiRender();
+			}
+			it++;
+		}
+		return true;
+	}
+
+	bool GameObject::OnGUITraverser::Visit(GameObject & node)
+	{
+		auto it = node.GetComponents().begin();
+		while (it != node.GetComponents().end()) {
+			Component* comp = *it._Ptr;
+			if (comp->IsActive()) {
+				comp->OnImGuiRender();
+			}
+			it++;
+		}
+		return true;
+	}
 
 }

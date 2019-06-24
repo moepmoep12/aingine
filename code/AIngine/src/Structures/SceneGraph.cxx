@@ -97,6 +97,12 @@ namespace AIngine::Structures {
 		et.Traverse(m_Root);
 	}
 
+	void SceneGraph::OnImGuiRender()
+	{
+		AIngine::GameObject::OnGUITraverser t;
+		t.Traverse(m_Root);
+	}
+
 	/********************************** DELETE TRAVERSER ****************************************/
 
 	DeleteTraverser::DeleteTraverser(AIngine::Memory::Pool<GameObject>& gameObjectPool)

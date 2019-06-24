@@ -213,5 +213,15 @@ namespace AIngine {
 		private:
 			AIngine::Events::EventData& m_eventData;
 		};
+
+		// Traverses the SceneGraph to call the OnGui method
+		class OnGUITraverser : private Traverser {
+		public:
+			// Inherited via Traverser
+			virtual bool Traverse(GameObject* root) override;
+			virtual bool Enter(GameObject & node) override;
+			virtual bool Leave(GameObject & node) override { return true; }
+			virtual bool Visit(GameObject & node) override;
+		};
 	};
 }

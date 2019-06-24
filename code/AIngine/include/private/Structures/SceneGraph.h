@@ -25,6 +25,7 @@ namespace AIngine::Structures {
 
 		virtual void OnUpdate(float delta) override;
 		virtual void OnEvent(AIngine::Events::EventData& e) override;
+		virtual void OnImGuiRender() override;
 
 		GameObject* const SpawnObject(const std::string& name = std::string("GameObject"), GameObject* parent = nullptr, const glm::vec2& position = glm::vec2(0.0f), const glm::vec2& scale = glm::vec2(1.0f), const float rotation = 0.0f);
 
