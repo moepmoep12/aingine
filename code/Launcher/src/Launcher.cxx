@@ -72,7 +72,7 @@ namespace ProjectLauncher {
 
 		const char* PROJECT_NAME = "name";
 		const char* PROJECT_PATH = "path";
-		const char* PROJECT_DATE = "lastUsed";
+		//const char* PROJECT_DATE = "lastUsed";
 		const char* PROJECT_SCRIPTS = "scripts";
 		const char* ENGINE_INSTALLPATH = "installPath";
 	}
@@ -146,41 +146,50 @@ namespace ProjectLauncher {
 		}
 	}
 
-	void Launcher::LoadProject(const std::string & path)
+	//void Launcher::LoadProject(const std::string & path)
+	//{
+	//	if (std::filesystem::exists(path)) {
+	//		using json = nlohmann::json;
+
+	//		// the path ends with the project file, which we don't want
+	//		std::string p = std::filesystem::canonical(path).string();
+	//		int lastIndex = p.find_last_of('\\');
+	//		if (lastIndex > 0) {
+	//			p = p.substr(0, lastIndex);
+	//		}
+
+	//		std::ifstream file;
+	//		file.open(path);
+	//		if (file.fail()) return;
+	//		json j = json::parse(file);
+	//		file.close();
+
+	//		// update the paths
+	//		//j[AttributeNames::PROJECT_PATH] = std::filesystem::canonical(p).string() + "\\";
+	//		//j[AttributeNames::ENGINE_INSTALLPATH] = std::filesystem::canonical(s_instance->m_installpath).string() + "\\";
+
+	//		s_instance->m_projects.push_back(Project
+	//			{
+	//				j[AttributeNames::PROJECT_NAME],
+	//				j[AttributeNames::PROJECT_PATH]
+	//			});
+
+	//		//// write back the updates
+	//		//std::ofstream writeFile;
+	//		//writeFile.open(path);
+	//		//if (writeFile.fail()) return;
+	//		//writeFile << j.dump(0);
+	//		//writeFile.close();
+	//	}
+	//}
+
+	void Launcher::AddProject(const std::string & name, const std::string & projectRoot)
 	{
-		if (std::filesystem::exists(path)) {
-			using json = nlohmann::json;
-
-			// the path ends with the project file, which we don't want
-			std::string p = std::filesystem::canonical(path).string();
-			int lastIndex = p.find_last_of('\\');
-			if (lastIndex > 0) {
-				p = p.substr(0, lastIndex);
-			}
-
-			std::ifstream file;
-			file.open(path);
-			if (file.fail()) return;
-
-			json j = json::parse(file);
-			// update the paths
-			j[AttributeNames::PROJECT_PATH] = std::filesystem::canonical(p).string() + "\\";
-			j[AttributeNames::ENGINE_INSTALLPATH] = std::filesystem::canonical(s_instance->m_installpath).string() + "\\";
-			file.close();
-
-			s_instance->m_projects.push_back(Project
-				{
-					j[AttributeNames::PROJECT_NAME],
-					j[AttributeNames::PROJECT_PATH]
-				});
-
-			//// write back the updates
-			//std::ofstream writeFile;
-			//writeFile.open(path);
-			//if (writeFile.fail()) return;
-			//writeFile << j.dump(0);
-			//writeFile.close();
-		}
+		s_instance->m_projects.push_back(Project
+			{
+				name,
+				std::filesystem::canonical(projectRoot).string() + "\\"
+			});
 	}
 
 	void Launcher::OpenProject(const Project & proj)
@@ -231,6 +240,81 @@ namespace ProjectLauncher {
 		file << outer.dump(0);
 		file.close();
 	}
+
+	bool Launcher::HasCmakeBinaries(const std::string & projectRoot, const std::string& projectName)
+	{
+		if (!std::filesystem::is_directory(projectRoot)) return false;
+
+		const std::string cmakeBinDir = projectRoot + "\\out\\CMake\\";
+
+		bool cmakeDirExists = std::filesystem::is_directory(cmakeBinDir);
+		if (!cmakeDirExists) return false;
+
+		const std::string VSsolutionFile = cmakeBinDir + projectName + ".sln";
+		bool solutionFileExists = std::filesystem::exists(VSsolutionFile);
+
+		return solutionFileExists;
+	}
+
+	bool Launcher::HasCmakeBinaries(const std::string & projectFilePath)
+	{
+		std::ifstream file;
+		file.open(projectFilePath);
+		if (file.fail()) return false;
+		nlohmann::json j = nlohmann::json::parse(file);
+		file.close();
+
+		return HasCmakeBinaries(j[AttributeNames::PROJECT_PATH], j[AttributeNames::PROJECT_NAME]);
+	}
+
+	void Launcher::RegenerateCMake(const std::string & projectRoot)
+	{
+		std::string cmakeBinPath = std::filesystem::canonical(projectRoot + "\\out\\CMake").string();
+		std::stringstream command;
+		// cd to the correct drive
+		command << cmakeBinPath[0] << ":" << " &&";
+		// move to folder
+		command << "cd " << cmakeBinPath << " && ";
+		// run cmake
+		command << "cmake -DCMAKE_INSTALL_PREFIX=" << std::filesystem::canonical(Application::GetInstallPath()).string() << " " << projectRoot;
+
+		system(command.str().c_str());
+	}
+
+	std::string Launcher::GetProjectRootFromProjectFile(const std::string & projectFilePath)
+	{
+		std::ifstream file;
+		file.open(projectFilePath);
+		if (file.fail()) return std::string();
+		nlohmann::json j = nlohmann::json::parse(file);
+		file.close();
+
+		if (j.contains(AttributeNames::PROJECT_PATH))
+		{
+			std::string path = j[AttributeNames::PROJECT_PATH];
+			return path;
+		}
+
+		return std::string();
+	}
+
+	std::string Launcher::GetProjectNameFromProjectFile(const std::string & projectFilePath)
+	{
+		std::ifstream file;
+		file.open(projectFilePath);
+		if (file.fail()) return std::string();
+		nlohmann::json j = nlohmann::json::parse(file);
+		file.close();
+
+		if (j.contains(AttributeNames::PROJECT_NAME))
+		{
+			std::string path = j[AttributeNames::PROJECT_NAME];
+			return path;
+		}
+
+		return std::string();
+	}
+
 	void Launcher::CreateDirectories(const std::string & path)
 	{
 		// create folders
@@ -315,10 +399,10 @@ namespace ProjectLauncher {
 
 	void Launcher::RunCMake(const std::string & name, const std::string & path, unsigned int bit)
 	{
-		std::string cmakeBinPath = path + "out\\CMake";
+		std::string cmakeBinPath = std::filesystem::canonical(path).string() + "\\out\\CMake";
 		std::stringstream command;
 		// cd to the correct drive
-		command << path[0] << ":" << " &&";
+		command << path[0] << ":" << " && ";
 		// move to folder
 		command << "cd " << cmakeBinPath << " && ";
 		// run cmake
@@ -332,7 +416,7 @@ namespace ProjectLauncher {
 
 	void Launcher::OpenVSSolution(const std::string & name, const std::string & path)
 	{
-		std::string cmakeBinPath = path + "\\out\\CMake";
+		std::string cmakeBinPath = std::filesystem::canonical(path).string() + "\\out\\CMake";
 		std::stringstream command;
 		// cd to the correct drive
 		command << path[0] << ":" << " &&";

@@ -120,6 +120,10 @@ namespace ProjectLauncher {
 
 			ImGui::SameLine();
 
+			static bool choosingMode = false;
+			std::string projectRoot;
+			std::string projectName;
+
 			if (ImGui::Button("Add existing", buttonSize)) {
 				static const nfdchar_t *filterList = "proj.in";
 				nfdchar_t *outPath = NULL;
@@ -127,8 +131,66 @@ namespace ProjectLauncher {
 
 				if (result == NFD_OKAY)
 				{
-					Launcher::LoadProject(outPath);
+					// the path ends with the project file, which we don't want
+					std::string p = std::filesystem::canonical(outPath).string();
+					int lastIndex = p.find_last_of('\\');
+					if (lastIndex > 0) {
+						projectRoot = p.substr(0, lastIndex);
+						int lastIndexP = p.find_last_of('p');
+						projectName = p.substr(lastIndex + 1, p.size() - lastIndexP + 3);
+					}
+					if (Launcher::HasCmakeBinaries(projectRoot,projectName)) {
+						// re-generate cmake
+						Launcher::RegenerateCMake(projectRoot);
+						Launcher::AddProject(projectName, projectRoot);
+					}
+					// run cmake 
+					else {
+						choosingMode = true;
+					}
 					free(outPath);
+				}
+			}
+			if (choosingMode) {
+				ImGui::OpenPopup("PickBitVersion");
+				if (ImGui::BeginPopupModal("PickBitVersion", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(20, 20));
+
+					ImGui::Text("Choose mode");
+
+					static const int choosableModes[] = { 64,32 };
+					static const char* modeNames[] = { "64bit","32bit" };
+					static int currentIndex = 0;
+
+					if (ImGui::BeginCombo("Mode", modeNames[currentIndex])) {
+						for (int i = 0; i < IM_ARRAYSIZE(modeNames); i++) {
+							bool isSelected = choosableModes[i] == choosableModes[currentIndex];
+							if (ImGui::Selectable(modeNames[i], isSelected)) {
+								currentIndex = i;
+							}
+							if (isSelected)
+								ImGui::SetItemDefaultFocus();
+						}
+						ImGui::EndCombo();
+					}
+
+					if (ImGui::Button("Create##newcmake"))
+					{
+						Launcher::RunCMake(projectName, projectRoot, choosableModes[currentIndex]);
+						Launcher::AddProject(projectName, projectRoot);
+						ImGui::CloseCurrentPopup();
+						choosingMode = false;
+					}
+
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel##choosemode")) {
+						ImGui::CloseCurrentPopup();
+						choosingMode = false;
+					}
+					ImGui::PopStyleVar();
+					ImGui::EndPopup();
 				}
 			}
 
@@ -136,10 +198,62 @@ namespace ProjectLauncher {
 
 			if (s_selectedProject)
 			{
+				static bool choosingMode = false;
 				if (ImGui::Button("Open", buttonSize))
 				{
-					Launcher::OpenProject(*s_selectedProject);
+					if (Launcher::HasCmakeBinaries(s_selectedProject->AbsolutePath, s_selectedProject->Name)) {
+						Launcher::RegenerateCMake(s_selectedProject->AbsolutePath);
+						Launcher::OpenProject(*s_selectedProject);
+					}
+					else {
+						choosingMode = true;
+					}
 				}
+				if (choosingMode) {
+					ImGui::OpenPopup("PickBitVersion");
+					if (ImGui::BeginPopupModal("PickBitVersion", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+						ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(20, 20));
+
+						ImGui::Text("Choose mode");
+
+						static const int choosableModes[] = { 64,32 };
+						static const char* modeNames[] = { "64bit","32bit" };
+						static int currentIndex = 0;
+
+						if (ImGui::BeginCombo("Mode", modeNames[currentIndex])) {
+							for (int i = 0; i < IM_ARRAYSIZE(modeNames); i++) {
+								bool isSelected = choosableModes[i] == choosableModes[currentIndex];
+								if (ImGui::Selectable(modeNames[i], isSelected)) {
+									currentIndex = i;
+								}
+								if (isSelected)
+									ImGui::SetItemDefaultFocus();
+							}
+							ImGui::EndCombo();
+						}
+
+						if (ImGui::Button("Create##newcmake"))
+						{
+							Launcher::RunCMake(s_selectedProject->Name, s_selectedProject->AbsolutePath, choosableModes[currentIndex]);
+							ImGui::CloseCurrentPopup();
+							choosingMode = false;
+							Launcher::OpenProject(*s_selectedProject);
+						}
+
+						ImGui::SameLine();
+
+						if (ImGui::Button("Cancel##choosemode")) {
+							ImGui::CloseCurrentPopup();
+							choosingMode = false;
+						}
+
+						ImGui::PopStyleVar();
+						ImGui::EndPopup();
+					}
+				}
+
+
 			}
 			else {
 				ImGui::InvisibleButton("Open", buttonSize);
@@ -200,7 +314,7 @@ namespace ProjectLauncher {
 			window_flags |= ImGuiWindowFlags_NoBackground;
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::Begin("DockSpace Demo", &show, window_flags);
+		ImGui::Begin("Launcher DockSpace", &show, window_flags);
 		ImGui::PopStyleVar();
 
 		if (opt_fullscreen)
