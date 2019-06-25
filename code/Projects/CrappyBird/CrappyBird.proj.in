@@ -7,6 +7,7 @@
 "BackGround",
 "PickUpFactory",
 "Obstacles",
-"PickUp"
+"PickUp",
+"Agent"
 ]
 }

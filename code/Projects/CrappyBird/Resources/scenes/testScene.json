@@ -501,6 +501,83 @@
 }
 },
 {
+"AgentRocket": {
+"a_active": false,
+"a_name": "AgentRocket",
+"a_posX": 2.5,
+"a_posY": 2.5,
+"a_rotation": 1.2479100227355957,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"physics": {
+"active": true,
+"bodyType": 1,
+"density": 1.0,
+"friction": 0.20000000298023224,
+"isTrigger": false,
+"restitution": 0.0,
+"shape": 2,
+"vertexcount": 7,
+"vertices": [
+{
+"x": 0.27051401138305664,
+"y": 0.09655618667602539
+},
+{
+"x": 0.23444509506225586,
+"y": 0.29043126106262207
+},
+{
+"x": -0.23444557189941406,
+"y": 0.21378302574157715
+},
+{
+"x": -0.26600542664527893,
+"y": 0.03794291615486145
+},
+{
+"x": -0.13525733351707458,
+"y": -0.426455557346344
+},
+{
+"x": 0.013525620102882385,
+"y": -0.6338568925857544
+},
+{
+"x": 0.13976526260375977,
+"y": -0.42645561695098877
+},
+{
+"x": 0.0,
+"y": 0.0
+}
+]
+},
+"script": [
+5
+],
+"sprite": {
+"active": true,
+"alpha": 0.5839999914169312,
+"colorB": 0.0,
+"colorG": 1.0,
+"colorR": 0.735293984413147,
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"path": "textures\\rocket_nofire.png",
+"sizeX": 2.0,
+"sizeY": 3.0,
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+},
+{
 "PickUpFactory": {
 "a_active": true,
 "a_name": "PickUpFactory",

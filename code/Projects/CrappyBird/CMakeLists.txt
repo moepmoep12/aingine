@@ -16,6 +16,7 @@ set(SRC
     code/src/Obstacles.cxx
     code/src/PickUp.cxx
     code/src/Effects.cxx
+    code/src/Agent.cxx
     code/src/${PROJECT_NAME}.cxx
     code/src/Scripting_generated.cxx
      )
@@ -31,6 +32,7 @@ set(HEADER
     code/include/Obstacles.h
     code/include/PickUp.h
     code/include/Effects.h
+    code/include/Agent.h
 	   code/include/${PROJECT_NAME}.h
     )
 

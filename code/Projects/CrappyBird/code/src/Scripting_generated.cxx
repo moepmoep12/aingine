@@ -5,6 +5,7 @@
 #include "PickUpFactory.h"
 #include "Obstacles.h"
 #include "PickUp.h"
+#include "Agent.h"
 #include <vector>
 #include <string>
 
@@ -14,6 +15,7 @@ std::vector<std::string> AIngine::ApplicationComponentNames = {
     "PickUpFactory",
     "Obstacles",
     "PickUp",
+    "Agent",
 };
 
 void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
@@ -36,6 +38,10 @@ void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
 
 	case 4:
 		obj->AddComponent<CrappyBird::PickUp>()->ScriptIndex = 4;
+		break;
+
+	case 5:
+		obj->AddComponent<CrappyBird::Agent>()->ScriptIndex = 5;
 		break;
 
 	}
