@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <nlohmann/json.hpp>
+#include <filesystem>
 
 
 namespace AIngine::Editor::Scripting {
@@ -57,7 +58,7 @@ namespace AIngine::Editor::Scripting {
 
 		// Update extern Script methods
 		std::vector<std::string> componentNames;
-		std::string projectFilePath = AIngine::Editor::Editor::GetProjectDirectory() + projectname + ".proj";
+		std::string projectFilePath = AIngine::Editor::Editor::GetProjectDirectory() + projectname + ".proj.in";
 		std::ifstream projectFile;
 		projectFile.open(projectFilePath);
 		if (projectFile.fail()) return;
@@ -83,8 +84,8 @@ namespace AIngine::Editor::Scripting {
 	{
 		static const std::string projectname = AIngine::Editor::Editor::GetProjectName();
 		static const std::string projectDir = AIngine::Editor::Editor::GetProjectDirectory();
+		std::string projectFilePath = AIngine::Editor::Editor::GetProjectDirectory() + projectname + ".proj.in";
 		std::vector<std::string> componentNames;
-		std::string projectFilePath = AIngine::Editor::Editor::GetProjectDirectory() + projectname + ".proj";
 
 		std::ifstream projectFile;
 		projectFile.open(projectFilePath);
@@ -98,10 +99,10 @@ namespace AIngine::Editor::Scripting {
 				componentNames.push_back(scriptname);
 		}
 
-		// replace the list of scripts with one less
+		// replace the list of scripts without the script being removed
 		j.at("scripts") = componentNames;
 
-		// write back
+		// write back the list of scripts to the project file
 		std::ofstream f;
 		f.open(projectFilePath);
 		f << j.dump(0);
@@ -111,6 +112,31 @@ namespace AIngine::Editor::Scripting {
 		f.open(projectDir + "code\\src\\Scripting_generated.cxx");
 		f << GenerateExternScriptMethods(componentNames, projectname);
 		f.close();
+
+		// open the cmakelist
+		static const std::string cmakeListFilePath = projectDir + "CMakeLists.txt";
+		std::ifstream cmakeListsFile;
+		cmakeListsFile.open(cmakeListFilePath);
+		if (cmakeListsFile.fail()) return;
+
+		std::stringstream lines;
+		std::string line;
+
+		// Read the cmakelist line by line and skip the line with the script toRemove
+		while (std::getline(cmakeListsFile, line)) {
+			if (line.find(name) == std::string::npos)
+				lines << line << '\n';
+		}
+		cmakeListsFile.close();
+
+		// write back into the cmakelist
+		f.open(cmakeListFilePath);
+		f << lines.str();
+		f.close();
+
+		// Delete the script files
+		std::filesystem::remove(projectDir + "code\\include\\" + name + ".h");
+		std::filesystem::remove(projectDir + "code\\src\\" + name + ".cxx");
 	}
 
 	std::string GenerateExternScriptMethods(const std::vector<std::string>& scriptNames, const std::string& projectname)
@@ -215,7 +241,7 @@ namespace AIngine::Editor::Scripting {
 	std::vector<std::string> GetScriptNames()
 	{
 		static const std::string projectname = AIngine::Editor::Editor::GetProjectName();
-		static const std::string projectFilePath = AIngine::Editor::Editor::GetProjectDirectory() + projectname + ".proj";
+		static const std::string projectFilePath = AIngine::Editor::Editor::GetProjectDirectory() + projectname + ".proj.in";
 		std::vector<std::string> componentNames;
 
 		std::ifstream projectFile;
