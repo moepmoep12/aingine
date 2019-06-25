@@ -3,7 +3,7 @@
 #include "imgui.h"
 namespace CrappyBird {
 
-	static float s_spawnHeight = 0;
+	static glm::vec2 s_spawnPos;
 
 	// Constructor
 	Agent::Agent()
@@ -19,10 +19,10 @@ namespace CrappyBird {
 		m_physBody->SetFixedRotation(true);
 
 		static auto constants = xxr::XCSRConstants();
-		constants.n = 1200;
+		constants.n = 1000;
 		static std::unordered_set<int> options = std::unordered_set<int>{ 0, 1 };
 		xcsr = new xxr::XCSR<>(xxr::CSR, options, constants);
-		s_spawnHeight = GetOwner()->GetWorldPosition().y;
+		s_spawnPos = GetOwner()->GetWorldPosition();
 
 		GameObject* obstacleParent = AIngine::World::GetGameObject("Obstacles");
 		for (auto& child : obstacleParent->GetChildren()) {
@@ -53,6 +53,9 @@ namespace CrappyBird {
 			glm::vec2 point = obstacle->GetWorldPosition();
 			observations.push_back(point.x / maxWidth);
 			observations.push_back(point.y / maxHeight);
+			Sprite* sprite = obstacle->GetComponent<Sprite>();
+			observations.push_back(sprite->GetLocalWorldSize().x / maxWidth);
+			observations.push_back(sprite->GetLocalWorldSize().y / maxHeight);
 		}
 
 		int action = xcsr->explore(observations);
@@ -61,12 +64,12 @@ namespace CrappyBird {
 			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -0.055f));
 		}
 
-		if (m_physBody->IsCollided()) {
+		if (m_physBody->IsCollided() && m_physBody->GetOtherCollider()->GetOwner()->GetName().find("PickUp") == std::string::npos) {
 			xcsr->reward(-1, true);
-			GetOwner()->SetWorldPosition(glm::vec2(GetOwner()->GetWorldPosition().x, s_spawnHeight));
+			GetOwner()->SetWorldPosition(s_spawnPos);
 		}
 		else {
-			xcsr->reward(/*-std::abs(currentheight - s_spawnHeight) + */0.1);
+			xcsr->reward(-std::abs(currentheight - s_spawnPos.y) + 0.1);
 		}
 	}
 
@@ -85,6 +88,7 @@ namespace CrappyBird {
 
 	void Agent::OnGUI()
 	{
+		return;
 		std::ostringstream os;
 		xcsr->dumpPopulation(os);
 		std::string content = os.str();
@@ -153,8 +157,9 @@ namespace CrappyBird {
 		for (auto& val : fitnesses)
 			fitnessAv += val;
 		fitnessAv /= fitnesses.size();
+		static bool open = true;
 
-		if (ImGui::BeginChild("Agent", ImVec2(0, 0), false, ImGuiWindowFlags_AlwaysAutoResize)) {
+		if (ImGui::Begin("Agent", &open, ImGuiWindowFlags_AlwaysAutoResize)) {
 
 			{
 				static std::vector<float> FitnessQueue;
@@ -176,8 +181,13 @@ namespace CrappyBird {
 				}
 				FitnessQueue.push_back(fitnessAv);
 				float(*func)(void*, int) = Funcs::Get;
-
-				ImGui::PlotLines("Fitness", func, NULL, FitnessQueue.size(), 0, NULL, FitnessMin, FitnessMax, ImVec2(0, 150));
+				float FitnessAverage = 0;
+				for (auto& val : FitnessQueue) {
+					FitnessAverage += val;
+				}
+				FitnessAverage /= FitnessQueue.size();
+				std::string t = std::to_string(FitnessAverage);
+				ImGui::PlotLines("Fitness", func, NULL, FitnessQueue.size(), 0, t.c_str(), FitnessMin, FitnessMax, ImVec2(0, 150));
 			}
 
 			{
@@ -200,10 +210,15 @@ namespace CrappyBird {
 				}
 				EpsilonQueue.push_back(epsilonAv);
 				float(*func)(void*, int) = Funcs::Get;
-
-				ImGui::PlotLines("Epsilon", func, NULL, EpsilonQueue.size(), 0, NULL, EpsilonMin, EpsilonMax, ImVec2(0, 150));
+				float EpsilonAverage = 0;
+				for (auto& val : EpsilonQueue) {
+					EpsilonAverage += val;
+				}
+				EpsilonAverage /= EpsilonQueue.size();
+				std::string t = std::to_string(EpsilonAverage);
+				ImGui::PlotLines("Epsilon", func, NULL, EpsilonQueue.size(), 0, t.c_str(), EpsilonMin, EpsilonMax, ImVec2(0, 150));
 			}
-			ImGui::EndChild();
+			ImGui::End();
 		}
 	}
 }
