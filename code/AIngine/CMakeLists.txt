@@ -176,7 +176,7 @@ target_link_libraries(AIngine
 		nlohmann_json
 		nativefiledialog
 		cxxopts
-
+		xcsrlib
 		freetype
 		cute_sound
         )
