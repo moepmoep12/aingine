@@ -6,3 +6,6 @@
 /cmake-build-*/
 /build_gl3_project/
 /out/
+
+# project files
+*.proj
