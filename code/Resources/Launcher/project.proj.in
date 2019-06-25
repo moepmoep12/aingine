@@ -1,6 +1,6 @@
 {
 "name" : "Launcher",
-"path" : "@InstallPath@",
+"path" : "@projectDir@",
 "installPath" : "@InstallPath@",
 "scripts" : null
 }

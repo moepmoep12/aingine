@@ -84,9 +84,18 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT $
 
 #-- Copy project File
 set(OUTPUT_PATH $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+set(InstallPath "${CMAKE_INSTALL_PREFIX}//")
+set(projectDir "${CMAKE_CURRENT_SOURCE_DIR}//")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj.in ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj @ONLY)
 add_custom_command(
 			TARGET ${PROJECT_NAME} POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy
 					${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj
 					${OUTPUT_PATH}/project.proj)
 
+#--- Copy imgui.ini
+add_custom_command(
+			TARGET ${PROJECT_NAME} POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy
+					${CMAKE_INSTALL_PREFIX}/Resources/AIngine/imgui.ini
+					${OUTPUT_PATH}/imgui.ini)

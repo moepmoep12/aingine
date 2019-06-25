@@ -121,7 +121,7 @@ namespace ProjectLauncher {
 			ImGui::SameLine();
 
 			if (ImGui::Button("Add existing", buttonSize)) {
-				static const nfdchar_t *filterList = "proj";
+				static const nfdchar_t *filterList = "proj.in";
 				nfdchar_t *outPath = NULL;
 				nfdresult_t result = NFD_OpenDialog(filterList, NULL, &outPath);
 

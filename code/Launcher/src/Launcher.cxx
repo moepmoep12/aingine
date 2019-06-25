@@ -151,12 +151,20 @@ namespace ProjectLauncher {
 		if (std::filesystem::exists(path)) {
 			using json = nlohmann::json;
 
+			// the path ends with the project file, which we don't want
+			std::string p = std::filesystem::canonical(path).string();
+			int lastIndex = p.find_last_of('\\');
+			if (lastIndex > 0) {
+				p = p.substr(0, lastIndex);
+			}
+
 			std::ifstream file;
 			file.open(path);
 			if (file.fail()) return;
 
 			json j = json::parse(file);
-			j[AttributeNames::PROJECT_PATH] = std::filesystem::canonical(path).string() + "\\";
+			// update the paths
+			j[AttributeNames::PROJECT_PATH] = std::filesystem::canonical(p).string() + "\\";
 			j[AttributeNames::ENGINE_INSTALLPATH] = std::filesystem::canonical(s_instance->m_installpath).string() + "\\";
 			file.close();
 
@@ -166,11 +174,12 @@ namespace ProjectLauncher {
 					j[AttributeNames::PROJECT_PATH]
 				});
 
-			std::ofstream writeFile;
-			writeFile.open(path);
-			if (writeFile.fail()) return;
-			writeFile << j.dump(0);
-			writeFile.close();
+			//// write back the updates
+			//std::ofstream writeFile;
+			//writeFile.open(path);
+			//if (writeFile.fail()) return;
+			//writeFile << j.dump(0);
+			//writeFile.close();
 		}
 	}
 
@@ -274,11 +283,11 @@ namespace ProjectLauncher {
 	{
 		nlohmann::json j;
 		j[AttributeNames::PROJECT_NAME] = name;
-		j[AttributeNames::PROJECT_PATH] = std::filesystem::canonical(path).string() + "\\";
+		j[AttributeNames::PROJECT_PATH] = "@projectDir@";
 		j[AttributeNames::PROJECT_SCRIPTS] = std::vector<std::string>();
-		j[AttributeNames::ENGINE_INSTALLPATH] = std::filesystem::canonical(s_instance->m_installpath).string() + "\\";
+		j[AttributeNames::ENGINE_INSTALLPATH] = "@InstallPath@";
 		std::ofstream file;
-		file.open(path + name + ".proj");
+		file.open(path + name + ".proj.in");
 		file << j.dump(0);
 		file.close();
 	}

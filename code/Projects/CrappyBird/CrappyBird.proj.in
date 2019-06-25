@@ -1,0 +1,12 @@
+{
+"installPath": "@InstallPath@",
+"name": "CrappyBird",
+"path": "@projectDir@",
+"scripts": [
+"Player",
+"BackGround",
+"PickUpFactory",
+"Obstacles",
+"PickUp"
+]
+}
