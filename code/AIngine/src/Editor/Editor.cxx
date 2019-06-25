@@ -561,7 +561,7 @@ namespace AIngine::Editor {
 			std::string sceneName = s_instance->GetCurrentSceneName();
 			s_instance->UpdateSceneTitle();
 
-			CORE_INFO("Loaded ccene " + sceneName + " from " + path);
+			CORE_INFO("Loaded scene " + sceneName + " from " + path);
 		}
 		else {
 			AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(path);
