@@ -137,9 +137,9 @@ namespace ProjectLauncher {
 					if (lastIndex > 0) {
 						projectRoot = p.substr(0, lastIndex);
 						int lastIndexP = p.find_last_of('p');
-						projectName = p.substr(lastIndex + 1, p.size() - lastIndexP + 3);
+						projectName = p.substr(lastIndex + 1, (lastIndexP - 2) - lastIndex);
 					}
-					if (Launcher::HasCmakeBinaries(projectRoot,projectName)) {
+					if (Launcher::HasCmakeBinaries(projectRoot, projectName)) {
 						// re-generate cmake
 						Launcher::RegenerateCMake(projectRoot);
 						Launcher::AddProject(projectName, projectRoot);
