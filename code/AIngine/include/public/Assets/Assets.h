@@ -324,13 +324,14 @@ namespace AIngine::Assets {
 				std::filesystem::path p(path);
 				std::string result;
 
-				// Is it an engine resource?
-				if (path.find("AIngine") != std::string::npos) {
-					result = s_instance->m_engineInstallPath + "Resources\\" + path;
+				if (p.is_relative()) {
+					// Is it an engine resource?
+					if (path.find("AIngine") != std::string::npos) {
+						result = s_instance->m_engineInstallPath + "Resources\\" + path;
+					}
+					else
+						result = s_instance->m_resourceFolderPath + path;
 				}
-
-				else if (p.is_relative())
-					result = s_instance->m_resourceFolderPath + path;
 				else
 					result = path;
 				return (T*)s_instance->Load(result, std::type_index(typeid(T)));
