@@ -614,29 +614,37 @@ namespace AIngine::Editor {
 
 	void Editor::DrawFpsGraph(float delta) const
 	{
-		static bool firstFrame = true;
-		if (firstFrame) {
-			firstFrame = false;
-			return;
+		static const ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse
+			| ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus;
+		static bool open = true;
+		if (ImGui::Begin("fps", &open, flags)) {
+			static bool firstFrame = true;
+			if (firstFrame) {
+				firstFrame = false;
+				ImGui::End();
+				return;
+			}
+			static std::vector<float> fpsqueue;
+			static float max = 0;
+			struct Funcs
+			{
+				static float Get(void*, int i) { return fpsqueue[i]; }
+
+			};
+
+			if (fpsqueue.size() >= 1000) {
+				fpsqueue.erase(fpsqueue.begin());
+			}
+			float fps = 1.0f / delta;
+			if (fps > max)
+				max = fps;
+			fpsqueue.push_back(fps);
+			float(*func)(void*, int) = Funcs::Get;
+
+			ImGui::PlotLines("FPS", func, NULL, fpsqueue.size(), 0, std::to_string(1.0 / delta).c_str(), 0, max, ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
+
 		}
-		static std::vector<float> fpsqueue;
-		static float max = 0;
-		struct Funcs
-		{
-			static float Get(void*, int i) { return fpsqueue[i]; }
-
-		};
-
-		if (fpsqueue.size() >= 200) {
-			fpsqueue.erase(fpsqueue.begin());
-		}
-		float fps = 1.0f / delta;
-		if (fps > max)
-			max = fps;
-		fpsqueue.push_back(fps);
-		float(*func)(void*, int) = Funcs::Get;
-
-		ImGui::PlotLines("FPS", func, NULL, fpsqueue.size(), 0, NULL, 0, max, ImVec2(0, 80));
+		ImGui::End();
 	}
 
 	bool Editor::DidAnyDockedWidgetChangeSize() const
