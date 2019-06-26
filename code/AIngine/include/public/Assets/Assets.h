@@ -223,6 +223,12 @@ namespace AIngine::Assets {
 
 	/********************************** FontAsset ******************************************/
 
+	inline std::string GetFontPath(const std::string& path, int size) {
+		std::stringstream ss;
+		ss << path << '\n' << size;
+		return ss.str();
+	}
+
 	class FontAsset final :public AssetBase
 	{
 		friend class FontAssetFactory;

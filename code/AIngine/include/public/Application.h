@@ -53,6 +53,7 @@ namespace AIngine {
 
 		inline static Application& Get() { return *s_instance; }
 		inline const Window& GetWindow() const { return *m_window; }
+		inline static const AIngine::Rendering::Viewport& GetViewport() { return *s_instance->m_viewport; }
 
 		static void LoadScene(int index);
 
