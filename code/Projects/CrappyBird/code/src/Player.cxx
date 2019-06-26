@@ -119,7 +119,7 @@ namespace CrappyBird {
 		// display the score
 		std::stringstream ss;
 		ss << "Score: " << (int)m_distanceTraveled;
-		Graphics::Text(ss.str(), glm::vec2(10, 20), glm::vec2(2));
+		Graphics::Text(ss.str(), glm::vec2(10, 35), glm::vec2(2));
 	}
 
 	void Player::OnCollision(PhysicsComponent * other)

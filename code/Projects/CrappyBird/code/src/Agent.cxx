@@ -19,7 +19,7 @@ namespace CrappyBird {
 		m_physBody->SetFixedRotation(true);
 
 		static auto constants = xxr::XCSRConstants();
-		constants.n = 1000;
+		constants.n = 300;
 		static std::unordered_set<int> options = std::unordered_set<int>{ 0, 1 };
 		xcsr = new xxr::XCSR<>(xxr::CSR, options, constants);
 		s_spawnPos = GetOwner()->GetWorldPosition();
@@ -48,15 +48,15 @@ namespace CrappyBird {
 
 		std::vector<double> observations = { normalizedHeight,vel };
 
-		for (auto& obstacle : obstacles)
-		{
-			glm::vec2 point = obstacle->GetWorldPosition();
-			observations.push_back(point.x / maxWidth);
-			observations.push_back(point.y / maxHeight);
-			Sprite* sprite = obstacle->GetComponent<Sprite>();
-			observations.push_back(sprite->GetLocalWorldSize().x / maxWidth);
-			observations.push_back(sprite->GetLocalWorldSize().y / maxHeight);
-		}
+		//for (auto& obstacle : obstacles)
+		//{
+		//	glm::vec2 point = obstacle->GetWorldPosition();
+		//	observations.push_back(point.x / maxWidth);
+		//	observations.push_back(point.y / maxHeight);
+		//	Sprite* sprite = obstacle->GetComponent<Sprite>();
+		//	observations.push_back(sprite->GetLocalWorldSize().x / maxWidth);
+		//	observations.push_back(sprite->GetLocalWorldSize().y / maxHeight);
+		//}
 
 		int action = xcsr->explore(observations);
 
@@ -88,7 +88,6 @@ namespace CrappyBird {
 
 	void Agent::OnGUI()
 	{
-		return;
 		std::ostringstream os;
 		xcsr->dumpPopulation(os);
 		std::string content = os.str();
