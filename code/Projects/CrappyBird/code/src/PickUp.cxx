@@ -33,6 +33,8 @@ namespace CrappyBird {
 	// Update is called once per frame
 	void PickUp::Update(float delta)
 	{
+		if (m_player->IsGameOver) return;
+
 		GetOwner()->Translate(glm::vec2(-CrappyBird::s_GameSpeed  *delta, 0), true);
 
 		// the pickUp is now beyond the player

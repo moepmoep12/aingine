@@ -15,6 +15,12 @@ namespace CrappyBird {
 
 		// Event is fired when the player enters the next screen
 		AIngine::Events::Event<void, AIngine::Structures::RectangleI&> OnEnterNewScreen;
+		
+		AIngine::Events::Event<void> OnGameOverEvent;
+		typedef AIngine::Events::EventHandler<void> OnGameOverEventHandler;
+
+		AIngine::Events::Event<void> OnRestartGame;
+		typedef AIngine::Events::EventHandler<void> OnRestartGameEventHandler;
 
 		// returns the current size of the rocket
 		glm::vec2 GetSize();
@@ -46,11 +52,17 @@ namespace CrappyBird {
 		// the index of the screen the player is currently in
 		int CurrentScreenIndex = 1;
 
+		bool IsGameOver = false;
+
 	private:
 		/* Callbacks */
 		void OnCollision(PhysicsComponent* other);
 		void OnSpawnParticle(Particle& particle, const glm::vec2& pos);
 		void OnUpdateParticle(Particle& particle);
+		void OnGameOver();
+		void UpdateGameOverScreen(float delta);
+
+		void ResetGame();
 
 		// all effects currently affecting the player
 		std::vector<std::unique_ptr<Effect>> m_activeEffects;
@@ -67,10 +79,14 @@ namespace CrappyBird {
 		// the particle emitter which emitts fire
 		ParticleEmitter* m_emitter;
 
+		const glm::vec2 m_spawnPosition = glm::vec2(1, 2.5);
+
+		FontAsset* gameOverFont;
+
 		// EventHandler for the callbacks. Need to be kept in order to unsubscribe from events
 		AIngine::ParticleEmitter::SpawnParticleHandler OnSpawnParticleHandler;
 		AIngine::ParticleEmitter::UpdateParticleHandler OnUpdateParticleHandler;
 		AIngine::Events::EventHandler<void, PhysicsComponent*> OnCollisionEventHandler;
-
+		OnGameOverEventHandler OnGameOverHandler;
 	};
 }

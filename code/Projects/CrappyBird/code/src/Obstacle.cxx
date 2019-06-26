@@ -12,6 +12,7 @@ namespace CrappyBird {
 	void Obstacle::OnStart()
 	{
 		glm::vec2 pos = GetOwner()->GetWorldPosition();
+		m_spawnPosition = pos;
 		glm::vec2 size = GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize();
 		pos -= size;
 		m_rect.x = pos.x;
@@ -26,6 +27,11 @@ namespace CrappyBird {
 		GetOwner()->GetComponent<Sprite>()->SetLocalWorldSize(glm::vec2(rect.width, rect.height));
 		GetOwner()->GetComponent<PhysicsComponent>()->AdjustBoxShape(rect.width, rect.height);
 		m_rect = rect;
+	}
+
+	void Obstacle::Reset()
+	{
+		GetOwner()->SetWorldPosition(m_spawnPosition);
 	}
 
 	// End is called when gameplay ends for this script

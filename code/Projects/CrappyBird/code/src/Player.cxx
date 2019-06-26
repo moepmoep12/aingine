@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "CrappyBird.h"
+#include "Obstacle.h"
 
 #include <random>
 
@@ -11,6 +12,7 @@ namespace CrappyBird {
 		// In order for the editor to display the scripts name correctly
 		SetName(typeid(*this).name());
 		m_originalGameSpeed = CrappyBird::s_GameSpeed;
+		gameOverFont = Assets::Load<FontAsset>(AIngine::Assets::GetFontPath("AIngine/fonts/JOURNAL.ttf", 200));
 	}
 
 	glm::vec2 Player::GetSize()
@@ -40,11 +42,13 @@ namespace CrappyBird {
 		OnCollisionEventHandler = AIngine::Events::EventHandler<void, PhysicsComponent*>(std::bind(&Player::OnCollision, this, std::placeholders::_1));
 		OnSpawnParticleHandler = AIngine::ParticleEmitter::SpawnParticleHandler(std::bind(&Player::OnSpawnParticle, this, std::placeholders::_1, std::placeholders::_2));
 		OnUpdateParticleHandler = AIngine::ParticleEmitter::UpdateParticleHandler(std::bind(&Player::OnUpdateParticle, this, std::placeholders::_1));
+		OnGameOverHandler = OnGameOverEventHandler(std::bind(&Player::OnGameOver, this));
 
 		// register callbacks
 		m_physBody->OnCollisionBegin += OnCollisionEventHandler;
 		m_emitter->SpawnParticleEvent += OnSpawnParticleHandler;
 		m_emitter->UpdateParticleEvent += OnUpdateParticleHandler;
+		OnGameOverEvent += OnGameOverHandler;
 
 		for (int i = 0; i < m_physBody->GetBodyInformation().verticesCount; i++) {
 			m_originalVertices.push_back(m_physBody->GetBodyInformation().vertices[i]);
@@ -61,6 +65,7 @@ namespace CrappyBird {
 		m_physBody->OnCollisionBegin -= OnCollisionEventHandler;
 		m_emitter->SpawnParticleEvent -= OnSpawnParticleHandler;
 		m_emitter->UpdateParticleEvent -= OnUpdateParticleHandler;
+		OnGameOverEvent -= OnGameOverHandler;
 
 		m_activeEffects.clear();
 	}
@@ -68,6 +73,14 @@ namespace CrappyBird {
 	// Update is called once per frame
 	void Player::Update(float delta)
 	{
+		if (IsGameOver) {
+			UpdateGameOverScreen(delta);
+			return;
+		}
+		if (GetOwner()->GetWorldPosition().x <= -1) {
+			OnGameOverEvent();
+		}
+
 		// basic fire
 		m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 20);
 
@@ -111,6 +124,11 @@ namespace CrappyBird {
 		// key pressed
 		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent::KeyPressedEventData)) {
 			AIngine::Events::KeyPressedEvent::KeyPressedEventData pressedEvent = dynamic_cast<AIngine::Events::KeyPressedEvent::KeyPressedEventData&>(e);
+
+			if (pressedEvent.GetKeyCode() == AIngine::KeyCodes::SPACE) {
+				if (IsGameOver)
+					ResetGame();
+			}
 		}
 	}
 
@@ -177,5 +195,41 @@ namespace CrappyBird {
 		glm::vec4 a = glm::vec4(t, t, 0, u);
 		particle.Color = glm::mix(finalColor, particle.Color, a); // value = 1 => firstColor
 		particle.Rotation += particle.AngularVelocity * dt;
+	}
+
+	void Player::OnGameOver()
+	{
+		IsGameOver = true;
+		m_physBody->SetEnabled(false);
+	}
+
+	void Player::UpdateGameOverScreen(float delta)
+	{
+		const AIngine::Rendering::Viewport& viewport = AIngine::Application::Get().GetViewport();
+		glm::vec2 scale = glm::vec2(2);
+		glm::vec2 center = viewport.GetCenter() - glm::vec2(600, 100);
+		AIngine::Graphics::Text("Game Over", center, scale, glm::vec3(1, 0, 0),1, &gameOverFont->GetFont());
+	}
+
+	void Player::ResetGame()
+	{
+		m_distanceTraveled = 0;
+		IsGameOver = false;
+		m_physBody->SetEnabled(true);
+		GetOwner()->SetWorldPosition(m_spawnPosition);
+		CurrentScreenIndex = 1;
+
+		GameObject* obstacleParent = AIngine::World::GetGameObject("Obstacles");
+		for (auto& child : obstacleParent->GetChildren()) {
+			child->SetWorldPosition(glm::vec2(-5, 0));
+			child->SetActive(false);
+		}
+		GameObject* pickupParent = AIngine::World::GetGameObject("PickUpFactory");
+		for (auto& child : pickupParent->GetChildren()) {
+			child->SetActive(false);
+		}
+
+		OnRestartGame();
+
 	}
 }

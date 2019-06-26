@@ -48,6 +48,7 @@ namespace CrappyBird {
 	// Update is called once per frame
 	void Obstacles::Update(float delta)
 	{
+		if (m_player->IsGameOver) return;
 		for (auto& child : GetOwner()->GetChildren()) {
 			if (child->IsActive()) {
 				child->Translate(glm::vec2(-CrappyBird::s_GameSpeed * delta, 0), true);
@@ -216,7 +217,7 @@ namespace CrappyBird {
 						map[i][0].rectangle.width,
 						chosenHeight
 					});
-				obj->SetRotation(rotation);
+				//obj->SetRotation(rotation);
 			}
 		}
 
@@ -247,7 +248,7 @@ namespace CrappyBird {
 						map[i][0].rectangle.width,
 						chosenHeight
 					});
-				obj->SetRotation(rotation);
+				//obj->SetRotation(rotation);
 			}
 		}
 

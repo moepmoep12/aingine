@@ -14,7 +14,10 @@ namespace CrappyBird {
 		inline AIngine::Structures::RectangleF& GetRectangle() { return m_rect; }
 		void Set(const AIngine::Structures::RectangleF& rect);
 
+		void Reset();
+
 	private:
 		AIngine::Structures::RectangleF m_rect;
+		glm::vec2 m_spawnPosition;
 	};
 }
