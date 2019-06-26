@@ -67,10 +67,10 @@ namespace AIngine {
 
 	void World::OnUpdate(float delta)
 	{
-		m_sceneGraph->OnUpdate(delta);
-
 		if ((AIngine::Application::IsRunning()))
 			m_physicsWorld->Step(1.0f / 60.0f, 8, 3);
+
+		m_sceneGraph->OnUpdate(delta);
 
 		if (m_isPhysicsDebugDrawn)
 			m_physicsWorld->DrawDebugData();

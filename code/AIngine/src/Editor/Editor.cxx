@@ -626,22 +626,26 @@ namespace AIngine::Editor {
 			}
 			static std::vector<float> fpsqueue;
 			static float max = 0;
+			static float min = 1000;
 			struct Funcs
 			{
 				static float Get(void*, int i) { return fpsqueue[i]; }
 
 			};
 
-			if (fpsqueue.size() >= 1000) {
+			if (fpsqueue.size() >= 500) {
 				fpsqueue.erase(fpsqueue.begin());
 			}
 			float fps = 1.0f / delta;
 			if (fps > max)
 				max = fps;
+			if (fps < min) {
+				min = fps;
+			}
 			fpsqueue.push_back(fps);
 			float(*func)(void*, int) = Funcs::Get;
 
-			ImGui::PlotLines("FPS", func, NULL, fpsqueue.size(), 0, std::to_string(1.0 / delta).c_str(), 0, max, ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
+			ImGui::PlotLines("FPS", func, NULL, fpsqueue.size(), 0, std::to_string(1.0 / delta).c_str(), min, max, ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
 
 		}
 		ImGui::End();

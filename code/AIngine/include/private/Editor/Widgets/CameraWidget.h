@@ -15,6 +15,7 @@ namespace AIngine::Editor {
 
 	private:
 		AIngine::Rendering::Camera& m_camera;
-
+		float m_initialZoom, m_initialRot;
+		glm::vec2 m_initialPosition;
 	};
 }

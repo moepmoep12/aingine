@@ -7,7 +7,7 @@
 
 namespace AIngine::Editor {
 	CameraWidget::CameraWidget(AIngine::Rendering::Camera & camera)
-		: m_camera(camera)
+		: m_camera(camera), m_initialZoom(camera.m_zoom), m_initialPosition(camera.GetPosition()), m_initialRot(camera.GetRotation())
 	{
 	}
 
@@ -19,10 +19,7 @@ namespace AIngine::Editor {
 
 	void CameraWidget::OnImGuiRender()
 	{
-		static float dragspeed = 0.1f;
-		static glm::vec2 initialPosition(m_camera.GetPosition());
-		static float initialZoom(m_camera.m_zoom);
-		static float initialRot(m_camera.m_rotation);
+		static float dragspeed = 0.1f;;
 
 		if (ImGui::Begin("Camera"))
 		{
@@ -44,9 +41,9 @@ namespace AIngine::Editor {
 
 			// reset camera button
 			if (ImGui::Button("Reset")) {
-				m_camera.SetPosition(initialPosition);
-				m_camera.SetZoom(initialZoom);
-				m_camera.SetRotation(initialRot);
+				m_camera.SetPosition(m_initialPosition);
+				m_camera.SetZoom(m_initialZoom);
+				m_camera.SetRotation(m_initialRot);
 			}
 
 			ImGui::Separator();
