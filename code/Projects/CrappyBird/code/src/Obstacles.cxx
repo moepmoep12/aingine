@@ -52,7 +52,7 @@ namespace CrappyBird {
 			if (child->IsActive()) {
 				child->Translate(glm::vec2(-CrappyBird::s_GameSpeed * delta, 0), true);
 				if (child->GetWorldPosition().x < -child->GetComponent<Obstacle>()->GetRectangle().width) {
-					child->RemoveComponent<Obstacle>();
+					//child->RemoveComponent<Obstacle>();
 					child->SetActive(false);
 				}
 			}
@@ -77,11 +77,12 @@ namespace CrappyBird {
 		static std::default_random_engine generator;
 		static std::normal_distribution<double> distribution(0, 0.25);
 
-		glm::vec2 playerSize(2, 1);
+		static const glm::vec2 playerSize(2, 1);
 		int QuadrantsX = floor((float)worldRect.width / playerSize.x);
 		int QuadrantsY = floor((float)worldRect.height / playerSize.y);
 		int textureIndex = rand() % (m_obstacleTextures.size() - 1);
 
+		// if it's the first screen, choose a random height
 		if (m_lastObstacleHeight == -1) {
 			m_lastObstacleHeight = rand() % QuadrantsY;
 		}
@@ -208,7 +209,7 @@ namespace CrappyBird {
 			if (obj) {
 				obj->SetActive(true);
 				obj->GetComponent<Sprite>()->SetTexture(m_obstacleTextures[textureIndex]);
-				obj->AddComponent<Obstacle>()->Set(AIngine::Structures::RectangleF
+				obj->GetComponent<Obstacle>()->Set(AIngine::Structures::RectangleF
 					{
 						map[i][0].rectangle.x,
 						map[i][0].rectangle.y,
@@ -239,7 +240,7 @@ namespace CrappyBird {
 			if (obj) {
 				obj->SetActive(true);
 				obj->GetComponent<Sprite>()->SetTexture(m_obstacleTextures[textureIndex]);
-				obj->AddComponent<Obstacle>()->Set(AIngine::Structures::RectangleF
+				obj->GetComponent<Obstacle>()->Set(AIngine::Structures::RectangleF
 					{
 						map[i][0].rectangle.x,
 						5.0f - chosenHeight,
