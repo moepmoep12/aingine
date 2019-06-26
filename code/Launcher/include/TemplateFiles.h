@@ -160,13 +160,7 @@ namespace ProjectLauncher {
 			<< "		TARGET ${PROJECT_NAME} POST_BUILD" << '\n'
 			<< "		COMMAND ${CMAKE_COMMAND} -E copy" << '\n'
 			<< "		${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj" << '\n'
-			<< "		${OUTPUT_PATH}/project.proj)" << '\n'
-			<< '\n'
-			<< "add_custom_command(" << '\n'
-			<< "	TARGET ${PROJECT_NAME} POST_BUILD" << '\n'
-			<< "	COMMAND ${CMAKE_COMMAND} -E copy" << '\n'
-			<< "	${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj" << '\n'
-			<< "	${OUTPUT_PATH}/project.proj)" << '\n';
+			<< "		${OUTPUT_PATH}/project.proj)" << '\n';
 
 		return ss.str();
 	}

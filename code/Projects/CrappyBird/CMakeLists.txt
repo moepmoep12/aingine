@@ -94,10 +94,3 @@ add_custom_command(
 			COMMAND ${CMAKE_COMMAND} -E copy
 					${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj
 					${OUTPUT_PATH}/project.proj)
-
-#--- Copy imgui.ini
-add_custom_command(
-			TARGET ${PROJECT_NAME} POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy
-					${CMAKE_INSTALL_PREFIX}/Resources/AIngine/imgui.ini
-					${OUTPUT_PATH}/imgui.ini)
