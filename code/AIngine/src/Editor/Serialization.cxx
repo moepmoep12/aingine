@@ -11,6 +11,9 @@
 #include "AIngine/SoundComponent.h"
 #include "AIngine/ParticleEmitter.h"
 #include "AIngine/Script.h"
+#include "UI/UIELement.h"
+#include "UI/Button.h"
+#include "Rendering/UIRenderer.h"
 
 #include <fstream>
 #include <vector>
@@ -58,6 +61,8 @@ namespace AIngine::Editor::Serialization {
 		const char* COMPONENT_SOUND = "soundComponent";
 		const char* COMPONENT_SCRIPT = "script";
 		const char* COMPONENT_PARTICLEEMITTER = "particleemitter";
+		const char* COMPONENT_CANVAS = "canvas";
+		const char* COMPONENT_BUTTON = "button";
 
 		// Script
 		const char* SCRIPT_INDEX = "index";
@@ -106,6 +111,17 @@ namespace AIngine::Editor::Serialization {
 
 		// ParticleEmitter
 		const char* PARTICLEEMITTER_AMOUNT = "amount";
+
+		// UIElement
+		const char* UIELEMENT_RECT = "rectangle";
+		const char* UIELEMENT_ISDISABLED = "isdisabled";
+		const char* UIELEMENT_COLORTINT = "tintColor";
+		const char* UIELEMENT_COLORDISABLED = "disabledColor";
+
+		// Button
+		const char* BUTTON_COLORCLICKED = "colorClicked";
+		const char* BUTTON_COLORHOVERED = "colorHovered";
+		const char* BUTTON_TEXT = "text";
 
 	}
 
@@ -173,6 +189,14 @@ namespace AIngine::Editor::Serialization {
 						// restore particleEmitter
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_PARTICLEEMITTER)) {
 							RestoreParticleEmitter(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PARTICLEEMITTER], restoredObject);
+						}
+						// restore canvas
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_CANVAS)) {
+							RestoreCanvas(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_CANVAS], restoredObject);
+						}
+						// restore button
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_BUTTON)) {
+							RestoreButton(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_BUTTON], restoredObject);
 						}
 
 						//restore scripts
@@ -405,6 +429,36 @@ namespace AIngine::Editor::Serialization {
 		}
 	}
 
+	void Serializer::RestoreCanvas(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		AIngine::UI::Canvas* canvas = obj->AddComponent<AIngine::UI::Canvas>();
+		canvas->SetRectangle((*j)[AttributeNames::UIELEMENT_RECT]);
+		AIngine::Rendering::UIRenderer::canvas = obj;
+	}
+
+	void Serializer::RestoreButton(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		AIngine::UI::Button* button = obj->AddComponent<AIngine::UI::Button>();
+		button->SetRectangle((*j)[AttributeNames::UIELEMENT_RECT]);
+		button->ClickedColor = (*j)[AttributeNames::BUTTON_COLORCLICKED];
+		button->DisabledColor = (*j)[AttributeNames::UIELEMENT_COLORDISABLED];
+		button->SetDisabled((*j)[AttributeNames::UIELEMENT_ISDISABLED]);
+		button->HoverColor = (*j)[AttributeNames::BUTTON_COLORHOVERED];
+		button->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
+		button->Text = (*j)[AttributeNames::BUTTON_TEXT];
+		button->TintColor = (*j)[AttributeNames::UIELEMENT_COLORTINT];
+
+		AIngine::Rendering::Texture2D& texture = button->Texture;
+
+		texture.Wrap_S = (*j)[AttributeNames::TEXTURE_WRAP_S];
+		texture.Wrap_T = (*j)[AttributeNames::TEXTURE_WRAP_T];
+		texture.Filter_Min = (*j)[AttributeNames::TEXTURE_FILTER_MIN];
+		texture.Filter_Max = (*j)[AttributeNames::TEXTURE_FILTER_MAX];
+		texture.Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
+		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
+		texture.Generate(bitmap);
+	}
+
 
 	/* -------------------------------------------- SCENEGRAPH SERIALIZER -------------------------------------------------------*/
 
@@ -503,6 +557,18 @@ namespace AIngine::Editor::Serialization {
 			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PARTICLEEMITTER] = SerializeParticleEmitter(*emitter);
 		}
 
+		// serialize canvas
+		AIngine::UI::Canvas* canvas = obj.GetComponent<AIngine::UI::Canvas>();
+		if (canvas) {
+			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_CANVAS] = SerializeCanvas(*canvas);
+		}
+
+		// serialize button
+		AIngine::UI::Button* button = obj.GetComponent<AIngine::UI::Button>();
+		if (button) {
+			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_BUTTON] = SerializeButton(*button);
+		}
+
 		j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SCRIPT] = SerializeScripts(obj);
 
 		outer[obj.GetName()] = j;
@@ -526,7 +592,6 @@ namespace AIngine::Editor::Serialization {
 	{
 		nlohmann::json j;
 
-		j[AttributeNames::TEXTURE_PATH] = SerializePath(sprite.GetTexture().FileName);
 		j[AttributeNames::SPRITE_COLOR_R] = sprite.GetColor().x;
 		j[AttributeNames::SPRITE_COLOR_G] = sprite.GetColor().y;
 		j[AttributeNames::SPRITE_COLOR_B] = sprite.GetColor().z;
@@ -535,13 +600,13 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::SPRITE_SIZE_Y] = sprite.GetLocalWorldSize().y;
 		j[AttributeNames::SPRITE_PARALLAX_X] = sprite.GetParallaxFactor().x;
 		j[AttributeNames::SPRITE_PARALLAX_Y] = sprite.GetParallaxFactor().y;
+		j[AttributeNames::TEXTURE_PATH] = SerializePath(sprite.GetTexture().FileName);
 		j[AttributeNames::TEXTURE_WRAP_S] = sprite.GetTexture().Wrap_S;
 		j[AttributeNames::TEXTURE_WRAP_T] = sprite.GetTexture().Wrap_T;
 		j[AttributeNames::TEXTURE_FILTER_MIN] = sprite.GetTexture().Filter_Min;
 		j[AttributeNames::TEXTURE_FILTER_MAX] = sprite.GetTexture().Filter_Max;
 		j[AttributeNames::TEXTURE_IMAGEFORMAT] = sprite.GetTexture().Image_Format;
 		j[AttributeNames::COMPONENT_ACTIVE] = sprite.IsEnabled();
-
 		return j;
 	}
 
@@ -613,6 +678,35 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::TEXTURE_IMAGEFORMAT] = emitter.GetTexture().Image_Format;
 		j[AttributeNames::PARTICLEEMITTER_AMOUNT] = emitter.GetAmount();
 
+		return j;
+	}
+
+	nlohmann::json SceneGraphSerializer::SerializeCanvas(AIngine::UI::Canvas & canvas)
+	{
+		nlohmann::json j;
+		j[AttributeNames::UIELEMENT_RECT] = canvas.GetRectangle();
+		j[AttributeNames::COMPONENT_ACTIVE] = canvas.IsEnabled();
+
+		return j;
+	}
+
+	nlohmann::json SceneGraphSerializer::SerializeButton(AIngine::UI::Button & button)
+	{
+		nlohmann::json j;
+		j[AttributeNames::UIELEMENT_RECT] = button.GetRectangle();
+		j[AttributeNames::UIELEMENT_COLORDISABLED] = button.DisabledColor;
+		j[AttributeNames::UIELEMENT_COLORTINT] = button.TintColor;
+		j[AttributeNames::UIELEMENT_ISDISABLED] = button.IsDisabled();
+		j[AttributeNames::BUTTON_COLORCLICKED] = button.ClickedColor;
+		j[AttributeNames::BUTTON_COLORHOVERED] = button.HoverColor;
+		j[AttributeNames::BUTTON_TEXT] = button.Text;
+		j[AttributeNames::TEXTURE_PATH] = SerializePath(button.Texture.FileName);
+		j[AttributeNames::TEXTURE_WRAP_S] = button.Texture.Wrap_S;
+		j[AttributeNames::TEXTURE_WRAP_T] = button.Texture.Wrap_T;
+		j[AttributeNames::TEXTURE_FILTER_MIN] = button.Texture.Filter_Min;
+		j[AttributeNames::TEXTURE_FILTER_MAX] = button.Texture.Filter_Max;
+		j[AttributeNames::TEXTURE_IMAGEFORMAT] = button.Texture.Image_Format;
+		j[AttributeNames::COMPONENT_ACTIVE] = button.IsEnabled();
 		return j;
 	}
 
@@ -697,14 +791,3 @@ namespace AIngine::Editor::Serialization {
 
 }
 
-namespace glm
-{
-	void to_json(nlohmann::json& j, const glm::vec2& vec) {
-		j = nlohmann::json{ {"x",vec.x,}, {"y",vec.y} };
-	}
-
-	void from_json(const nlohmann::json& j, glm::vec2& vec) {
-		j.at("x").get_to(vec.x);
-		j.at("y").get_to(vec.y);
-	}
-}
