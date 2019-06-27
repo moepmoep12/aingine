@@ -4,6 +4,9 @@
 #include "AIngine/Physics.h"
 #include "AIngine/SoundComponent.h"
 #include "AIngine/ParticleEmitter.h"
+#include "UI/UIELement.h"
+#include "UI/Button.h"
+#include "Rendering/UIRenderer.h"
 #include "Application.h"
 
 #include <vector>
@@ -73,8 +76,19 @@ namespace AIngine::Editor {
 									obj->AddComponent<AIngine::ParticleEmitter>();
 									break;
 								}
+							case 4:
+								if (!obj->GetComponent<AIngine::UI::Canvas>()) {
+									obj->AddComponent<AIngine::UI::Canvas>();
+									AIngine::Rendering::UIRenderer::canvas = obj;
+									break;
+								}
+							case 5:
+								if (!obj->GetComponent<AIngine::UI::Button>()) {
+									obj->AddComponent<AIngine::UI::Button>();
+									break;
+								}
 							default:
-								AIngine::OnAddComponent(obj, i - 4);
+								AIngine::OnAddComponent(obj, i - 6);
 								break;
 							}
 						}

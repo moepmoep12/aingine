@@ -77,6 +77,7 @@ set(AIngine_HEADER_PRIVATE
 		include/private/Editor/ScriptingAPI.h
 		include/private/Editor/Serialization.h
 		include/private/Editor/Widgets/AddComponentWidget.h
+		include/private/Editor/Widgets/ButtonComponentWidget.h
 		include/private/Editor/Widgets/EditorWidget.h
 		include/private/Editor/Widgets/CameraWidget.h
 		include/private/Editor/Widgets/ComponentWidget.h
@@ -119,6 +120,7 @@ set(AINGINE_SRC
 		src/Editor/ScriptingAPI.cxx
 		src/Editor/Serialization.cxx
 		src/Editor/Widgets/AddComponentWidget.cxx
+		src/Editor/Widgets/ButtonComponentWidget.cxx
 		src/Editor/Widgets/CameraWidget.cxx
 		src/Editor/Widgets/MenuBarWidget.cxx
 		src/Editor/Widgets/ParticleEmitterWidget.cxx

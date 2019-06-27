@@ -9,6 +9,7 @@
 #include "Rendering/Font.h"
 #include "AIngine/Script.h"
 #include "Rendering/ParticleRenderer.h"
+#include "Rendering/UIRenderer.h"
 
 #include <memory>
 
@@ -93,6 +94,9 @@ namespace AIngine {
 
 		// create particle renderer
 		m_particleRenderer = new AIngine::Rendering::ParticleRenderer();
+
+		// create UI Renderer
+		m_uiRenderer = new AIngine::Rendering::UIRenderer();
 	}
 
 	Application::~Application()
@@ -160,6 +164,7 @@ namespace AIngine {
 			// scene rendering
 			m_renderer->Traverse(&m_world->GetSceneGraph().GetRoot());
 			m_particleRenderer->Traverse(&m_world->GetSceneGraph().GetRoot());
+			m_uiRenderer->Traverse(&m_world->GetSceneGraph().GetRoot());
 
 			// ui rendering
 			m_imGuiLayer->OnBegin();
@@ -362,7 +367,7 @@ namespace AIngine {
 
 	std::vector<std::string> GetAvailableComponentNames()
 	{
-		std::vector<std::string> result = { "Sprite", "Physics", "Sound", "ParticleEmitter" };
+		std::vector<std::string> result = { "Sprite", "Physics", "Sound", "ParticleEmitter", "Canvas", "Button" };
 
 		for (auto& it = ApplicationComponentNames.begin(); it != ApplicationComponentNames.end(); it++) {
 			result.push_back(*it._Ptr);

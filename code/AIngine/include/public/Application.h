@@ -32,6 +32,7 @@ namespace AIngine {
 	namespace Rendering {
 		class SpriteRenderer;
 		class ParticleRenderer;
+		class UIRenderer;
 	}
 
 	class Application {
@@ -98,6 +99,7 @@ namespace AIngine {
 		AIngine::Assets::AssetRegistry m_assetRegistry;
 		AIngine::Rendering::SpriteRenderer* m_renderer;
 		AIngine::Rendering::ParticleRenderer* m_particleRenderer;
+		AIngine::Rendering::UIRenderer* m_uiRenderer;
 		AIngine::Rendering::Viewport* m_viewport;
 		static Application* s_instance;
 		float m_deltaTime = 0.0f;

@@ -23,6 +23,8 @@ namespace AIngine::Rendering {
 		virtual bool Leave(GameObject & node) override;
 		virtual bool Visit(GameObject & node) override;
 
+		static GameObject* canvas;
+
 	private:
 		void RenderUIElement(AIngine::UI::UIElement& element);
 

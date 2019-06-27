@@ -15,6 +15,7 @@
 #include "AIngine/SoundComponent.h"
 #include "AIngine/Script.h"
 #include "AIngine/ParticleEmitter.h"
+#include "UI/Button.h"
 
 
 namespace AIngine::Editor {
@@ -87,6 +88,7 @@ namespace AIngine::Editor {
 		delete m_addComponentWidget;
 		delete m_soundComponentWidget;
 		delete m_particleEmitterWidget;
+		delete m_buttonComponentWidget;
 	}
 
 
@@ -99,6 +101,7 @@ namespace AIngine::Editor {
 		m_addComponentWidget = new AddComponentWidget();
 		m_soundComponentWidget = new SoundComponentWidget();
 		m_particleEmitterWidget = new ParticleEmitterWidget();
+		m_buttonComponentWidget = new ButtonComponentWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
@@ -128,6 +131,11 @@ namespace AIngine::Editor {
 			AIngine::ParticleEmitter* emitter = node->GetComponent<AIngine::ParticleEmitter>();
 			if (emitter) {
 				m_particleEmitterWidget->Render({ node });
+			}
+
+			AIngine::UI::Button* btn = node->GetComponent<AIngine::UI::Button>();
+			if (btn) {
+				m_buttonComponentWidget->Render({ node });
 			}
 
 			ShowUserScripts(node);

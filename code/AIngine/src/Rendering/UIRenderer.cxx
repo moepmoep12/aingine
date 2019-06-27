@@ -2,9 +2,13 @@
 #include "Rendering/Camera.h"
 #include "Assets/Assets.h"
 #include "AIngine/GameObject.h"
+#include "AIngine/World.h"
 #include "UI/UIELement.h"
 
 namespace AIngine::Rendering {
+
+	GameObject* UIRenderer::canvas = nullptr;
+
 	UIRenderer::UIRenderer()
 	{
 		// Configure VAO/VBO
@@ -51,15 +55,22 @@ namespace AIngine::Rendering {
 	{
 		glDeleteVertexArrays(1, &this->m_quadVAO);
 	}
+
+
 	bool UIRenderer::Traverse(GameObject * root)
 	{
+		if (!canvas) return false;
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		m_shader->SetMatrix4(2 /*projection*/, Camera::Get().GetProjectionMatrix(), true);
-		m_additiveRotation = 0;
+		m_shader->SetMatrix4(3 /*viewmatrix*/, glm::mat4(1));
 
-		return root->Accept(*this);
+		m_matrixStack.clear();
+		m_additiveRotation = 0;
+		m_modelMatrix = glm::mat4(1);
+
+		return canvas->Accept(*this);
 	}
 
 	bool UIRenderer::Enter(GameObject & node)
@@ -68,11 +79,11 @@ namespace AIngine::Rendering {
 		if (uielement)
 		{
 			if (uielement->IsActive()) {
-				uielement->Render(m_modelMatrix);
+				RenderUIElement(*uielement);
 			}
 
 			m_matrixStack.push_back(m_modelMatrix);
-			m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(uielement->ScreenPosition, 0.0f));
+			m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(uielement->GetRectangle().GetPosition(), 0.0f));
 			m_additiveRotation += node.GetLocalRotation();
 			m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(node.GetLocalScale(), 1.0f));
 		}
@@ -83,9 +94,11 @@ namespace AIngine::Rendering {
 
 	bool UIRenderer::Leave(GameObject & node)
 	{
-		m_modelMatrix = m_matrixStack.back();
-		m_matrixStack.pop_back();
-		m_additiveRotation -= node.GetLocalRotation();
+		if (m_matrixStack.size() > 0) {
+			m_modelMatrix = m_matrixStack.back();
+			m_matrixStack.pop_back();
+			m_additiveRotation -= node.GetLocalRotation();
+		}
 		return true;
 	}
 
@@ -105,6 +118,26 @@ namespace AIngine::Rendering {
 	void UIRenderer::RenderUIElement(AIngine::UI::UIElement & element)
 	{
 		m_shader->Use();
+		m_matrixStack.push_back(m_modelMatrix);
 
+		const AIngine::Structures::Rectangle<int>& rect = element.GetRectangle();
+
+		// we position & rotate around the center
+		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(rect.GetPosition(), 0.0f));
+		m_modelMatrix = glm::rotate(m_modelMatrix, m_additiveRotation, glm::vec3(0.0f, 0.0f, 1.0f));
+		m_modelMatrix = glm::rotate(m_modelMatrix, element.GetOwner()->GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
+		m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(rect.width, rect.height, 1.0f));
+
+		m_shader->SetMatrix4(1 /*model*/, m_modelMatrix);
+
+		glActiveTexture(GL_TEXTURE0);
+		element.Render(m_modelMatrix, *m_shader);
+		glBindVertexArray(m_quadVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glBindVertexArray(0);
+		glActiveTexture(0);
+
+		m_modelMatrix = m_matrixStack.back();
+		m_matrixStack.pop_back();
 	}
 }

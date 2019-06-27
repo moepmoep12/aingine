@@ -12,7 +12,7 @@ namespace AIngine::UI {
 		dispatcher.Dispatch<AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData>(BIND_EVENT_TO_FN(UIElement::OnMouseButtonReleased));
 	}
 
-	bool AIngine::UI::UIElement::IsHovered()
+	bool AIngine::UI::UIElement::IsHovered() const
 	{
 		auto pair = AIngine::Input::GetMousePosition();
 		return m_rectangle.Contains(glm::vec2(pair.first, pair.second));
