@@ -37,10 +37,10 @@ namespace AIngine::Editor {
 				ImGui::NewLine();
 
 				// Change rect transform
-				static float pos[] = { btn->m_rectangle.x, btn->m_rectangle.y };
-				static float dim[] = { btn->m_rectangle.width, btn->m_rectangle.height };
-				ImGui::DragFloat2("Screen Position", pos);
-				ImGui::DragFloat2("Dimensions", dim);
+				int* pos[] = { &btn->m_rectangle.x, &btn->m_rectangle.y };
+				int* dim[] = { &btn->m_rectangle.width, &btn->m_rectangle.height };
+				ImGui::DragInt2("Screen Position", *pos);
+				ImGui::DragInt2("Dimensions", *dim);
 
 				// Draw button rect
 				AIngine::Graphics::BoxScreen(btn->m_rectangle, glm::vec3(1, 1, 0));

@@ -18,6 +18,7 @@ namespace AIngine::UI {
 		friend class AIngine::Editor::ButtonComponentWidget;
 
 		inline const AIngine::Structures::Rectangle<int>& GetRectangle() const { return m_rectangle; }
+		inline void SetRectangle(const AIngine::Structures::Rectangle<int>& rect) { m_rectangle = rect; }
 
 		inline bool IsDisabled() const { return m_isDisabled; }
 		inline void SetDisabled(bool disabled) { m_isDisabled = disabled; }

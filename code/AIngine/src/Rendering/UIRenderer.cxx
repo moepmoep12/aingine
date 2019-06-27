@@ -75,7 +75,15 @@ namespace AIngine::Rendering {
 
 	bool UIRenderer::Enter(GameObject & node)
 	{
-		AIngine::UI::UIElement* uielement = node.GetComponent<AIngine::UI::UIElement>();
+		auto components = node.GetComponents();
+		AIngine::UI::UIElement* uielement = nullptr;
+
+		for (auto comp : components) {
+			uielement = dynamic_cast<AIngine::UI::UIElement*>(comp);
+			if (uielement)
+				break;
+		}
+
 		if (uielement)
 		{
 			if (uielement->IsActive()) {
@@ -83,7 +91,7 @@ namespace AIngine::Rendering {
 			}
 
 			m_matrixStack.push_back(m_modelMatrix);
-			m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(uielement->GetRectangle().GetPosition(), 0.0f));
+			m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(uielement->GetRectangle().GetCenter(), 0.0f));
 			m_additiveRotation += node.GetLocalRotation();
 			m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(node.GetLocalScale(), 1.0f));
 		}
@@ -104,7 +112,14 @@ namespace AIngine::Rendering {
 
 	bool UIRenderer::Visit(GameObject & node)
 	{
-		AIngine::UI::UIElement* uielement = node.GetComponent<AIngine::UI::UIElement>();
+		auto components = node.GetComponents();
+		AIngine::UI::UIElement* uielement = nullptr;
+
+		for (auto comp : components) {
+			uielement = dynamic_cast<AIngine::UI::UIElement*>(comp);
+			if (uielement)
+				break;
+		}
 		if (uielement)
 		{
 			if (uielement->IsActive()) {
@@ -123,7 +138,7 @@ namespace AIngine::Rendering {
 		const AIngine::Structures::Rectangle<int>& rect = element.GetRectangle();
 
 		// we position & rotate around the center
-		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(rect.GetPosition(), 0.0f));
+		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(rect.GetCenter(), 0.0f));
 		m_modelMatrix = glm::rotate(m_modelMatrix, m_additiveRotation, glm::vec3(0.0f, 0.0f, 1.0f));
 		m_modelMatrix = glm::rotate(m_modelMatrix, element.GetOwner()->GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
 		m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(rect.width, rect.height, 1.0f));
