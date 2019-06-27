@@ -48,7 +48,6 @@ namespace AIngine::Rendering {
 
 		// configure shader
 		m_shader->SetInteger(4, 0, true);
-		m_shader->SetMatrix4(2, projection);
 	}
 
 	UIRenderer::~UIRenderer()
@@ -89,11 +88,12 @@ namespace AIngine::Rendering {
 			if (uielement->IsActive()) {
 				RenderUIElement(*uielement);
 			}
-
 			m_matrixStack.push_back(m_modelMatrix);
-			m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(uielement->GetRectangle().GetCenter(), 0.0f));
-			m_additiveRotation += node.GetLocalRotation();
-			m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(node.GetLocalScale(), 1.0f));
+			if (!node.GetComponent<AIngine::UI::Canvas>()) {
+				m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(uielement->GetRectangle().GetCenter(), 0.0f));
+				m_additiveRotation += node.GetLocalRotation();
+				m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(node.GetLocalScale(), 1.0f));
+			}
 		}
 
 

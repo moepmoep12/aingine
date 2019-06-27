@@ -8,6 +8,7 @@
 #include "Editor/Widgets/SoundComponentWidget.h"
 #include "Editor/Widgets/ParticleEmitterWidget.h"
 #include "Editor/Widgets/ButtonComponentWidget.h"
+#include "Editor/Widgets/CanvasComponentWidget.h"
 
 #include <unordered_map>
 
@@ -39,6 +40,7 @@ namespace AIngine::Editor {
 		SoundComponentWidget* m_soundComponentWidget;
 		ParticleEmitterWidget* m_particleEmitterWidget;
 		ButtonComponentWidget* m_buttonComponentWidget;
+		CanvasComponentWidget* m_canvasComponentWidget;
 
 		void ShowSelectedNodeWidget(GameObject* node);
 		void ShowUserScripts(GameObject* node);

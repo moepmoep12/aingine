@@ -6,7 +6,10 @@ namespace AIngine::UI {
 	{
 		Texture.Bind();
 		glm::vec4 color = TintColor;
-		if (m_isClicked)
+		if (IsDisabled())
+			color = DisabledColor;
+
+		else if (m_isClicked)
 			color = ClickedColor;
 		else
 			if (IsHovered())

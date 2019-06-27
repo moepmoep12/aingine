@@ -89,6 +89,7 @@ namespace AIngine::Editor {
 		delete m_soundComponentWidget;
 		delete m_particleEmitterWidget;
 		delete m_buttonComponentWidget;
+		delete m_canvasComponentWidget;
 	}
 
 
@@ -102,6 +103,7 @@ namespace AIngine::Editor {
 		m_soundComponentWidget = new SoundComponentWidget();
 		m_particleEmitterWidget = new ParticleEmitterWidget();
 		m_buttonComponentWidget = new ButtonComponentWidget();
+		m_canvasComponentWidget = new CanvasComponentWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
@@ -131,6 +133,11 @@ namespace AIngine::Editor {
 			AIngine::ParticleEmitter* emitter = node->GetComponent<AIngine::ParticleEmitter>();
 			if (emitter) {
 				m_particleEmitterWidget->Render({ node });
+			}
+
+			AIngine::UI::Canvas* canvas = node->GetComponent<AIngine::UI::Canvas>();
+			if (canvas) {
+				m_canvasComponentWidget->Render({ node });
 			}
 
 			AIngine::UI::Button* btn = node->GetComponent<AIngine::UI::Button>();
