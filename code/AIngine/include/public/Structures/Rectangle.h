@@ -25,30 +25,30 @@ namespace AIngine::Structures {
 		}
 
 		// corresponds to the top left corner
-		glm::vec2 GetPosition() const {
-			return glm::vec2(x, y);
+		glm::vec<2, T> GetPosition() const {
+			return glm::vec<2, T>(x, y);
 		}
 
 		// Set position of the top left corner
-		void SetPosition(const glm::vec2& pos) {
+		void SetPosition(const glm::vec<2, T>& pos) {
 			x = (T)pos.x;
 			y = (T)pos.y;
 		}
 
-		glm::vec2 GetTopRight() const {
-			return glm::vec2(x + width, y);
+		glm::vec<2, T> GetTopRight() const {
+			return glm::vec<2, T>(x + width, y);
 		}
 
-		glm::vec2 GetBottomLeft() const {
-			return glm::vec2(x, y + height);
+		glm::vec<2, T> GetBottomLeft() const {
+			return glm::vec<2, T>(x, y + height);
 		}
 
-		glm::vec2 GetMax() const {
-			return glm::vec2(x + width, y + height);
+		glm::vec<2, T> GetMax() const {
+			return glm::vec<2, T>(x + width, y + height);
 		}
 
-		glm::vec2 GetCenter() const {
-			return GetPosition() + glm::vec2(width / 2.0f, height / 2.0f);
+		glm::vec<2, T> GetCenter() const {
+			return GetPosition() + glm::vec<2, T>(width *0.5f, height * 0.5f);
 		}
 
 		T Area() const {
