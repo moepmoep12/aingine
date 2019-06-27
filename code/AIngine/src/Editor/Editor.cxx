@@ -26,6 +26,8 @@
 namespace AIngine::Editor {
 
 	Editor* Editor::Editor::s_instance = nullptr;
+	AIngine::Events::Event<void> Editor::PauseGameEvent;
+	AIngine::Events::Event<void> Editor::ResumeGameEvent;
 
 	void Editor::OnAttach()
 	{
@@ -731,6 +733,21 @@ namespace AIngine::Editor {
 			}
 			s_instance->m_isInPlayMode = value;
 
+		}
+	}
+
+	void Editor::SetPaused(bool pause)
+	{
+		if (s_instance)
+		{
+			if (s_instance->m_isGamePaused)
+				if (!pause)
+					Editor::ResumeGameEvent();
+			if (!s_instance->m_isGamePaused)
+				if (pause)
+					Editor::PauseGameEvent();
+
+			s_instance->m_isGamePaused = pause;
 		}
 	}
 

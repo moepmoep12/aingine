@@ -89,7 +89,12 @@ namespace AIngine::Editor {
 		static void SetIsInPlayMode(bool value);
 
 		static inline bool IsPaused() { if (s_instance) return s_instance->m_isGamePaused; else return false; }
-		static inline void SetPaused(bool pause) { if (s_instance) s_instance->m_isGamePaused = pause; }
+		static void SetPaused(bool pause);
+
+		static AIngine::Events::Event<void> PauseGameEvent;
+		static AIngine::Events::Event<void> ResumeGameEvent;
+		typedef AIngine::Events::EventHandler<void> PauseGameEventHandler;
+		typedef AIngine::Events::EventHandler<void> ResumeGameEventHandler;
 
 		static inline bool IsFullScreenPlayMode() { if (s_instance) return s_instance->m_isFullScreen; else return true; }
 		static void SetFullScreenPlayMode(bool bFullsceen);
