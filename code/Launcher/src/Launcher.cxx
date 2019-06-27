@@ -406,9 +406,9 @@ namespace ProjectLauncher {
 		// move to folder
 		command << "cd " << cmakeBinPath << " && ";
 		// run cmake
-		command << "cmake " << "-G \"Visual Studio 15 2017 ";
+		command << "cmake " << "-G \"Visual Studio 15 2017";
 		if (bit == 64)
-			command << "Win" << bit;
+			command << " Win" << bit;
 		command << "\" " << " -DCMAKE_INSTALL_PREFIX=" << std::filesystem::canonical(Application::GetInstallPath()).string() << " " << path;
 
 		system(command.str().c_str());

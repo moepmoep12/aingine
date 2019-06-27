@@ -121,8 +121,8 @@ namespace ProjectLauncher {
 			ImGui::SameLine();
 
 			static bool choosingMode = false;
-			std::string projectRoot;
-			std::string projectName;
+			static std::string projectRoot;
+			static std::string projectName;
 
 			if (ImGui::Button("Add existing", buttonSize)) {
 				static const nfdchar_t *filterList = "proj.in";

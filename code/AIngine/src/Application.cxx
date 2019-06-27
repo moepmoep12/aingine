@@ -197,6 +197,7 @@ namespace AIngine {
 		delete m_Graphics;
 		delete m_viewport;
 		delete m_particleRenderer;
+		delete m_uiRenderer; 
 	}
 
 	void Application::PropagateEventData(AIngine::Events::EventData & e)
