@@ -1,7 +1,9 @@
 #pragma once
 #include "AIngine/Component.h"
 #include "AIngine/Sounds.h"
-
+#ifdef EDITOR
+#include "Editor/Editor.h"
+#endif
 #include <vector>
 
 namespace AIngine::Editor {
@@ -14,6 +16,7 @@ namespace AIngine {
 		friend class AIngine::Editor::SoundComponentWidget;
 
 	public:
+		SoundComponent();
 		virtual ~SoundComponent();
 
 		void Play(int index);
@@ -36,5 +39,13 @@ namespace AIngine {
 		std::vector<AIngine::Sound> m_sounds;
 
 		virtual Component* Copy(GameObject* const owner) const override;
+
+
+#ifdef EDITOR
+		AIngine::Editor::Editor::PauseGameEventHandler OnPauseGameEventHandler;
+		AIngine::Editor::Editor::ResumeGameEventHandler OnResumeGameEventHandler;
+		void OnPauseGame();
+		void OnResumeGame();
+#endif
 	};
 }

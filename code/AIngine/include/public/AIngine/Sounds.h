@@ -19,7 +19,7 @@ namespace AIngine {
 		Sound& operator=(Sound&& other);
 
 		inline bool IsPlaying() const { if (m_playingSound) return m_playingSound->active && !m_playingSound->paused; else return false; }
-		inline bool IsPaused() const { return m_soundDef.paused; }
+		inline bool IsPaused() const { if (m_playingSound) return m_playingSound->paused; else return false; }
 		inline bool IsLooping() const { return m_soundDef.looped; }
 		inline int SampleCount() const { return m_soundDef.loaded->sample_count; }
 		inline int SampleRate() const { return m_soundDef.loaded->sample_rate; }

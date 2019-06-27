@@ -2,8 +2,23 @@
 #include "AIngine/Sounds.h"
 
 namespace AIngine {
+
+	SoundComponent::SoundComponent()
+	{
+#ifdef EDITOR
+		this->OnPauseGameEventHandler = AIngine::Editor::Editor::PauseGameEventHandler(std::bind(&SoundComponent::OnPauseGame, this));
+		this->OnResumeGameEventHandler = AIngine::Editor::Editor::ResumeGameEventHandler(std::bind(&SoundComponent::OnResumeGame, this));
+		AIngine::Editor::Editor::PauseGameEvent += this->OnPauseGameEventHandler;
+		AIngine::Editor::Editor::ResumeGameEvent += this->OnResumeGameEventHandler;
+#endif
+	}
+
 	AIngine::SoundComponent::~SoundComponent()
 	{
+#ifdef EDITOR
+		AIngine::Editor::Editor::PauseGameEvent -= this->OnPauseGameEventHandler;
+		AIngine::Editor::Editor::ResumeGameEvent -= this->OnResumeGameEventHandler;
+#endif
 		for (auto& sound : m_sounds) {
 			if (sound.IsPlaying())
 				sound.Stop();
@@ -98,4 +113,17 @@ namespace AIngine {
 		return std::move(copy);
 	}
 
+#ifdef EDITOR
+	void SoundComponent::OnPauseGame()
+	{
+		for (auto& sound : m_sounds)
+			if (sound.IsPlaying()) sound.Pause();
+	}
+
+	void SoundComponent::OnResumeGame()
+	{
+		for (auto& sound : m_sounds)
+			if (sound.IsPaused()) sound.Play();
+	}
+#endif
 }
