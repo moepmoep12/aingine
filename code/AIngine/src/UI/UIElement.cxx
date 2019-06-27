@@ -1,6 +1,7 @@
 #include "UI/UIELement.h"
 #include "AIngine/Input.h"
 #include "AIngine/Macros.h"
+#include "Rendering/UIRenderer.h"
 
 namespace AIngine::UI {
 
@@ -40,5 +41,10 @@ namespace AIngine::UI {
 			}
 		}
 		return false;
+	}
+	Canvas::~Canvas()
+	{
+		if (AIngine::Rendering::UIRenderer::canvas == GetOwner())
+			AIngine::Rendering::UIRenderer::canvas = nullptr;
 	}
 }

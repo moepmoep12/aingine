@@ -78,8 +78,10 @@ namespace AIngine::Editor {
 								}
 							case 4:
 								if (!obj->GetComponent<AIngine::UI::Canvas>()) {
-									obj->AddComponent<AIngine::UI::Canvas>();
-									AIngine::Rendering::UIRenderer::canvas = obj;
+									if (AIngine::Rendering::UIRenderer::canvas == nullptr) {
+										obj->AddComponent<AIngine::UI::Canvas>();
+										AIngine::Rendering::UIRenderer::canvas = obj;
+									}
 									break;
 								}
 							case 5:

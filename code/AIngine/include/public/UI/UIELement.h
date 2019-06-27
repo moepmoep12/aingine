@@ -49,6 +49,7 @@ namespace AIngine::UI {
 
 	class Canvas : public UIElement {
 	public:
+		virtual ~Canvas();
 		inline virtual void Render(const glm::mat4& modelMatrix, AIngine::Rendering::GLShaderProgram& shader) const override {}
 	};
 }
