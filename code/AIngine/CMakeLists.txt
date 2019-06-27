@@ -68,6 +68,8 @@ set(AINGINE_HEADER_STRUCTURES
 
 set(AINGINE_HEADER_UI
 		include/public/UI/ImGuiLayer.h	
+		include/public/UI/UIElement.h	
+		include/public/UI/Button.h	
 )
 
 set(AIngine_HEADER_PRIVATE
@@ -91,6 +93,7 @@ set(AIngine_HEADER_PRIVATE
 		include/private/Rendering/ParticleRenderer.h
 		include/private/Rendering/PhysicsRenderer.h
 		include/private/Rendering/Renderer.h
+		include/private/Rendering/UIRenderer.h
 		include/private/Structures/SceneGraph.h
 		include/private/gl_error.h
 		include/private/readfile.h
@@ -132,6 +135,7 @@ set(AINGINE_SRC
 		src/Rendering/ParticleRenderer.cxx
 		src/Rendering/PhysicsRenderer.cxx
 		src/Rendering/Renderer.cxx
+		src/Rendering/UIRenderer.cxx
 		src/Rendering/shader.cxx
 		src/Rendering/texture.cxx
 		src/Rendering/Viewport.cxx
@@ -139,6 +143,8 @@ set(AINGINE_SRC
 		src/Structures/LayerStack.cxx
 		src/Structures/SceneGraph.cxx
 		src/UI/ImGuiLayer.cxx
+		src/UI/Button.cxx
+		src/UI/UIElement.cxx
 	)
 	
 
