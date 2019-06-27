@@ -42,8 +42,26 @@ namespace AIngine::Editor {
 				ImGui::DragInt2("Screen Position", *pos);
 				ImGui::DragInt2("Dimensions", *dim);
 
-				// Draw button rect
-				AIngine::Graphics::BoxScreen(btn->m_rectangle, glm::vec3(1, 1, 0));
+				// Disabled
+				bool isDisabled = btn->IsDisabled();
+				if (ImGui::Checkbox("Disabled", &isDisabled)) {
+					btn->SetDisabled(isDisabled);
+				}
+
+				ImGui::NewLine();
+
+				// Color Tint
+				float* tintColor[] = { &btn->TintColor.x,&btn->TintColor.y,&btn->TintColor.z, &btn->TintColor.w };
+				ImGui::ColorEdit4("TintColor", *tintColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
+				// Color Disabled
+				float* disabledColor[] = { &btn->DisabledColor.x,&btn->DisabledColor.y,&btn->DisabledColor.z, &btn->DisabledColor.w };
+				ImGui::ColorEdit4("disabledColor", *disabledColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
+				// Color Hovered
+				float* hoveredColor[] = { &btn->HoverColor.x,&btn->HoverColor.y,&btn->HoverColor.z, &btn->HoverColor.w };
+				ImGui::ColorEdit4("hoveredColor", *hoveredColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
+				// Color Clicked
+				float* clickedColor[] = { &btn->ClickedColor.x,&btn->ClickedColor.y,&btn->ClickedColor.z, &btn->ClickedColor.w };
+				ImGui::ColorEdit4("clickedColor", *clickedColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
 
 				// preview image
 					// we preserve the image ratio in the preview
@@ -195,7 +213,12 @@ namespace AIngine::Editor {
 
 					btn->Texture.Generate(bitmap);
 				}
+
+				ImGui::NewLine();
 				ImGui::Separator();
+
+				// Draw button rect
+				AIngine::Graphics::BoxScreen(btn->m_rectangle, glm::vec3(1, 1, 0));
 			}
 		}
 	}
