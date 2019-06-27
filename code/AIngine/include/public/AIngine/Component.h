@@ -52,7 +52,7 @@ namespace AIngine {
 
 
 	protected:
-		GameObject* m_owner;
+		GameObject* m_owner = nullptr;
 
 		friend class AIngine::Structures::SceneGraph;
 		friend class AIngine::Structures::UpdateTraverser;
