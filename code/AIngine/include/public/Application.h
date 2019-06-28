@@ -13,18 +13,20 @@
 #include "AIngine/World.h"
 #include "AIngine/Graphics.h"
 
-namespace AIngine::Editor {
-}
-
 namespace AIngine {
 
-	// All available Components should be listed by the Application
+	// to be defined by the actual Application
+	extern Application* CreateApplication();
+	// Components defined by the Application should be defined here, this includes Scripts
+	// This is used by the auto generated Scripting API
 	extern std::vector<std::string> ApplicationComponentNames;
-
-	extern void OnAddComponent(GameObject* obj,int index);
-
+	// Callback method for adding a User-defined compononent inside the editor
+	// This is used by the auto generated Scripting API
+	extern void OnAddComponent(GameObject* obj, int index);
+	// Returns a list of all Components (including Components defined by the Engine)
 	std::vector<std::string> GetAvailableComponentNames();
 
+	// Forward Declarations
 	namespace Editor {
 		class Editor;
 	}
@@ -39,44 +41,54 @@ namespace AIngine {
 
 		friend class Editor::Editor;
 
-
 	public:
 		Application();
-		virtual ~Application();
+		virtual ~Application() {}
 
+		/* Starts the Application */
 		void Run();
-		//void OnEvent(AIngine::Events::Event& e);
+
+		/* Returns whether the game is currently running */
+		static bool IsRunning();
+
+		/* Returns the time it took to process the last frame in seconds */
+		float GetDeltaTime();
+
+		/* Adds a layer to the layerstack */
 		void PushLayer(AIngine::Structures::Layer* layer);
 		void PushOverlay(AIngine::Structures::Layer* overlay);
-		float GetDeltaTime();
-		bool IsAnyUiElementHovered() const;
 
-
+		/* Returns the currently running instance */
 		inline static Application& Get() { return *s_instance; }
+		/* Returns the window in which the Application is running */
 		inline const Window& GetWindow() const { return *m_window; }
+		/* Returns the viewport in which the game is running*/
 		inline static const AIngine::Rendering::Viewport& GetViewport() { return *s_instance->m_viewport; }
 
+		/* Loads a Scene with the given index. The index was specified in the build process */
 		static void LoadScene(int index);
 
-		static bool IsRunning();
+		static std::string GetInstallPath();
 		static std::string GetResourceDirectory();
-	protected:
 
+	protected:
+		std::unique_ptr<Window> m_window;
 		WindowConfig m_windowConfig;
 		glm::vec2 m_gravity;
 		glm::vec4 m_bounds;
-		AIngine::Rendering::Camera* m_camera;
-		World* m_world;
-		std::unique_ptr<Window> m_window;
 
+
+		/* StartUp is called once when Playmode is entered */
 		virtual void OnAppStartUp() = 0;
+		/* ShutDown is called once before the scene was sthudown */
 		virtual void OnAppShutDown() = 0;
+		/* Update is called once per frame */
 		virtual void OnAppUpdate() = 0;
+		/* AppEvent propagates events */
 		virtual void OnAppEvent(AIngine::Events::EventData& e) {}
 
-
+		/* Shuts the App down. This is equal to closing the window. */
 		void ShutDown();
-		static std::string GetInstallPath();
 
 	private:
 		void RegisterCallbacks();
@@ -90,22 +102,33 @@ namespace AIngine {
 
 
 	private:
-		AIngine::Editor::Editor* m_editor;
+		using LayerStack = AIngine::Structures::LayerStack;
+		using SpriteRenderer = AIngine::Rendering::SpriteRenderer;
+		using ParticleRenderer = AIngine::Rendering::ParticleRenderer;
+		using UIRenderer = AIngine::Rendering::UIRenderer;
+		using Viewport = AIngine::Rendering::Viewport;
+		using ImGuiLayer = AIngine::UI::ImGuiLayer;
+		using AssetRegistry = AIngine::Assets::AssetRegistry;
+		using Editor = AIngine::Editor::Editor;
+		using Camera = AIngine::Rendering::Camera;
+
+		LayerStack m_layerStack;
+		SpriteRenderer* m_spriteRenderer;
+		ParticleRenderer* m_particleRenderer;
+		UIRenderer* m_uiRenderer;
+		Viewport* m_viewport;
+		ImGuiLayer* m_imGuiLayer;
+		AssetRegistry m_assetRegistry;
+		Editor* m_editor;
+		Graphics* m_Graphics;
+		Camera* m_camera;
+		World* m_world;
 		bool m_isRunning = false;
 		bool m_wantsLoadLevel = false;
 		int m_sceneToLoadIndex = 0;
-		AIngine::Structures::LayerStack m_layerStack;
-		AIngine::UI::ImGuiLayer* m_imGuiLayer;
-		AIngine::Assets::AssetRegistry m_assetRegistry;
-		AIngine::Rendering::SpriteRenderer* m_renderer;
-		AIngine::Rendering::ParticleRenderer* m_particleRenderer;
-		AIngine::Rendering::UIRenderer* m_uiRenderer;
-		AIngine::Rendering::Viewport* m_viewport;
-		static Application* s_instance;
 		float m_deltaTime = 0.0f;
-		Graphics* m_Graphics;
+
+		static Application* s_instance;
 	};
 
-	// to be defined by the actual Application
-	Application* CreateApplication();
 }

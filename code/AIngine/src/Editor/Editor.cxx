@@ -123,7 +123,7 @@ namespace AIngine::Editor {
 
 	bool Editor::OnMouseScrolled(AIngine::Events::MouseScrolledEvent::MouseScrolledEventData & e)
 	{
-		if (!m_app.IsAnyUiElementHovered()) {
+		if (!IsAnyUIElementHovered()) {
 			m_app.m_camera->Zoom(e.GetYOffset() * m_app.GetDeltaTime() * zoomSpeed);
 		}
 		return true;
@@ -300,7 +300,7 @@ namespace AIngine::Editor {
 			if (widget.IsWindowDocked()) {
 				AIngine::Structures::Rectangle widgetRect = widget.GetRectangle();
 				if (viewportRect.Contains(widgetRect)) {
-					glm::vec<2, glm::i32> windowPos = glm::vec<2,glm::i32>(m_app.m_window->GetX(), m_app.m_window->GetY());
+					glm::vec<2, glm::i32> windowPos = glm::vec<2, glm::i32>(m_app.m_window->GetX(), m_app.m_window->GetY());
 					glm::vec2 viewportPos = viewportRect.GetPosition();
 					glm::vec2 viewportMax = viewportRect.GetMax();
 					glm::vec2 widgetPos = widgetRect.GetPosition() - windowPos /*- m_widgets[3]->GetPosition().y - m_widgets[3]->GetSize().y*/;

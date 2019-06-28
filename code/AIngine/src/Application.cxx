@@ -74,7 +74,7 @@ namespace AIngine {
 		AIngine::Assets::ShaderAsset* shaderAsset = m_assetRegistry.Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vertexPath, fragPath));
 
 		// create sprite renderer
-		m_renderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());
+		m_spriteRenderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());
 
 		//load basic white texture
 		std::string path = std::string("AIngine/textures/White.png");
@@ -97,10 +97,6 @@ namespace AIngine {
 
 		// create UI Renderer
 		m_uiRenderer = new AIngine::Rendering::UIRenderer();
-	}
-
-	Application::~Application()
-	{
 	}
 
 	static float s_currentFrame = 0.0f;
@@ -134,7 +130,7 @@ namespace AIngine {
 		OnEnterPlayMode();
 #endif
 
-		m_renderer->initRenderData();
+		m_spriteRenderer->initRenderData();
 
 		CORE_INFO("App is running!");
 
@@ -162,7 +158,7 @@ namespace AIngine {
 				layer->OnUpdate(GetDeltaTime());
 
 			// scene rendering
-			m_renderer->Traverse(&m_world->GetSceneGraph().GetRoot());
+			m_spriteRenderer->Traverse(&m_world->GetSceneGraph().GetRoot());
 			m_particleRenderer->Traverse(&m_world->GetSceneGraph().GetRoot());
 			m_uiRenderer->Traverse(&m_world->GetSceneGraph().GetRoot());
 
@@ -192,7 +188,7 @@ namespace AIngine {
 
 		// Clean up
 		m_window = NULL;
-		delete m_renderer;
+		delete m_spriteRenderer;
 		delete m_camera;
 		delete m_Graphics;
 		delete m_viewport;
@@ -241,14 +237,6 @@ namespace AIngine {
 	float Application::GetDeltaTime()
 	{
 		return m_deltaTime;
-	}
-
-	bool Application::IsAnyUiElementHovered() const
-	{
-		if (m_editor)
-			return m_editor->IsAnyUIElementHovered();
-		else
-			return false;
 	}
 
 	void Application::LoadScene(int index)
@@ -355,14 +343,14 @@ namespace AIngine {
 	void Application::OnWindowResize(unsigned int width, unsigned int height)
 	{
 		if (m_viewport)
-			m_renderer->SetViewport();
+			m_spriteRenderer->SetViewport();
 	}
 
 	void Application::OnViewportChanged(AIngine::Structures::RectangleI& viewport)
 	{
 		m_viewport->Set(viewport.GetPosition(), viewport.width, viewport.height, true);
 		m_camera->SetZoom((float)m_window->GetWidth() / (float)m_world->GetBounds().y);
-		m_renderer->SetViewport();
+		m_spriteRenderer->SetViewport();
 		CORE_INFO("Viewport Size Changed To ({0} | {1}) at Position ({2} | {3})", m_viewport->m_width, m_viewport->m_height, m_viewport->m_x, m_viewport->m_y);
 	}
 
