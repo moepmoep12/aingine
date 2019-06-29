@@ -1,19 +1,20 @@
 #pragma once
 
-#include <memory>
 #include "Window.h"
 #include "Events/Event.h"
-#include "Events/ApplicationEvents.h"
-#include "UI/ImGuiLayer.h"
 #include "Structures/LayerStack.h"
 #include "Assets/Assets.h"
-#include "Box2D/Box2D.h"
-#include "Rendering/Camera.h"
-#include "Rendering/Viewport.h"
-#include "AIngine/World.h"
-#include "AIngine/Graphics.h"
+
+#include <memory>
+#include <string>
+#include <vector>
+#include <glm/glm.hpp>
 
 namespace AIngine {
+
+	class GameObject;
+	class World;
+	class Graphics;
 
 	// to be defined by the actual Application
 	extern Application* CreateApplication();
@@ -35,7 +36,14 @@ namespace AIngine {
 		class SpriteRenderer;
 		class ParticleRenderer;
 		class UIRenderer;
+		class Camera;
+		class Viewport;
 	}
+
+	namespace UI {
+		class ImGuiLayer;
+	}
+
 
 	class Application {
 

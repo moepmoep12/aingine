@@ -71,7 +71,7 @@ namespace ProjectLauncher {
 
 					static char str[40] = "MyProject";
 
-					if (ImGui::InputText("", str, IM_ARRAYSIZE(str)));
+					ImGui::InputText("", str, IM_ARRAYSIZE(str));
 
 					static const int choosableModes[] = { 64,32 };
 					static const char* modeNames[] = { "64bit","32bit" };

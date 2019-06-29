@@ -1,29 +1,27 @@
 #include "Application.h"
-#include "Events/ApplicationEvents.h"
-#include "AIngine/Macros.h"
 #include "AIngine/Input.h"
-#include "Editor/Editor.h"
-#include "Rendering/Renderer.h"
-#include "Structures/SceneGraph.h"
-#include "AIngine/Sounds.h"
-#include "Rendering/Font.h"
+#include "AIngine/Graphics.h"
+#include "AIngine/Macros.h"
 #include "AIngine/Script.h"
+#include "AIngine/Sounds.h"
+#include "AIngine/World.h"
+#include "Editor/Editor.h"
+#include "Events/ApplicationEvents.h"
+#include "Rendering/Camera.h"
+#include "Rendering/Font.h"
 #include "Rendering/ParticleRenderer.h"
+#include "Rendering/Renderer.h"
+#include "Rendering/Viewport.h"
 #include "Rendering/UIRenderer.h"
+#include "Structures/SceneGraph.h"
 #include "Util/Project.h"
-
-#include <memory>
 
 namespace AIngine {
 
 	Application* Application::s_instance = nullptr;
 
-
-
 	Application::Application()
 	{
-		CORE_INFO("Starting Application...");
-
 		ASSERT(!s_instance, "Application already running");
 		s_instance = this;
 
@@ -109,7 +107,7 @@ namespace AIngine {
 		m_world = new World(m_bounds, m_gravity);
 		PushLayer(m_world);
 
-		// create Editor if we're in Debug
+		// create Editor if its an editor build
 #ifdef EDITOR
 		m_editor = new AIngine::Editor::Editor();
 		PushOverlay(m_editor);

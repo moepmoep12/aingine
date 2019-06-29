@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "AIngine/Constants.h"
 #include "AIngine/GameObject.h"
+#include "AIngine/World.h"
 
 namespace AIngine::Physics {
 	PhysicsComponent::~PhysicsComponent()
