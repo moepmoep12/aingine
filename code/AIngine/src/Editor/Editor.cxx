@@ -252,7 +252,6 @@ namespace AIngine::Editor {
 
 		AIngine::Editor::Serialization::Serializer::LoadEditorSettings();
 		m_BuildScenes = AIngine::Editor::Serialization::Serializer::LoadBuildScenes();
-		LoadProjectData();
 	}
 
 	void Editor::EnterFullScreenMode()
@@ -267,23 +266,6 @@ namespace AIngine::Editor {
 		m_isFullScreen = false;
 		AIngine::Structures::Rectangle viewportRect = CalculateViewportRect(glm::vec2(m_app.GetWindow().GetWidth(), m_app.GetWindow().GetHeight()));
 		OnViewportChangedEvent(viewportRect);
-	}
-
-	const char* s_projectFilePath = "project.proj";
-
-	void Editor::LoadProjectData()
-	{
-		// open the file
-		std::ifstream file;
-		file.open(s_projectFilePath);
-		if (file.fail()) return;
-		nlohmann::json j = nlohmann::json::parse(file);
-		file.close();
-
-		m_projectName = j.at("name");
-		m_resourceFolderPath = j.at("path");
-		m_resourceFolderPath.append("Resources\\");
-		m_engineInstallDir = j.at("installPath");
 	}
 
 	AIngine::Structures::RectangleI Editor::CalculateViewportRect(const glm::vec2& windowSize) const
@@ -390,78 +372,6 @@ namespace AIngine::Editor {
 	bool Editor::IsAnyUIElementHovered()
 	{
 		return ImGui::IsAnyWindowHovered();
-	}
-
-	std::string Editor::GetEngineInstallDirectory()
-	{
-		if (s_instance)
-		{
-			return s_instance->m_engineInstallDir;
-		}
-		else {
-			// open the file
-			std::ifstream file;
-			file.open(s_projectFilePath);
-			if (file.fail()) return "";
-			nlohmann::json j = nlohmann::json::parse(file);
-			file.close();
-			std::string path = j.at("installPath");
-			return path;
-		}
-
-		return std::string();
-	}
-
-	std::string Editor::GetResourceDirectory()
-	{
-		if (s_instance)
-		{
-			return s_instance->m_resourceFolderPath;
-		}
-		else {
-			// open the file
-			std::ifstream file;
-			file.open(s_projectFilePath);
-			if (file.fail()) return "";
-			nlohmann::json j = nlohmann::json::parse(file);
-			file.close();
-			std::string path = j.at("path");
-			path.append("Resources\\");
-			return path;
-		}
-
-		return std::string();
-	}
-
-	std::string AIngine::Editor::Editor::GetProjectDirectory()
-	{
-		// open the file
-		std::ifstream file;
-		file.open(s_projectFilePath);
-		if (file.fail()) return "";
-		nlohmann::json j = nlohmann::json::parse(file);
-		file.close();
-		std::string path = j.at("path");
-		return path;
-	}
-
-	std::string Editor::GetProjectName()
-	{
-		if (s_instance)
-		{
-			return s_instance->m_projectName;
-		}
-		else {
-			// open the file
-			std::ifstream file;
-			file.open(s_projectFilePath);
-			if (file.fail()) return "";
-			nlohmann::json j = nlohmann::json::parse(file);
-			file.close();
-
-			return j.at("name");
-		}
-		return std::string();
 	}
 
 	void Editor::SetFullScreenPlayMode(bool bFullsceen)

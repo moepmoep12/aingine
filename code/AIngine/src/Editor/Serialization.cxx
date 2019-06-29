@@ -14,6 +14,7 @@
 #include "UI/UIELement.h"
 #include "UI/Button.h"
 #include "Rendering/UIRenderer.h"
+#include "Util/Project.h"
 
 #include <fstream>
 #include <vector>
@@ -714,9 +715,9 @@ namespace AIngine::Editor::Serialization {
 	{
 		// it's an Engine resource and thus relative to the install dir
 		if (path.find("AIngine") != std::string::npos) {
-			return std::filesystem::relative(path, AIngine::Editor::Editor::GetEngineInstallDirectory() + "\\" + "Resources").string();
+			return std::filesystem::relative(path, AIngine::Util::Project::GetEngineInstallDirectory() + "\\" + "Resources").string();
 		}
-		else return std::filesystem::relative(path, AIngine::Editor::Editor::GetResourceDirectory()).string();
+		else return std::filesystem::relative(path, AIngine::Util::Project::GetResourceDirectory()).string();
 
 		return std::string();
 	}

@@ -1,5 +1,5 @@
 #include "Editor/ScriptingAPI.h"
-#include "Editor/Editor.h"
+#include "Util/Project.h"
 
 #include <fstream>
 #include <sstream>
@@ -11,8 +11,8 @@ namespace AIngine::Editor::Scripting {
 
 	void AddScript(const std::string & name)
 	{
-		static const std::string projectname = AIngine::Editor::Editor::GetProjectName();
-		static const std::string projectDir = AIngine::Editor::Editor::GetProjectDirectory();
+		static const std::string projectname = AIngine::Util::Project::GetProjectName();
+		static const std::string projectDir = AIngine::Util::Project::GetProjectDir();
 		static const std::string cmakeListFilePath = projectDir + "CMakeLists.txt";
 
 		const std::string header = "code/include/${PROJECT_NAME}.h";
@@ -58,7 +58,7 @@ namespace AIngine::Editor::Scripting {
 
 		// Update extern Script methods
 		std::vector<std::string> componentNames;
-		std::string projectFilePath = AIngine::Editor::Editor::GetProjectDirectory() + projectname + ".proj.in";
+		std::string projectFilePath = AIngine::Util::Project::GetProjectDir() + projectname + ".proj.in";
 		std::ifstream projectFile;
 		projectFile.open(projectFilePath);
 		if (projectFile.fail()) return;
@@ -82,9 +82,9 @@ namespace AIngine::Editor::Scripting {
 
 	void RemoveScript(const std::string & name)
 	{
-		static const std::string projectname = AIngine::Editor::Editor::GetProjectName();
-		static const std::string projectDir = AIngine::Editor::Editor::GetProjectDirectory();
-		std::string projectFilePath = AIngine::Editor::Editor::GetProjectDirectory() + projectname + ".proj.in";
+		static const std::string projectname = AIngine::Util::Project::GetProjectName();
+		static const std::string projectDir = AIngine::Util::Project::GetProjectDir();
+		std::string projectFilePath = AIngine::Util::Project::GetProjectDir() + projectname + ".proj.in";
 		std::vector<std::string> componentNames;
 
 		std::ifstream projectFile;
@@ -185,7 +185,7 @@ namespace AIngine::Editor::Scripting {
 			<< "#pragma once" << '\n'
 			<< "#include \"AIngine/Core.h\"" << '\n'
 			<< '\n'
-			<< "namespace " + AIngine::Editor::Editor::GetProjectName() + " {" << '\n'
+			<< "namespace " + AIngine::Util::Project::GetProjectName() + " {" << '\n'
 			<< "	class " + name + " : public AIngine::Script {" << '\n'
 			<< "	public:" << '\n'
 			<< "		" + name + "();" << '\n'
@@ -206,7 +206,7 @@ namespace AIngine::Editor::Scripting {
 		ss
 			<< "#include \"" + name + ".h\"" << '\n'
 
-			<< "namespace " + AIngine::Editor::Editor::GetProjectName() + " {" << '\n'
+			<< "namespace " + AIngine::Util::Project::GetProjectName() + " {" << '\n'
 			<< '\n'
 			<< "	// Constructor" << '\n'
 			<< "	" << name << "::" << name << "()" << '\n'
@@ -240,8 +240,8 @@ namespace AIngine::Editor::Scripting {
 
 	std::vector<std::string> GetScriptNames()
 	{
-		static const std::string projectname = AIngine::Editor::Editor::GetProjectName();
-		static const std::string projectFilePath = AIngine::Editor::Editor::GetProjectDirectory() + projectname + ".proj.in";
+		static const std::string projectname = AIngine::Util::Project::GetProjectName();
+		static const std::string projectFilePath = AIngine::Util::Project::GetProjectDir() + projectname + ".proj.in";
 		std::vector<std::string> componentNames;
 
 		std::ifstream projectFile;

@@ -66,6 +66,10 @@ set(AINGINE_HEADER_STRUCTURES
 		include/public/Structures/Traverser.h
 )
 
+set(AINGINE_HEADER_UTIL
+		include/public/Util/Project.h
+)
+
 set(AINGINE_HEADER_UI
 		include/public/UI/ImGuiLayer.h	
 		include/public/UI/UIElement.h	
@@ -146,6 +150,7 @@ set(AINGINE_SRC
 		src/Structures/Layer.cxx
 		src/Structures/LayerStack.cxx
 		src/Structures/SceneGraph.cxx
+		src/Util/Project.cxx
 		src/UI/ImGuiLayer.cxx
 		src/UI/Button.cxx
 		src/UI/UIElement.cxx
@@ -158,7 +163,7 @@ set(AINGINE_SRC
 
 find_package(OpenGL REQUIRED)
 
-add_library(AIngine STATIC ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
+add_library(AIngine STATIC ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES}  ${AINGINE_HEADER_UTIL} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
 
 set_target_properties(AIngine PROPERTIES
         CXX_STANDARD 17
@@ -195,7 +200,7 @@ target_link_libraries(AIngine
 # --- Code Editor
 #
 
-assign_source_group( ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
+assign_source_group( ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES} ${AINGINE_HEADER_UTIL} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
 
 set_target_properties(AIngine PROPERTIES FOLDER AIngine)
 
@@ -229,6 +234,7 @@ install(FILES ${AINGINE_HEADER_DEBUG} DESTINATION "include/AIngine/Debug")
 install(FILES ${AINGINE_HEADER_EVENTS} DESTINATION "include/AIngine/Events")
 install(FILES ${AINGINE_HEADER_RENDERING} DESTINATION "include/AIngine/Rendering")
 install(FILES ${AINGINE_HEADER_STRUCTURES} DESTINATION "include/AIngine/Structures")
+install(FILES ${AINGINE_HEADER_UTIL} DESTINATION "include/AIngine/Util")
 install(FILES ${AINGINE_HEADER_UI} DESTINATION "include/AIngine/UI")
 install(FILES ${CMAKE_SOURCE_DIR}/Resources/AIngine/imgui.ini DESTINATION "Resources/AIngine")
 

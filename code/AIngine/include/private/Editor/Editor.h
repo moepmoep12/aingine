@@ -62,10 +62,10 @@ namespace AIngine::Editor {
 		/* Returns wheter any UI element is currently hovered with the mouse */
 		static bool IsAnyUIElementHovered();
 
-		static std::string GetEngineInstallDirectory();
-		static std::string GetResourceDirectory();
-		static std::string GetProjectDirectory();
-		static std::string GetProjectName();
+		//static std::string GetEngineInstallDirectory();
+		//static std::string GetResourceDirectory();
+		//static std::string GetProjectDirectory();
+		//static std::string GetProjectName();
 
 
 		/* Actives/Deactivates the frame counter in the top left corner*/
@@ -149,8 +149,6 @@ namespace AIngine::Editor {
 		void EnterFullScreenMode();
 		void LeaveFullScreenMode();
 
-		void LoadProjectData();
-
 		Editor();
 
 	private:
@@ -166,8 +164,5 @@ namespace AIngine::Editor {
 		bool m_isInPlayMode = false;
 		bool m_isGamePaused = false;
 		std::string m_currentSceneFilePath;
-		std::string m_resourceFolderPath;
-		std::string m_projectName;
-		std::string m_engineInstallDir;
 	};
 }

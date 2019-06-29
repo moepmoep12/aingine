@@ -3,6 +3,7 @@
 #include "EntryPoint.h"
 #include "LauncherGUI.h"
 #include "TemplateFiles.h"
+#include "Util/Project.h"
 
 #include <nlohmann/json.hpp>
 #include <fstream>
@@ -38,7 +39,7 @@ namespace ProjectLauncher {
 		PushOverlay(new LauncherGUI());
 
 		LoadProjectsFromFile();
-		m_installpath = Application::GetInstallPath();
+		m_installpath = AIngine::Util::Project::GetEngineInstallDirectory();
 	}
 
 	Launcher::~Launcher()
@@ -276,7 +277,7 @@ namespace ProjectLauncher {
 		// move to folder
 		command << "cd " << cmakeBinPath << " && ";
 		// run cmake
-		command << "cmake -DCMAKE_INSTALL_PREFIX=" << std::filesystem::canonical(Application::GetInstallPath()).string() << " " << projectRoot;
+		command << "cmake -DCMAKE_INSTALL_PREFIX=" << std::filesystem::canonical(AIngine::Util::Project::GetEngineInstallDirectory()).string() << " " << projectRoot;
 
 		system(command.str().c_str());
 	}
@@ -332,7 +333,7 @@ namespace ProjectLauncher {
 	}
 	void Launcher::CopyDirectories(const std::string & path)
 	{
-		std::string imguiFilePath = Application::GetInstallPath() + "Resources\\AIngine\\imgui.ini";
+		std::string imguiFilePath = AIngine::Util::Project::GetEngineInstallDirectory() + "Resources\\AIngine\\imgui.ini";
 		static const std::filesystem::copy_options copyOptions = std::filesystem::copy_options::recursive | std::filesystem::copy_options::update_existing;
 		std::filesystem::copy(imguiFilePath, path + "out\\bin\\Debug", copyOptions);
 		std::filesystem::copy(imguiFilePath, path + "out\\bin\\Release", copyOptions);
@@ -343,7 +344,7 @@ namespace ProjectLauncher {
 	{
 		std::string header = GetHeaderTemplate(name);
 		std::string src = GetSourceTemplate(name);
-		std::string cmakeList = GetCMakeListTemplate(name, Application::GetInstallPath());
+		std::string cmakeList = GetCMakeListTemplate(name, AIngine::Util::Project::GetEngineInstallDirectory());
 
 		std::string headerFilePath = path + "code\\include\\" + name + ".h";
 		std::string sourceFilePath = path + "code\\src\\" + name + ".cxx";
@@ -409,7 +410,7 @@ namespace ProjectLauncher {
 		command << "cmake " << "-G \"Visual Studio 15 2017";
 		if (bit == 64)
 			command << " Win" << bit;
-		command << "\" " << " -DCMAKE_INSTALL_PREFIX=" << std::filesystem::canonical(Application::GetInstallPath()).string() << " " << path;
+		command << "\" " << " -DCMAKE_INSTALL_PREFIX=" << std::filesystem::canonical(AIngine::Util::Project::GetEngineInstallDirectory()).string() << " " << path;
 
 		system(command.str().c_str());
 	}

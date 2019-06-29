@@ -68,9 +68,6 @@ namespace AIngine {
 		/* Loads a Scene with the given index. The index was specified in the build process */
 		static void LoadScene(int index);
 
-		static std::string GetInstallPath();
-		static std::string GetResourceDirectory();
-
 	protected:
 		std::unique_ptr<Window> m_window;
 		WindowConfig m_windowConfig;

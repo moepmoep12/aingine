@@ -10,6 +10,7 @@
 #include "AIngine/Script.h"
 #include "Rendering/ParticleRenderer.h"
 #include "Rendering/UIRenderer.h"
+#include "Util/Project.h"
 
 #include <memory>
 
@@ -36,8 +37,8 @@ namespace AIngine {
 
 		// create asset factories
 		{
-			m_assetRegistry.m_resourceFolderPath = AIngine::Editor::Editor::GetResourceDirectory();
-			m_assetRegistry.m_engineInstallPath = AIngine::Editor::Editor::GetEngineInstallDirectory();
+			m_assetRegistry.m_resourceFolderPath = AIngine::Util::Project::GetResourceDirectory();
+			m_assetRegistry.m_engineInstallPath = AIngine::Util::Project::GetEngineInstallDirectory();
 			using namespace AIngine::Assets;
 
 			m_assetRegistry.RegisterFactory<ShaderAsset>(
@@ -267,19 +268,9 @@ namespace AIngine {
 		return AIngine::Editor::Editor::IsGameRunning();
 	}
 
-	std::string Application::GetResourceDirectory()
-	{
-		return AIngine::Editor::Editor::GetResourceDirectory();
-	}
-
 	void Application::ShutDown()
 	{
 		m_window->Close();
-	}
-
-	std::string Application::GetInstallPath()
-	{
-		return AIngine::Editor::Editor::GetEngineInstallDirectory();
 	}
 
 	void Application::RegisterCallbacks()
