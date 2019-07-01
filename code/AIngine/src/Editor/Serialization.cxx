@@ -219,10 +219,6 @@ namespace AIngine::Editor::Serialization {
 			openJsons.erase(openJsons.begin());
 
 		}
-
-		// all physComponetns have been restored, activate them
-		for (auto comp : physComponents)
-			comp->SetEnabled(true);
 	}
 
 	static const char* editorSettingsPath = "Editor/Settings.ini";
@@ -397,7 +393,7 @@ namespace AIngine::Editor::Serialization {
 			break;
 		}
 
-		physComp->SetEnabled(false);
+		physComp->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 
 		return physComp;
 	}
