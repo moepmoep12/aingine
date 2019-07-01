@@ -1,6 +1,7 @@
 #pragma once
 #include "AIngine/Core.h"
 #include "Effects.h"
+#include "AIngine/UI/Button.h"
 
 namespace CrappyBird {
 	class Player : public AIngine::Script {
@@ -81,7 +82,10 @@ namespace CrappyBird {
 
 		const glm::vec2 m_spawnPosition = glm::vec2(1, 2.5);
 
-		FontAsset* gameOverFont;
+		FontAsset* gameOverFont = nullptr;
+
+		AIngine::UI::Button* retryButton = nullptr;
+		AIngine::UI::Button::OnClickedEventHandler OnRetryClickedHandler;
 
 		// EventHandler for the callbacks. Need to be kept in order to unsubscribe from events
 		AIngine::ParticleEmitter::SpawnParticleHandler OnSpawnParticleHandler;

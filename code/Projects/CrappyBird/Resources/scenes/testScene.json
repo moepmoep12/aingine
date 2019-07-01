@@ -6804,6 +6804,100 @@
 "script": null
 }
 }
+},
+{
+"Canvas": {
+"a_active": true,
+"a_name": "Canvas",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"canvas": {
+"active": true,
+"rectangle": {
+"height": 2,
+"width": 5,
+"x": 0,
+"y": 0
+}
+},
+"script": null
+},
+"c_children": [
+{
+"RetryButton": {
+"a_active": false,
+"a_name": "RetryButton",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"button": {
+"active": true,
+"colorClicked": {
+"w": 1.0,
+"x": 0.9700000286102295,
+"y": 1.0,
+"z": 0.4000000059604645
+},
+"colorHovered": {
+"w": 1.0,
+"x": 0.3799999952316284,
+"y": 0.6589999794960022,
+"z": 0.8389999866485596
+},
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"isdisabled": false,
+"path": "AIngine\\textures\\buttons_PNG105.png",
+"rectangle": {
+"height": 100,
+"width": 300,
+"x": 860,
+"y": 850
+},
+"text": "Retry?",
+"textColor": {
+"w": 1.0,
+"x": 9.999999974752427e-07,
+"y": 9.999899930335232e-07,
+"z": 9.999899930335232e-07
+},
+"textOffset": {
+"x": 3.0,
+"y": -20.0
+},
+"textScale": {
+"x": 1.0,
+"y": 1.0
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"wrapS": 10497,
+"wrapT": 10497
+},
+"script": null
+}
+}
+}
+]
+}
 }
 ]
 }

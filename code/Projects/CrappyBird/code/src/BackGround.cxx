@@ -64,7 +64,7 @@ namespace CrappyBird {
 	void BackGround::OnGameOver()
 	{
 		SoundComponent* soundComp = m_owner->GetComponent<SoundComponent>();
-		soundComp->Pause(0);
+		soundComp->Stop(0);
 	}
 
 	void BackGround::OnRestartGame()

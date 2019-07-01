@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "CrappyBird.h"
 #include "Obstacle.h"
+#include "Rendering/Viewport.h"
 
 #include <random>
 
@@ -53,6 +54,10 @@ namespace CrappyBird {
 		for (int i = 0; i < m_physBody->GetBodyInformation().verticesCount; i++) {
 			m_originalVertices.push_back(m_physBody->GetBodyInformation().vertices[i]);
 		}
+
+		retryButton = AIngine::World::GetGameObject("RetryButton")->GetComponent<AIngine::UI::Button>();
+		OnRetryClickedHandler = AIngine::UI::Button::OnClickedEventHandler(std::bind(&Player::ResetGame, this));
+		retryButton->OnClickedEvent += OnRetryClickedHandler;
 	}
 
 	// End is called when gameplay ends for this script
@@ -66,6 +71,7 @@ namespace CrappyBird {
 		m_emitter->SpawnParticleEvent -= OnSpawnParticleHandler;
 		m_emitter->UpdateParticleEvent -= OnUpdateParticleHandler;
 		OnGameOverEvent -= OnGameOverHandler;
+		retryButton->OnClickedEvent -= OnRetryClickedHandler;
 
 		m_activeEffects.clear();
 	}
@@ -84,7 +90,7 @@ namespace CrappyBird {
 		// basic fire
 		m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 20);
 
-		if (AIngine::Input::IsMouseButtonPressed(0)) {
+		if (AIngine::Input::IsMouseButtonPressed(0) ||AIngine::Input::IsKeyPressed(AIngine::KeyCodes::SPACE)) {
 			// accelerate
 			m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 75);
 			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -0.075f));
@@ -201,6 +207,7 @@ namespace CrappyBird {
 	{
 		IsGameOver = true;
 		m_physBody->SetEnabled(false);
+		retryButton->GetOwner()->SetActive(true);
 	}
 
 	void Player::UpdateGameOverScreen(float delta)
@@ -208,11 +215,13 @@ namespace CrappyBird {
 		const AIngine::Rendering::Viewport& viewport = AIngine::Application::Get().GetViewport();
 		glm::vec2 scale = glm::vec2(2);
 		glm::vec2 center = viewport.GetCenter() - glm::vec2(600, 100);
-		AIngine::Graphics::Text("Game Over", center, scale, glm::vec3(1, 0, 0),1, &gameOverFont->GetFont());
+		AIngine::Graphics::Text("Game Over", center, scale, glm::vec3(1, 0, 0), 1, &gameOverFont->GetFont());
 	}
 
 	void Player::ResetGame()
 	{
+		retryButton->GetOwner()->SetActive(false);
+
 		m_distanceTraveled = 0;
 		IsGameOver = false;
 		m_physBody->SetEnabled(true);
