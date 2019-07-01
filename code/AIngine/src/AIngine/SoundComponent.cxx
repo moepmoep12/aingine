@@ -1,6 +1,8 @@
 #include "AIngine/SoundComponent.h"
 #include "AIngine/Sounds.h"
-
+#ifdef EDITOR
+#include "Editor/Editor.h"
+#endif
 namespace AIngine {
 
 	SoundComponent::SoundComponent()

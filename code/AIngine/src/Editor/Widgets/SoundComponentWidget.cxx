@@ -110,14 +110,14 @@ namespace AIngine::Editor {
 				float pan = sound->GetPan();
 				ss.str(std::string());
 				ss << "Pan" << "##" << sound->GetPath();
-				if (ImGui::SliderFloat(ss.str().c_str(), &pan, 0, pan * 5, "%.1f")) {
+				if (ImGui::DragFloat(ss.str().c_str(),&pan)) {
 					sound->SetPan(pan);
 				}
 				// Pitch
 				float pitch = sound->GetPitch();
 				ss.str(std::string());
 				ss << "Pitch" << "##" << sound->GetPath();
-				if (ImGui::SliderFloat(ss.str().c_str(), &pitch, 0, pitch * 5, "%.1f")) {
+				if (ImGui::DragFloat(ss.str().c_str(), &pitch)) {
 					sound->SetPitch(pitch);
 				}
 

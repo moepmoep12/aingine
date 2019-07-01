@@ -83,9 +83,6 @@ namespace AIngine {
 		// create Graphics API
 		m_Graphics = new AIngine::Graphics();
 
-		//create Sound API
-		PushLayer(new SoundEngine(m_window->GetWin32Window()));
-
 		// create viewport
 		m_viewport = new AIngine::Rendering::Viewport(m_window->GetWidth(), m_window->GetHeight(), 0, 0, *m_window.get());
 
@@ -107,6 +104,9 @@ namespace AIngine {
 		// create game world
 		m_world = new World(m_bounds, m_gravity);
 		PushLayer(m_world);
+
+		//create Sound API
+		PushLayer(new SoundEngine(m_window->GetWin32Window()));
 
 		// create Editor if its an editor build
 #ifdef EDITOR

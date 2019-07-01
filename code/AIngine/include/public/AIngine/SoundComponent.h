@@ -2,7 +2,7 @@
 #include "AIngine/Component.h"
 #include "AIngine/Sounds.h"
 #ifdef EDITOR
-#include "Editor/Editor.h"
+#include "Events/Event.h"
 #endif
 #include <vector>
 
@@ -42,8 +42,8 @@ namespace AIngine {
 
 
 #ifdef EDITOR
-		AIngine::Editor::Editor::PauseGameEventHandler OnPauseGameEventHandler;
-		AIngine::Editor::Editor::ResumeGameEventHandler OnResumeGameEventHandler;
+		AIngine::Events::EventHandler<void> OnPauseGameEventHandler;
+		AIngine::Events::EventHandler<void> OnResumeGameEventHandler;
 		void OnPauseGame();
 		void OnResumeGame();
 #endif
