@@ -1,7 +1,10 @@
 #include "AIngine/Graphics.h"
+#include "Application.h"
 #include "AIngine/Macros.h"
 #include "Assets/Assets.h"
 #include "Rendering/Camera.h"
+#include "Editor/Editor.h"
+#include "Rendering/Viewport.h"
 #include "Debug/log.h"
 
 #include "imgui.h"
@@ -402,6 +405,9 @@ namespace AIngine {
 					color,
 					alpha
 				};
+				if (!AIngine::Editor::Editor::IsFullScreenPlayMode())
+					textStack[m_count].position -= AIngine::Application::GetViewport().GetTopLeftCornerPosition();
+
 				m_count++;
 			}
 		}
