@@ -3,6 +3,8 @@
 #include "Assets/Assets.h"
 #include "AIngine/GameObject.h"
 #include "AIngine/World.h"
+#include "Application.h"
+#include "Rendering/Viewport.h"
 #include "UI/UIELement.h"
 
 namespace AIngine::Rendering {
@@ -136,9 +138,10 @@ namespace AIngine::Rendering {
 		m_matrixStack.push_back(m_modelMatrix);
 
 		const AIngine::Structures::Rectangle<int>& rect = element.GetRectangle();
-
+		const AIngine::Rendering::Viewport& viewport = AIngine::Application::GetViewport();
+		glm::vec2 pos = (glm::vec2)rect.GetCenter() - viewport.GetTopLeftCornerPosition();
 		// we position & rotate around the center
-		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(rect.GetCenter(), 0.0f));
+		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(pos, 0.0f));
 		m_modelMatrix = glm::rotate(m_modelMatrix, m_additiveRotation, glm::vec3(0.0f, 0.0f, 1.0f));
 		m_modelMatrix = glm::rotate(m_modelMatrix, element.GetOwner()->GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
 		m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(rect.width, rect.height, 1.0f));
