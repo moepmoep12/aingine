@@ -133,6 +133,7 @@ namespace AIngine::Editor {
 		bool OnKeyPressed(AIngine::Events::KeyPressedEvent::KeyPressedEventData& e);
 		bool OnWindowResized(AIngine::Events::WindowResizeEvent::WindowResizeEventData& e);
 		bool OnMouseScrolled(AIngine::Events::MouseScrolledEvent::MouseScrolledEventData& e);
+		bool OnMouseButtonPressed(AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData& e);
 		void OnWindowClose();
 
 		/* Calculates the available viewport size to be used for rendering the scene
@@ -155,6 +156,7 @@ namespace AIngine::Editor {
 		bool m_displayingFramerate = false;
 		bool m_showingFpsGraph = false;
 		bool m_isFullScreen = false;
+		bool m_hasViewportFocus = true;
 		static Editor* s_instance;
 		AIngine::Application& m_app;
 		std::vector<EditorWidget*> m_widgets;

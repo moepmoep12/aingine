@@ -8,6 +8,7 @@
 #include "AIngine/World.h"
 #include "Structures/SceneGraph.h"
 #include "Editor/Serialization.h"
+#include "Rendering/Viewport.h"
 #include "Debug/log.h"
 
 // widgets
@@ -49,7 +50,7 @@ namespace AIngine::Editor {
 			OnViewportChangedEvent(viewportRect);
 		}
 
-		MoveCamera(delta);
+		if (m_hasViewportFocus) MoveCamera(delta);
 		if (m_displayingFramerate) DisplayFramerate(delta);
 	}
 
@@ -59,6 +60,7 @@ namespace AIngine::Editor {
 
 		dispatcher.Dispatch<AIngine::Events::KeyPressedEvent::KeyPressedEventData>(BIND_EVENT_TO_FN(Editor::OnKeyPressed));
 		dispatcher.Dispatch<AIngine::Events::MouseScrolledEvent::MouseScrolledEventData>(BIND_EVENT_TO_FN(Editor::OnMouseScrolled));
+		dispatcher.Dispatch<AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData>(BIND_EVENT_TO_FN(Editor::OnMouseButtonPressed));
 
 		auto it = m_widgets.begin();
 		while (it != m_widgets.end()) {
@@ -129,6 +131,15 @@ namespace AIngine::Editor {
 			m_app.m_camera->Zoom(e.GetYOffset() * m_app.GetDeltaTime() * zoomSpeed);
 		}
 		return true;
+	}
+
+	bool Editor::OnMouseButtonPressed(AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData & e)
+	{
+		if (e.GetMouseButton() == 0) {
+			glm::vec2 mousePos = glm::vec2(AIngine::Input::GetMousePosition().first, AIngine::Input::GetMousePosition().first);
+			m_hasViewportFocus = m_app.GetViewport().Contains(mousePos);
+		}
+		return false;
 	}
 
 	void Editor::MoveCamera(float delta)
