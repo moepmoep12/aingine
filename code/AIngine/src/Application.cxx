@@ -15,6 +15,7 @@
 #include "Rendering/UIRenderer.h"
 #include "Structures/SceneGraph.h"
 #include "Util/Project.h"
+#include "UI/ImGuiLayer.h"
 
 namespace AIngine {
 
@@ -166,10 +167,10 @@ namespace AIngine {
 			for (AIngine::Structures::Layer* layer : m_layerStack) {
 				layer->OnImGuiRender();
 			}
-			// render debug stuff last
-			m_Graphics->Flush();
 			// finish UI rendering
 			m_imGuiLayer->OnEnd();
+			// render debug stuff last
+			m_Graphics->Flush();
 
 			// finish the frame
 			m_window->OnUpdate();

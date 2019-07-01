@@ -44,7 +44,7 @@ namespace AIngine {
 		class ImGuiLayer;
 	}
 
-
+	/* This is the base class for the running app. The app created with AIngine extends Application. */
 	class Application {
 
 		friend class Editor::Editor;
@@ -77,7 +77,7 @@ namespace AIngine {
 		static void LoadScene(int index);
 
 	protected:
-		std::unique_ptr<Window> m_window;
+		std::unique_ptr<Window> m_window = NULL;
 		WindowConfig m_windowConfig;
 		glm::vec2 m_gravity;
 		glm::vec4 m_bounds;
@@ -118,16 +118,16 @@ namespace AIngine {
 		using Camera = AIngine::Rendering::Camera;
 
 		LayerStack m_layerStack;
-		SpriteRenderer* m_spriteRenderer;
-		ParticleRenderer* m_particleRenderer;
-		UIRenderer* m_uiRenderer;
-		Viewport* m_viewport;
-		ImGuiLayer* m_imGuiLayer;
+		SpriteRenderer* m_spriteRenderer = nullptr;
+		ParticleRenderer* m_particleRenderer = nullptr;
+		UIRenderer* m_uiRenderer = nullptr;
+		Viewport* m_viewport = nullptr;
+		ImGuiLayer* m_imGuiLayer = nullptr;
 		AssetRegistry m_assetRegistry;
-		Editor* m_editor;
-		Graphics* m_Graphics;
-		Camera* m_camera;
-		World* m_world;
+		Editor* m_editor = nullptr;
+		Graphics* m_Graphics = nullptr;
+		Camera* m_camera = nullptr;
+		World* m_world = nullptr;
 		bool m_isRunning = false;
 		bool m_wantsLoadLevel = false;
 		int m_sceneToLoadIndex = 0;
