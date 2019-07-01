@@ -23,6 +23,15 @@ namespace AIngine::UI {
 		inline bool IsDisabled() const { return m_isDisabled; }
 		inline void SetDisabled(bool disabled) { m_isDisabled = disabled; }
 
+		/* Sets the position of the top left corner */
+		inline virtual void SetPosition(const glm::vec2& newpos) {
+			m_rectangle.x = newpos.x;
+			m_rectangle.y = newpos.y;
+		}
+
+		inline virtual void SetWidth(int width) { m_rectangle.width = width; }
+		inline virtual void SetHeight(int height) { m_rectangle.height = height; }
+
 		inline virtual void Render(const glm::mat4& modelMatrix, AIngine::Rendering::GLShaderProgram& shader) const = 0;
 
 		// Inherited via Component
