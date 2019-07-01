@@ -1,2 +1,5 @@
 save.png :Icons made by https://www.flaticon.com/authors/smashicons from www.flaticon.com
 add-file.png :Icons made by https://www.flaticon.com/authors/smashicons from www.flaticon.com
+HILLBLU_button_background.png : https://commons.wikimedia.org/wiki/File:HILLBLU_button_background.svg
+buttons_PNG184.png : http://pngimg.com/download/31678
+buttons_PNG183.png : http://pngimg.com/download/31677
