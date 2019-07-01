@@ -431,8 +431,9 @@ namespace AIngine {
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-			for (TextElement& textElement : textStack)
+			for (int i = 0; i < m_count; i++)
 			{
+				TextElement& textElement = textStack[i];
 				m_shader->SetVector3f(3 /*"textColor"*/, textElement.color);
 				m_shader->SetFloat(4 /*"alpha"*/, textElement.alpha);
 				GLfloat x = textElement.position.x;
@@ -463,7 +464,7 @@ namespace AIngine {
 					glBindTexture(GL_TEXTURE_2D, ch.TextureID);
 					// Update content of VBO memory
 					glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
+					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); 
 
 					glBindBuffer(GL_ARRAY_BUFFER, 0);
 					// Render quad
