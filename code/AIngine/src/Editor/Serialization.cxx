@@ -123,6 +123,9 @@ namespace AIngine::Editor::Serialization {
 		const char* BUTTON_COLORCLICKED = "colorClicked";
 		const char* BUTTON_COLORHOVERED = "colorHovered";
 		const char* BUTTON_TEXT = "text";
+		const char* BUTTON_TEXTSCALE = "textScale";
+		const char* BUTTON_TEXTOFFSET = "textOffset";
+		const char* BUTTON_TEXTCOLOR = "textColor";
 
 	}
 
@@ -448,6 +451,9 @@ namespace AIngine::Editor::Serialization {
 		button->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 		button->Text = (*j)[AttributeNames::BUTTON_TEXT];
 		button->TintColor = (*j)[AttributeNames::UIELEMENT_COLORTINT];
+		button->TextOffset = (*j)[AttributeNames::BUTTON_TEXTOFFSET];
+		button->TextScale = (*j)[AttributeNames::BUTTON_TEXTSCALE];
+		button->TextColor = (*j)[AttributeNames::BUTTON_TEXTCOLOR];
 
 		AIngine::Rendering::Texture2D& texture = button->Texture;
 
@@ -700,6 +706,9 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::UIELEMENT_ISDISABLED] = button.IsDisabled();
 		j[AttributeNames::BUTTON_COLORCLICKED] = button.ClickedColor;
 		j[AttributeNames::BUTTON_COLORHOVERED] = button.HoverColor;
+		j[AttributeNames::BUTTON_TEXTOFFSET] = button.TextOffset;
+		j[AttributeNames::BUTTON_TEXTSCALE] = button.TextScale;
+		j[AttributeNames::BUTTON_TEXTCOLOR] = button.TextColor;
 		j[AttributeNames::BUTTON_TEXT] = button.Text;
 		j[AttributeNames::TEXTURE_PATH] = SerializePath(button.Texture.FileName);
 		j[AttributeNames::TEXTURE_WRAP_S] = button.Texture.Wrap_S;
