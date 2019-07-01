@@ -39,10 +39,19 @@ set(HEADER
 #
 # --- Output Configuration
 #
+option(EDITOR " " ON)
+set(OutputDir "${OUTPUT_DIR}/bin" CACHE PATH "The build dir")
 set(OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/out")
+
+if(EDITOR)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_DIR}/lib")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_DIR}/lib")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_DIR}/bin")
+else()
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OutputDir}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OutputDir}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OutputDir}")
+endif()
 
 # Add Executable Target
 add_executable(${PROJECT_NAME} ${HEADER} ${SRC})
@@ -55,8 +64,13 @@ find_package(spdlog REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(cxxopts REQUIRED)
 find_package(OpenGL REQUIRED)
+if(EDITOR)
+find_package(AIngineEditor REQUIRED)
+target_link_libraries(${PROJECT_NAME} AIngineEditor)
+else()
 find_package(AIngine REQUIRED)
 target_link_libraries(${PROJECT_NAME} AIngine)
+endif()
 
 #-- Add include path
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/code/include)

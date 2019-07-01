@@ -34,7 +34,16 @@
 "volumeLeft": 1.0,
 "volumeRight": 1.0
 },
-"active": true
+"active": true,
+"qubodup-PowerDrain": {
+"delay": 0.0,
+"looped": false,
+"pan": 0.5,
+"path": "sounds\\qubodup-PowerDrain.wav",
+"ptich": 1.0,
+"volumeLeft": 2.0,
+"volumeRight": 2.0
+}
 }
 },
 "c_children": [
@@ -6888,8 +6897,8 @@
 "z": 9.999899930335232e-07
 },
 "textOffset": {
-"x": 3.0,
-"y": -20.0
+"x": 0.0,
+"y": 0.0
 },
 "textScale": {
 "x": 1.0,
