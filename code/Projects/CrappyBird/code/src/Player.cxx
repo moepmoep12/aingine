@@ -90,7 +90,7 @@ namespace CrappyBird {
 		// basic fire
 		m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 20);
 
-		if (AIngine::Input::IsMouseButtonPressed(0) ||AIngine::Input::IsKeyPressed(AIngine::KeyCodes::SPACE)) {
+		if (AIngine::Input::IsMouseButtonPressed(0) || AIngine::Input::IsKeyPressed(AIngine::KeyCodes::SPACE)) {
 			// accelerate
 			m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 75);
 			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -0.075f));
@@ -213,9 +213,17 @@ namespace CrappyBird {
 	void Player::UpdateGameOverScreen(float delta)
 	{
 		const AIngine::Rendering::Viewport& viewport = AIngine::Application::Get().GetViewport();
-		glm::vec2 scale = glm::vec2(2);
-		glm::vec2 center = viewport.GetCenter() - glm::vec2(600, 100);
-		AIngine::Graphics::Text("Game Over", center, scale, glm::vec3(1, 0, 0), 1, &gameOverFont->GetFont());
+		static const glm::vec2 scale = glm::vec2(3);
+		glm::vec2 center = viewport.GetCenter();
+		static glm::vec2 textsize = AIngine::Graphics::GetTextSize("Game Over", scale, &gameOverFont->GetFont());
+		glm::vec2 pos = center;
+		pos.x -= textsize.x * 0.5f;
+		pos.y -= textsize.y * 0.5f;
+		glm::vec2 buttonPos = center;
+		buttonPos.y += textsize.y * 0.75;
+		buttonPos.x -= retryButton->GetRectangle().width * 0.5;
+		retryButton->SetPosition(buttonPos);
+		AIngine::Graphics::Text("Game Over", pos, scale, glm::vec3(1, 0, 0), 1, &gameOverFont->GetFont());
 	}
 
 	void Player::ResetGame()
