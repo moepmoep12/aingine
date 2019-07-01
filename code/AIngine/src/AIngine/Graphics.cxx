@@ -25,7 +25,7 @@ namespace AIngine {
 			std::string vs("AIngine/shader/debug/vertexPoints.glsl");
 			std::string fs("AIngine/shader/debug/fragment.glsl");
 
-			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs,fs))->GetShader();
+			m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs, fs))->GetShader();
 
 			m_vertexAttribute = 0;
 			m_colorAttribute = 1;
@@ -464,7 +464,7 @@ namespace AIngine {
 					glBindTexture(GL_TEXTURE_2D, ch.TextureID);
 					// Update content of VBO memory
 					glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); 
+					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 
 					glBindBuffer(GL_ARRAY_BUFFER, 0);
 					// Render quad
@@ -476,6 +476,27 @@ namespace AIngine {
 			glBindVertexArray(0);
 			glBindTexture(GL_TEXTURE_2D, 0);
 			m_count = 0;
+		}
+
+		glm::vec2 GetTextSize(const std::string& text, glm::vec2 scale, AIngine::Rendering::Font* font = nullptr)
+		{
+			if (!font)
+				font = m_standardFont;
+
+			// Iterate through all characters
+			std::string::const_iterator c;
+			float width = 0;
+			float height = 0;
+			for (c = text.begin(); c != text.end(); c++)
+			{
+				AIngine::Rendering::RenderableCharacter ch = font->Characters[*c];
+				width += ch.Size.x *scale.x;
+				//width += (ch.Advance >> 6) * scale.x;
+				if (ch.Size.y * scale.y > height)
+					height = ch.Size.y * scale.y;
+			}
+
+			return glm::vec2(width, height);
 		}
 
 		GLuint m_vao;
@@ -594,6 +615,13 @@ namespace AIngine {
 		if (s_instance) {
 			s_instance->m_text->AddText(text, screenPosition, scale, color, alpha, font);
 		}
+	}
+
+	glm::vec2 Graphics::GetTextSize(const std::string & text, const glm::vec2 scale, AIngine::Rendering::Font * font)
+	{
+		if (s_instance)
+			return s_instance->m_text->GetTextSize(text, scale, font);
+		else return glm::vec2(0);
 	}
 
 	void Graphics::CircleWorld(const glm::vec2 & center, float radius, const glm::vec3 & color)
