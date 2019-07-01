@@ -163,21 +163,46 @@ set(AINGINE_SRC
 
 find_package(OpenGL REQUIRED)
 
+add_library(AIngineEditor STATIC ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES}  ${AINGINE_HEADER_UTIL} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
 add_library(AIngine STATIC ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES}  ${AINGINE_HEADER_UTIL} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
 
-set_target_properties(AIngine PROPERTIES
+set_target_properties(AIngineEditor PROPERTIES
         CXX_STANDARD 17
         CXX_EXTENSIONS OFF)
-		
+set_target_properties(AIngine PROPERTIES
+        CXX_STANDARD 17
+        CXX_EXTENSIONS OFF)	
+
 set(THIRD_PARTY_DIR "${CMAKE_SOURCE_DIR}/thirdParty")
 
+target_include_directories(AIngineEditor PUBLIC 
+						$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/public>
+						$<INSTALL_INTERFACE:include/AIngine>)
 target_include_directories(AIngine PUBLIC 
 						$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/public>
 						$<INSTALL_INTERFACE:include/AIngine>)
 #target_include_directories(Engine PUBLIC include/public)
+include_directories(AIngineEditor PRIVATE include/private)
 include_directories(AIngine PRIVATE include/private)
 
 
+target_link_libraries(AIngineEditor
+        glad
+        glfw
+        OpenGL::GL
+        glm
+        tinyobjloader
+        stb
+		imgui
+		spdlog
+		Box2D-cmake
+		nlohmann_json
+		nativefiledialog
+		cxxopts
+		xcsrlib
+		freetype
+		cute_sound
+        )
 target_link_libraries(AIngine
         glad
         glfw
@@ -202,6 +227,7 @@ target_link_libraries(AIngine
 
 assign_source_group( ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES} ${AINGINE_HEADER_UTIL} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
 
+set_target_properties(AIngineEditor PROPERTIES FOLDER AIngine)
 set_target_properties(AIngine PROPERTIES FOLDER AIngine)
 
 
@@ -214,16 +240,16 @@ if(AINGINE_LOG_TO_FILE)
 	add_definitions(-DLOG_TO_FILE)
 endif()
 
-option(AINGINE_EDITOR "Build Editor?" OFF)
-if(AINGINE_EDITOR)
-	add_definitions(-DEDITOR)
-endif()
+target_compile_definitions(AIngineEditor PUBLIC -DEDITOR)
 
 #
 # --- Install
 #
-install(TARGETS AIngine freetype EXPORT Engine DESTINATION "lib/AIngine")
-install(EXPORT Engine DESTINATION "lib/AIngine"
+install(TARGETS AIngineEditor freetype EXPORT AIngineEditor DESTINATION "lib/AIngineEditor")
+install(TARGETS AIngine freetype EXPORT AIngine DESTINATION "lib/AIngine")
+install(EXPORT AIngineEditor DESTINATION "lib/AIngineEditor"
+									FILE aingineeditor-config.cmake)
+install(EXPORT AIngine DESTINATION "lib/AIngine"
 									FILE aingine-config.cmake)
 
 # Header Files

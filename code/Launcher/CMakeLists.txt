@@ -28,7 +28,7 @@ set_target_properties(Launcher PROPERTIES
 
 target_include_directories(Launcher PRIVATE include)
   
-target_link_libraries(Launcher AIngine)
+target_link_libraries(Launcher AIngineEditor)
 
 #
 # --- Code Editor Configuration

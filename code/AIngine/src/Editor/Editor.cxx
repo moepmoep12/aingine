@@ -10,6 +10,7 @@
 #include "Editor/Serialization.h"
 #include "Rendering/Viewport.h"
 #include "Debug/log.h"
+#include "Util/Project.h"
 
 // widgets
 #include "Editor/Widgets/EditorWidget.h"
@@ -21,10 +22,10 @@
 
 #include <glm/geometric.hpp>
 #include <fstream>
-#include <filesystem>
 #include <nfd.h>
 #include <algorithm>
 #include <stdlib.h>
+#include <filesystem>
 
 namespace AIngine::Editor {
 
@@ -236,9 +237,8 @@ namespace AIngine::Editor {
 
 	void Editor::UpdateSceneTitle()
 	{
-		std::string sceneName = " | ";
-		sceneName.append(GetCurrentSceneName());
-		m_app.m_window->AppendWindowTitle(sceneName.c_str());
+		std::string title = AIngine::Util::Project::GetProjectName() + " | " + GetCurrentSceneName();
+		m_app.m_window->SetWindowTitle(title.c_str());
 	}
 
 
@@ -481,7 +481,7 @@ namespace AIngine::Editor {
 			// load the new scene
 			AIngine::Editor::Serialization::Serializer::DeserializeSceneGraph(path);
 			// remember the path to the new scene
-			s_instance->m_currentSceneFilePath = std::filesystem::relative(path).string();
+			s_instance->m_currentSceneFilePath = std::filesystem::canonical(path).string();
 
 			std::string sceneName = s_instance->GetCurrentSceneName();
 			s_instance->UpdateSceneTitle();
@@ -608,35 +608,48 @@ namespace AIngine::Editor {
 		if (s_instance) {
 			if (s_instance->m_BuildScenes.size() == 0) return;
 
-			std::vector<std::string> Result;
+			//std::vector<std::string> Result;
 
-			for (auto& scene : s_instance->m_BuildScenes) {
+			//for (auto& scene : s_instance->m_BuildScenes) {
 
-				auto result = AIngine::Editor::Serialization::ExtractPathsFromScene(scene.Path);
-				for (auto& path : result) {
-					if (std::find(Result.begin(), Result.end(), path) == Result.end())
-						Result.push_back(path);
-				}
-			}
+			//	auto result = AIngine::Editor::Serialization::ExtractPathsFromScene(scene.Path);
+			//	for (auto& path : result) {
+			//		if (std::find(Result.begin(), Result.end(), path) == Result.end())
+			//			Result.push_back(path);
+			//	}
+			//}
 
+			std::string projectDir = AIngine::Util::Project::GetProjectDir();
 			nfdchar_t *outPath = NULL;
-			nfdresult_t result = NFD_PickFolder("", &outPath);
-
+			nfdresult_t result = NFD_PickFolder(NULL, &outPath);
+			std::string outputDir;
 			if (result == NFD_OKAY)
 			{
-				std::stringstream command;
-
-				//// move to correct hard drive
-				//command << outPath[0] << ":" << " && ";
-
-				//// move to folder
-				//command << "cd " << outPath << " && ";
-
-				//// build
-				//command << "cmake --build . --target " << s_instance->m_app.GetProjectName() << " --config Release";
-				//system(command.str().c_str());
-
+				static const std::string config = "Debug";
+				outputDir = std::filesystem::canonical(outPath).string();
+				std::filesystem::create_directories(outputDir + "\\" + config + "\\Editor");
+				std::filesystem::create_directories(outputDir + "\\Resources");
 				free(outPath);
+
+				// Turn off Editor
+				AIngine::Util::Project::RegenerateCMake({ "-DEDITOR=OFF", "-DOutputDir=" + outputDir });
+
+				// Build
+				std::stringstream command;
+				command << projectDir[0] << ":" << " && ";
+				command << "cd " << projectDir + "out//CMake" << " && ";
+				command << "cmake --build . --target " << AIngine::Util::Project::GetProjectName() << " --config " << config;
+				system(command.str().c_str());
+
+				// Turn on Editor again
+				AIngine::Util::Project::RegenerateCMake({ "-DEDITOR=ON" });
+
+				// Copy the file with the built scenes
+				static const std::filesystem::copy_options copyoptions = std::filesystem::copy_options::update_existing | std::filesystem::copy_options::recursive;
+				std::filesystem::copy_file("Editor\\ScenesBuild.json", outputDir + "\\" + config + "\\Editor\\ScenesBuild.json", copyoptions);
+				// Copy Resources
+				std::filesystem::copy(AIngine::Util::Project::GetResourceDirectory(), outputDir + "\\Resources", copyoptions);
+				AIngine::Util::Project::SetProjectDir(outputDir, outputDir + "\\" + config + "\\project.proj");
 			}
 		}
 	}

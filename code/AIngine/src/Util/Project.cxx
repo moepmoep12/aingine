@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <sstream>
 
 namespace AIngine::Util::Project {
 
@@ -44,5 +45,43 @@ namespace AIngine::Util::Project {
 		file.close();
 		std::string path = j.at("installPath");
 		return path;
+	}
+
+	void SetProjectDir(const std::string & dir, const std::string& filepath)
+	{
+		std::ifstream file;
+		if (filepath.empty())
+			file.open(PROJECTFILEPATH);
+		else
+			file.open(filepath);
+		if (file.fail()) return;
+		nlohmann::json j = nlohmann::json::parse(file);
+		j.at("path") = std::filesystem::canonical(dir).string();
+		file.close();
+		std::ofstream f;
+		if (filepath.empty())
+			f.open(PROJECTFILEPATH);
+		else
+			f.open(filepath);
+		f << j.dump(0);
+		f.close();
+	}
+
+	void RegenerateCMake(const std::vector<std::string>& variables)
+	{
+		std::string projectRoot = GetProjectDir();
+		std::string cmakeBinPath = std::filesystem::canonical(projectRoot + "out\\CMake").string();
+		std::stringstream command;
+
+		// cd to the correct drive
+		command << cmakeBinPath[0] << ":" << " &&";
+		// move to folder
+		command << "cd " << cmakeBinPath << " && ";
+		command << "cmake ";
+		for (auto& var : variables)
+			command << var << " ";
+		command << projectRoot;
+
+		system(command.str().c_str());
 	}
 }

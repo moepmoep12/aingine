@@ -20,7 +20,8 @@ target_include_directories(glad PUBLIC
 						$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 						"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/glad>")
 						
-install(TARGETS glad EXPORT Engine DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+install(TARGETS glad EXPORT AIngineEditor DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+install(TARGETS glad EXPORT AIngine DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 # install(EXPORT GLAD DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/glad"
 								# FILE glad-config.cmake)
 install(FILES include/glad/glad.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/glad)
