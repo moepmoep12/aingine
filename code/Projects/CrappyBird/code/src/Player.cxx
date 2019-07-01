@@ -94,6 +94,7 @@ namespace CrappyBird {
 			// accelerate
 			m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 75);
 			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -0.075f));
+			PlayEngineSound();
 		}
 
 		// update score
@@ -248,5 +249,12 @@ namespace CrappyBird {
 
 		OnRestartGame();
 
+	}
+
+	void Player::PlayEngineSound()
+	{
+		static AIngine::Sound* sound = GetOwner()->GetComponent<SoundComponent>()->GetSound(0);
+		if (!sound->IsPlaying())
+			GetOwner()->GetComponent<SoundComponent>()->Play(0);
 	}
 }

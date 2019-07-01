@@ -480,6 +480,18 @@
 "script": [
 0
 ],
+"soundComponent": {
+"active": true,
+"rocket_launch_short": {
+"delay": 0.0,
+"looped": false,
+"pan": 0.5,
+"path": "sounds\\rocket_launch_short.wav",
+"ptich": 0.20000000298023224,
+"volumeLeft": 0.10000000149011612,
+"volumeRight": 0.10000000149011612
+}
+},
 "sprite": {
 "active": true,
 "alpha": 1.0,

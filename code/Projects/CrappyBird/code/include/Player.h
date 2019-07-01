@@ -64,6 +64,7 @@ namespace CrappyBird {
 		void UpdateGameOverScreen(float delta);
 
 		void ResetGame();
+		void PlayEngineSound();
 
 		// all effects currently affecting the player
 		std::vector<std::unique_ptr<Effect>> m_activeEffects;

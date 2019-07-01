@@ -2,3 +2,5 @@ fuel.png Icons made by https://www.freepik.com/ from Flaticon
 fast-forward.png Icons made by  https://www.flaticon.com/authors/smashicons from www.flaticon.com
 reduce.png Icons made by https://www.freepik.com from www.flaticon.com
 metal-set https://opengameart.org/content/free-metal-texture-creation-set-08
+qubodup-PowerDrain.wav : https://opengameart.org/content/energy-drain
+rocket_launch_short.wav : https://opengameart.org/content/rocket-launch-0 (edited)
