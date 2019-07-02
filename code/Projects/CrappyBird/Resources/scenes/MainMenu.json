@@ -12,16 +12,450 @@
 },
 "c_children": [
 {
-"Root": {
+"MainMenu": {
 "a_active": true,
-"a_name": "Root",
+"a_name": "MainMenu",
 "a_posX": 0.0,
 "a_posY": 0.0,
 "a_rotation": 0.0,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
 "b_components": {
+"script": [
+7
+]
+}
+}
+},
+{
+"BackGround": {
+"a_active": true,
+"a_name": "BackGround",
+"a_posX": 5.0,
+"a_posY": 2.5,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"path": "textures\\Background\\4\\6.png",
+"sizeX": 10.0,
+"sizeY": 5.0,
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+},
+{
+"Canvas": {
+"a_active": true,
+"a_name": "Canvas",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"canvas": {
+"active": true,
+"rectangle": {
+"height": 2,
+"width": 5,
+"x": 0,
+"y": 0
+}
+},
 "script": null
+},
+"c_children": [
+{
+"StartButton": {
+"a_active": true,
+"a_name": "StartButton",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"button": {
+"active": true,
+"colorClicked": {
+"w": 1.0,
+"x": 0.37254899740219116,
+"y": 0.0,
+"z": 0.03600850701332092
+},
+"colorHovered": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"isdisabled": false,
+"path": "AIngine\\textures\\buttons_PNG183.png",
+"rectangle": {
+"height": 150,
+"width": 150,
+"x": 645,
+"y": 626
+},
+"text": "START",
+"textColor": {
+"w": 1.0,
+"x": 0.0,
+"y": 0.0,
+"z": 0.0
+},
+"textOffset": {
+"x": 0.0,
+"y": 0.0
+},
+"textScale": {
+"x": 0.6000000238418579,
+"y": 1.0
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"wrapS": 10497,
+"wrapT": 10497
+},
+"script": null
+}
+}
+},
+{
+"Level1Button": {
+"a_active": true,
+"a_name": "Level1Button",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"button": {
+"active": true,
+"colorClicked": {
+"w": 1.0,
+"x": 0.9700000286102295,
+"y": 1.0,
+"z": 0.4000000059604645
+},
+"colorHovered": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"isdisabled": false,
+"path": "textures\\Background\\1\\1_game_background.png",
+"rectangle": {
+"height": 150,
+"width": 300,
+"x": 1135,
+"y": 50
+},
+"text": "",
+"textColor": {
+"w": 1.0,
+"x": 0.0,
+"y": 0.0,
+"z": 0.0
+},
+"textOffset": {
+"x": 0.0,
+"y": 0.0
+},
+"textScale": {
+"x": 1.0,
+"y": 1.0
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"wrapS": 10497,
+"wrapT": 10497
+},
+"script": null
+}
+}
+},
+{
+"Level2Button": {
+"a_active": true,
+"a_name": "Level2Button",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"button": {
+"active": true,
+"colorClicked": {
+"w": 1.0,
+"x": 0.9700000286102295,
+"y": 1.0,
+"z": 0.4000000059604645
+},
+"colorHovered": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"isdisabled": false,
+"path": "textures\\Background\\2\\2_game_background.png",
+"rectangle": {
+"height": 150,
+"width": 300,
+"x": 1135,
+"y": 225
+},
+"text": "",
+"textColor": {
+"w": 1.0,
+"x": 0.0,
+"y": 0.0,
+"z": 0.0
+},
+"textOffset": {
+"x": 0.0,
+"y": 0.0
+},
+"textScale": {
+"x": 1.0,
+"y": 1.0
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"wrapS": 10497,
+"wrapT": 10497
+},
+"script": null
+}
+}
+},
+{
+"Level3Button": {
+"a_active": true,
+"a_name": "Level3Button",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"button": {
+"active": true,
+"colorClicked": {
+"w": 1.0,
+"x": 0.9700000286102295,
+"y": 1.0,
+"z": 0.4000000059604645
+},
+"colorHovered": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"isdisabled": false,
+"path": "textures\\Background\\3\\3_game_background.png",
+"rectangle": {
+"height": 150,
+"width": 300,
+"x": 1135,
+"y": 400
+},
+"text": "",
+"textColor": {
+"w": 1.0,
+"x": 0.0,
+"y": 0.0,
+"z": 0.0
+},
+"textOffset": {
+"x": 0.0,
+"y": 0.0
+},
+"textScale": {
+"x": 1.0,
+"y": 1.0
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"wrapS": 10497,
+"wrapT": 10497
+},
+"script": null
+}
+}
+},
+{
+"Level4Button": {
+"a_active": true,
+"a_name": "Level4Button",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"button": {
+"active": true,
+"colorClicked": {
+"w": 1.0,
+"x": 0.9700000286102295,
+"y": 1.0,
+"z": 0.4000000059604645
+},
+"colorHovered": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"isdisabled": false,
+"path": "textures\\Background\\4\\4_game_background.png",
+"rectangle": {
+"height": 150,
+"width": 300,
+"x": 1135,
+"y": 575
+},
+"text": "",
+"textColor": {
+"w": 1.0,
+"x": 0.0,
+"y": 0.0,
+"z": 0.0
+},
+"textOffset": {
+"x": 0.0,
+"y": 0.0
+},
+"textScale": {
+"x": 1.0,
+"y": 1.0
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"wrapS": 10497,
+"wrapT": 10497
+},
+"script": null
+}
+}
+}
+]
+}
+},
+{
+"Rocket": {
+"a_active": true,
+"a_name": "Rocket",
+"a_posX": 4.792657852172852,
+"a_posY": 2.3698232173919678,
+"a_rotation": 1.2479100227355957,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"path": "textures\\rocket_nofire.png",
+"sizeX": 2.0,
+"sizeY": 3.0,
+"wrapS": 10497,
+"wrapT": 10497
+}
 }
 }
 }

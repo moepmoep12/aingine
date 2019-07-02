@@ -9,6 +9,7 @@
 "Obstacles",
 "PickUp",
 "Agent",
-"Obstacle"
+"Obstacle",
+"MainMenu"
 ]
 }

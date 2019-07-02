@@ -17,6 +17,7 @@ set(SRC
     code/src/PickUp.cxx
     code/src/Effects.cxx
     code/src/Agent.cxx
+    code/src/MainMenu.cxx
     code/src/${PROJECT_NAME}.cxx
     code/src/Scripting_generated.cxx
      )
@@ -33,6 +34,7 @@ set(HEADER
     code/include/PickUp.h
     code/include/Effects.h
     code/include/Agent.h
+    code/include/MainMenu.h
 	   code/include/${PROJECT_NAME}.h
     )
 
