@@ -7,16 +7,22 @@ namespace AIngine::Rendering {
 	class GLShaderProgram;
 }
 
-namespace AIngine::Editor {
-	class ButtonComponentWidget;
-}
-
 namespace AIngine::UI {
+
+	enum Anchor {
+		Center = 0,
+		TopLeft,
+		TopRight,
+		BottomRight,
+		BottomLeft,
+		CenterUp,
+		CenterLeft,
+		CenterDown,
+		CenterRight
+	};
 
 	class UIElement : public AIngine::Component {
 	public:
-		friend class AIngine::Editor::ButtonComponentWidget;
-
 		inline const AIngine::Structures::Rectangle<int>& GetRectangle() const { return m_rectangle; }
 		inline void SetRectangle(const AIngine::Structures::Rectangle<int>& rect) { m_rectangle = rect; }
 
@@ -41,6 +47,8 @@ namespace AIngine::UI {
 
 		glm::vec4 TintColor = glm::vec4(1);
 		glm::vec4 DisabledColor = glm::vec4(0.2, 0.2, 0.2, 1);
+
+		Anchor AnchorPos = TopLeft;
 
 	protected:
 		virtual void OnClicked() {}
