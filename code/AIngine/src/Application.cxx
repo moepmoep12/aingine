@@ -341,7 +341,7 @@ namespace AIngine {
 		m_viewport->Set(viewport.GetPosition(), viewport.width, viewport.height, true);
 		m_camera->SetZoom((float)m_window->GetWidth() / (float)m_world->GetBounds().y);
 		m_spriteRenderer->SetViewport();
-		CORE_INFO("Viewport Size Changed To ({0} | {1}) at Position ({2} | {3})", m_viewport->m_width, m_viewport->m_height, m_viewport->m_x, m_viewport->m_y);
+		//CORE_INFO("Viewport Size Changed To ({0} | {1}) at Position ({2} | {3})", m_viewport->m_width, m_viewport->m_height, m_viewport->m_x, m_viewport->m_y);
 	}
 
 	std::vector<std::string> GetAvailableComponentNames()
