@@ -3,8 +3,8 @@
 #include "Assets/Assets.h"
 #include "AIngine/Graphics.h"
 #include "Editor/Widgets/Common.h"
+#include "Editor/Widgets/UIElementComponentWidget.h"
 #include "Util/FileSystem.h"
-#include "Util/Project.h"
 
 #include <imgui.h>
 
@@ -21,22 +21,9 @@ namespace AIngine::Editor::Widget::Component {
 
 				ImGui::NewLine();
 
-				// Change rect transform
-				int pos[] = { btn->GetRectangle().x, btn->GetRectangle().y };
-				int dim[] = { btn->GetRectangle().width, btn->GetRectangle().height };
-				if (ImGui::DragInt2("Screen Position", pos)) {
-					btn->SetPosition(glm::vec2(pos[0], pos[1]));
-				}
-				if (ImGui::DragInt2("Dimensions", dim)) {
-					btn->SetWidth(dim[0]);
-					btn->SetHeight(dim[1]);
-				}
+				ChangeTransform(btn);
 
-				// Disabled
-				bool isDisabled = btn->IsDisabled();
-				if (ImGui::Checkbox("Disabled", &isDisabled)) {
-					btn->SetDisabled(isDisabled);
-				}
+				AnchorCombo(btn);
 
 				ImGui::NewLine();
 

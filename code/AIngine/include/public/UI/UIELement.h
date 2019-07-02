@@ -21,13 +21,20 @@ namespace AIngine::UI {
 		CenterRight
 	};
 
+	const glm::vec2 TargetResolution(1920, 1080);
+
 	class UIElement : public AIngine::Component {
 	public:
-		inline const AIngine::Structures::Rectangle<int>& GetRectangle() const { return m_rectangle; }
+		AIngine::Structures::Rectangle<int> GetRectangle() const;
+		AIngine::Structures::Rectangle<int> GetRectangleAbsolute() const;
+		inline const AIngine::Structures::Rectangle<int>& GetRectangleNative() const { return m_rectangle; }
 		inline void SetRectangle(const AIngine::Structures::Rectangle<int>& rect) { m_rectangle = rect; }
 
 		inline bool IsDisabled() const { return m_isDisabled; }
 		inline void SetDisabled(bool disabled) { m_isDisabled = disabled; }
+
+		inline Anchor GetAnchor() const { return AnchorPos; }
+		void SetAnchor(Anchor anch);
 
 		/* Sets the position of the top left corner */
 		inline virtual void SetPosition(const glm::vec2& newpos) {
@@ -48,20 +55,23 @@ namespace AIngine::UI {
 		glm::vec4 TintColor = glm::vec4(1);
 		glm::vec4 DisabledColor = glm::vec4(0.2, 0.2, 0.2, 1);
 
-		Anchor AnchorPos = TopLeft;
 
 	protected:
 		virtual void OnClicked() {}
 		virtual void OnMouseReleased() {}
 
 	protected:
-		AIngine::Structures::Rectangle<int> m_rectangle = AIngine::Structures::Rectangle<int>(0, 0, 5, 2);
 		bool m_isClicked = false;
 		bool m_isDisabled = false;
+		Anchor AnchorPos = TopLeft;
 
 	private:
 		bool OnMouseButtonPressed(AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData& e);
 		bool OnMouseButtonReleased(AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData& e);
+
+	private:
+		AIngine::Structures::Rectangle<int> m_rectangle = AIngine::Structures::Rectangle<int>(0, 0, 5, 2);
+
 	};
 
 	class Canvas : public UIElement {

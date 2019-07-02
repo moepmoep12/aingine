@@ -20,9 +20,9 @@ namespace AIngine::UI {
 
 		if (!Text.empty()) {
 			glm::vec2 textSize = AIngine::Graphics::GetTextSize(Text, TextScale);
-
-			float xpos = m_rectangle.x + ((float)m_rectangle.width - textSize.x) * 0.5f;
-			float ypos = m_rectangle.y + ((float)m_rectangle.height - textSize.y) * 0.5f;
+			auto rectangle = GetRectangle();
+			float xpos = rectangle.x + ((float)rectangle.width - textSize.x) * 0.5f;
+			float ypos = rectangle.y + ((float)rectangle.height - textSize.y) * 0.5f;
 
 			AIngine::Graphics::Text(Text, glm::vec2(xpos, ypos) + TextOffset, TextScale, TextColor, TextColor.w);
 		}

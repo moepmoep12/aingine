@@ -141,57 +141,57 @@ namespace AIngine::Rendering {
 		const AIngine::Structures::RectangleI& viewportRect = AIngine::Application::GetViewport().GetRectangle();
 		glm::highp_ivec2 relativeElementPos = rect.GetCenter() - viewportRect.GetPosition();
 
-		glm::vec3 translation(0);
+		//glm::vec3 translation(0);
 
-		switch (element.AnchorPos) {
-		case AIngine::UI::Anchor::TopLeft:
-			translation = glm::vec3(relativeElementPos, 0);
-			break;
+		//switch (element.GetAnchor()) {
+		//case AIngine::UI::Anchor::TopLeft:
+		//	translation = glm::vec3(relativeElementPos, 0);
+		//	break;
 
-		case AIngine::UI::Anchor::TopRight:
-			translation = glm::vec3(viewportRect.GetTopRight() + relativeElementPos, 0);
-			break;
+		//case AIngine::UI::Anchor::TopRight:
+		//	translation = glm::vec3(viewportRect.GetTopRight() + relativeElementPos, 0);
+		//	break;
 
-		case AIngine::UI::Anchor::BottomRight:
-			translation = glm::vec3(viewportRect.GetMax() + relativeElementPos, 0);
-			break;
+		//case AIngine::UI::Anchor::BottomRight:
+		//	translation = glm::vec3(viewportRect.GetMax() + relativeElementPos, 0);
+		//	break;
 
-		case AIngine::UI::Anchor::BottomLeft:
-			translation = glm::vec3(viewportRect.GetBottomLeft() + relativeElementPos, 0);
-			break;
+		//case AIngine::UI::Anchor::BottomLeft:
+		//	translation = glm::vec3(viewportRect.GetBottomLeft() + relativeElementPos, 0);
+		//	break;
 
-		case AIngine::UI::Anchor::Center:
-			translation = glm::vec3(viewportRect.GetCenter() + relativeElementPos, 0);
-			break;
+		//case AIngine::UI::Anchor::Center:
+		//	translation = glm::vec3(viewportRect.GetCenter() + relativeElementPos, 0);
+		//	break;
 
-		case AIngine::UI::Anchor::CenterDown:
-			glm::highp_ivec2 centerDown = viewportRect.GetMax();
-			centerDown.x -= viewportRect.width * 0.5f;
-			translation = glm::vec3(centerDown + relativeElementPos, 0);
-			break;
+		//case AIngine::UI::Anchor::CenterDown:
+		//	glm::highp_ivec2 centerDown = viewportRect.GetMax();
+		//	centerDown.x -= viewportRect.width * 0.5f;
+		//	translation = glm::vec3(centerDown + relativeElementPos, 0);
+		//	break;
 
-		case AIngine::UI::Anchor::CenterLeft:
-			glm::highp_ivec2 centerLeft = viewportRect.GetPosition();
-			centerLeft.y += viewportRect.height * 0.5f;
-			translation = glm::vec3(centerLeft + relativeElementPos, 0);
-			break;
+		//case AIngine::UI::Anchor::CenterLeft:
+		//	glm::highp_ivec2 centerLeft = viewportRect.GetPosition();
+		//	centerLeft.y += viewportRect.height * 0.5f;
+		//	translation = glm::vec3(centerLeft + relativeElementPos, 0);
+		//	break;
 
-		case AIngine::UI::Anchor::CenterRight:
-			glm::highp_ivec2 centerRight = viewportRect.GetTopRight();
-			centerRight.y += viewportRect.height * 0.5f;
-			translation = glm::vec3(centerRight + relativeElementPos, 0);
-			break;
+		//case AIngine::UI::Anchor::CenterRight:
+		//	glm::highp_ivec2 centerRight = viewportRect.GetTopRight();
+		//	centerRight.y += viewportRect.height * 0.5f;
+		//	translation = glm::vec3(centerRight + relativeElementPos, 0);
+		//	break;
 
-		case AIngine::UI::Anchor::CenterUp:
-			glm::highp_ivec2 centerUp = viewportRect.GetTopRight();
-			centerUp.x -= viewportRect.width * 0.5f;
-			translation = glm::vec3(centerUp + relativeElementPos, 0);
-			break;
-		}
+		//case AIngine::UI::Anchor::CenterUp:
+		//	glm::highp_ivec2 centerUp = viewportRect.GetTopRight();
+		//	centerUp.x -= viewportRect.width * 0.5f;
+		//	translation = glm::vec3(centerUp + relativeElementPos, 0);
+		//	break;
+		//}
 
 
 		// we position & rotate around the center
-		m_modelMatrix = glm::translate(m_modelMatrix, translation);
+		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(relativeElementPos,0));
 		m_modelMatrix = glm::rotate(m_modelMatrix, m_additiveRotation, glm::vec3(0.0f, 0.0f, 1.0f));
 		m_modelMatrix = glm::rotate(m_modelMatrix, element.GetOwner()->GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
 		m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(rect.width, rect.height, 1.0f));
