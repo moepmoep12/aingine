@@ -496,8 +496,8 @@ namespace AIngine {
 			for (c = text.begin(); c != text.end(); c++)
 			{
 				AIngine::Rendering::RenderableCharacter ch = font->Characters[*c];
-				width += ch.Size.x *scale.x;
-				//width += (ch.Advance >> 6) * scale.x;
+				//width += ch.Size.x *scale.x;
+				width += (ch.Advance >> 6) * scale.x;
 				if (ch.Size.y * scale.y > height)
 					height = ch.Size.y * scale.y;
 			}
