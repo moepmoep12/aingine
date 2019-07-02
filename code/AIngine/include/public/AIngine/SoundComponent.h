@@ -6,14 +6,15 @@
 #endif
 #include <vector>
 
-namespace AIngine::Editor {
-	class SoundComponentWidget;
+namespace AIngine::Editor::Widget::Component {
+		class SoundComponentWidget;
+
 }
 
 namespace AIngine {
 	class SoundComponent final : public Component {
 
-		friend class AIngine::Editor::SoundComponentWidget;
+		friend class AIngine::Editor::Widget::Component::SoundComponentWidget;
 
 	public:
 		SoundComponent();

@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget {
 	CameraWidget::CameraWidget(AIngine::Rendering::Camera & camera)
 		: m_camera(camera), m_initialZoom(camera.m_zoom), m_initialPosition(camera.GetPosition()), m_initialRot(camera.GetRotation())
 	{

@@ -8,7 +8,7 @@
 
 #include <imgui.h>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 	void ButtonComponentWidget::OnImGuiRender()
 	{
 		if (m_activeGameObjects.size() == 1) {
@@ -17,7 +17,7 @@ namespace AIngine::Editor {
 			Button* btn = obj->GetComponent<Button>();
 			if (btn) {
 
-				AIngine::Editor::Widgets::DisplayTitle(btn, "Button");
+				DisplayTitle(btn, "Button");
 
 				ImGui::NewLine();
 
@@ -68,7 +68,7 @@ namespace AIngine::Editor {
 				float* offset[] = { &btn->TextOffset.x, &btn->TextOffset.y };
 				ImGui::DragFloat2("Text Offset", *offset);
 
-				AIngine::Editor::Widgets::PreviewImage(btn->Texture);
+				PreviewImage(btn->Texture);
 
 				// load new texture
 				if (ImGui::IsItemClicked())
@@ -88,7 +88,7 @@ namespace AIngine::Editor {
 				ImGui::NewLine();			
 
 				// Texture Params
-				AIngine::Editor::Widgets::TextureParams(btn->Texture);
+				TextureParams(btn->Texture);
 
 				// Apply changes to generate a new spriteComponent
 				if (ImGui::Button("Apply Changes"))

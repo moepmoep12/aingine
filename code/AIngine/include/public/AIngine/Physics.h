@@ -5,9 +5,11 @@
 #include <Box2D/Box2D.h>
 #include <glm/glm.hpp>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget {
 	class SceneGraphWidget;
-	class PhysicsComponentWidget;
+	namespace Component {
+		class PhysicsComponentWidget;
+	}
 }
 
 namespace AIngine::Physics {
@@ -59,8 +61,8 @@ namespace AIngine::Physics {
 
 		};
 
-		friend class AIngine::Editor::SceneGraphWidget;
-		friend class AIngine::Editor::PhysicsComponentWidget;
+		friend class AIngine::Editor::Widget::SceneGraphWidget;
+		friend class AIngine::Editor::Widget::Component::PhysicsComponentWidget;
 
 	public:
 		virtual ~PhysicsComponent();

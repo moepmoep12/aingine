@@ -8,7 +8,7 @@ namespace AIngine {
 	class GameObject;
 }
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 	class ComponentWidget : protected EditorWidget {
 	public:
 		virtual void OnImGuiRender() = 0;

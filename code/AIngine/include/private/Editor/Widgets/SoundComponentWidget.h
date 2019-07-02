@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 	class SoundComponentWidget : public ComponentWidget {
 	public:
 		SoundComponentWidget();

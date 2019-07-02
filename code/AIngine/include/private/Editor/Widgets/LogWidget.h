@@ -8,7 +8,7 @@
 #include "spdlog/fmt/ostr.h"
 #include <mutex>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget {
 
 	class LogWidget : public EditorWidget
 	{

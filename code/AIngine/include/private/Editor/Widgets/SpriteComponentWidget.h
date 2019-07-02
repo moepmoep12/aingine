@@ -2,7 +2,7 @@
 
 #include "Editor/Widgets/ComponentWidget.h"
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 
 	class SpriteComponentWidget : public ComponentWidget {
 	public:

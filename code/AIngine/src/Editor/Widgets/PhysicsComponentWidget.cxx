@@ -10,7 +10,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include <sstream>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 	void PhysicsComponentWidget::OnImGuiRender()
 	{
 		if (m_activeGameObjects.size() == 1) {

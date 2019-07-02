@@ -26,7 +26,9 @@ namespace AIngine::Editor {
 	};
 
 	// forward declaration
-	class EditorWidget;
+	namespace Widget {
+		class EditorWidget;
+	}
 
 	class Editor : public AIngine::Structures::Layer {
 
@@ -159,7 +161,7 @@ namespace AIngine::Editor {
 		bool m_hasViewportFocus = true;
 		static Editor* s_instance;
 		AIngine::Application& m_app;
-		std::vector<EditorWidget*> m_widgets;
+		std::vector<Widget::EditorWidget*> m_widgets;
 		std::vector<AIngine::GameObject*> m_selectedObjects;
 		std::vector<Scene> m_BuildScenes;
 		AIngine::Events::ViewportChangedEvent OnViewportChangedEvent;

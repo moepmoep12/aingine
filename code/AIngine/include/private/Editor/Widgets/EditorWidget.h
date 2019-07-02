@@ -7,7 +7,7 @@
 
 #include <glm/glm.hpp>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget {
 
 	/*
 	* The base class for widgets that make up the Editor

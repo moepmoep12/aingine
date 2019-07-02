@@ -4,14 +4,14 @@
 #include "Rendering/texture.h"
 #include <glm/glm.hpp>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 	class SpriteComponentWidget;
 }
 
 namespace AIngine {
 	class Sprite final : public Component {
 
-		friend class AIngine::Editor::SpriteComponentWidget;
+		friend class AIngine::Editor::Widget::Component::SpriteComponentWidget;
 
 	public:
 		inline glm::vec2 GetLocalWorldSize()const { return m_localWorldSize; }

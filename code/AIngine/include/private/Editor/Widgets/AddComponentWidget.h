@@ -3,7 +3,7 @@
 #include "Editor/Widgets/ComponentWidget.h"
 
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 
 	class AddComponentWidget : public ComponentWidget {
 	public:

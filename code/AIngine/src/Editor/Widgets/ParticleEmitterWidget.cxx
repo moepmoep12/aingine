@@ -6,7 +6,7 @@
 
 #include <imgui.h>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 	void ParticleEmitterWidget::OnImGuiRender()
 	{
 		if (m_activeGameObjects.size() == 1) {

@@ -1,12 +1,11 @@
 #include "Editor/Widgets/UIElementComponentWidget.h"
 #include "UI/UIELement.h"
 
-#include <typeinfo>
 #include "imgui.h"
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 
-	void UIElementComponentWidget::ChangeTransform(AIngine::UI::UIElement * element)
+	void ChangeTransform(AIngine::UI::UIElement * element)
 	{
 		int pos[] = { element->GetRectangle().x, element->GetRectangle().y };
 		int dim[] = { element->GetRectangle().width, element->GetRectangle().height };
@@ -24,7 +23,7 @@ namespace AIngine::Editor {
 			element->SetDisabled(isDisabled);
 		}
 	}
-	void UIElementComponentWidget::ColorEdit(float * Color, const char * title)
+	void ColorEdit(float * Color, const char * title)
 	{
 		static const ImGuiColorEditFlags flags = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar;
 		ImGui::ColorEdit4(title, Color, flags);

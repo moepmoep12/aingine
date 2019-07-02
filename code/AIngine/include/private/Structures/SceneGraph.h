@@ -6,14 +6,16 @@
 #include <vector>
 
 namespace AIngine::Editor {
-	class SceneGraphWidget;
 	class Editor;
+	namespace Widget {
+		class SceneGraphWidget;
+	}
 }
 
 namespace AIngine::Structures {
 	class SceneGraph final : public Layer {
 
-		friend class AIngine::Editor::SceneGraphWidget;
+		friend class AIngine::Editor::Widget::SceneGraphWidget;
 		friend class AIngine::Editor::Editor;
 
 	public:

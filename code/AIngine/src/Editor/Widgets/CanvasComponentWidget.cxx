@@ -2,7 +2,7 @@
 #include "UI/UIELement.h"
 #include "AIngine/Graphics.h"
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 	void CanvasComponentWidget::OnImGuiRender()
 	{
 		if (m_activeGameObjects.size() == 1) {

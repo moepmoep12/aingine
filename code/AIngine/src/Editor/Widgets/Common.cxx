@@ -3,7 +3,7 @@
 
 #include <map>
 
-namespace AIngine::Editor::Widgets {
+namespace AIngine::Editor::Widget {
 
 	void PreviewImage(const AIngine::Rendering::Texture2D & texture)
 	{

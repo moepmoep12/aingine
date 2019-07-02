@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget {
 	class CameraWidget;
 }
 
@@ -11,7 +11,7 @@ namespace AIngine::Rendering {
 
 	class Camera final {
 
-		friend class AIngine::Editor::CameraWidget;
+		friend class AIngine::Editor::Widget::CameraWidget;
 
 	public:
 		inline const glm::vec2& GetPosition() const { return m_position; }

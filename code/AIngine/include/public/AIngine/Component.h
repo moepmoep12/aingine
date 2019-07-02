@@ -17,8 +17,11 @@ namespace AIngine {
 		inline  std::string GetName() const { return m_name; }
 		inline void SetName(const std::string& name) { m_name = name; }
 
+		/* Returns whether this component is enabled */
 		inline bool IsEnabled() const { return m_isEnabled; }
 		virtual void SetEnabled(bool enabled) { m_isEnabled = enabled; }
+
+		/* Returns whether this component is enabled AND all parents of the owner */
 		inline bool IsActive() const {
 			GameObject* parent = m_owner->GetParent();
 			bool isTreeActive = m_owner->IsActive();

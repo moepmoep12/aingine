@@ -4,7 +4,7 @@
 #include "Structures/Traverser.h"
 
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 	class TransformComponentWidget : public ComponentWidget {
 		// Inherited via ComponentWidget
 		virtual void OnImGuiRender() override;

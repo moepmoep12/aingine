@@ -8,7 +8,7 @@ namespace AIngine::Rendering {
 	class Texture2D;
 }
 
-namespace AIngine::Editor::Widgets {
+namespace AIngine::Editor::Widget {
 
 	template<class T>
 	void DisplayTitle(T* obj, const char* title) {

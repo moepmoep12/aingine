@@ -10,9 +10,9 @@
 #include <map>
 #include <filesystem>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 
-	void AIngine::Editor::SpriteComponentWidget::OnImGuiRender()
+	void SpriteComponentWidget::OnImGuiRender()
 	{
 		if (m_activeGameObjects.size() == 1) {
 			AIngine::GameObject* obj = m_activeGameObjects[0];
@@ -24,7 +24,7 @@ namespace AIngine::Editor {
 				float* color[] = { &spriteComponent->m_color.x,&spriteComponent->m_color.y ,&spriteComponent->m_color.z, &spriteComponent->m_color.w };
 				float* parallax[] = { &spriteComponent->m_parallaxFactor.x, &spriteComponent->m_parallaxFactor.y };
 
-				Widgets::DisplayTitle(spriteComponent, "Sprite Component");
+				DisplayTitle(spriteComponent, "Sprite Component");
 				ImGui::NewLine();
 
 				// WorldSize
@@ -38,7 +38,7 @@ namespace AIngine::Editor {
 				ImGui::DragFloat2("Parallax Factor", *parallax, 0.02f, -100.0f, 100.0f);
 
 				// Preview Image
-				Widgets::PreviewImage(spriteComponent->GetTexture());
+				PreviewImage(spriteComponent->GetTexture());
 
 				// load new texture
 				if (ImGui::IsItemClicked())
@@ -58,7 +58,7 @@ namespace AIngine::Editor {
 				ImGui::NewLine();
 
 				// Texture params
-				Widgets::TextureParams(spriteComponent->GetTexture());
+				TextureParams(spriteComponent->GetTexture());
 
 				// Apply changes to generate a new spriteComponent
 				if (ImGui::Button("Apply Changes"))

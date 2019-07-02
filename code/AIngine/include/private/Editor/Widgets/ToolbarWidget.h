@@ -5,7 +5,7 @@
 #include <string>
 #include <map>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget {
 
 	class ToolbarWidget : public EditorWidget {
 	public:

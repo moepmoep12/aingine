@@ -23,7 +23,7 @@ namespace AIngine {
 
 		spdlog::set_pattern("%^[%T] %n: %v%$");
 
-		auto logSink = (spdlog::sink_ptr) std::make_shared<AIngine::Editor::LogWidgetSink_st>();
+		auto logSink = (spdlog::sink_ptr) std::make_shared<AIngine::Editor::Widget::LogWidgetSink_st>();
 
 		s_coreLogger = spdlog::stdout_color_mt("Core");
 		s_coreLogger->set_level(spdlog::level::trace);

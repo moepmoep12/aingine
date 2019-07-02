@@ -6,7 +6,7 @@
 #include "Util/Project.h"
 
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 	SoundComponentWidget::SoundComponentWidget()
 	{
 		std::string path = "AIngine/textures/Editor/add-1.png";
@@ -33,7 +33,7 @@ namespace AIngine::Editor {
 	{
 	}
 
-	void AIngine::Editor::SoundComponentWidget::OnImGuiRender()
+	void SoundComponentWidget::OnImGuiRender()
 	{
 		ImGui::Separator();
 		ImGui::NewLine();

@@ -17,7 +17,7 @@ namespace AIngine {
 		class SceneGraph;
 	}
 
-	namespace Editor {
+	namespace Editor::Widget::Component {
 		class TransformComponentWidget;
 	}
 
@@ -176,7 +176,7 @@ namespace AIngine {
 		/* SceneGraph is responsible for the creation of GameObjects */
 		friend class AIngine::Structures::SceneGraph;
 
-		friend class AIngine::Editor::TransformComponentWidget;
+		friend class AIngine::Editor::Widget::Component::TransformComponentWidget;
 
 		// private Constructor to be used by the SceneGraph
 		GameObject(GameObject* parent, const std::string& name);

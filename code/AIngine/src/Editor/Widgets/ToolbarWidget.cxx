@@ -4,7 +4,7 @@
 #include "Editor/Serialization.h"
 #include "Editor/Widgets/PopUps.h"
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget {
 
 	ToolbarWidget::ToolbarWidget()
 	{

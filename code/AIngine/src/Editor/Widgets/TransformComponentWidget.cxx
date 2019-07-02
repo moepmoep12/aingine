@@ -5,7 +5,7 @@
 #include "Editor/Editor.h"
 #include "Structures/SceneGraph.h"
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 	void TransformComponentWidget::OnImGuiRender()
 	{
 		if (m_activeGameObjects.size() == 1)

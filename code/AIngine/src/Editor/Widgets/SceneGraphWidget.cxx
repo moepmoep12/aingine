@@ -18,13 +18,13 @@
 #include "UI/Button.h"
 
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget {
 
 	static GameObject* s_selectedNode = nullptr;
 	static GameObject* s_DropTarget = nullptr;
 	static GameObject* s_CopySource = nullptr;
 
-	void AIngine::Editor::SceneGraphWidget::OnImGuiRender()
+	void SceneGraphWidget::OnImGuiRender()
 	{
 		static bool p_open = true;
 		static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse /*| ImGuiWindowFlags_NoMove*/;
@@ -96,14 +96,14 @@ namespace AIngine::Editor {
 	SceneGraphWidget::SceneGraphWidget(AIngine::Structures::SceneGraph & sceneGraph)
 		: m_sceneGraph(sceneGraph)
 	{
-		m_textureCompWidget = new SpriteComponentWidget();
-		m_transformCompWidget = new TransformComponentWidget();
-		m_physCompWidget = new PhysicsComponentWidget();
-		m_addComponentWidget = new AddComponentWidget();
-		m_soundComponentWidget = new SoundComponentWidget();
-		m_particleEmitterWidget = new ParticleEmitterWidget();
-		m_buttonComponentWidget = new ButtonComponentWidget();
-		m_canvasComponentWidget = new CanvasComponentWidget();
+		m_textureCompWidget = new Component::SpriteComponentWidget();
+		m_transformCompWidget = new Component::TransformComponentWidget();
+		m_physCompWidget = new Component::PhysicsComponentWidget();
+		m_addComponentWidget = new Component::AddComponentWidget();
+		m_soundComponentWidget = new Component::SoundComponentWidget();
+		m_particleEmitterWidget = new Component::ParticleEmitterWidget();
+		m_buttonComponentWidget = new Component::ButtonComponentWidget();
+		m_canvasComponentWidget = new Component::CanvasComponentWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)

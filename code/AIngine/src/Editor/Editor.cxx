@@ -257,11 +257,11 @@ namespace AIngine::Editor {
 		LoadLastScene();
 
 		// Create Editor Widgets
-		m_widgets.push_back(new SceneGraphWidget(*m_app.m_world->m_sceneGraph));
-		m_widgets.push_back(new LogWidget());
-		m_widgets.push_back(new CameraWidget(*m_app.m_camera));
-		m_widgets.push_back(new MenubarWidget());
-		m_widgets.push_back(new ToolbarWidget());
+		m_widgets.push_back(new Widget::SceneGraphWidget(*m_app.m_world->m_sceneGraph));
+		m_widgets.push_back(new Widget::LogWidget());
+		m_widgets.push_back(new Widget::CameraWidget(*m_app.m_camera));
+		m_widgets.push_back(new Widget::MenubarWidget());
+		m_widgets.push_back(new Widget::ToolbarWidget());
 
 		AIngine::Editor::Serialization::Serializer::LoadEditorSettings();
 		m_BuildScenes = AIngine::Editor::Serialization::Serializer::LoadBuildScenes();
@@ -291,7 +291,7 @@ namespace AIngine::Editor {
 		auto it = m_widgets.begin();
 
 		while (it != m_widgets.end()) {
-			const EditorWidget& widget = *(*it._Ptr);
+			const Widget::EditorWidget& widget = *(*it._Ptr);
 			if (widget.IsWindowDocked()) {
 				AIngine::Structures::Rectangle widgetRect = widget.GetRectangle();
 				if (viewportRect.Contains(widgetRect)) {
@@ -580,7 +580,7 @@ namespace AIngine::Editor {
 		auto it = m_widgets.begin();
 
 		while (it != m_widgets.end()) {
-			const EditorWidget& widget = *(*it._Ptr);
+			const Widget::EditorWidget& widget = *(*it._Ptr);
 			if (widget.WasWindowSizeChanged() && widget.IsWindowDocked())
 				return true;
 			it++;

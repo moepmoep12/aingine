@@ -3,7 +3,7 @@
 #include "Editor/Widgets/EditorWidget.h"
 #include "Rendering/Camera.h"
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget {
 	class CameraWidget : public EditorWidget {
 
 	public:

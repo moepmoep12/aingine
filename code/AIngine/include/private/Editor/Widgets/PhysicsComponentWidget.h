@@ -8,7 +8,7 @@ namespace AIngine::Physics {
 	class PhysicsComponent;
 }
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 	class PhysicsComponentWidget : public ComponentWidget {
 	public:
 		// Inherited via ComponentWidget

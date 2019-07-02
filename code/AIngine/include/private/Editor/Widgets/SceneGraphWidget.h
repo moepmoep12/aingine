@@ -20,7 +20,7 @@ namespace AIngine::Structures {
 	class SceneGraph;
 }
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget {
 	class SceneGraphWidget : public EditorWidget {
 	public:
 		// Inherited via EditorWidget
@@ -33,14 +33,14 @@ namespace AIngine::Editor {
 
 	private:
 		AIngine::Structures::SceneGraph& m_sceneGraph;
-		SpriteComponentWidget* m_textureCompWidget;
-		TransformComponentWidget* m_transformCompWidget;
-		PhysicsComponentWidget* m_physCompWidget;
-		AddComponentWidget* m_addComponentWidget;
-		SoundComponentWidget* m_soundComponentWidget;
-		ParticleEmitterWidget* m_particleEmitterWidget;
-		ButtonComponentWidget* m_buttonComponentWidget;
-		CanvasComponentWidget* m_canvasComponentWidget;
+		Component::SpriteComponentWidget* m_textureCompWidget;
+		Component::TransformComponentWidget* m_transformCompWidget;
+		Component::PhysicsComponentWidget* m_physCompWidget;
+		Component::AddComponentWidget* m_addComponentWidget;
+		Component::SoundComponentWidget* m_soundComponentWidget;
+		Component::ParticleEmitterWidget* m_particleEmitterWidget;
+		Component::ButtonComponentWidget* m_buttonComponentWidget;
+		Component::CanvasComponentWidget* m_canvasComponentWidget;
 
 		void ShowSelectedNodeWidget(GameObject* node);
 		void ShowUserScripts(GameObject* node);

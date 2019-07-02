@@ -12,7 +12,7 @@
 #include <vector>
 #include <string>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget::Component {
 	AddComponentWidget::AddComponentWidget()
 	{
 

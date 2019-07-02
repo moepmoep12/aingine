@@ -8,7 +8,7 @@
 
 #include <string>
 
-namespace AIngine::Editor {
+namespace AIngine::Editor::Widget {
 
 
 	void MenubarWidget::OnImGuiRender()
