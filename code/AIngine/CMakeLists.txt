@@ -67,6 +67,7 @@ set(AINGINE_HEADER_STRUCTURES
 )
 
 set(AINGINE_HEADER_UTIL
+		include/public/Util/FileSystem.h
 		include/public/Util/Project.h
 		include/public/Util/Random.h
 )
@@ -84,6 +85,7 @@ set(AIngine_HEADER_PRIVATE
 		include/private/Editor/Widgets/AddComponentWidget.h
 		include/private/Editor/Widgets/ButtonComponentWidget.h
 		include/private/Editor/Widgets/CanvasComponentWidget.h
+		include/private/Editor/Widgets/Common.h
 		include/private/Editor/Widgets/EditorWidget.h
 		include/private/Editor/Widgets/CameraWidget.h
 		include/private/Editor/Widgets/ComponentWidget.h
@@ -97,6 +99,7 @@ set(AIngine_HEADER_PRIVATE
 		include/private/Editor/Widgets/SpriteComponentWidget.h
 		include/private/Editor/Widgets/ToolbarWidget.h
 		include/private/Editor/Widgets/TransformComponentWidget.h
+		include/private/Editor/Widgets/UIElementComponentWidget.h
 		include/private/Rendering/ParticleRenderer.h
 		include/private/Rendering/PhysicsRenderer.h
 		include/private/Rendering/Renderer.h
@@ -129,6 +132,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/ButtonComponentWidget.cxx
 		src/Editor/Widgets/CanvasComponentWidget.cxx
 		src/Editor/Widgets/CameraWidget.cxx
+		src/Editor/Widgets/Common.cxx
 		src/Editor/Widgets/MenuBarWidget.cxx
 		src/Editor/Widgets/ParticleEmitterWidget.cxx
 		src/Editor/Widgets/PhysicsComponentWidget.cxx
@@ -138,6 +142,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/SpriteComponentWidget.cxx
 		src/Editor/Widgets/ToolbarWidget.cxx
 		src/Editor/Widgets/TransformComponentWidget.cxx
+		src/Editor/Widgets/UIElementComponentWidget.cxx
 		src/Rendering/bitmap.cxx
 		src/Rendering/Camera.cxx
 		src/Rendering/Font.cxx
@@ -151,6 +156,7 @@ set(AINGINE_SRC
 		src/Structures/Layer.cxx
 		src/Structures/LayerStack.cxx
 		src/Structures/SceneGraph.cxx
+		src/Util/FileSystem.cxx
 		src/Util/Project.cxx
 		src/Util/Random.cxx
 		src/UI/ImGuiLayer.cxx
