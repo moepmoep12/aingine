@@ -6860,6 +6860,7 @@
 "b_components": {
 "button": {
 "active": true,
+"anchor": 1,
 "colorClicked": {
 "w": 1.0,
 "x": 0.9700000286102295,
