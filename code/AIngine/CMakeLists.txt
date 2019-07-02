@@ -68,6 +68,7 @@ set(AINGINE_HEADER_STRUCTURES
 
 set(AINGINE_HEADER_UTIL
 		include/public/Util/Project.h
+		include/public/Util/Random.h
 )
 
 set(AINGINE_HEADER_UI
@@ -151,6 +152,7 @@ set(AINGINE_SRC
 		src/Structures/LayerStack.cxx
 		src/Structures/SceneGraph.cxx
 		src/Util/Project.cxx
+		src/Util/Random.cxx
 		src/UI/ImGuiLayer.cxx
 		src/UI/Button.cxx
 		src/UI/UIElement.cxx
