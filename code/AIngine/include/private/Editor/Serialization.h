@@ -29,6 +29,7 @@ namespace AIngine {
 	namespace UI {
 		class Canvas;
 		class Button;
+		class Image;
 	}
 }
 
@@ -54,6 +55,7 @@ namespace AIngine::Editor::Serialization
 		static void RestoreScripts(const nlohmann::json* const j, AIngine::GameObject* obj);
 		static void RestoreCanvas(const nlohmann::json* const j, AIngine::GameObject* obj);
 		static void RestoreButton(const nlohmann::json* const j, AIngine::GameObject* obj);
+		static void RestoreImage(const nlohmann::json* const j, AIngine::GameObject* obj);
 	};
 
 	class SceneGraphSerializer : public AIngine::Traverser {
@@ -76,6 +78,7 @@ namespace AIngine::Editor::Serialization
 		nlohmann::json SerializeParticleEmitter(AIngine::ParticleEmitter& emitter);
 		nlohmann::json SerializeCanvas(AIngine::UI::Canvas& canvas);
 		nlohmann::json SerializeButton(AIngine::UI::Button& button);
+		nlohmann::json SerializeImage(AIngine::UI::Image& image);
 		std::vector<nlohmann::json*> m_prevChildren;
 		nlohmann::json* m_children;
 		std::vector<AIngine::GameObject*> m_spawnedObjects;

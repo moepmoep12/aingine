@@ -6,6 +6,7 @@
 #include "AIngine/ParticleEmitter.h"
 #include "UI/UIELement.h"
 #include "UI/Button.h"
+#include "UI/Image.h"
 #include "Rendering/UIRenderer.h"
 #include "Application.h"
 
@@ -47,7 +48,7 @@ namespace AIngine::Editor::Widget::Component {
 
 				ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
 
-				ImGui::BeginChild("addComponentChildWindow", ImVec2(buttonWidth, 30 * 3), true, 0);
+				ImGui::BeginChild("addComponentChildWindow", ImVec2(buttonWidth, 30 * 7), true, 0);
 
 				filter.Draw("", buttonWidth);
 
@@ -89,8 +90,13 @@ namespace AIngine::Editor::Widget::Component {
 									obj->AddComponent<AIngine::UI::Button>();
 									break;
 								}
+							case 6:
+								if (!obj->GetComponent<AIngine::UI::Image>()) {
+									obj->AddComponent<AIngine::UI::Image>();
+									break;
+								}
 							default:
-								AIngine::OnAddComponent(obj, i - 6);
+								AIngine::OnAddComponent(obj, i - 7);
 								break;
 							}
 						}

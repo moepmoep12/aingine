@@ -115,6 +115,7 @@ namespace AIngine::Events {
 	{
 	public:
 		class ViewportChangedEventData : public EventData {
+		public:
 			ViewportChangedEventData(AIngine::Structures::RectangleI& viewportRect)
 				: ViewportRect(viewportRect) {}
 

@@ -9,6 +9,7 @@
 #include "Editor/Widgets/ParticleEmitterWidget.h"
 #include "Editor/Widgets/ButtonComponentWidget.h"
 #include "Editor/Widgets/CanvasComponentWidget.h"
+#include "Editor/Widgets/ImageComponentWidget.h"
 
 #include <unordered_map>
 
@@ -41,6 +42,7 @@ namespace AIngine::Editor::Widget {
 		Component::ParticleEmitterWidget* m_particleEmitterWidget;
 		Component::ButtonComponentWidget* m_buttonComponentWidget;
 		Component::CanvasComponentWidget* m_canvasComponentWidget;
+		Component::ImageComponentWidget* m_imageComponentWidget;
 
 		void ShowSelectedNodeWidget(GameObject* node);
 		void ShowUserScripts(GameObject* node);

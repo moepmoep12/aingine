@@ -13,6 +13,7 @@
 #include "AIngine/Script.h"
 #include "UI/UIELement.h"
 #include "UI/Button.h"
+#include "UI/Image.h"
 #include "Rendering/UIRenderer.h"
 #include "Util/Project.h"
 
@@ -64,6 +65,7 @@ namespace AIngine::Editor::Serialization {
 		const char* COMPONENT_PARTICLEEMITTER = "particleemitter";
 		const char* COMPONENT_CANVAS = "canvas";
 		const char* COMPONENT_BUTTON = "button";
+		const char* COMPONENT_IMAGE = "image";
 
 		// Script
 		const char* SCRIPT_INDEX = "index";
@@ -118,6 +120,7 @@ namespace AIngine::Editor::Serialization {
 		const char* UIELEMENT_ISDISABLED = "isdisabled";
 		const char* UIELEMENT_COLORTINT = "tintColor";
 		const char* UIELEMENT_COLORDISABLED = "disabledColor";
+		const char* UIELEMENT_ANCHOR = "anchor";
 
 		// Button
 		const char* BUTTON_COLORCLICKED = "colorClicked";
@@ -201,6 +204,10 @@ namespace AIngine::Editor::Serialization {
 						// restore button
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_BUTTON)) {
 							RestoreButton(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_BUTTON], restoredObject);
+						}
+						// restore image
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_IMAGE)) {
+							RestoreImage(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_IMAGE], restoredObject);
 						}
 
 						//restore scripts
@@ -444,6 +451,7 @@ namespace AIngine::Editor::Serialization {
 		button->DisabledColor = (*j)[AttributeNames::UIELEMENT_COLORDISABLED];
 		button->SetDisabled((*j)[AttributeNames::UIELEMENT_ISDISABLED]);
 		button->HoverColor = (*j)[AttributeNames::BUTTON_COLORHOVERED];
+		button->SetAnchor((*j)[AttributeNames::UIELEMENT_ANCHOR]);
 		button->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 		button->Text = (*j)[AttributeNames::BUTTON_TEXT];
 		button->TintColor = (*j)[AttributeNames::UIELEMENT_COLORTINT];
@@ -452,6 +460,27 @@ namespace AIngine::Editor::Serialization {
 		button->TextColor = (*j)[AttributeNames::BUTTON_TEXTCOLOR];
 
 		AIngine::Rendering::Texture2D& texture = button->Texture;
+
+		texture.Wrap_S = (*j)[AttributeNames::TEXTURE_WRAP_S];
+		texture.Wrap_T = (*j)[AttributeNames::TEXTURE_WRAP_T];
+		texture.Filter_Min = (*j)[AttributeNames::TEXTURE_FILTER_MIN];
+		texture.Filter_Max = (*j)[AttributeNames::TEXTURE_FILTER_MAX];
+		texture.Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
+		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
+		texture.Generate(bitmap);
+	}
+
+	void Serializer::RestoreImage(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		AIngine::UI::Image* image = obj->AddComponent<AIngine::UI::Image>();
+		image->SetRectangle((*j)[AttributeNames::UIELEMENT_RECT]);
+		image->DisabledColor = (*j)[AttributeNames::UIELEMENT_COLORDISABLED];
+		image->SetDisabled((*j)[AttributeNames::UIELEMENT_ISDISABLED]);
+		image->SetAnchor((*j)[AttributeNames::UIELEMENT_ANCHOR]);
+		image->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
+		image->TintColor = (*j)[AttributeNames::UIELEMENT_COLORTINT];
+
+		AIngine::Rendering::Texture2D& texture = image->Texture;
 
 		texture.Wrap_S = (*j)[AttributeNames::TEXTURE_WRAP_S];
 		texture.Wrap_T = (*j)[AttributeNames::TEXTURE_WRAP_T];
@@ -570,6 +599,12 @@ namespace AIngine::Editor::Serialization {
 		AIngine::UI::Button* button = obj.GetComponent<AIngine::UI::Button>();
 		if (button) {
 			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_BUTTON] = SerializeButton(*button);
+		}
+
+		// serialize image
+		AIngine::UI::Image* img = obj.GetComponent<AIngine::UI::Image>();
+		if (img) {
+			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_IMAGE] = SerializeImage(*img);
 		}
 
 		j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SCRIPT] = SerializeScripts(obj);
@@ -696,10 +731,11 @@ namespace AIngine::Editor::Serialization {
 	nlohmann::json SceneGraphSerializer::SerializeButton(AIngine::UI::Button & button)
 	{
 		nlohmann::json j;
-		j[AttributeNames::UIELEMENT_RECT] = button.GetRectangle();
+		j[AttributeNames::UIELEMENT_RECT] = button.GetRectangleNative();
 		j[AttributeNames::UIELEMENT_COLORDISABLED] = button.DisabledColor;
 		j[AttributeNames::UIELEMENT_COLORTINT] = button.TintColor;
 		j[AttributeNames::UIELEMENT_ISDISABLED] = button.IsDisabled();
+		j[AttributeNames::UIELEMENT_ANCHOR] = button.GetAnchor();
 		j[AttributeNames::BUTTON_COLORCLICKED] = button.ClickedColor;
 		j[AttributeNames::BUTTON_COLORHOVERED] = button.HoverColor;
 		j[AttributeNames::BUTTON_TEXTOFFSET] = button.TextOffset;
@@ -713,6 +749,24 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::TEXTURE_FILTER_MAX] = button.Texture.Filter_Max;
 		j[AttributeNames::TEXTURE_IMAGEFORMAT] = button.Texture.Image_Format;
 		j[AttributeNames::COMPONENT_ACTIVE] = button.IsEnabled();
+		return j;
+	}
+
+	nlohmann::json SceneGraphSerializer::SerializeImage(AIngine::UI::Image & image)
+	{
+		nlohmann::json j;
+		j[AttributeNames::UIELEMENT_RECT] = image.GetRectangleNative();
+		j[AttributeNames::UIELEMENT_COLORDISABLED] = image.DisabledColor;
+		j[AttributeNames::UIELEMENT_COLORTINT] = image.TintColor;
+		j[AttributeNames::UIELEMENT_ISDISABLED] = image.IsDisabled();
+		j[AttributeNames::UIELEMENT_ANCHOR] = image.GetAnchor();
+		j[AttributeNames::TEXTURE_PATH] = SerializePath(image.Texture.FileName);
+		j[AttributeNames::TEXTURE_WRAP_S] = image.Texture.Wrap_S;
+		j[AttributeNames::TEXTURE_WRAP_T] = image.Texture.Wrap_T;
+		j[AttributeNames::TEXTURE_FILTER_MIN] = image.Texture.Filter_Min;
+		j[AttributeNames::TEXTURE_FILTER_MAX] = image.Texture.Filter_Max;
+		j[AttributeNames::TEXTURE_IMAGEFORMAT] = image.Texture.Image_Format;
+		j[AttributeNames::COMPONENT_ACTIVE] = image.IsEnabled();
 		return j;
 	}
 

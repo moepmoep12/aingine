@@ -73,6 +73,7 @@ set(AINGINE_HEADER_UTIL
 )
 
 set(AINGINE_HEADER_UI
+		include/public/UI/Image.h	
 		include/public/UI/ImGuiLayer.h	
 		include/public/UI/UIElement.h	
 		include/public/UI/Button.h	
@@ -89,6 +90,7 @@ set(AIngine_HEADER_PRIVATE
 		include/private/Editor/Widgets/EditorWidget.h
 		include/private/Editor/Widgets/CameraWidget.h
 		include/private/Editor/Widgets/ComponentWidget.h
+		include/private/Editor/Widgets/ImageComponentWidget.h
 		include/private/Editor/Widgets/LogWidget.h
 		include/private/Editor/Widgets/MenuBarWidget.h
 		include/private/Editor/Widgets/ParticleEmitterWidget.h
@@ -133,6 +135,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/CanvasComponentWidget.cxx
 		src/Editor/Widgets/CameraWidget.cxx
 		src/Editor/Widgets/Common.cxx
+		src/Editor/Widgets/ImageComponentWidget.cxx
 		src/Editor/Widgets/MenuBarWidget.cxx
 		src/Editor/Widgets/ParticleEmitterWidget.cxx
 		src/Editor/Widgets/PhysicsComponentWidget.cxx
@@ -159,6 +162,7 @@ set(AINGINE_SRC
 		src/Util/FileSystem.cxx
 		src/Util/Project.cxx
 		src/Util/Random.cxx
+		src/UI/Image.cxx
 		src/UI/ImGuiLayer.cxx
 		src/UI/Button.cxx
 		src/UI/UIElement.cxx

@@ -16,6 +16,7 @@
 #include "AIngine/Script.h"
 #include "AIngine/ParticleEmitter.h"
 #include "UI/Button.h"
+#include "UI/Image.h"
 
 
 namespace AIngine::Editor::Widget {
@@ -90,6 +91,7 @@ namespace AIngine::Editor::Widget {
 		delete m_particleEmitterWidget;
 		delete m_buttonComponentWidget;
 		delete m_canvasComponentWidget;
+		delete m_imageComponentWidget;
 	}
 
 
@@ -104,6 +106,7 @@ namespace AIngine::Editor::Widget {
 		m_particleEmitterWidget = new Component::ParticleEmitterWidget();
 		m_buttonComponentWidget = new Component::ButtonComponentWidget();
 		m_canvasComponentWidget = new Component::CanvasComponentWidget();
+		m_imageComponentWidget = new Component::ImageComponentWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
@@ -143,6 +146,10 @@ namespace AIngine::Editor::Widget {
 			AIngine::UI::Button* btn = node->GetComponent<AIngine::UI::Button>();
 			if (btn) {
 				m_buttonComponentWidget->Render({ node });
+			}
+			AIngine::UI::Image* img = node->GetComponent<AIngine::UI::Image>();
+			if (img) {
+				m_imageComponentWidget->Render({ node });
 			}
 
 			ShowUserScripts(node);
