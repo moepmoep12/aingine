@@ -5,9 +5,9 @@
 
 bool AIngine::Rendering::Viewport::Contains(const glm::vec2 & screenpoint) const
 {
-	bool withinX = screenpoint.x >= m_x && screenpoint.x <= m_x + m_width;
-	bool withinY = screenpoint.y >= m_y && screenpoint.y <= m_y + m_height;
-	return withinX && withinY;
+	//bool withinX = screenpoint.x >= m_x && screenpoint.x <= m_x + m_width;
+	//bool withinY = screenpoint.y >= m_y && screenpoint.y <= m_y + m_height;
+	return Rectangle.Contains(screenpoint);
 }
 
 unsigned int AIngine::Rendering::Viewport::GetWindowWidth() const
@@ -23,7 +23,7 @@ unsigned int AIngine::Rendering::Viewport::GetWindowHeight() const
 glm::mat4 AIngine::Rendering::Viewport::GetScaleMat() const
 {
 	glm::mat4 scalemat = glm::mat4(1.0);
-	glm::vec2 scale = glm::vec2((float)m_width / (float)m_window.GetWidth(), (float)m_height / (float)m_window.GetHeight());
+	glm::vec2 scale = glm::vec2((float)Rectangle.width / (float)m_window.GetWidth(), (float)Rectangle.height / (float)m_window.GetHeight());
 	scalemat = glm::scale(scalemat, glm::vec3(scale, 1.0));
 	return scalemat;
 }
@@ -38,7 +38,7 @@ glm::vec2 AIngine::Rendering::Viewport::PointToScreen(const glm::vec2 viewpoint)
 }
 
 AIngine::Rendering::Viewport::Viewport(int viewportwidth, int viewportheight, int topleftX, int topleftY, const AIngine::Window& window)
-	: m_width(viewportwidth), m_height(viewportheight), m_x(topleftX), m_y(topleftY), m_window(window)
+	: /*m_width(viewportwidth), m_height(viewportheight), m_x(topleftX), m_y(topleftY),*/ m_window(window), Rectangle(topleftX, topleftY,viewportwidth, viewportheight)
 {
 
 }
@@ -47,10 +47,12 @@ void AIngine::Rendering::Viewport::Set(const glm::vec2 & pos, unsigned int width
 {
 	if (preserveAspect) {
 		float aspectRatio = m_window.GetAspectRatio();
-		m_x = pos.x;
-		m_y = pos.y;
+		Rectangle.x = pos.x;
+		Rectangle.y = pos.y;
+		//m_x = pos.x;
+		//m_y = pos.y;
 
-		m_height = std::floorf((float)width / aspectRatio);
-		m_width = width;
+		Rectangle.height = std::floorf((float)width / aspectRatio);
+		Rectangle.width = width;
 	}
 }

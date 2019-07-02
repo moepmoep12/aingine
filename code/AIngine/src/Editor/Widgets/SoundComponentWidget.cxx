@@ -2,8 +2,8 @@
 #include "AIngine/SoundComponent.h"
 #include "AIngine/GameObject.h"
 #include "Assets/Assets.h"
-
-#include <nfd.h>
+#include "Util/FileSystem.h"
+#include "Util/Project.h"
 
 
 namespace AIngine::Editor {
@@ -110,7 +110,7 @@ namespace AIngine::Editor {
 				float pan = sound->GetPan();
 				ss.str(std::string());
 				ss << "Pan" << "##" << sound->GetPath();
-				if (ImGui::DragFloat(ss.str().c_str(),&pan)) {
+				if (ImGui::DragFloat(ss.str().c_str(), &pan)) {
 					sound->SetPan(pan);
 				}
 				// Pitch
@@ -158,15 +158,14 @@ namespace AIngine::Editor {
 
 			if (ImGui::ImageButtonWithText((ImTextureID)m_Icons["add"].ID, "Add Sound##addSoundWidget"))
 			{
-				static const nfdchar_t *filterList = "wav";
-				nfdchar_t *outPath = NULL;
-				nfdresult_t result = NFD_OpenDialog(filterList, NULL, &outPath);
+				static const char* filterList = "wav";
+				std::string path;
+				AIngine::Util::Filesystem::Result result = AIngine::Util::Filesystem::OpenFile(filterList, &path, "sounds");
 
-				if (result == NFD_OKAY)
+				if (result == AIngine::Util::Filesystem::Result::OKAY)
 				{
-					AIngine::Assets::SoundAsset& sound = *AIngine::Assets::AssetRegistry::Load<AIngine::Assets::SoundAsset>(outPath);
+					AIngine::Assets::SoundAsset& sound = *AIngine::Assets::AssetRegistry::Load<AIngine::Assets::SoundAsset>(path);
 					soundComp->m_sounds.push_back(AIngine::Sound(sound));
-					free(outPath);
 				}
 			}
 

@@ -11,6 +11,7 @@
 #include "Rendering/Viewport.h"
 #include "Debug/log.h"
 #include "Util/Project.h"
+#include "Util/FileSystem.h"
 
 // widgets
 #include "Editor/Widgets/EditorWidget.h"
@@ -22,7 +23,6 @@
 
 #include <glm/geometric.hpp>
 #include <fstream>
-#include <nfd.h>
 #include <algorithm>
 #include <stdlib.h>
 #include <filesystem>
@@ -504,27 +504,25 @@ namespace AIngine::Editor {
 
 	void Editor::LoadSceneFromFile()
 	{
-		static const nfdchar_t *filterList = "txt,json";
-		nfdchar_t *outPath = NULL;
-		nfdresult_t result = NFD_OpenDialog(filterList, NULL, &outPath);
+		static const char* filterList = "txt,json";
+		std::string path;
+		AIngine::Util::Filesystem::Result result = AIngine::Util::Filesystem::OpenFile(filterList, &path, "scenes");
 
-		if (result == NFD_OKAY)
+		if (result == AIngine::Util::Filesystem::Result::OKAY)
 		{
-			LoadScene(outPath);
-			free(outPath);
+			LoadScene(path);
 		}
 	}
 
 	bool Editor::SaveSceneToFile()
 	{
-		static const nfdchar_t *filterList = "txt,json";
-		nfdchar_t *outPath = NULL;
-		nfdresult_t result = NFD_SaveDialog(filterList, NULL, &outPath);
+		static const char* filterList = "txt,json";
+		std::string path;
+		AIngine::Util::Filesystem::Result result = AIngine::Util::Filesystem::SaveFile(filterList, &path,"scenes");
 
-		if (result == NFD_OKAY)
+		if (result == AIngine::Util::Filesystem::Result::OKAY)
 		{
-			SaveScene(outPath);
-			free(outPath);
+			SaveScene(path);
 			return true;
 		}
 		return false;
@@ -620,16 +618,15 @@ namespace AIngine::Editor {
 			//}
 
 			std::string projectDir = AIngine::Util::Project::GetProjectDir();
-			nfdchar_t *outPath = NULL;
-			nfdresult_t result = NFD_PickFolder(NULL, &outPath);
+			std::string path;
+			AIngine::Util::Filesystem::Result result = AIngine::Util::Filesystem::PickFolder(&path, nullptr);
 			std::string outputDir;
-			if (result == NFD_OKAY)
+			if (result == AIngine::Util::Filesystem::Result::OKAY)
 			{
 				static const std::string config = "Debug";
-				outputDir = std::filesystem::canonical(outPath).string();
+				outputDir = std::filesystem::canonical(path).string();
 				std::filesystem::create_directories(outputDir + "\\" + config + "\\Editor");
 				std::filesystem::create_directories(outputDir + "\\Resources");
-				free(outPath);
 
 				// Turn off Editor
 				AIngine::Util::Project::RegenerateCMake({ "-DEDITOR=OFF", "-DOutputDir=" + outputDir });

@@ -7,7 +7,6 @@
 #include "Editor/ScriptingAPI.h"
 
 #include <string>
-#include <nfd.h>
 
 namespace AIngine::Editor {
 
@@ -22,7 +21,6 @@ namespace AIngine::Editor {
 
 			if (ImGui::BeginMenu("Scene"))
 			{
-				static const nfdchar_t *filterList = "txt,json";
 				// create new scene
 				ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 				if (ImGui::MenuItem("New##scene"))

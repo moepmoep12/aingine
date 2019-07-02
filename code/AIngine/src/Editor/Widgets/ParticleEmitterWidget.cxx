@@ -1,9 +1,10 @@
 #include "Editor/Widgets/ParticleEmitterWidget.h"
 #include "AIngine/ParticleEmitter.h"
 #include "Assets/Assets.h"
+#include "Util/Project.h"
+#include "Util/FileSystem.h"
 
 #include <imgui.h>
-#include <nfd.h>
 
 namespace AIngine::Editor {
 	void ParticleEmitterWidget::OnImGuiRender()
@@ -68,15 +69,14 @@ namespace AIngine::Editor {
 				// load new texture
 				if (ImGui::IsItemClicked())
 				{
-					static const nfdchar_t *filterList = "png,jpg,jpeg,bmp";
-					nfdchar_t *outPath = NULL;
-					nfdresult_t result = NFD_OpenDialog(filterList, NULL, &outPath);
+					static const char* filterList = "png,jpg,jpeg,bmp";
+					std::string path;
+					AIngine::Util::Filesystem::Result result = AIngine::Util::Filesystem::OpenFile(filterList, &path,"textures");
 
-					if (result == NFD_OKAY)
+					if (result == AIngine::Util::Filesystem::Result::OKAY)
 					{
-						AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(outPath)->GetBitmap();
+						AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 						emitter->SetTexture(AIngine::Rendering::Texture2D(bitmap));
-						free(outPath);
 					}
 				}
 

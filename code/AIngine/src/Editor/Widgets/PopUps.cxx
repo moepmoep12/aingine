@@ -3,7 +3,6 @@
 #include "Editor/ScriptingAPI.h"
 
 #include "imgui.h"
-#include <nfd.h>
 
 namespace AIngine::Editor::PopUps {
 

@@ -4,8 +4,6 @@
 #include "Editor/Serialization.h"
 #include "Editor/Widgets/PopUps.h"
 
-#include <nfd.h>
-
 namespace AIngine::Editor {
 
 	ToolbarWidget::ToolbarWidget()
