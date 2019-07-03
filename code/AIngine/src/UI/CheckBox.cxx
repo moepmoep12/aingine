@@ -10,12 +10,15 @@ namespace AIngine::UI {
 		TextureOn.Generate(AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>("AIngine/textures/Editor/icons8-ausgefüllte-checkbox-100.png")->GetBitmap());
 	}
 
-	bool CheckBox::Render(const glm::mat4 & modelMatrix, AIngine::Rendering::GLShaderProgram & shader) const
+	bool CheckBox::Render(AIngine::Rendering::GLShaderProgram & shader) const
 	{
 		if (TextComponent) {
-			glm::vec2 pos = GetRectangleAbsolute().GetCenter();
-			pos.x *= GetRectangleAbsolute().width * 0.5f;
+			auto rect = GetRectangleNative();
+			glm::vec2 pos = rect.GetPosition();
+			pos.x += GetRectangle().width;
 			TextComponent->SetPosition(pos);
+			TextComponent->SetHeight(rect.height);
+			TextComponent->SetWidth(TextComponent->GetTextSize().x);
 		}
 
 		if (m_bState) {

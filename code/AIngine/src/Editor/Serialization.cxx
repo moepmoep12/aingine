@@ -138,9 +138,11 @@ namespace AIngine::Editor::Serialization {
 		const char* UITEXT_FONTSIZE = "fontsize";
 		const char* UITEXT_TEXT = "text";
 		const char* UITEXT_FONTPATH = "fontpath";
+		const char* UITEXT_VERTICALALIGN = "verticalAlign";
+		const char* UITEXT_HORIZONTALALIGN = "horizontalAlign";
 
 		// CheckBox
-		const char* CHECKBOX_ACTIVE = "active";
+		const char* CHECKBOX_STATE = "state";
 
 	}
 
@@ -531,6 +533,8 @@ namespace AIngine::Editor::Serialization {
 		AIngine::Rendering::Font* font = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::FontAsset>(path)->GetFont();
 		txt->SetFont(font);
 		txt->ChangeFontSize((*j)[AttributeNames::UITEXT_FONTSIZE]);
+		txt->AlignHorizontal = (*j)[AttributeNames::UITEXT_HORIZONTALALIGN];
+		txt->AlignVertical = (*j)[AttributeNames::UITEXT_VERTICALALIGN];
 		txt->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
 
@@ -543,7 +547,7 @@ namespace AIngine::Editor::Serialization {
 		checkbox->SetAnchor((*j)[AttributeNames::UIELEMENT_ANCHOR]);
 		checkbox->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 		checkbox->TintColor = (*j)[AttributeNames::UIELEMENT_COLORTINT];
-		checkbox->SetState((*j)[AttributeNames::CHECKBOX_ACTIVE]);
+		checkbox->SetState((*j)[AttributeNames::CHECKBOX_STATE]);
 		checkbox->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
 
@@ -848,6 +852,8 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::UIELEMENT_ANCHOR] = uitext.GetAnchor();
 		j[AttributeNames::UITEXT_TEXT] = uitext.Text;
 		j[AttributeNames::UITEXT_FONTSIZE] = uitext.GetFontSize();
+		j[AttributeNames::UITEXT_HORIZONTALALIGN] = uitext.AlignHorizontal;
+		j[AttributeNames::UITEXT_VERTICALALIGN] = uitext.AlignVertical;
 		j[AttributeNames::UITEXT_FONTPATH] = SerializePath(uitext.GetFont().Path);
 		j[AttributeNames::COMPONENT_ACTIVE] = uitext.IsEnabled();
 
@@ -862,7 +868,7 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::UIELEMENT_COLORTINT] = checkbox.TintColor;
 		j[AttributeNames::UIELEMENT_ISDISABLED] = checkbox.IsDisabled();
 		j[AttributeNames::UIELEMENT_ANCHOR] = checkbox.GetAnchor();
-		j[AttributeNames::CHECKBOX_ACTIVE] = checkbox.GetState();
+		j[AttributeNames::CHECKBOX_STATE] = checkbox.GetState();
 		j[AttributeNames::COMPONENT_ACTIVE] = checkbox.IsEnabled();
 
 		return j;
