@@ -18,6 +18,7 @@
 #include "UI/Button.h"
 #include "UI/Image.h"
 #include "UI/Text.h"
+#include "UI/CheckBox.h"
 
 
 namespace AIngine::Editor::Widget {
@@ -94,6 +95,7 @@ namespace AIngine::Editor::Widget {
 		delete m_canvasComponentWidget;
 		delete m_imageComponentWidget;
 		delete m_textComponentWidget;
+		delete m_checkBoxComponentWidget;
 	}
 
 
@@ -110,6 +112,7 @@ namespace AIngine::Editor::Widget {
 		m_canvasComponentWidget = new Component::CanvasComponentWidget();
 		m_imageComponentWidget = new Component::ImageComponentWidget();
 		m_textComponentWidget = new Component::UITextComponentWidget();
+		m_checkBoxComponentWidget = new Component::CheckBoxComponentWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
@@ -157,6 +160,10 @@ namespace AIngine::Editor::Widget {
 			AIngine::UI::UIText* txt = node->GetComponent<AIngine::UI::UIText>();
 			if (txt) {
 				m_textComponentWidget->Render({ node });
+			}
+			AIngine::UI::CheckBox* checkbox = node->GetComponent<AIngine::UI::CheckBox>();
+			if (checkbox) {
+				m_checkBoxComponentWidget->Render({ node });
 			}
 
 			ShowUserScripts(node);

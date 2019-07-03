@@ -8,6 +8,7 @@
 #include "UI/Button.h"
 #include "UI/Image.h"
 #include "UI/Text.h"
+#include "UI/CheckBox.h"
 #include "Rendering/UIRenderer.h"
 #include "Application.h"
 
@@ -48,8 +49,8 @@ namespace AIngine::Editor::Widget::Component {
 				std::vector<std::string > componentNames = AIngine::GetAvailableComponentNames();
 
 				ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
-
-				ImGui::BeginChild("addComponentChildWindow", ImVec2(buttonWidth, 30 * 8), true, 0);
+				static const int engineComponentsCount = 9;
+				ImGui::BeginChild("addComponentChildWindow", ImVec2(buttonWidth, 30 * engineComponentsCount), true, 0);
 
 				filter.Draw("", buttonWidth);
 
@@ -101,12 +102,17 @@ namespace AIngine::Editor::Widget::Component {
 									obj->AddComponent<AIngine::UI::UIText>();
 									break;
 								}
+							case 8:
+								if (!obj->GetComponent<AIngine::UI::CheckBox>()) {
+									obj->AddComponent<AIngine::UI::CheckBox>();
+									break;
+								}
 							default:
-								AIngine::OnAddComponent(obj, i - 8);
+								AIngine::OnAddComponent(obj, i - engineComponentsCount);
 								break;
 							}
 						}
-						if (i == 7)
+						if (i == engineComponentsCount -1)
 							ImGui::Separator();
 
 					}

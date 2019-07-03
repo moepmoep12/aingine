@@ -88,6 +88,7 @@ set(AIngine_HEADER_PRIVATE
 		include/private/Editor/Widgets/AddComponentWidget.h
 		include/private/Editor/Widgets/ButtonComponentWidget.h
 		include/private/Editor/Widgets/CanvasComponentWidget.h
+		include/private/Editor/Widgets/CheckBoxComponentWidget.h
 		include/private/Editor/Widgets/Common.h
 		include/private/Editor/Widgets/EditorWidget.h
 		include/private/Editor/Widgets/CameraWidget.h
@@ -136,6 +137,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/AddComponentWidget.cxx
 		src/Editor/Widgets/ButtonComponentWidget.cxx
 		src/Editor/Widgets/CanvasComponentWidget.cxx
+		src/Editor/Widgets/CheckBoxComponentWidget.cxx
 		src/Editor/Widgets/CameraWidget.cxx
 		src/Editor/Widgets/Common.cxx
 		src/Editor/Widgets/ImageComponentWidget.cxx
