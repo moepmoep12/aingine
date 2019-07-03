@@ -393,7 +393,7 @@ namespace AIngine {
 			m_count = 0;
 		}
 
-		void AddText(std::string text, glm::vec2 screenPosition, glm::vec2 scale, glm::vec3 color, float alpha, AIngine::Rendering::Font* font = nullptr) {
+		void AddText(std::string text, glm::vec2 screenPosition, glm::vec2 scale, glm::vec3 color, float alpha, AIngine::Rendering::Font* font = nullptr, bool drawInstant = false) {
 			if (m_count <= e_maxTextElements) {
 				if (!font)
 					font = m_standardFont;
@@ -408,7 +408,12 @@ namespace AIngine {
 				if (!AIngine::Editor::Editor::IsFullScreenPlayMode())
 					textStack[m_count].position -= AIngine::Application::GetViewport().GetTopLeftCornerPosition();
 
-				m_count++;
+				if (drawInstant) {
+					this->Draw(textStack[m_count], true);
+				}
+
+				else
+					m_count++;
 			}
 		}
 
@@ -440,44 +445,7 @@ namespace AIngine {
 			for (int i = 0; i < m_count; i++)
 			{
 				TextElement& textElement = textStack[i];
-				m_shader->SetVector3f(3 /*"textColor"*/, textElement.color);
-				m_shader->SetFloat(4 /*"alpha"*/, textElement.alpha);
-				GLfloat x = textElement.position.x;
-				GLfloat y = textElement.position.y;
-
-				// Iterate through all characters
-				std::string::const_iterator c;
-				for (c = textElement.msg.begin(); c != textElement.msg.end(); c++)
-				{
-					AIngine::Rendering::RenderableCharacter ch = textElement.font->Characters[*c];
-
-					GLfloat xpos = x + ch.Bearing.x * textElement.scale.x;
-					GLfloat ypos = y + (textElement.font->Characters['H'].Bearing.y - ch.Bearing.y) * textElement.scale.y;
-
-					GLfloat w = ch.Size.x * textElement.scale.x;
-					GLfloat h = ch.Size.y * textElement.scale.y;
-					// Update VBO for each character
-					GLfloat vertices[6][4] = {
-						{ xpos,     ypos + h,   0.0, 1.0 },
-						{ xpos + w, ypos,       1.0, 0.0 },
-						{ xpos,     ypos,       0.0, 0.0 },
-
-						{ xpos,     ypos + h,   0.0, 1.0 },
-						{ xpos + w, ypos + h,   1.0, 1.0 },
-						{ xpos + w, ypos,       1.0, 0.0 }
-					};
-					// Render glyph texture over quad
-					glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-					// Update content of VBO memory
-					glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-					glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-
-					glBindBuffer(GL_ARRAY_BUFFER, 0);
-					// Render quad
-					glDrawArrays(GL_TRIANGLES, 0, 6);
-					// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-					x += (ch.Advance >> 6) * textElement.scale.x; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
-				}
+				this->Draw(textElement, false);
 			}
 			glBindVertexArray(0);
 			glBindTexture(GL_TEXTURE_2D, 0);
@@ -503,6 +471,63 @@ namespace AIngine {
 			}
 
 			return glm::vec2(width, height);
+		}
+
+		void Draw(const TextElement& textElement, bool needPreparation = false) {
+			if (needPreparation) {
+				glm::mat4 projection = AIngine::Rendering::Camera::Get().GetProjectionMatrix();
+				m_shader->SetMatrix4(1 /*"projection"*/, projection, true);
+				glActiveTexture(GL_TEXTURE0);
+				glBindVertexArray(m_vao);
+				// Set OpenGL options
+				glEnable(GL_CULL_FACE);
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			}
+
+			m_shader->SetVector3f(3 /*"textColor"*/, textElement.color);
+			m_shader->SetFloat(4 /*"alpha"*/, textElement.alpha);
+			GLfloat x = textElement.position.x;
+			GLfloat y = textElement.position.y;
+
+			// Iterate through all characters
+			std::string::const_iterator c;
+			for (c = textElement.msg.begin(); c != textElement.msg.end(); c++)
+			{
+				AIngine::Rendering::RenderableCharacter ch = textElement.font->Characters[*c];
+
+				GLfloat xpos = x + ch.Bearing.x * textElement.scale.x;
+				GLfloat ypos = y + (textElement.font->Characters['H'].Bearing.y - ch.Bearing.y) * textElement.scale.y;
+
+				GLfloat w = ch.Size.x * textElement.scale.x;
+				GLfloat h = ch.Size.y * textElement.scale.y;
+				// Update VBO for each character
+				GLfloat vertices[6][4] = {
+					{ xpos,     ypos + h,   0.0, 1.0 },
+					{ xpos + w, ypos,       1.0, 0.0 },
+					{ xpos,     ypos,       0.0, 0.0 },
+
+					{ xpos,     ypos + h,   0.0, 1.0 },
+					{ xpos + w, ypos + h,   1.0, 1.0 },
+					{ xpos + w, ypos,       1.0, 0.0 }
+				};
+				// Render glyph texture over quad
+				glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+				// Update content of VBO memory
+				glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				// Render quad
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+				// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+				x += (ch.Advance >> 6) * textElement.scale.x; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+			}
+
+			if (needPreparation) {
+				glBindVertexArray(0);
+				glBindTexture(GL_TEXTURE_2D, 0);
+			}
 		}
 
 		GLuint m_vao;
@@ -619,7 +644,14 @@ namespace AIngine {
 	void Graphics::Text(const std::string& text, const glm::vec2 & screenPosition, const glm::vec2 & scale, const glm::vec3 & color, float alpha, AIngine::Rendering::Font* font)
 	{
 		if (s_instance) {
-			s_instance->m_text->AddText(text, screenPosition, scale, color, alpha, font);
+			s_instance->m_text->AddText(text, screenPosition, scale, color, alpha, font, false);
+		}
+	}
+
+	void Graphics::TextInstant(const std::string & text, const glm::vec2 & screenPosition, const glm::vec2 & scale, const glm::vec3 & color, float alpha, AIngine::Rendering::Font * font)
+	{
+		if (s_instance) {
+			s_instance->m_text->AddText(text, screenPosition, scale, color, alpha, font, true);
 		}
 	}
 

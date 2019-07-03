@@ -35,6 +35,7 @@ namespace AIngine {
 		static void Point(const b2Vec2& vWorl, float32 size, const b2Color& color);
 
 		static void Text(const std::string& text, const glm::vec2& screenPosition, const glm::vec2& scale = glm::vec2(1.0), const glm::vec3& color = glm::vec3(1.0), float alpha = 1.0f, AIngine::Rendering::Font* font = nullptr);
+		static void TextInstant(const std::string& text, const glm::vec2& screenPosition, const glm::vec2& scale = glm::vec2(1.0), const glm::vec3& color = glm::vec3(1.0), float alpha = 1.0f, AIngine::Rendering::Font* font = nullptr);
 		static glm::vec2 GetTextSize(const std::string& text, const glm::vec2 scale = glm::vec2(1.0), AIngine::Rendering::Font* font = nullptr);
 
 		/* high level API for drawing*/
