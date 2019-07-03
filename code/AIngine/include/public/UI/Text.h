@@ -22,5 +22,8 @@ namespace AIngine::UI {
 		unsigned int FontSize = 50;
 		AIngine::Rendering::Font* m_currentFont;
 		std::map<unsigned int, AIngine::Rendering::Font*> m_fonts;
+
+	protected:
+		virtual Component* Copy(GameObject* const owner) const override;
 	};
 }

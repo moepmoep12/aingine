@@ -40,6 +40,23 @@ namespace AIngine::UI {
 			m_fonts.clear();
 			m_fonts[font->Size] = font;
 			m_currentFont = font;
+			FontSize = font->Size;
 		}
+	}
+	Component * UIText::Copy(GameObject * const owner) const
+	{
+		UIText* copy = new UIText();
+		copy->SetEnabled(IsEnabled());
+		copy->m_owner = owner;
+		copy->m_isDisabled = m_isDisabled;
+		copy->DisabledColor = DisabledColor;
+		copy->TintColor = TintColor;
+		copy->AnchorPos = AnchorPos;
+		copy->SetRectangle(GetRectangleNative());
+
+		copy->Text = Text;
+		copy->SetFont(m_currentFont);
+
+		return copy;
 	}
 }

@@ -32,4 +32,26 @@ namespace AIngine::UI {
 	{
 		OnClickedEvent();
 	}
+
+	Component * Button::Copy(GameObject * const owner) const
+	{
+		Button* copy = new Button();
+		copy->SetEnabled(IsEnabled());
+		copy->m_owner = owner;
+		copy->m_isDisabled = m_isDisabled;
+		copy->DisabledColor = DisabledColor;
+		copy->TintColor = TintColor;
+		copy->AnchorPos = AnchorPos;
+		copy->SetRectangle(GetRectangleNative());
+
+		copy->ClickedColor = ClickedColor;
+		copy->HoverColor = HoverColor;
+		copy->Text = Text;
+		copy->Texture = Texture;
+		copy->TextScale = TextScale;
+		copy->TextOffset = TextOffset;
+		copy->TextColor = TextColor;
+
+		return copy;
+	}
 }

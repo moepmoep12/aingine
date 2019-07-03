@@ -25,5 +25,6 @@ namespace AIngine::UI {
 
 	protected:
 		virtual void OnMouseReleased() override;
+		virtual Component* Copy(GameObject* const owner) const override;
 	};
 }

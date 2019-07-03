@@ -13,4 +13,18 @@ namespace AIngine::UI {
 		shader.SetVector4f(5 /*spriteColor*/, color);
 		return true;
 	}
+	Component * Image::Copy(GameObject * const owner) const
+	{
+		Image* copy = new Image();
+		copy->SetEnabled(IsEnabled());
+		copy->m_owner = owner;
+		copy->m_isDisabled = m_isDisabled;
+		copy->DisabledColor = DisabledColor;
+		copy->TintColor = TintColor;
+		copy->AnchorPos = AnchorPos;
+		copy->SetRectangle(GetRectangleNative());
+
+		copy->Texture = Texture;
+		return copy;
+	}
 }
