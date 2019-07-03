@@ -79,17 +79,22 @@ namespace AIngine::Rendering {
 		auto components = node.GetComponents();
 		AIngine::UI::UIElement* uielement = nullptr;
 
+		std::vector<AIngine::UI::UIElement*> elements;
+
 		for (auto comp : components) {
 			uielement = dynamic_cast<AIngine::UI::UIElement*>(comp);
 			if (uielement)
-				break;
+				elements.push_back(uielement);
 		}
 
-		if (uielement)
+		if (elements.size() > 0)
 		{
-			if (uielement->IsActive()) {
-				RenderUIElement(*uielement);
+			for (auto& element : elements) {
+				if (element->IsActive()) {
+					RenderUIElement(*element);
+				}
 			}
+
 			m_matrixStack.push_back(m_modelMatrix);
 			if (!node.GetComponent<AIngine::UI::Canvas>()) {
 				m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(uielement->GetRectangle().GetCenter(), 0.0f));
@@ -117,17 +122,20 @@ namespace AIngine::Rendering {
 		auto components = node.GetComponents();
 		AIngine::UI::UIElement* uielement = nullptr;
 
+		std::vector<AIngine::UI::UIElement*> elements;
+
 		for (auto comp : components) {
 			uielement = dynamic_cast<AIngine::UI::UIElement*>(comp);
 			if (uielement)
-				break;
+				elements.push_back(uielement);
 		}
-		if (uielement)
-		{
-			if (uielement->IsActive()) {
-				RenderUIElement(*uielement);
+
+		for (auto& element : elements) {
+			if (element->IsActive()) {
+				RenderUIElement(*element);
 			}
 		}
+
 		return true;
 	}
 
@@ -191,7 +199,7 @@ namespace AIngine::Rendering {
 
 
 		// we position & rotate around the center
-		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(relativeElementPos,0));
+		m_modelMatrix = glm::translate(m_modelMatrix, glm::vec3(relativeElementPos, 0));
 		m_modelMatrix = glm::rotate(m_modelMatrix, m_additiveRotation, glm::vec3(0.0f, 0.0f, 1.0f));
 		m_modelMatrix = glm::rotate(m_modelMatrix, element.GetOwner()->GetLocalRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
 		m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(rect.width, rect.height, 1.0f));
@@ -199,9 +207,10 @@ namespace AIngine::Rendering {
 		m_shader->SetMatrix4(1 /*model*/, m_modelMatrix);
 
 		glActiveTexture(GL_TEXTURE0);
-		element.Render(m_modelMatrix, *m_shader);
-		glBindVertexArray(m_quadVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		if (element.Render(m_modelMatrix, *m_shader)) {
+			glBindVertexArray(m_quadVAO);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
 		glBindVertexArray(0);
 		glActiveTexture(0);
 

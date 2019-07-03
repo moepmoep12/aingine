@@ -45,7 +45,7 @@ namespace AIngine::UI {
 		inline virtual void SetWidth(int width) { m_rectangle.width = width; }
 		inline virtual void SetHeight(int height) { m_rectangle.height = height; }
 
-		inline virtual void Render(const glm::mat4& modelMatrix, AIngine::Rendering::GLShaderProgram& shader) const = 0;
+		inline virtual bool Render(const glm::mat4& modelMatrix, AIngine::Rendering::GLShaderProgram& shader) const = 0;
 
 		// Inherited via Component
 		virtual void OnEvent(AIngine::Events::EventData& e);
@@ -77,6 +77,6 @@ namespace AIngine::UI {
 	class Canvas : public UIElement {
 	public:
 		virtual ~Canvas();
-		inline virtual void Render(const glm::mat4& modelMatrix, AIngine::Rendering::GLShaderProgram& shader) const override {}
+		inline virtual bool Render(const glm::mat4& modelMatrix, AIngine::Rendering::GLShaderProgram& shader) const override { return false; }
 	};
 }

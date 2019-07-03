@@ -3,7 +3,7 @@
 #include "AIngine/Graphics.h"
 
 namespace AIngine::UI {
-	void Button::Render(const glm::mat4 & modelMatrix, AIngine::Rendering::GLShaderProgram & shader) const
+	bool Button::Render(const glm::mat4 & modelMatrix, AIngine::Rendering::GLShaderProgram & shader) const
 	{
 		Texture.Bind();
 		glm::vec4 color = TintColor;
@@ -26,6 +26,7 @@ namespace AIngine::UI {
 
 			AIngine::Graphics::Text(Text, glm::vec2(xpos, ypos) + TextOffset, TextScale, TextColor, TextColor.w);
 		}
+		return true;
 	}
 	void Button::OnMouseReleased()
 	{

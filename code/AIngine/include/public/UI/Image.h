@@ -8,6 +8,6 @@ namespace AIngine::UI {
 	public:
 		AIngine::Rendering::Texture2D Texture;
 
-		virtual void Render(const glm::mat4& modelMatrix, AIngine::Rendering::GLShaderProgram& shader) const override;
+		virtual bool Render(const glm::mat4& modelMatrix, AIngine::Rendering::GLShaderProgram& shader) const override;
 	};
 }
