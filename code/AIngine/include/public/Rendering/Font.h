@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <map>
 #include <glm/glm.hpp>
+#include <string>
 
 namespace AIngine::Rendering {
 
@@ -22,7 +23,8 @@ namespace AIngine::Rendering {
 
 	public:
 		std::map<GLchar, RenderableCharacter> Characters;
-		const char* Name;
+		std::string Name;
+		std::string Path;
 		unsigned int Size;
 
 

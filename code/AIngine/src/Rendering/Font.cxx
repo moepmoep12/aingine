@@ -8,7 +8,7 @@
 
 namespace AIngine::Rendering {
 	Font::Font(const char * path, unsigned int size)
-		: Size(size)
+		: Size(size), Path(path)
 	{
 		ExtractName(path);
 		FT_Library ft;
@@ -74,8 +74,8 @@ namespace AIngine::Rendering {
 	void Font::ExtractName(const char * path)
 	{
 		std::string Path(std::filesystem::canonical(path).string());
-		size_t first = Path.find_last_of('\\'); 
+		size_t first = Path.find_last_of('\\') + 1;
 		size_t last = Path.find_last_of('.');
-		Name = Path.substr(first, last - first).c_str();
+		Name = Path.substr(first, last - first);
 	}
 }
