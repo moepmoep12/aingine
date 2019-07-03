@@ -2,6 +2,8 @@
 #include "Rendering/shader.h"
 #include "AIngine/Graphics.h"
 #include "Assets/Assets.h"
+#include "Application.h"
+#include "Rendering/Viewport.h"
 
 namespace AIngine::UI {
 
@@ -15,9 +17,19 @@ namespace AIngine::UI {
 		m_fonts[FontSize] = m_currentFont;
 	}
 
-	bool UIText::Render(const glm::mat4 & modelMatrix, AIngine::Rendering::GLShaderProgram & shader) const
+	bool UIText::Render(AIngine::Rendering::GLShaderProgram & shader) const
 	{
-		AIngine::Graphics::TextInstant(Text, GetRectangleAbsolute().GetPosition(), glm::vec2(1), TintColor, TintColor.w, m_fonts.at(FontSize));
+		const AIngine::Rendering::Viewport& viewport = AIngine::Application::GetViewport();
+		// Scale the text to look the same on different resolutions
+		glm::vec2 scale = glm::vec2((float)viewport.GetViewportWidth() / (float)TargetResolution.x, (float)viewport.GetViewportHeight() / (float)TargetResolution.y);
+		auto rect = GetRectangle();
+		glm::vec2 pos = rect.GetPosition();
+		glm::vec2 textSize = AIngine::Graphics::GetTextSize(Text, scale, m_fonts.at(FontSize));
+
+		AlignTextHorizontally(&pos.x, textSize.x, glm::vec2(rect.x, rect.GetMax().x), AlignHorizontal);
+		AlignTextVertically(&pos.y, textSize.y, glm::vec2(rect.y, rect.GetMax().y), AlignVertical);
+
+		AIngine::Graphics::TextInstant(Text, pos, scale, TintColor, TintColor.w, m_fonts.at(FontSize));
 		shader.Use();
 		return false;
 	}
@@ -43,6 +55,12 @@ namespace AIngine::UI {
 			FontSize = font->Size;
 		}
 	}
+	glm::vec2 UIText::GetTextSize() const
+	{
+		const AIngine::Rendering::Viewport& viewport = AIngine::Application::GetViewport();
+		glm::vec2 scale = glm::vec2((float)viewport.GetViewportWidth() / (float)TargetResolution.x, (float)viewport.GetViewportHeight() / (float)TargetResolution.y);
+		return AIngine::Graphics::GetTextSize(Text, scale, m_fonts.at(FontSize));
+	}
 	Component * UIText::Copy(GameObject * const owner) const
 	{
 		UIText* copy = new UIText();
@@ -58,5 +76,38 @@ namespace AIngine::UI {
 		copy->SetFont(m_currentFont);
 
 		return copy;
+	}
+
+	void AlignTextHorizontally(float * x, float textWidth, const glm::vec2 & extents, TextAlignmentHorizontal align)
+	{
+		float center = 0;
+		switch (align) {
+		case TextAlignmentHorizontal::Left:
+			*x = extents.x;
+			break;
+		case TextAlignmentHorizontal::Center:
+			center = (extents.y + extents.x) * 0.5;
+			*x = center - textWidth * 0.5f;
+			break;
+		case TextAlignmentHorizontal::Right:
+			*x = extents.y - textWidth;
+			break;
+		}
+	}
+	void AlignTextVertically(float * y, float textHeight, const glm::vec2 & extents, TextAlignmentVertical align)
+	{
+		float center = 0;
+		switch (align) {
+		case TextAlignmentVertical::Top:
+			*y = extents.x;
+			break;
+		case TextAlignmentVertical::Center:
+			center = (extents.y + extents.x) * 0.5;
+			*y = center - textHeight * 0.5f;
+			break;
+		case TextAlignmentVertical::Bottom:
+			*y = extents.y - textHeight;
+			break;
+		}
 	}
 }

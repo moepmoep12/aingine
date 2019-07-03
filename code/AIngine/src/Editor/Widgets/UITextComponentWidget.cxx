@@ -35,7 +35,7 @@ namespace AIngine::Editor::Widget::Component {
 
 				// Text
 				label = "Text##textcomp";
-				static char str0[40] ="";
+				static char str0[40] = "";
 				if (ImGui::InputText(label.c_str(), str0, IM_ARRAYSIZE(str0))) {
 					txt->Text = str0;
 				}
@@ -62,6 +62,40 @@ namespace AIngine::Editor::Widget::Component {
 					txt->ChangeFontSize(static_cast<unsigned int>(size));
 				}
 
+				ImGui::NewLine();
+
+				// Alignment horizontal
+				{
+					static const AIngine::UI::TextAlignmentHorizontal choosableAlignsHorizontal[] = { AIngine::UI::TextAlignmentHorizontal::Left, AIngine::UI::TextAlignmentHorizontal::Center,  AIngine::UI::TextAlignmentHorizontal::Right };
+					static const char* horizontalAlignNames[] = { "Left","Center","Right" };
+					if (ImGui::BeginCombo("Horizontal Alignment##uitext", horizontalAlignNames[(int)txt->AlignHorizontal])) {
+						for (int i = 0; i < IM_ARRAYSIZE(horizontalAlignNames); i++) {
+							bool isSelected = choosableAlignsHorizontal[i] == txt->AlignHorizontal;
+							if (ImGui::Selectable(horizontalAlignNames[i], isSelected)) {
+								txt->AlignHorizontal = choosableAlignsHorizontal[i];
+							}
+							if (isSelected)
+								ImGui::SetItemDefaultFocus();
+						}
+						ImGui::EndCombo();
+					}
+				}
+				// Alignment vertical
+				{
+					static const AIngine::UI::TextAlignmentVertical choosableAlignsVertical[] = { AIngine::UI::TextAlignmentVertical::Top, AIngine::UI::TextAlignmentVertical::Center,  AIngine::UI::TextAlignmentVertical::Bottom };
+					static const char* verticalAlignNames[] = { "Top","Center","Bottom" };
+					if (ImGui::BeginCombo("Vertical Alignment##uitext", verticalAlignNames[(int)txt->AlignVertical])) {
+						for (int i = 0; i < IM_ARRAYSIZE(verticalAlignNames); i++) {
+							bool isSelected = choosableAlignsVertical[i] == txt->AlignVertical;
+							if (ImGui::Selectable(verticalAlignNames[i], isSelected)) {
+								txt->AlignVertical = choosableAlignsVertical[i];
+							}
+							if (isSelected)
+								ImGui::SetItemDefaultFocus();
+						}
+						ImGui::EndCombo();
+					}
+				}
 
 				ImGui::NewLine();
 				ImGui::Separator();
