@@ -24,7 +24,7 @@ namespace AIngine::Editor::Widget::Component {
 		std::string name = ss.str();
 
 		std::string anchorname = "Anchor##" + name;
-		if (ImGui::BeginCombo(anchorname.c_str(), anchorNames[element->GetAnchor()])) {
+		if (ImGui::BeginCombo(anchorname.c_str(), anchorNames[(int)element->GetAnchor()])) {
 			for (int i = 0; i < IM_ARRAYSIZE(anchorNames); i++) {
 				bool isSelected = choosableAnchors[i] == element->GetAnchor();
 				if (ImGui::Selectable(anchorNames[i], isSelected)) {
