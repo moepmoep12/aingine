@@ -28,32 +28,40 @@ namespace AIngine::Editor::Widget::Component {
 				ImGui::NewLine();
 
 				// Color Tint
+				std::string label = "Tint Color##button";
 				float* tintColor[] = { &btn->TintColor.x,&btn->TintColor.y,&btn->TintColor.z, &btn->TintColor.w };
-				ImGui::ColorEdit4("Tint Color", *tintColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
+				ImGui::ColorEdit4(label.c_str(), *tintColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
 				// Color Disabled
+				label = "Disabled Color##button";
 				float* disabledColor[] = { &btn->DisabledColor.x,&btn->DisabledColor.y,&btn->DisabledColor.z, &btn->DisabledColor.w };
-				ImGui::ColorEdit4("Disabled Color", *disabledColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
+				ImGui::ColorEdit4(label.c_str(), *disabledColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
 				// Color Hovered
+				label = "Hovered Color##button";
 				float* hoveredColor[] = { &btn->HoverColor.x,&btn->HoverColor.y,&btn->HoverColor.z, &btn->HoverColor.w };
-				ImGui::ColorEdit4("Hovered Color", *hoveredColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
+				ImGui::ColorEdit4(label.c_str(), *hoveredColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
 				// Color Clicked
+				label = "Clicked Color##button";
 				float* clickedColor[] = { &btn->ClickedColor.x,&btn->ClickedColor.y,&btn->ClickedColor.z, &btn->ClickedColor.w };
-				ImGui::ColorEdit4("Clicked Color", *clickedColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
+				ImGui::ColorEdit4(label.c_str(), *clickedColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
 				// Color Text
+				label = "Text Color##button";
 				float* textColor[] = { &btn->TextColor.x,&btn->TextColor.y,&btn->TextColor.z, &btn->TextColor.w };
-				ImGui::ColorEdit4("Text Color", *textColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
+				ImGui::ColorEdit4(label.c_str(), *textColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
 
 				// Text
+				label = "Text##button";
 				static char str0[40] = "";
-				if (ImGui::InputText("Text", str0, IM_ARRAYSIZE(str0))) {
+				if (ImGui::InputText(label.c_str(), str0, IM_ARRAYSIZE(str0))) {
 					btn->Text = str0;
 				}
 				// Text Scale 
+				label = "Text Scale##button";
 				float* scale[] = { &btn->TextScale.x, &btn->TextScale.y };
-				ImGui::DragFloat2("Text Scale", *scale, 0.1f);
+				ImGui::DragFloat2(label.c_str(), *scale, 0.1f);
 				// Text Offset
+				label = "Text Offset##button";
 				float* offset[] = { &btn->TextOffset.x, &btn->TextOffset.y };
-				ImGui::DragFloat2("Text Offset", *offset);
+				ImGui::DragFloat2(label.c_str(), *offset);
 
 				PreviewImage(btn->Texture);
 
@@ -78,7 +86,8 @@ namespace AIngine::Editor::Widget::Component {
 				TextureParams(btn->Texture);
 
 				// Apply changes to generate a new spriteComponent
-				if (ImGui::Button("Apply Changes"))
+				label = "Apply Changes##button";
+				if (ImGui::Button(label.c_str()))
 				{
 					AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(btn->Texture.FileName)->GetBitmap();
 					btn->Texture.Generate(bitmap);

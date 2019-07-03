@@ -29,12 +29,14 @@ namespace AIngine::Editor::Widget::Component {
 				ImGui::NewLine();
 
 				// Color Tint
+				std::string label = "Tint Color##textTint";
 				float* tintColor[] = { &txt->TintColor.x,&txt->TintColor.y,&txt->TintColor.z, &txt->TintColor.w };
-				ImGui::ColorEdit4("Tint Color", *tintColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
+				ImGui::ColorEdit4(label.c_str(), *tintColor, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar);
 
 				// Text
+				label = "Text##textcomp";
 				static char str0[40] ="";
-				if (ImGui::InputText("Text", str0, IM_ARRAYSIZE(str0))) {
+				if (ImGui::InputText(label.c_str(), str0, IM_ARRAYSIZE(str0))) {
 					txt->Text = str0;
 				}
 

@@ -3,10 +3,10 @@
 
 namespace AIngine::Editor::Widget::Component {
 
-	void AnchorCombo(AIngine::UI::UIElement* element);
+	bool AnchorCombo(AIngine::UI::UIElement* element);
 
-	void ChangeTransform(AIngine::UI::UIElement* element);
+	bool ChangeTransform(AIngine::UI::UIElement* element);
 
-	void ColorEdit(float* Color, const char* title);
+	bool ColorEdit(float* Color, const char* title);
 
 }

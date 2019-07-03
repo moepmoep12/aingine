@@ -10,8 +10,10 @@
 
 namespace AIngine::Editor::Widget::Component {
 
-	void AnchorCombo(AIngine::UI::UIElement * element)
+	bool AnchorCombo(AIngine::UI::UIElement * element)
 	{
+		bool changed = false;
+
 		static const AIngine::UI::Anchor choosableAnchors[] = { AIngine::UI::Anchor::Center,AIngine::UI::Anchor::TopLeft, AIngine::UI::Anchor::TopRight, AIngine::UI::Anchor::BottomRight,
 			AIngine::UI::Anchor::BottomLeft, AIngine::UI::Anchor::CenterUp,AIngine::UI::Anchor::CenterLeft, AIngine::UI::Anchor::CenterDown, AIngine::UI::Anchor::CenterRight };
 		static const char* anchorNames[] = { "Center", "TopLeft", "TopRight", "BottomRight", "BottomLeft", "CenterUp", "CenterLeft", "CenterDown", "CenterRight" };
@@ -25,8 +27,10 @@ namespace AIngine::Editor::Widget::Component {
 		if (ImGui::BeginCombo(anchorname.c_str(), anchorNames[element->GetAnchor()])) {
 			for (int i = 0; i < IM_ARRAYSIZE(anchorNames); i++) {
 				bool isSelected = choosableAnchors[i] == element->GetAnchor();
-				if (ImGui::Selectable(anchorNames[i], isSelected))
+				if (ImGui::Selectable(anchorNames[i], isSelected)) {
 					element->SetAnchor(choosableAnchors[i]);
+					changed = true;
+				}
 				if (isSelected)
 					ImGui::SetItemDefaultFocus();
 			}
@@ -84,10 +88,13 @@ namespace AIngine::Editor::Widget::Component {
 		}
 
 		AIngine::Graphics::PointScreen(anchorpos, 50, glm::vec3(0.35, 0.72, 0));
+
+		return changed;
 	}
 
-	void ChangeTransform(AIngine::UI::UIElement * element)
+	bool ChangeTransform(AIngine::UI::UIElement * element)
 	{
+		bool changed = false;
 		const void * address = static_cast<const void*>(element);
 		std::stringstream ss;
 		ss << address;
@@ -100,22 +107,32 @@ namespace AIngine::Editor::Widget::Component {
 		int dim[] = { element->GetRectangleNative().width, element->GetRectangleNative().height };
 		if (ImGui::DragInt2(screenposname.c_str(), pos)) {
 			element->SetPosition(glm::vec2(pos[0], pos[1]));
+			changed = true;
 		}
 		if (ImGui::DragInt2(dimname.c_str(), dim)) {
 			element->SetWidth(dim[0]);
 			element->SetHeight(dim[1]);
+			changed = true;
 		}
 
 		// Disabled
 		std::string disabledname = "Disabled##" + name;
 		bool isDisabled = element->IsDisabled();
-		if (ImGui::Checkbox(disabledname.c_str() , &isDisabled)) {
+		if (ImGui::Checkbox(disabledname.c_str(), &isDisabled)) {
 			element->SetDisabled(isDisabled);
+			changed = true;
 		}
+
+		return changed;
 	}
-	void ColorEdit(float * Color, const char * title)
+	bool ColorEdit(float * Color, const char * title)
 	{
+		bool changed = false;
+
 		static const ImGuiColorEditFlags flags = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_PickerHueBar;
-		ImGui::ColorEdit4(title, Color, flags);
+		if (ImGui::ColorEdit4(title, Color, flags)) {
+			changed = true;
+		}
+		return changed;
 	}
 }
