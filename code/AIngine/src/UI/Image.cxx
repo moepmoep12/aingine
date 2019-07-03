@@ -3,7 +3,7 @@
 
 namespace AIngine::UI {
 
-	bool Image::Render(const glm::mat4 & modelMatrix, AIngine::Rendering::GLShaderProgram & shader) const
+	bool Image::Render(AIngine::Rendering::GLShaderProgram & shader) const
 	{
 		Texture.Bind();
 		glm::vec4 color = TintColor;

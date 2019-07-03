@@ -9,110 +9,11 @@ namespace AIngine::UI {
 
 	AIngine::Structures::Rectangle<int> UIElement::GetRectangle() const
 	{
-		glm::vec2 offset;
+		glm::vec2 offset = GetOffsetFromAnchor(AnchorPos);
 		const AIngine::Structures::RectangleI& viewportRect = AIngine::Application::GetViewport().GetRectangle();
-
-		switch (AnchorPos) {
-		case AIngine::UI::Anchor::TopLeft:
-			offset = glm::vec2(0);
-			break;
-
-		case AIngine::UI::Anchor::TopRight:
-			offset = viewportRect.GetTopRight();
-			break;
-
-		case AIngine::UI::Anchor::BottomRight:
-			offset = viewportRect.GetMax();
-			break;
-
-		case AIngine::UI::Anchor::BottomLeft:
-			offset = viewportRect.GetBottomLeft();
-			break;
-
-		case AIngine::UI::Anchor::Center:
-			offset = viewportRect.GetCenter();
-			break;
-
-		case AIngine::UI::Anchor::CenterDown:
-			glm::highp_ivec2 centerDown = viewportRect.GetMax();
-			centerDown.x -= viewportRect.width * 0.5f;
-			offset = centerDown;
-			break;
-
-		case AIngine::UI::Anchor::CenterLeft:
-			glm::highp_ivec2 centerLeft = viewportRect.GetPosition();
-			centerLeft.y += viewportRect.height * 0.5f;
-			offset = centerLeft;
-			break;
-
-		case AIngine::UI::Anchor::CenterRight:
-			glm::highp_ivec2 centerRight = viewportRect.GetTopRight();
-			centerRight.y += viewportRect.height * 0.5f;
-			offset = centerRight;
-			break;
-
-		case AIngine::UI::Anchor::CenterUp:
-			glm::highp_ivec2 centerUp = viewportRect.GetTopRight();
-			centerUp.x -= viewportRect.width * 0.5f;
-			offset = centerUp;
-			break;
-		}
 
 		return AIngine::Structures::RectangleI(offset.x + (m_rectangle.x / TargetResolution.x) * viewportRect.width, offset.y + (m_rectangle.y / TargetResolution.y) * viewportRect.height,
 			(m_rectangle.width / TargetResolution.x) * viewportRect.width, (m_rectangle.height / TargetResolution.y) * viewportRect.height);
-	}
-
-	AIngine::Structures::Rectangle<int> UIElement::GetRectangleAbsolute() const
-	{
-		glm::vec2 offset;
-		const AIngine::Structures::RectangleI& viewportRect = AIngine::Application::GetViewport().GetRectangle();
-
-		switch (AnchorPos) {
-		case AIngine::UI::Anchor::TopLeft:
-			offset = glm::vec2(0);
-			break;
-
-		case AIngine::UI::Anchor::TopRight:
-			offset = -viewportRect.GetTopRight();
-			break;
-
-		case AIngine::UI::Anchor::BottomRight:
-			offset = -viewportRect.GetMax();
-			break;
-
-		case AIngine::UI::Anchor::BottomLeft:
-			offset = -viewportRect.GetBottomLeft();
-			break;
-
-		case AIngine::UI::Anchor::Center:
-			offset = viewportRect.GetCenter();
-			break;
-
-		case AIngine::UI::Anchor::CenterDown:
-			glm::highp_ivec2 centerDown = viewportRect.GetMax();
-			centerDown.x -= viewportRect.width * 0.5f;
-			offset = -centerDown;
-			break;
-
-		case AIngine::UI::Anchor::CenterLeft:
-			glm::highp_ivec2 centerLeft = viewportRect.GetPosition();
-			centerLeft.y += viewportRect.height * 0.5f;
-			offset = -centerLeft;
-			break;
-
-		case AIngine::UI::Anchor::CenterRight:
-			glm::highp_ivec2 centerRight = viewportRect.GetTopRight();
-			centerRight.y += viewportRect.height * 0.5f;
-			offset = -centerRight;
-			break;
-
-		case AIngine::UI::Anchor::CenterUp:
-			glm::highp_ivec2 centerUp = viewportRect.GetTopRight();
-			centerUp.x -= viewportRect.width * 0.5f;
-			offset = -centerUp;
-			break;
-		}
-		return AIngine::Structures::RectangleI(m_rectangle.x + offset.x, m_rectangle.y + offset.y, m_rectangle.width, m_rectangle.height);
 	}
 
 	void UIElement::SetAnchor(Anchor anch)
@@ -162,5 +63,58 @@ namespace AIngine::UI {
 	{
 		if (AIngine::Rendering::UIRenderer::canvas == GetOwner())
 			AIngine::Rendering::UIRenderer::canvas = nullptr;
+	}
+
+	glm::vec2 GetOffsetFromAnchor(Anchor pos)
+	{
+		glm::vec2 offset(0);
+		const AIngine::Structures::RectangleI& viewportRect = AIngine::Application::GetViewport().GetRectangle();
+
+		switch (pos) {
+		case AIngine::UI::Anchor::TopLeft:
+			offset = glm::vec2(0);
+			break;
+
+		case AIngine::UI::Anchor::TopRight:
+			offset = viewportRect.GetTopRight();
+			break;
+
+		case AIngine::UI::Anchor::BottomRight:
+			offset = viewportRect.GetMax();
+			break;
+
+		case AIngine::UI::Anchor::BottomLeft:
+			offset = viewportRect.GetBottomLeft();
+			break;
+
+		case AIngine::UI::Anchor::Center:
+			offset = viewportRect.GetCenter();
+			break;
+
+		case AIngine::UI::Anchor::CenterDown:
+			glm::highp_ivec2 centerDown = viewportRect.GetMax();
+			centerDown.x -= viewportRect.width * 0.5f;
+			offset = centerDown;
+			break;
+
+		case AIngine::UI::Anchor::CenterLeft:
+			glm::highp_ivec2 centerLeft = viewportRect.GetPosition();
+			centerLeft.y += viewportRect.height * 0.5f;
+			offset = centerLeft;
+			break;
+
+		case AIngine::UI::Anchor::CenterRight:
+			glm::highp_ivec2 centerRight = viewportRect.GetTopRight();
+			centerRight.y += viewportRect.height * 0.5f;
+			offset = centerRight;
+			break;
+
+		case AIngine::UI::Anchor::CenterUp:
+			glm::highp_ivec2 centerUp = viewportRect.GetTopRight();
+			centerUp.x -= viewportRect.width * 0.5f;
+			offset = centerUp;
+			break;
+		}
+		return offset;
 	}
 }

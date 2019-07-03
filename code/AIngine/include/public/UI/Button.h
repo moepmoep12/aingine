@@ -20,7 +20,7 @@ namespace AIngine::UI {
 
 		AIngine::Rendering::Texture2D Texture;
 
-		virtual bool Render(const glm::mat4& modelMatrix, AIngine::Rendering::GLShaderProgram& shader) const override;
+		virtual bool Render(AIngine::Rendering::GLShaderProgram& shader) const override;
 
 
 	protected:

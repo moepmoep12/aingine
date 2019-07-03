@@ -3,7 +3,7 @@
 #include "AIngine/Graphics.h"
 
 namespace AIngine::UI {
-	bool Button::Render(const glm::mat4 & modelMatrix, AIngine::Rendering::GLShaderProgram & shader) const
+	bool Button::Render(AIngine::Rendering::GLShaderProgram & shader) const
 	{
 		Texture.Bind();
 		glm::vec4 color = TintColor;

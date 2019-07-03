@@ -9,7 +9,7 @@ namespace AIngine::Rendering {
 
 namespace AIngine::UI {
 
-	enum Anchor {
+	enum class Anchor {
 		Center = 0,
 		TopLeft,
 		TopRight,
@@ -23,10 +23,11 @@ namespace AIngine::UI {
 
 	const glm::vec2 TargetResolution(1920, 1080);
 
+	glm::vec2 GetOffsetFromAnchor(Anchor pos);
+
 	class UIElement : public AIngine::Component {
 	public:
 		AIngine::Structures::Rectangle<int> GetRectangle() const;
-		AIngine::Structures::Rectangle<int> GetRectangleAbsolute() const;
 		inline const AIngine::Structures::Rectangle<int>& GetRectangleNative() const { return m_rectangle; }
 		inline void SetRectangle(const AIngine::Structures::Rectangle<int>& rect) { m_rectangle = rect; }
 
@@ -45,7 +46,7 @@ namespace AIngine::UI {
 		inline virtual void SetWidth(int width) { m_rectangle.width = width; }
 		inline virtual void SetHeight(int height) { m_rectangle.height = height; }
 
-		inline virtual bool Render(const glm::mat4& modelMatrix, AIngine::Rendering::GLShaderProgram& shader) const = 0;
+		inline virtual bool Render(AIngine::Rendering::GLShaderProgram& shader) const = 0;
 
 		// Inherited via Component
 		virtual void OnEvent(AIngine::Events::EventData& e);
@@ -55,7 +56,6 @@ namespace AIngine::UI {
 		glm::vec4 TintColor = glm::vec4(1);
 		glm::vec4 DisabledColor = glm::vec4(0.2, 0.2, 0.2, 1);
 
-
 	protected:
 		virtual void OnClicked() {}
 		virtual void OnMouseReleased() {}
@@ -63,7 +63,7 @@ namespace AIngine::UI {
 	protected:
 		bool m_isClicked = false;
 		bool m_isDisabled = false;
-		Anchor AnchorPos = TopLeft;
+		Anchor AnchorPos = Anchor::TopLeft;
 
 	private:
 		bool OnMouseButtonPressed(AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData& e);
@@ -77,6 +77,6 @@ namespace AIngine::UI {
 	class Canvas : public UIElement {
 	public:
 		virtual ~Canvas();
-		inline virtual bool Render(const glm::mat4& modelMatrix, AIngine::Rendering::GLShaderProgram& shader) const override { return false; }
+		inline virtual bool Render(AIngine::Rendering::GLShaderProgram& shader) const override { return false; }
 	};
 }

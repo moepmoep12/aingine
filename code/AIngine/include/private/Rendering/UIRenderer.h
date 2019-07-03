@@ -32,7 +32,7 @@ namespace AIngine::Rendering {
 		GLShaderProgram* m_shader;
 		GLuint m_quadVAO;
 		float m_additiveRotation = 0.0f;
-		std::vector<glm::mat4> m_matrixStack;
+		//std::vector<glm::mat4> m_matrixStack;
 		glm::mat4 m_modelMatrix = glm::mat4(1.0f);
 
 	};
