@@ -11,11 +11,15 @@ namespace CrappyBird {
 	// Start is called when gameplay starts for this script
 	void MainMenu::OnStart()
 	{
+		StartButton = AIngine::World::GetGameObject("StartButton")->GetComponent<AIngine::UI::Button>();
+		OnStartClickedHandler = AIngine::UI::Button::OnClickedEventHandler(std::bind(&MainMenu::OnStartClicked, this));
+		StartButton->OnClickedEvent += OnStartClickedHandler;
 	}
 
 	// End is called when gameplay ends for this script
 	void MainMenu::OnEnd()
 	{
+		StartButton->OnClickedEvent -= OnStartClickedHandler;
 	}
 
 	// Update is called once per frame
@@ -29,5 +33,9 @@ namespace CrappyBird {
 	}
 	void MainMenu::OnGUI()
 	{
+	}
+	void MainMenu::OnStartClicked()
+	{
+		AIngine::Application::LoadScene(1);
 	}
 }

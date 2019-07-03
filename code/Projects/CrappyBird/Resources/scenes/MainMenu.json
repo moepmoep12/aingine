@@ -122,7 +122,7 @@
 "script": null,
 "text": {
 "active": true,
-"anchor": 1,
+"anchor": 2,
 "disabledColor": {
 "w": 1.0,
 "x": 0.20000000298023224,
@@ -130,13 +130,14 @@
 "z": 0.20000000298023224
 },
 "fontpath": "AIngine\\fonts\\arial.ttf",
-"fontsize": 60,
+"fontsize": 100,
+"horizontalAlign": 1,
 "isdisabled": false,
 "rectangle": {
 "height": 100,
-"width": 300,
-"x": 1228,
-"y": 35
+"width": 400,
+"x": -399,
+"y": -5
 },
 "text": "Levels",
 "tintColor": {
@@ -144,7 +145,8 @@
 "x": 1.0,
 "y": 1.0,
 "z": 1.0
-}
+},
+"verticalAlign": 2
 }
 }
 }
@@ -199,13 +201,14 @@
 "z": 0.20000000298023224
 },
 "fontpath": "AIngine\\fonts\\arial.ttf",
-"fontsize": 60,
+"fontsize": 90,
+"horizontalAlign": 1,
 "isdisabled": false,
 "rectangle": {
 "height": 100,
-"width": 300,
-"x": 35,
-"y": 35
+"width": 400,
+"x": -1,
+"y": 0
 },
 "text": "Settings",
 "tintColor": {
@@ -213,7 +216,8 @@
 "x": 1.0,
 "y": 1.0,
 "z": 1.0
-}
+},
+"verticalAlign": 2
 }
 },
 "c_children": [
@@ -227,11 +231,106 @@
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
 "b_components": {
-"script": null
+"checkbox": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 50,
+"width": 50,
+"x": 5,
+"y": 130
+},
+"state": false,
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+}
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "AIngine\\fonts\\arial.ttf",
+"fontsize": 30,
+"horizontalAlign": 0,
+"isdisabled": false,
+"rectangle": {
+"height": 50,
+"width": 299,
+"x": 60,
+"y": 130
+},
+"text": "Rotating Obstacles?",
+"tintColor": {
+"w": 1.0,
+"x": 9.999999974752427e-07,
+"y": 9.999899930335232e-07,
+"z": 9.999899930335232e-07
+},
+"verticalAlign": 1
+}
 }
 }
 }
 ]
+}
+},
+{
+"BackGroundImageBottom": {
+"a_active": true,
+"a_name": "BackGroundImageBottom",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"image": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"isdisabled": false,
+"path": "AIngine\\textures\\White.png",
+"rectangle": {
+"height": 200,
+"width": 1124,
+"x": 398,
+"y": 826
+},
+"tintColor": {
+"w": 0.5,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"wrapS": 10497,
+"wrapT": 10497
+},
+"script": null
+}
 }
 },
 {
@@ -255,8 +354,8 @@
 },
 "colorHovered": {
 "w": 1.0,
-"x": 0.6110000014305115,
-"y": 1.0,
+"x": 0.8930000066757202,
+"y": 0.8859999775886536,
 "z": 1.0
 },
 "disabledColor": {
@@ -269,7 +368,7 @@
 "filterMin": 9729,
 "imageFormat": 6408,
 "isdisabled": false,
-"path": "AIngine\\textures\\buttons_PNG105.png",
+"path": "AIngine\\textures\\HILLBLU_button_background.png",
 "rectangle": {
 "height": 166,
 "width": 1120,
@@ -289,7 +388,7 @@
 },
 "textScale": {
 "x": 3.0,
-"y": 1.0
+"y": 2.0
 },
 "tintColor": {
 "w": 1.0,
@@ -591,8 +690,8 @@
 "Rocket": {
 "a_active": true,
 "a_name": "Rocket",
-"a_posX": 4.0,
-"a_posY": 2.25,
+"a_posX": 5.0,
+"a_posY": 2.5,
 "a_rotation": 1.2479100227355957,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,

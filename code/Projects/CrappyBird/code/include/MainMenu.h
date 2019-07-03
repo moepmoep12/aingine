@@ -1,5 +1,6 @@
 #pragma once
 #include "AIngine/Core.h"
+#include "AIngine/UI/Button.h"
 
 namespace CrappyBird {
 	class MainMenu : public AIngine::Script {
@@ -11,5 +12,12 @@ namespace CrappyBird {
 		virtual void Update(float delta) override;
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
 		virtual void OnGUI() override;
+
+	private:
+		void OnStartClicked();
+
+	private:
+		AIngine::UI::Button::OnClickedEventHandler OnStartClickedHandler;
+		AIngine::UI::Button* StartButton;
 	};
 }
