@@ -71,8 +71,8 @@
 "canvas": {
 "active": true,
 "rectangle": {
-"height": 2,
-"width": 5,
+"height": 0,
+"width": 0,
 "x": 0,
 "y": 0
 }
@@ -81,9 +81,9 @@
 },
 "c_children": [
 {
-"BackgroundImage": {
+"BackGroundImageRight": {
 "a_active": true,
-"a_name": "BackgroundImage",
+"a_name": "BackGroundImageRight",
 "a_posX": 0.0,
 "a_posY": 0.0,
 "a_rotation": 0.0,
@@ -119,8 +119,119 @@
 "wrapS": 10497,
 "wrapT": 10497
 },
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "AIngine\\fonts\\arial.ttf",
+"fontsize": 60,
+"isdisabled": false,
+"rectangle": {
+"height": 100,
+"width": 300,
+"x": 1228,
+"y": 35
+},
+"text": "Levels",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+}
+}
+}
+}
+},
+{
+"BackGroundImageLeft": {
+"a_active": true,
+"a_name": "BackGroundImageLeft",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"image": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"isdisabled": false,
+"path": "AIngine\\textures\\White.png",
+"rectangle": {
+"height": 1920,
+"width": 400,
+"x": -1,
+"y": 0
+},
+"tintColor": {
+"w": 0.5,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"wrapS": 10497,
+"wrapT": 10497
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "AIngine\\fonts\\arial.ttf",
+"fontsize": 60,
+"isdisabled": false,
+"rectangle": {
+"height": 100,
+"width": 300,
+"x": 35,
+"y": 35
+},
+"text": "Settings",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+}
+}
+},
+"c_children": [
+{
+"CheckBoxRotation": {
+"a_active": true,
+"a_name": "CheckBoxRotation",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
 "script": null
 }
+}
+}
+]
 }
 },
 {
@@ -135,16 +246,16 @@
 "b_components": {
 "button": {
 "active": true,
-"anchor": 3,
+"anchor": 0,
 "colorClicked": {
 "w": 1.0,
-"x": 0.37254899740219116,
-"y": 0.0,
-"z": 0.03600850701332092
+"x": 1.0,
+"y": 0.8080000281333923,
+"z": 1.0
 },
 "colorHovered": {
 "w": 1.0,
-"x": 1.0,
+"x": 0.6110000014305115,
 "y": 1.0,
 "z": 1.0
 },
@@ -158,12 +269,12 @@
 "filterMin": 9729,
 "imageFormat": 6408,
 "isdisabled": false,
-"path": "AIngine\\textures\\buttons_PNG183.png",
+"path": "AIngine\\textures\\buttons_PNG105.png",
 "rectangle": {
 "height": 166,
-"width": 166,
-"x": 1858,
-"y": 942
+"width": 1120,
+"x": -560,
+"y": 300
 },
 "text": "START",
 "textColor": {
@@ -177,7 +288,7 @@
 "y": 0.0
 },
 "textScale": {
-"x": 0.6000000238418579,
+"x": 3.0,
 "y": 1.0
 },
 "tintColor": {
@@ -230,10 +341,10 @@
 "isdisabled": false,
 "path": "textures\\Background\\1\\1_game_background.png",
 "rectangle": {
-"height": 220,
+"height": 210,
 "width": 340,
 "x": -370,
-"y": 10
+"y": 110
 },
 "text": "",
 "textColor": {
@@ -300,10 +411,10 @@
 "isdisabled": false,
 "path": "textures\\Background\\2\\2_game_background.png",
 "rectangle": {
-"height": 220,
+"height": 210,
 "width": 340,
 "x": -370,
-"y": 260
+"y": 340
 },
 "text": "",
 "textColor": {
@@ -370,10 +481,10 @@
 "isdisabled": false,
 "path": "textures\\Background\\3\\3_game_background.png",
 "rectangle": {
-"height": 220,
+"height": 210,
 "width": 340,
 "x": -370,
-"y": 520
+"y": 570
 },
 "text": "",
 "textColor": {
@@ -440,10 +551,10 @@
 "isdisabled": false,
 "path": "textures\\Background\\4\\4_game_background.png",
 "rectangle": {
-"height": 220,
+"height": 210,
 "width": 340,
 "x": -370,
-"y": 770
+"y": 800
 },
 "text": "",
 "textColor": {
