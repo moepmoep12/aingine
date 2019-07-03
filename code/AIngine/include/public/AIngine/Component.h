@@ -64,6 +64,9 @@ namespace AIngine {
 		inline Component() {}
 		inline virtual ~Component() {}
 
+		/* To be called by GameObject AFTER constructing a Component*/
+		virtual void PostInit() {}
+
 		virtual Component* Copy(GameObject* const owner) const { return nullptr; }
 
 	private:

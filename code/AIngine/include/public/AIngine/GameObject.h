@@ -74,6 +74,7 @@ namespace AIngine {
 
 			T* comp = new T();
 			comp->m_owner = this;
+			comp->PostInit();
 
 			m_components.push_back(comp);
 
