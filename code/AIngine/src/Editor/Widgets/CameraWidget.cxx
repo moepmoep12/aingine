@@ -2,6 +2,7 @@
 #include "AIngine/Constants.h"
 #include "AIngine/Input.h"
 #include "Application.h"
+#include "Rendering/Viewport.h"
 
 #include <glm/glm.hpp>
 
@@ -66,6 +67,7 @@ namespace AIngine::Editor::Widget {
 			ImGui::Text("MousePosition (%.2f | %.2f)", screenPos.x, screenPos.y);
 			ImGui::Text("Screen To World (%.2f | %.2f)", worldPos.x, worldPos.y);
 			ImGui::Text("World To Screen (%.2f | %.2f)", WorldToScreen.x, WorldToScreen.y);
+			ImGui::Text("Viewport Size (%i | %i)", AIngine::Application::GetViewport().GetViewportWidth(), AIngine::Application::GetViewport().GetViewportHeight());
 
 			float deltaTime = AIngine::Application::Get().GetDeltaTime();
 
