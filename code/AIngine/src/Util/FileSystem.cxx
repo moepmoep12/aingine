@@ -15,7 +15,7 @@ namespace AIngine::Util::Filesystem {
 				absoluteDefaultPath = std::filesystem::canonical(resourceDir + defaultPath).string();
 			}
 			catch (const std::exception& e) {
-				absoluteDefaultPath = "";
+				absoluteDefaultPath = std::string();
 			}
 		}
 

@@ -14,6 +14,8 @@
 #include "UI/UIELement.h"
 #include "UI/Button.h"
 #include "UI/Image.h"
+#include "UI/Text.h"
+#include "UI/CheckBox.h"
 #include "Rendering/UIRenderer.h"
 #include "Util/Project.h"
 
@@ -66,6 +68,8 @@ namespace AIngine::Editor::Serialization {
 		const char* COMPONENT_CANVAS = "canvas";
 		const char* COMPONENT_BUTTON = "button";
 		const char* COMPONENT_IMAGE = "image";
+		const char* COMPONENT_TEXT = "text";
+		const char* COMPONENT_CHECKBOX = "checkbox";
 
 		// Script
 		const char* SCRIPT_INDEX = "index";
@@ -129,6 +133,14 @@ namespace AIngine::Editor::Serialization {
 		const char* BUTTON_TEXTSCALE = "textScale";
 		const char* BUTTON_TEXTOFFSET = "textOffset";
 		const char* BUTTON_TEXTCOLOR = "textColor";
+
+		// UIText
+		const char* UITEXT_FONTSIZE = "fontsize";
+		const char* UITEXT_TEXT = "text";
+		const char* UITEXT_FONTPATH = "fontpath";
+
+		// CheckBox
+		const char* CHECKBOX_ACTIVE = "active";
 
 	}
 
@@ -208,6 +220,14 @@ namespace AIngine::Editor::Serialization {
 						// restore image
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_IMAGE)) {
 							RestoreImage(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_IMAGE], restoredObject);
+						}
+						// restore UIText
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_TEXT)) {
+							RestoreUIText(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_TEXT], restoredObject);
+						}
+						// restore CheckBox
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_CHECKBOX)) {
+							RestoreCheckBox(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_CHECKBOX], restoredObject);
 						}
 
 						//restore scripts
@@ -441,6 +461,8 @@ namespace AIngine::Editor::Serialization {
 		AIngine::UI::Canvas* canvas = obj->AddComponent<AIngine::UI::Canvas>();
 		canvas->SetRectangle((*j)[AttributeNames::UIELEMENT_RECT]);
 		AIngine::Rendering::UIRenderer::canvas = obj;
+
+		canvas->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
 
 	void Serializer::RestoreButton(const nlohmann::json * const j, AIngine::GameObject * obj)
@@ -468,6 +490,8 @@ namespace AIngine::Editor::Serialization {
 		texture.Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
 		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
 		texture.Generate(bitmap);
+
+		button->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
 
 	void Serializer::RestoreImage(const nlohmann::json * const j, AIngine::GameObject * obj)
@@ -489,6 +513,38 @@ namespace AIngine::Editor::Serialization {
 		texture.Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
 		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
 		texture.Generate(bitmap);
+
+		image->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
+	}
+
+	void Serializer::RestoreUIText(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		AIngine::UI::UIText* txt = obj->AddComponent<AIngine::UI::UIText>();
+		txt->SetRectangle((*j)[AttributeNames::UIELEMENT_RECT]);
+		txt->DisabledColor = (*j)[AttributeNames::UIELEMENT_COLORDISABLED];
+		txt->SetDisabled((*j)[AttributeNames::UIELEMENT_ISDISABLED]);
+		txt->SetAnchor((*j)[AttributeNames::UIELEMENT_ANCHOR]);
+		txt->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
+		txt->TintColor = (*j)[AttributeNames::UIELEMENT_COLORTINT];
+		txt->Text = (*j)[AttributeNames::UITEXT_TEXT];
+		std::string path = AIngine::Assets::GetFontPath((*j)[AttributeNames::UITEXT_FONTPATH], (*j)[AttributeNames::UITEXT_FONTSIZE]);
+		AIngine::Rendering::Font* font = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::FontAsset>(path)->GetFont();
+		txt->SetFont(font);
+		txt->ChangeFontSize((*j)[AttributeNames::UITEXT_FONTSIZE]);
+		txt->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
+	}
+
+	void Serializer::RestoreCheckBox(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		AIngine::UI::CheckBox* checkbox = obj->AddComponent<AIngine::UI::CheckBox>();
+		checkbox->SetRectangle((*j)[AttributeNames::UIELEMENT_RECT]);
+		checkbox->DisabledColor = (*j)[AttributeNames::UIELEMENT_COLORDISABLED];
+		checkbox->SetDisabled((*j)[AttributeNames::UIELEMENT_ISDISABLED]);
+		checkbox->SetAnchor((*j)[AttributeNames::UIELEMENT_ANCHOR]);
+		checkbox->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
+		checkbox->TintColor = (*j)[AttributeNames::UIELEMENT_COLORTINT];
+		checkbox->SetState((*j)[AttributeNames::CHECKBOX_ACTIVE]);
+		checkbox->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
 
 
@@ -605,6 +661,18 @@ namespace AIngine::Editor::Serialization {
 		AIngine::UI::Image* img = obj.GetComponent<AIngine::UI::Image>();
 		if (img) {
 			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_IMAGE] = SerializeImage(*img);
+		}
+
+		// serialize UIText
+		AIngine::UI::UIText* text = obj.GetComponent<AIngine::UI::UIText>();
+		if (text) {
+			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_TEXT] = SerializeText(*text);
+		}
+
+		// serialize Checkbox
+		AIngine::UI::CheckBox* checkbox = obj.GetComponent<AIngine::UI::CheckBox>();
+		if (checkbox) {
+			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_CHECKBOX] = SerializeCheckBox(*checkbox);
 		}
 
 		j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SCRIPT] = SerializeScripts(obj);
@@ -767,6 +835,36 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::TEXTURE_FILTER_MAX] = image.Texture.Filter_Max;
 		j[AttributeNames::TEXTURE_IMAGEFORMAT] = image.Texture.Image_Format;
 		j[AttributeNames::COMPONENT_ACTIVE] = image.IsEnabled();
+		return j;
+	}
+
+	nlohmann::json SceneGraphSerializer::SerializeText(AIngine::UI::UIText & uitext)
+	{
+		nlohmann::json j;
+		j[AttributeNames::UIELEMENT_RECT] = uitext.GetRectangleNative();
+		j[AttributeNames::UIELEMENT_COLORDISABLED] = uitext.DisabledColor;
+		j[AttributeNames::UIELEMENT_COLORTINT] = uitext.TintColor;
+		j[AttributeNames::UIELEMENT_ISDISABLED] = uitext.IsDisabled();
+		j[AttributeNames::UIELEMENT_ANCHOR] = uitext.GetAnchor();
+		j[AttributeNames::UITEXT_TEXT] = uitext.Text;
+		j[AttributeNames::UITEXT_FONTSIZE] = uitext.GetFontSize();
+		j[AttributeNames::UITEXT_FONTPATH] = SerializePath(uitext.GetFont().Path);
+		j[AttributeNames::COMPONENT_ACTIVE] = uitext.IsEnabled();
+
+		return j;
+	}
+
+	nlohmann::json SceneGraphSerializer::SerializeCheckBox(AIngine::UI::CheckBox & checkbox)
+	{
+		nlohmann::json j;
+		j[AttributeNames::UIELEMENT_RECT] = checkbox.GetRectangleNative();
+		j[AttributeNames::UIELEMENT_COLORDISABLED] = checkbox.DisabledColor;
+		j[AttributeNames::UIELEMENT_COLORTINT] = checkbox.TintColor;
+		j[AttributeNames::UIELEMENT_ISDISABLED] = checkbox.IsDisabled();
+		j[AttributeNames::UIELEMENT_ANCHOR] = checkbox.GetAnchor();
+		j[AttributeNames::CHECKBOX_ACTIVE] = checkbox.GetState();
+		j[AttributeNames::COMPONENT_ACTIVE] = checkbox.IsEnabled();
+
 		return j;
 	}
 

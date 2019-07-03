@@ -7,6 +7,7 @@
 #include "UI/UIELement.h"
 #include "UI/Button.h"
 #include "UI/Image.h"
+#include "UI/Text.h"
 #include "Rendering/UIRenderer.h"
 #include "Application.h"
 
@@ -48,7 +49,7 @@ namespace AIngine::Editor::Widget::Component {
 
 				ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
 
-				ImGui::BeginChild("addComponentChildWindow", ImVec2(buttonWidth, 30 * 7), true, 0);
+				ImGui::BeginChild("addComponentChildWindow", ImVec2(buttonWidth, 30 * 8), true, 0);
 
 				filter.Draw("", buttonWidth);
 
@@ -95,11 +96,19 @@ namespace AIngine::Editor::Widget::Component {
 									obj->AddComponent<AIngine::UI::Image>();
 									break;
 								}
+							case 7:
+								if (!obj->GetComponent<AIngine::UI::UIText>()) {
+									obj->AddComponent<AIngine::UI::UIText>();
+									break;
+								}
 							default:
-								AIngine::OnAddComponent(obj, i - 7);
+								AIngine::OnAddComponent(obj, i - 8);
 								break;
 							}
 						}
+						if (i == 7)
+							ImGui::Separator();
+
 					}
 				}
 				ImGui::EndChild();

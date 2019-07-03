@@ -10,6 +10,7 @@
 #include "Editor/Widgets/ButtonComponentWidget.h"
 #include "Editor/Widgets/CanvasComponentWidget.h"
 #include "Editor/Widgets/ImageComponentWidget.h"
+#include "Editor/Widgets/UITextComponentWidget.h"
 
 #include <unordered_map>
 
@@ -43,6 +44,7 @@ namespace AIngine::Editor::Widget {
 		Component::ButtonComponentWidget* m_buttonComponentWidget;
 		Component::CanvasComponentWidget* m_canvasComponentWidget;
 		Component::ImageComponentWidget* m_imageComponentWidget;
+		Component::UITextComponentWidget* m_textComponentWidget;
 
 		void ShowSelectedNodeWidget(GameObject* node);
 		void ShowUserScripts(GameObject* node);

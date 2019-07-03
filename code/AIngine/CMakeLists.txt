@@ -73,10 +73,12 @@ set(AINGINE_HEADER_UTIL
 )
 
 set(AINGINE_HEADER_UI
+		include/public/UI/Button.h	
+		include/public/UI/CheckBox.h	
 		include/public/UI/Image.h	
 		include/public/UI/ImGuiLayer.h	
 		include/public/UI/UIElement.h	
-		include/public/UI/Button.h	
+		include/public/UI/Text.h	
 )
 
 set(AIngine_HEADER_PRIVATE
@@ -102,6 +104,7 @@ set(AIngine_HEADER_PRIVATE
 		include/private/Editor/Widgets/ToolbarWidget.h
 		include/private/Editor/Widgets/TransformComponentWidget.h
 		include/private/Editor/Widgets/UIElementComponentWidget.h
+		include/private/Editor/Widgets/UITextComponentWidget.h
 		include/private/Rendering/ParticleRenderer.h
 		include/private/Rendering/PhysicsRenderer.h
 		include/private/Rendering/Renderer.h
@@ -146,6 +149,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/ToolbarWidget.cxx
 		src/Editor/Widgets/TransformComponentWidget.cxx
 		src/Editor/Widgets/UIElementComponentWidget.cxx
+		src/Editor/Widgets/UITextComponentWidget.cxx
 		src/Rendering/bitmap.cxx
 		src/Rendering/Camera.cxx
 		src/Rendering/Font.cxx
@@ -162,10 +166,12 @@ set(AINGINE_SRC
 		src/Util/FileSystem.cxx
 		src/Util/Project.cxx
 		src/Util/Random.cxx
+		src/UI/CheckBox.cxx
 		src/UI/Image.cxx
 		src/UI/ImGuiLayer.cxx
 		src/UI/Button.cxx
 		src/UI/UIElement.cxx
+		src/UI/Text.cxx
 	)
 	
 
