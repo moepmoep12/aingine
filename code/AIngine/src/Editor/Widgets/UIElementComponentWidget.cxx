@@ -5,6 +5,8 @@
 #include "Application.h"
 
 #include "imgui.h"
+#include <sstream>
+#include <string>
 
 namespace AIngine::Editor::Widget::Component {
 
@@ -14,12 +16,17 @@ namespace AIngine::Editor::Widget::Component {
 			AIngine::UI::Anchor::BottomLeft, AIngine::UI::Anchor::CenterUp,AIngine::UI::Anchor::CenterLeft, AIngine::UI::Anchor::CenterDown, AIngine::UI::Anchor::CenterRight };
 		static const char* anchorNames[] = { "Center", "TopLeft", "TopRight", "BottomRight", "BottomLeft", "CenterUp", "CenterLeft", "CenterDown", "CenterRight" };
 
-		/*AIngine::UI::Anchor currentAnchor = element->AnchorPos;*/
-		if (ImGui::BeginCombo("Anchor", anchorNames[element->GetAnchor()])) {
+		const void * address = static_cast<const void*>(element);
+		std::stringstream ss;
+		ss << address;
+		std::string name = ss.str();
+
+		std::string anchorname = "Anchor##" + name;
+		if (ImGui::BeginCombo(anchorname.c_str(), anchorNames[element->GetAnchor()])) {
 			for (int i = 0; i < IM_ARRAYSIZE(anchorNames); i++) {
 				bool isSelected = choosableAnchors[i] == element->GetAnchor();
 				if (ImGui::Selectable(anchorNames[i], isSelected))
-					element->SetAnchor( choosableAnchors[i]);
+					element->SetAnchor(choosableAnchors[i]);
 				if (isSelected)
 					ImGui::SetItemDefaultFocus();
 			}
@@ -76,24 +83,33 @@ namespace AIngine::Editor::Widget::Component {
 			break;
 		}
 
-		AIngine::Graphics::PointScreen(anchorpos, 50 , glm::vec3(0.35, 0.72, 0));
+		AIngine::Graphics::PointScreen(anchorpos, 50, glm::vec3(0.35, 0.72, 0));
 	}
 
 	void ChangeTransform(AIngine::UI::UIElement * element)
 	{
+		const void * address = static_cast<const void*>(element);
+		std::stringstream ss;
+		ss << address;
+		std::string name = ss.str();
+
+		std::string screenposname = "Screen Position##" + name;
+		std::string dimname = "Dimensions##" + name;
+
 		int pos[] = { element->GetRectangleNative().x, element->GetRectangleNative().y };
 		int dim[] = { element->GetRectangleNative().width, element->GetRectangleNative().height };
-		if (ImGui::DragInt2("Screen Position", pos)) {
+		if (ImGui::DragInt2(screenposname.c_str(), pos)) {
 			element->SetPosition(glm::vec2(pos[0], pos[1]));
 		}
-		if (ImGui::DragInt2("Dimensions", dim)) {
+		if (ImGui::DragInt2(dimname.c_str(), dim)) {
 			element->SetWidth(dim[0]);
 			element->SetHeight(dim[1]);
 		}
 
 		// Disabled
+		std::string disabledname = "Disabled##" + name;
 		bool isDisabled = element->IsDisabled();
-		if (ImGui::Checkbox("Disabled", &isDisabled)) {
+		if (ImGui::Checkbox(disabledname.c_str() , &isDisabled)) {
 			element->SetDisabled(isDisabled);
 		}
 	}
