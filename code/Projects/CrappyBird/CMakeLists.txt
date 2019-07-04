@@ -18,6 +18,7 @@ set(SRC
     code/src/Effects.cxx
     code/src/Agent.cxx
     code/src/MainMenu.cxx
+    code/src/PlayerMainMenu.cxx
     code/src/${PROJECT_NAME}.cxx
     code/src/Scripting_generated.cxx
      )
@@ -35,6 +36,7 @@ set(HEADER
     code/include/Effects.h
     code/include/Agent.h
     code/include/MainMenu.h
+    code/include/PlayerMainMenu.h
 	   code/include/${PROJECT_NAME}.h
     )
 

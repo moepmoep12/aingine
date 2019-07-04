@@ -10,6 +10,7 @@
 "PickUp",
 "Agent",
 "Obstacle",
-"MainMenu"
+"MainMenu",
+"PlayerMainMenu"
 ]
 }
