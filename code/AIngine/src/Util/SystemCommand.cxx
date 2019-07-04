@@ -8,7 +8,7 @@
 #include <array>
 #include <sstream>
 
-void AIngine::Util::System::Exec(const std::vector<std::string>& commands)
+void AIngine::Util::System::Exec(const std::vector<std::string>& commands, bool dumpOutput)
 {
 	std::array<char, 128> buffer;
 	std::string result;
@@ -30,5 +30,6 @@ void AIngine::Util::System::Exec(const std::vector<std::string>& commands)
 		result += buffer.data();
 	}
 
-	CORE_INFO(result);
+	if (dumpOutput)
+		CORE_INFO(result);
 }

@@ -636,7 +636,7 @@ namespace AIngine::Editor {
 				command << projectDir[0] << ":" << " && ";
 				command << "cd " << projectDir + "out//CMake" << " && ";
 				command << "cmake --build . --target " << AIngine::Util::Project::GetProjectName() << " --config " << config;
-				AIngine::Util::System::Exec({ command.str() });
+				AIngine::Util::System::Exec({ command.str() }, false);
 
 				// Turn on Editor again
 				AIngine::Util::Project::RegenerateCMake({ "-DEDITOR=ON" });

@@ -5,5 +5,5 @@
 
 namespace AIngine::Util::System 
 {
-	void Exec(const std::vector<std::string>& commands);
+	void Exec(const std::vector<std::string>& commands, bool dumpOutput = true);
 }
