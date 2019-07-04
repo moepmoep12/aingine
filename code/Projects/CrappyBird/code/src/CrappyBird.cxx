@@ -9,7 +9,10 @@ AIngine::Application* AIngine::CreateApplication() {
 namespace CrappyBird {
 
 	const float CrappyBird::s_originalGameSpeed = 2.5f;
+
 	float CrappyBird::s_GameSpeed = CrappyBird::s_originalGameSpeed;
+	bool CrappyBird::s_bObstacleRotation = false;
+	int CrappyBird::s_levelIndex = 3;
 
 	// Constructor
 	CrappyBird::CrappyBird()

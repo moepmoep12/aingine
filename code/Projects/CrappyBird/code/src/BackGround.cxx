@@ -22,6 +22,17 @@ namespace CrappyBird {
 
 		m_player->OnGameOverEvent += OnGameOverHandler;
 		m_player->OnRestartGame += OnRestartGameHandler;
+
+		auto children = GetOwner()->GetChildren();
+		int j = 6;
+		for (int i = 0; i < 12; i++) {
+			std::stringstream ss;
+			ss << "textures/Background/" << CrappyBird::s_levelIndex + 1 << "/" << j << ".png";
+			children[i]->GetComponent<Sprite>()->SetTexture(Texture2D(Assets::Load<BitmapAsset>(ss.str())->GetBitmap()));
+			if ((i+1) % 2 == 0) {
+				j--;
+			}
+		}
 	}
 
 	// End is called when gameplay ends for this script

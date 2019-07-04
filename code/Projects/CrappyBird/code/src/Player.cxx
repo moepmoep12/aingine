@@ -79,6 +79,8 @@ namespace CrappyBird {
 	// Update is called once per frame
 	void Player::Update(float delta)
 	{
+		m_delta = delta;
+
 		if (IsGameOver) {
 			UpdateGameOverScreen(delta);
 			return;
@@ -88,11 +90,11 @@ namespace CrappyBird {
 		}
 
 		// basic fire
-		m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 20);
+		m_emitter->Update(delta, 20);
 
 		if (AIngine::Input::IsMouseButtonPressed(0) || AIngine::Input::IsKeyPressed(AIngine::KeyCodes::SPACE)) {
 			// accelerate
-			m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 75);
+			m_emitter->Update(delta, 75);
 			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -0.075f));
 			PlayEngineSound();
 		}
@@ -193,7 +195,7 @@ namespace CrappyBird {
 
 	void Player::OnUpdateParticle(Particle & particle)
 	{
-		float dt = AIngine::Application::Get().GetDeltaTime();
+		float dt = m_delta;
 		particle.Position += particle.Velocity * dt;
 		static glm::vec4 finalColor(1, 0, 0, 0);
 		float t = AIngine::Math::CosErp(particle.Lifetime / s_lifeTime);

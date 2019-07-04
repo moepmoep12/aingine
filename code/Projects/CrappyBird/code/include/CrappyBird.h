@@ -12,7 +12,11 @@ namespace CrappyBird {
 		virtual void OnAppUpdate() override;
 		virtual void OnAppEvent(AIngine::Events::EventData& e) override;
 
+		// GameSettings
 		static float s_GameSpeed;
+		static bool s_bObstacleRotation;
+		static int s_levelIndex;
+
 		const static float s_originalGameSpeed;
 	};
 }

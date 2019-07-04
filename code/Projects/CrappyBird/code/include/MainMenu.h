@@ -15,9 +15,13 @@ namespace CrappyBird {
 
 	private:
 		void OnStartClicked();
+		void OnLevelButtonClicked();
 
 	private:
 		AIngine::UI::Button::OnClickedEventHandler OnStartClickedHandler;
 		AIngine::UI::Button* StartButton;
+
+		AIngine::UI::Button* LevelButtons[4];
+		Texture2D BackGrounds[4];
 	};
 }

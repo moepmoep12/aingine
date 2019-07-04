@@ -78,6 +78,8 @@ namespace CrappyBird {
 		// the distance traveled aka Score
 		float m_distanceTraveled = 0;
 
+		float m_delta = 0;
+
 		// the particle emitter which emitts fire
 		ParticleEmitter* m_emitter;
 
