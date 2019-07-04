@@ -4,13 +4,12 @@
 #include "LauncherGUI.h"
 #include "TemplateFiles.h"
 #include "Util/Project.h"
+#include "Util/SystemCommand.h"
 
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <ctime>
 #include <filesystem>
-#include <stdlib.h>
-
 
 AIngine::Application* AIngine::CreateApplication() {
 	return new ProjectLauncher::Launcher();
@@ -279,7 +278,7 @@ namespace ProjectLauncher {
 		// run cmake
 		command << "cmake -DCMAKE_INSTALL_PREFIX=" << std::filesystem::canonical(AIngine::Util::Project::GetEngineInstallDirectory()).string() << " " << projectRoot;
 
-		system(command.str().c_str());
+		AIngine::Util::System::Exec({ command.str() });
 	}
 
 	std::string Launcher::GetProjectRootFromProjectFile(const std::string & projectFilePath)
@@ -412,7 +411,7 @@ namespace ProjectLauncher {
 			command << " Win" << bit;
 		command << "\" " << " -DCMAKE_INSTALL_PREFIX=" << std::filesystem::canonical(AIngine::Util::Project::GetEngineInstallDirectory()).string() << " " << path;
 
-		system(command.str().c_str());
+		AIngine::Util::System::Exec({ command.str() });
 	}
 
 	void Launcher::OpenVSSolution(const std::string & name, const std::string & path)
@@ -424,6 +423,6 @@ namespace ProjectLauncher {
 		// move to folder
 		command << "cd " << cmakeBinPath << " && ";
 		command << name << ".sln";
-		system(command.str().c_str());
+		AIngine::Util::System::Exec({ command.str() });
 	}
 }
