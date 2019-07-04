@@ -51,8 +51,8 @@ namespace AIngine::UI {
 	{
 		if (e.GetMouseButton() == 0) {
 			if (m_isClicked) {
-				m_isClicked = false;
 				OnMouseReleased();
+				m_isClicked = false;
 				return true;
 			}
 		}

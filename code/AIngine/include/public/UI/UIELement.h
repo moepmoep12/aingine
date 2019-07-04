@@ -34,6 +34,8 @@ namespace AIngine::UI {
 		inline bool IsDisabled() const { return m_isDisabled; }
 		inline void SetDisabled(bool disabled) { m_isDisabled = disabled; }
 
+		inline bool IsClicked() const { return m_isClicked; }
+
 		inline Anchor GetAnchor() const { return AnchorPos; }
 		void SetAnchor(Anchor anch);
 
