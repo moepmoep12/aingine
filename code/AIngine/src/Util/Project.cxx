@@ -1,4 +1,5 @@
 #include "Util/Project.h"
+#include "Util/SystemCommand.h"
 
 #include <filesystem>
 #include <fstream>
@@ -82,6 +83,6 @@ namespace AIngine::Util::Project {
 			command << var << " ";
 		command << projectRoot;
 
-		system(command.str().c_str());
+		AIngine::Util::System::Exec({ command.str() });
 	}
 }

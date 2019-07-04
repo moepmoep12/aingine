@@ -70,6 +70,7 @@ set(AINGINE_HEADER_UTIL
 		include/public/Util/FileSystem.h
 		include/public/Util/Project.h
 		include/public/Util/Random.h
+		include/public/Util/SystemCommand.h
 )
 
 set(AINGINE_HEADER_UI
@@ -171,6 +172,7 @@ set(AINGINE_SRC
 		src/Util/FileSystem.cxx
 		src/Util/Project.cxx
 		src/Util/Random.cxx
+		src/Util/SystemCommand.cxx
 		src/UI/CheckBox.cxx
 		src/UI/Image.cxx
 		src/UI/ImGuiLayer.cxx

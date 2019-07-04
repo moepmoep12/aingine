@@ -12,6 +12,7 @@
 #include "Debug/log.h"
 #include "Util/Project.h"
 #include "Util/FileSystem.h"
+#include "Util/SystemCommand.h"
 
 // widgets
 #include "Editor/Widgets/EditorWidget.h"
@@ -24,7 +25,6 @@
 #include <glm/geometric.hpp>
 #include <fstream>
 #include <algorithm>
-#include <stdlib.h>
 #include <filesystem>
 
 namespace AIngine::Editor {
@@ -636,7 +636,7 @@ namespace AIngine::Editor {
 				command << projectDir[0] << ":" << " && ";
 				command << "cd " << projectDir + "out//CMake" << " && ";
 				command << "cmake --build . --target " << AIngine::Util::Project::GetProjectName() << " --config " << config;
-				system(command.str().c_str());
+				AIngine::Util::System::Exec({ command.str() });
 
 				// Turn on Editor again
 				AIngine::Util::Project::RegenerateCMake({ "-DEDITOR=ON" });
