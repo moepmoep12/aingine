@@ -78,6 +78,9 @@ namespace AIngine::Editor::Scripting {
 		f.open(projectDir + "code\\src\\Scripting_generated.cxx");
 		f << GenerateExternScriptMethods(componentNames, projectname);
 		f.close();
+
+		// Refresh project
+		AIngine::Util::Project::RegenerateCMake({});
 	}
 
 	void RemoveScript(const std::string & name)
@@ -137,6 +140,9 @@ namespace AIngine::Editor::Scripting {
 		// Delete the script files
 		std::filesystem::remove(projectDir + "code\\include\\" + name + ".h");
 		std::filesystem::remove(projectDir + "code\\src\\" + name + ".cxx");
+
+		// Refresh project
+		AIngine::Util::Project::RegenerateCMake({});
 	}
 
 	std::string GenerateExternScriptMethods(const std::vector<std::string>& scriptNames, const std::string& projectname)
