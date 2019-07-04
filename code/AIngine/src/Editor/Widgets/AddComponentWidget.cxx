@@ -9,6 +9,7 @@
 #include "UI/Image.h"
 #include "UI/Text.h"
 #include "UI/CheckBox.h"
+#include "UI/Slider.h"
 #include "Rendering/UIRenderer.h"
 #include "Application.h"
 
@@ -49,7 +50,7 @@ namespace AIngine::Editor::Widget::Component {
 				std::vector<std::string > componentNames = AIngine::GetAvailableComponentNames();
 
 				ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
-				static const int engineComponentsCount = 9;
+				static const int engineComponentsCount = 10;
 				ImGui::BeginChild("addComponentChildWindow", ImVec2(buttonWidth, 30 * engineComponentsCount), true, 0);
 
 				filter.Draw("", buttonWidth);
@@ -105,6 +106,11 @@ namespace AIngine::Editor::Widget::Component {
 							case 8:
 								if (!obj->GetComponent<AIngine::UI::CheckBox>()) {
 									obj->AddComponent<AIngine::UI::CheckBox>();
+									break;
+								}
+							case 9:
+								if (!obj->GetComponent<AIngine::UI::Slider>()) {
+									obj->AddComponent<AIngine::UI::Slider>();
 									break;
 								}
 							default:

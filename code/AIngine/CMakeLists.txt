@@ -78,6 +78,7 @@ set(AINGINE_HEADER_UI
 		include/public/UI/Image.h	
 		include/public/UI/ImGuiLayer.h	
 		include/public/UI/UIElement.h	
+		include/public/UI/Slider.h	
 		include/public/UI/Text.h	
 )
 
@@ -100,6 +101,7 @@ set(AIngine_HEADER_PRIVATE
 		include/private/Editor/Widgets/PhysicsComponentWidget.h
 		include/private/Editor/Widgets/PopUps.h
 		include/private/Editor/Widgets/SceneGraphWidget.h
+		include/private/Editor/Widgets/SliderComponentWidget.h
 		include/private/Editor/Widgets/SoundComponentWidget.h
 		include/private/Editor/Widgets/SpriteComponentWidget.h
 		include/private/Editor/Widgets/ToolbarWidget.h
@@ -146,6 +148,7 @@ set(AINGINE_SRC
 		src/Editor/Widgets/PhysicsComponentWidget.cxx
 		src/Editor/Widgets/PopUps.cxx
 		src/Editor/Widgets/SceneGraphWidget.cxx
+		src/Editor/Widgets/SliderComponentWidget.cxx
 		src/Editor/Widgets/SoundComponentWidget.cxx
 		src/Editor/Widgets/SpriteComponentWidget.cxx
 		src/Editor/Widgets/ToolbarWidget.cxx
@@ -173,6 +176,7 @@ set(AINGINE_SRC
 		src/UI/ImGuiLayer.cxx
 		src/UI/Button.cxx
 		src/UI/UIElement.cxx
+		src/UI/Slider.cxx
 		src/UI/Text.cxx
 	)
 	

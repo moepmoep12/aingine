@@ -59,6 +59,14 @@ namespace AIngine::UI {
 		return false;
 	}
 
+	void UIElement::OnUpdate(float deltatime)
+	{
+		if (AIngine::Application::IsRunning())
+		{
+			Update(deltatime);
+		}
+	}
+
 	Canvas::~Canvas()
 	{
 		if (AIngine::Rendering::UIRenderer::canvas == GetOwner())

@@ -47,6 +47,7 @@ namespace AIngine::UI {
 		inline virtual void SetHeight(int height) { m_rectangle.height = height; }
 
 		inline virtual bool Render(AIngine::Rendering::GLShaderProgram& shader) const = 0;
+		virtual void Update(float deltatime) {}
 
 		// Inherited via Component
 		virtual void OnEvent(AIngine::Events::EventData& e);
@@ -68,6 +69,8 @@ namespace AIngine::UI {
 	private:
 		bool OnMouseButtonPressed(AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData& e);
 		bool OnMouseButtonReleased(AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData& e);
+
+		virtual void OnUpdate(float deltatime) override;
 
 	private:
 		AIngine::Structures::Rectangle<int> m_rectangle = AIngine::Structures::Rectangle<int>(0, 0, 5, 2);

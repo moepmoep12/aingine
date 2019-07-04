@@ -19,6 +19,7 @@
 #include "UI/Image.h"
 #include "UI/Text.h"
 #include "UI/CheckBox.h"
+#include "UI/Slider.h"
 
 
 namespace AIngine::Editor::Widget {
@@ -96,6 +97,7 @@ namespace AIngine::Editor::Widget {
 		delete m_imageComponentWidget;
 		delete m_textComponentWidget;
 		delete m_checkBoxComponentWidget;
+		delete m_sliderComponentWidget;
 	}
 
 
@@ -113,6 +115,7 @@ namespace AIngine::Editor::Widget {
 		m_imageComponentWidget = new Component::ImageComponentWidget();
 		m_textComponentWidget = new Component::UITextComponentWidget();
 		m_checkBoxComponentWidget = new Component::CheckBoxComponentWidget();
+		m_sliderComponentWidget = new Component::SliderComponentWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
@@ -164,6 +167,10 @@ namespace AIngine::Editor::Widget {
 			AIngine::UI::CheckBox* checkbox = node->GetComponent<AIngine::UI::CheckBox>();
 			if (checkbox) {
 				m_checkBoxComponentWidget->Render({ node });
+			}
+			AIngine::UI::Slider* slider = node->GetComponent<AIngine::UI::Slider>();
+			if (slider) {
+				m_sliderComponentWidget->Render({ node });
 			}
 
 			ShowUserScripts(node);

@@ -346,7 +346,7 @@ namespace AIngine {
 
 	std::vector<std::string> GetAvailableComponentNames()
 	{
-		std::vector<std::string> result = { "Sprite", "Physics", "Sound", "ParticleEmitter", "Canvas", "Button", "Image", "Text", "CheckBox" };
+		std::vector<std::string> result = { "Sprite", "Physics", "Sound", "ParticleEmitter", "Canvas", "Button", "Image", "Text", "CheckBox", "Slider" };
 
 		for (auto& it = ApplicationComponentNames.begin(); it != ApplicationComponentNames.end(); it++) {
 			result.push_back(*it._Ptr);
