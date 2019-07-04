@@ -145,3 +145,28 @@ namespace AIngine::Structures
 		j.at("height").get_to(rect.height);
 	}
 }
+
+//namespace AIngine::Rendering
+//{
+//	inline void to_json(nlohmann::json& j, const AIngine::Rendering::Texture2D& texture)
+//	{
+//		j = nlohmann::json{
+//			{"path", AIngine::Editor::Serialization::SerializePath(texture.FileName)},
+//			{"wrapS", texture.Wrap_S},
+//			{"wrapT", texture.Wrap_T},
+//			{"filterMin", texture.Filter_Min},
+//			{"filterMax", texture.Filter_Max},
+//			{"imageFormat", texture.Image_Format},
+//		};
+//	}
+//
+//	inline void from_json(const nlohmann::json& j, AIngine::Rendering::Texture2D& texture) {
+//		j.at("wrapS").get_to(texture.Wrap_S);
+//		j.at("wrapT").get_to(texture.Wrap_T);
+//		j.at("filterMin").get_to(texture.Filter_Min);
+//		j.at("filterMax").get_to(texture.Filter_Max);
+//		j.at("imageFormat").get_to(texture.Image_Format);
+//		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(j.at("path"))->GetBitmap();
+//		texture.Generate(bitmap);
+//	}
+//}
