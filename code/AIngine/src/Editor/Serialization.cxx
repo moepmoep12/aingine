@@ -15,6 +15,7 @@
 #include "UI/Image.h"
 #include "UI/Text.h"
 #include "UI/CheckBox.h"
+#include "UI/Slider.h"
 #include "Rendering/UIRenderer.h"
 #include "Util/Project.h"
 
@@ -69,6 +70,7 @@ namespace AIngine::Editor::Serialization {
 		const char* COMPONENT_IMAGE = "image";
 		const char* COMPONENT_TEXT = "text";
 		const char* COMPONENT_CHECKBOX = "checkbox";
+		const char* COMPONENT_SLIDER = "slider";
 
 		// Script
 		const char* SCRIPT_INDEX = "index";
@@ -137,6 +139,14 @@ namespace AIngine::Editor::Serialization {
 
 		// CheckBox
 		const char* CHECKBOX_STATE = "state";
+
+		// Slider
+		const char* SLIDER_MINVALUE = "minvalue";
+		const char* SLIDER_MAXVALUE = "maxvalue";
+		const char* SLIDER_VALUE = "value";
+		const char* SLIDER_TEXTUREBACKGROUND = "textureBackground";
+		const char* SLIDER_TEXTUREHANDLER = "textureHandler";
+		const char* SLIDER_DRAGCOLOR = "dragColor";
 
 	}
 
@@ -224,6 +234,10 @@ namespace AIngine::Editor::Serialization {
 						// restore CheckBox
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_CHECKBOX)) {
 							RestoreCheckBox(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_CHECKBOX], restoredObject);
+						}
+						// restore Slider
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SLIDER)) {
+							RestoreSlider(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SLIDER], restoredObject);
 						}
 
 						//restore scripts
@@ -516,6 +530,25 @@ namespace AIngine::Editor::Serialization {
 		checkbox->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
 
+	void Serializer::RestoreSlider(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		AIngine::UI::Slider* slider = obj->AddComponent<AIngine::UI::Slider>();
+		slider->SetRectangle((*j)[AttributeNames::UIELEMENT_RECT]);
+		slider->DisabledColor = (*j)[AttributeNames::UIELEMENT_COLORDISABLED];
+		slider->SetDisabled((*j)[AttributeNames::UIELEMENT_ISDISABLED]);
+		slider->SetAnchor((*j)[AttributeNames::UIELEMENT_ANCHOR]);
+		slider->TintColor = (*j)[AttributeNames::UIELEMENT_COLORTINT];
+
+		slider->Max = (*j)[AttributeNames::SLIDER_MAXVALUE];
+		slider->Min = (*j)[AttributeNames::SLIDER_MINVALUE];
+		slider->Value = (*j)[AttributeNames::SLIDER_VALUE];
+		slider->TextureBackGround = (*j)[AttributeNames::SLIDER_TEXTUREBACKGROUND];
+		slider->m_sliderHandle->TextureSlider = (*j)[AttributeNames::SLIDER_TEXTUREHANDLER];
+		slider->m_sliderHandle->DragColor = (*j)[AttributeNames::SLIDER_DRAGCOLOR];
+;
+		slider->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
+	}
+
 
 	/* -------------------------------------------- SCENEGRAPH SERIALIZER -------------------------------------------------------*/
 
@@ -642,6 +675,12 @@ namespace AIngine::Editor::Serialization {
 		AIngine::UI::CheckBox* checkbox = obj.GetComponent<AIngine::UI::CheckBox>();
 		if (checkbox) {
 			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_CHECKBOX] = SerializeCheckBox(*checkbox);
+		}
+
+		// serialize Slider
+		AIngine::UI::Slider* slider = obj.GetComponent<AIngine::UI::Slider>();
+		if (slider) {
+			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SLIDER] = SerializeSlider(*slider);
 		}
 
 		j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SCRIPT] = SerializeScripts(obj);
@@ -815,6 +854,27 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::UIELEMENT_ANCHOR] = checkbox.GetAnchor();
 		j[AttributeNames::CHECKBOX_STATE] = checkbox.GetState();
 		j[AttributeNames::COMPONENT_ACTIVE] = checkbox.IsEnabled();
+
+		return j;
+	}
+
+	nlohmann::json SceneGraphSerializer::SerializeSlider(AIngine::UI::Slider & slider)
+	{
+		nlohmann::json j;
+		j[AttributeNames::UIELEMENT_RECT] = slider.GetRectangleNative();
+		j[AttributeNames::UIELEMENT_COLORDISABLED] = slider.DisabledColor;
+		j[AttributeNames::UIELEMENT_COLORTINT] = slider.TintColor;
+		j[AttributeNames::UIELEMENT_ISDISABLED] = slider.IsDisabled();
+		j[AttributeNames::UIELEMENT_ANCHOR] = slider.GetAnchor();
+
+		j[AttributeNames::SLIDER_DRAGCOLOR] = slider.m_sliderHandle->DragColor;
+		j[AttributeNames::SLIDER_MAXVALUE] = slider.Max;
+		j[AttributeNames::SLIDER_MINVALUE] = slider.Min;
+		j[AttributeNames::SLIDER_VALUE] = slider.Value;
+		j[AttributeNames::SLIDER_TEXTUREBACKGROUND] = slider.TextureBackGround;
+		j[AttributeNames::SLIDER_TEXTUREHANDLER] = slider.m_sliderHandle->TextureSlider;
+
+		j[AttributeNames::COMPONENT_ACTIVE] = slider.IsEnabled();
 
 		return j;
 	}

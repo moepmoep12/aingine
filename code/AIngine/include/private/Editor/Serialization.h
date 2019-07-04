@@ -34,6 +34,7 @@ namespace AIngine {
 		class Image;
 		class UIText;
 		class CheckBox;
+		class Slider;
 	}
 }
 
@@ -63,6 +64,7 @@ namespace AIngine::Editor::Serialization
 		static void RestoreImage(const nlohmann::json* const j, AIngine::GameObject* obj);
 		static void RestoreUIText(const nlohmann::json* const j, AIngine::GameObject* obj);
 		static void RestoreCheckBox(const nlohmann::json* const j, AIngine::GameObject* obj);
+		static void RestoreSlider(const nlohmann::json* const j, AIngine::GameObject* obj);
 	};
 
 	class SceneGraphSerializer : public AIngine::Traverser {
@@ -88,6 +90,7 @@ namespace AIngine::Editor::Serialization
 		nlohmann::json SerializeImage(AIngine::UI::Image& image);
 		nlohmann::json SerializeText(AIngine::UI::UIText& uitext);
 		nlohmann::json SerializeCheckBox(AIngine::UI::CheckBox& checkbox);
+		nlohmann::json SerializeSlider(AIngine::UI::Slider& slider);
 		std::vector<nlohmann::json*> m_prevChildren;
 		nlohmann::json* m_children;
 		std::vector<AIngine::GameObject*> m_spawnedObjects;
