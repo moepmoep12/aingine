@@ -31,6 +31,13 @@ namespace AIngine::Editor::Widget::Component {
 
 			// rename
 			static char str0[40] = "Enter Name";
+			std::string name = activeGameObject->GetName();
+			for (int i = 0; i < 40; i++) {
+				if (i < name.size())
+					str0[i] = name[i];
+				else
+					str0[i] = '\0';
+			}
 			if (ImGui::InputText("Name", str0, IM_ARRAYSIZE(str0))) {
 				activeGameObject->SetName(str0);
 			}

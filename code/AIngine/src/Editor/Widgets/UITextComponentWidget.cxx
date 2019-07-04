@@ -36,6 +36,12 @@ namespace AIngine::Editor::Widget::Component {
 				// Text
 				label = "Text##textcomp";
 				static char str0[40] = "";
+				for (int i = 0; i < 40; i++) {
+					if (i < txt->Text.size())
+						str0[i] = txt->Text[i];
+					else
+						str0[i] = '\0';
+				}
 				if (ImGui::InputText(label.c_str(), str0, IM_ARRAYSIZE(str0))) {
 					txt->Text = str0;
 				}

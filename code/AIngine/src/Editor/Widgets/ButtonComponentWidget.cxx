@@ -51,6 +51,12 @@ namespace AIngine::Editor::Widget::Component {
 				// Text
 				label = "Text##button";
 				static char str0[40] = "";
+				for (int i = 0; i < 40; i++) {
+					if (i < btn->Text.size())
+						str0[i] = btn->Text[i];
+					else
+						str0[i] = '\0';
+				}
 				if (ImGui::InputText(label.c_str(), str0, IM_ARRAYSIZE(str0))) {
 					btn->Text = str0;
 				}
@@ -70,7 +76,7 @@ namespace AIngine::Editor::Widget::Component {
 				{
 					static const char *filterList = "png,jpg,jpeg,bmp";
 					std::string path;
-					AIngine::Util::Filesystem::Result result = AIngine::Util::Filesystem::OpenFile(filterList, &path,"textures");
+					AIngine::Util::Filesystem::Result result = AIngine::Util::Filesystem::OpenFile(filterList, &path, "textures");
 
 					if (result == AIngine::Util::Filesystem::OKAY)
 					{
@@ -80,7 +86,7 @@ namespace AIngine::Editor::Widget::Component {
 				}
 
 				ImGui::NewLine();
-				ImGui::NewLine();			
+				ImGui::NewLine();
 
 				// Texture Params
 				TextureParams(btn->Texture);
