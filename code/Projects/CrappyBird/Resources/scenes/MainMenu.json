@@ -44,16 +44,18 @@
 "colorB": 1.0,
 "colorG": 1.0,
 "colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 10.0,
+"sizeY": 5.0,
+"texture": {
 "filterMax": 9729,
 "filterMin": 9729,
 "imageFormat": 6407,
-"parallaxX": 1.0,
-"parallaxY": 1.0,
 "path": "textures\\Background\\4\\6.png",
-"sizeX": 10.0,
-"sizeY": 5.0,
 "wrapS": 10497,
 "wrapT": 10497
+}
 }
 }
 }
@@ -99,25 +101,27 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6407,
 "isdisabled": false,
-"path": "AIngine\\textures\\White.png",
 "rectangle": {
 "height": 1920,
 "width": 400,
 "x": -399,
 "y": 0
 },
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "AIngine\\textures\\White.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
 "tintColor": {
 "w": 0.5,
 "x": 1.0,
 "y": 1.0,
 "z": 1.0
-},
-"wrapS": 10497,
-"wrapT": 10497
+}
 },
 "script": null,
 "text": {
@@ -170,25 +174,27 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6407,
 "isdisabled": false,
-"path": "AIngine\\textures\\White.png",
 "rectangle": {
 "height": 1920,
 "width": 400,
 "x": -1,
 "y": 0
 },
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "AIngine\\textures\\White.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
 "tintColor": {
 "w": 0.5,
 "x": 1.0,
 "y": 1.0,
 "z": 1.0
-},
-"wrapS": 10497,
-"wrapT": 10497
+}
 },
 "script": null,
 "text": {
@@ -309,25 +315,27 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6407,
 "isdisabled": false,
-"path": "AIngine\\textures\\White.png",
 "rectangle": {
 "height": 200,
 "width": 1124,
 "x": 398,
 "y": 826
 },
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "AIngine\\textures\\White.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
 "tintColor": {
 "w": 0.5,
 "x": 1.0,
 "y": 1.0,
 "z": 1.0
-},
-"wrapS": 10497,
-"wrapT": 10497
+}
 },
 "script": null
 }
@@ -364,11 +372,7 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6408,
 "isdisabled": false,
-"path": "AIngine\\textures\\HILLBLU_button_background.png",
 "rectangle": {
 "height": 166,
 "width": 1120,
@@ -390,14 +394,20 @@
 "x": 3.0,
 "y": 2.0
 },
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\HILLBLU_button_background.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
 "tintColor": {
 "w": 1.0,
 "x": 1.0,
 "y": 1.0,
 "z": 1.0
-},
-"wrapS": 10497,
-"wrapT": 10497
+}
 },
 "script": null
 }
@@ -434,11 +444,7 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6407,
 "isdisabled": false,
-"path": "textures\\Background\\1\\1_game_background.png",
 "rectangle": {
 "height": 210,
 "width": 340,
@@ -460,14 +466,20 @@
 "x": 1.0,
 "y": 1.0
 },
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "textures\\Background\\1\\1_game_background.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
 "tintColor": {
 "w": 1.0,
 "x": 1.0,
 "y": 1.0,
 "z": 1.0
-},
-"wrapS": 10497,
-"wrapT": 10497
+}
 },
 "script": null
 }
@@ -504,11 +516,7 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6407,
 "isdisabled": false,
-"path": "textures\\Background\\2\\2_game_background.png",
 "rectangle": {
 "height": 210,
 "width": 340,
@@ -530,14 +538,20 @@
 "x": 1.0,
 "y": 1.0
 },
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "textures\\Background\\2\\2_game_background.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
 "tintColor": {
 "w": 1.0,
 "x": 1.0,
 "y": 1.0,
 "z": 1.0
-},
-"wrapS": 10497,
-"wrapT": 10497
+}
 },
 "script": null
 }
@@ -574,11 +588,7 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6407,
 "isdisabled": false,
-"path": "textures\\Background\\3\\3_game_background.png",
 "rectangle": {
 "height": 210,
 "width": 340,
@@ -600,14 +610,20 @@
 "x": 1.0,
 "y": 1.0
 },
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "textures\\Background\\3\\3_game_background.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
 "tintColor": {
 "w": 1.0,
 "x": 1.0,
 "y": 1.0,
 "z": 1.0
-},
-"wrapS": 10497,
-"wrapT": 10497
+}
 },
 "script": null
 }
@@ -644,11 +660,7 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6407,
 "isdisabled": false,
-"path": "textures\\Background\\4\\4_game_background.png",
 "rectangle": {
 "height": 210,
 "width": 340,
@@ -670,14 +682,20 @@
 "x": 1.0,
 "y": 1.0
 },
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "textures\\Background\\4\\4_game_background.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
 "tintColor": {
 "w": 1.0,
 "x": 1.0,
 "y": 1.0,
 "z": 1.0
-},
-"wrapS": 10497,
-"wrapT": 10497
+}
 },
 "script": null
 }
@@ -703,16 +721,18 @@
 "colorB": 1.0,
 "colorG": 1.0,
 "colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 2.0,
+"sizeY": 3.0,
+"texture": {
 "filterMax": 9729,
 "filterMin": 9729,
 "imageFormat": 6408,
-"parallaxX": 1.0,
-"parallaxY": 1.0,
 "path": "textures\\rocket_nofire.png",
-"sizeX": 2.0,
-"sizeY": 3.0,
 "wrapS": 10497,
 "wrapT": 10497
+}
 }
 }
 }

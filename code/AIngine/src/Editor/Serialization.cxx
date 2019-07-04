@@ -5,7 +5,6 @@
 #include "AIngine/GameObject.h"
 #include "Structures/SceneGraph.h"
 #include "AIngine/World.h"
-#include "Assets/Assets.h"
 #include "AIngine/World.h"
 #include "AIngine/Sprite.h"
 #include "AIngine/SoundComponent.h"
@@ -85,12 +84,7 @@ namespace AIngine::Editor::Serialization {
 		const char* SPRITE_PARALLAX_Y = "parallaxY";
 
 		// Texture
-		const char* TEXTURE_PATH = "path";
-		const char* TEXTURE_WRAP_S = "wrapS";
-		const char* TEXTURE_WRAP_T = "wrapT";
-		const char* TEXTURE_FILTER_MIN = "filterMin";
-		const char* TEXTURE_FILTER_MAX = "filterMax";
-		const char* TEXTURE_IMAGEFORMAT = "imageFormat";
+		const char* TEXTURE = "texture";
 
 		// PhysicsComponent
 		const char* PHYSICS_SHAPE = "shape";
@@ -340,18 +334,10 @@ namespace AIngine::Editor::Serialization {
 		glm::vec2 parallax = glm::vec2((*j)[AttributeNames::SPRITE_PARALLAX_X], (*j)[AttributeNames::SPRITE_PARALLAX_Y]);
 
 		AIngine::Rendering::Texture2D& texture = sprite->GetTexture();
-
-		texture.Wrap_S = (*j)[AttributeNames::TEXTURE_WRAP_S];
-		texture.Wrap_T = (*j)[AttributeNames::TEXTURE_WRAP_T];
-		texture.Filter_Min = (*j)[AttributeNames::TEXTURE_FILTER_MIN];
-		texture.Filter_Max = (*j)[AttributeNames::TEXTURE_FILTER_MAX];
-		texture.Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
+		texture = (*j)[AttributeNames::TEXTURE];
 		sprite->SetLocalWorldSize(size);
 		sprite->SetColor(glm::vec4(color, (*j)[AttributeNames::SPRITE_ALPHA]));
 		sprite->SetParallaxFactor(parallax);
-
-		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
-		texture.Generate(bitmap);
 
 		sprite->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
@@ -359,15 +345,8 @@ namespace AIngine::Editor::Serialization {
 	void Serializer::RestoreParticleEmitter(const nlohmann::json * const j, AIngine::GameObject * obj)
 	{
 		AIngine::ParticleEmitter* emitter = obj->AddComponent<AIngine::ParticleEmitter>();
-		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
 		AIngine::Rendering::Texture2D& texture = emitter->GetTexture();
-
-		texture.Wrap_S = (*j)[AttributeNames::TEXTURE_WRAP_S];
-		texture.Wrap_T = (*j)[AttributeNames::TEXTURE_WRAP_T];
-		texture.Filter_Min = (*j)[AttributeNames::TEXTURE_FILTER_MIN];
-		texture.Filter_Max = (*j)[AttributeNames::TEXTURE_FILTER_MAX];
-		texture.Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
-		texture.Generate(bitmap);
+		texture = (*j)[AttributeNames::TEXTURE];
 
 		emitter->SetAmount((*j)[AttributeNames::PARTICLEEMITTER_AMOUNT]);
 
@@ -484,14 +463,7 @@ namespace AIngine::Editor::Serialization {
 		button->TextColor = (*j)[AttributeNames::BUTTON_TEXTCOLOR];
 
 		AIngine::Rendering::Texture2D& texture = button->Texture;
-
-		texture.Wrap_S = (*j)[AttributeNames::TEXTURE_WRAP_S];
-		texture.Wrap_T = (*j)[AttributeNames::TEXTURE_WRAP_T];
-		texture.Filter_Min = (*j)[AttributeNames::TEXTURE_FILTER_MIN];
-		texture.Filter_Max = (*j)[AttributeNames::TEXTURE_FILTER_MAX];
-		texture.Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
-		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
-		texture.Generate(bitmap);
+		texture = (*j)[AttributeNames::TEXTURE];
 
 		button->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
@@ -507,14 +479,7 @@ namespace AIngine::Editor::Serialization {
 		image->TintColor = (*j)[AttributeNames::UIELEMENT_COLORTINT];
 
 		AIngine::Rendering::Texture2D& texture = image->Texture;
-
-		texture.Wrap_S = (*j)[AttributeNames::TEXTURE_WRAP_S];
-		texture.Wrap_T = (*j)[AttributeNames::TEXTURE_WRAP_T];
-		texture.Filter_Min = (*j)[AttributeNames::TEXTURE_FILTER_MIN];
-		texture.Filter_Max = (*j)[AttributeNames::TEXTURE_FILTER_MAX];
-		texture.Image_Format = (*j)[AttributeNames::TEXTURE_IMAGEFORMAT];
-		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>((*j)[AttributeNames::TEXTURE_PATH])->GetBitmap();
-		texture.Generate(bitmap);
+		texture = (*j)[AttributeNames::TEXTURE];
 
 		image->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
@@ -710,12 +675,7 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::SPRITE_SIZE_Y] = sprite.GetLocalWorldSize().y;
 		j[AttributeNames::SPRITE_PARALLAX_X] = sprite.GetParallaxFactor().x;
 		j[AttributeNames::SPRITE_PARALLAX_Y] = sprite.GetParallaxFactor().y;
-		j[AttributeNames::TEXTURE_PATH] = SerializePath(sprite.GetTexture().FileName);
-		j[AttributeNames::TEXTURE_WRAP_S] = sprite.GetTexture().Wrap_S;
-		j[AttributeNames::TEXTURE_WRAP_T] = sprite.GetTexture().Wrap_T;
-		j[AttributeNames::TEXTURE_FILTER_MIN] = sprite.GetTexture().Filter_Min;
-		j[AttributeNames::TEXTURE_FILTER_MAX] = sprite.GetTexture().Filter_Max;
-		j[AttributeNames::TEXTURE_IMAGEFORMAT] = sprite.GetTexture().Image_Format;
+		j[AttributeNames::TEXTURE] = sprite.GetTexture();
 		j[AttributeNames::COMPONENT_ACTIVE] = sprite.IsEnabled();
 		return j;
 	}
@@ -780,12 +740,7 @@ namespace AIngine::Editor::Serialization {
 	{
 		nlohmann::json j;
 		j[AttributeNames::COMPONENT_ACTIVE] = emitter.IsEnabled();
-		j[AttributeNames::TEXTURE_PATH] = SerializePath(emitter.GetTexture().FileName);
-		j[AttributeNames::TEXTURE_WRAP_S] = emitter.GetTexture().Wrap_S;
-		j[AttributeNames::TEXTURE_WRAP_T] = emitter.GetTexture().Wrap_T;
-		j[AttributeNames::TEXTURE_FILTER_MIN] = emitter.GetTexture().Filter_Min;
-		j[AttributeNames::TEXTURE_FILTER_MAX] = emitter.GetTexture().Filter_Max;
-		j[AttributeNames::TEXTURE_IMAGEFORMAT] = emitter.GetTexture().Image_Format;
+		j[AttributeNames::TEXTURE] = emitter.GetTexture();
 		j[AttributeNames::PARTICLEEMITTER_AMOUNT] = emitter.GetAmount();
 
 		return j;
@@ -814,12 +769,7 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::BUTTON_TEXTSCALE] = button.TextScale;
 		j[AttributeNames::BUTTON_TEXTCOLOR] = button.TextColor;
 		j[AttributeNames::BUTTON_TEXT] = button.Text;
-		j[AttributeNames::TEXTURE_PATH] = SerializePath(button.Texture.FileName);
-		j[AttributeNames::TEXTURE_WRAP_S] = button.Texture.Wrap_S;
-		j[AttributeNames::TEXTURE_WRAP_T] = button.Texture.Wrap_T;
-		j[AttributeNames::TEXTURE_FILTER_MIN] = button.Texture.Filter_Min;
-		j[AttributeNames::TEXTURE_FILTER_MAX] = button.Texture.Filter_Max;
-		j[AttributeNames::TEXTURE_IMAGEFORMAT] = button.Texture.Image_Format;
+		j[AttributeNames::TEXTURE] = button.Texture;
 		j[AttributeNames::COMPONENT_ACTIVE] = button.IsEnabled();
 		return j;
 	}
@@ -832,12 +782,7 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::UIELEMENT_COLORTINT] = image.TintColor;
 		j[AttributeNames::UIELEMENT_ISDISABLED] = image.IsDisabled();
 		j[AttributeNames::UIELEMENT_ANCHOR] = image.GetAnchor();
-		j[AttributeNames::TEXTURE_PATH] = SerializePath(image.Texture.FileName);
-		j[AttributeNames::TEXTURE_WRAP_S] = image.Texture.Wrap_S;
-		j[AttributeNames::TEXTURE_WRAP_T] = image.Texture.Wrap_T;
-		j[AttributeNames::TEXTURE_FILTER_MIN] = image.Texture.Filter_Min;
-		j[AttributeNames::TEXTURE_FILTER_MAX] = image.Texture.Filter_Max;
-		j[AttributeNames::TEXTURE_IMAGEFORMAT] = image.Texture.Image_Format;
+		j[AttributeNames::TEXTURE] = image.Texture;
 		j[AttributeNames::COMPONENT_ACTIVE] = image.IsEnabled();
 		return j;
 	}
@@ -874,7 +819,7 @@ namespace AIngine::Editor::Serialization {
 		return j;
 	}
 
-	std::string SceneGraphSerializer::SerializePath(const std::string & path)
+	std::string SerializePath(const std::string & path)
 	{
 		// it's an Engine resource and thus relative to the install dir
 		if (path.find("AIngine") != std::string::npos) {
@@ -889,67 +834,67 @@ namespace AIngine::Editor::Serialization {
 	{
 		std::vector<std::string> result;
 
-		using json = nlohmann::json;
+		//using json = nlohmann::json;
 
-		// open the file
-		std::ifstream file;
-		file.open(sceneFilePath);
-		if (file.fail()) return result;
-		json j = json::parse(file);
-		file.close();
+		//// open the file
+		//std::ifstream file;
+		//file.open(sceneFilePath);
+		//if (file.fail()) return result;
+		//json j = json::parse(file);
+		//file.close();
 
 
-		json* currentJson = &j["Root"];
-		std::vector<json*> openJsons;
-		openJsons.push_back(currentJson);
+		//json* currentJson = &j["Root"];
+		//std::vector<json*> openJsons;
+		//openJsons.push_back(currentJson);
 
-		while (openJsons.size() > 0) {
+		//while (openJsons.size() > 0) {
 
-			currentJson = openJsons[0];
+		//	currentJson = openJsons[0];
 
-			if ((*currentJson).contains(AttributeNames::GAMEOBJECT_CHILDREN)) {
-				int index = 0;
-				for (auto child : (*currentJson)[AttributeNames::GAMEOBJECT_CHILDREN]) {
-					std::string name = child.begin().key();
-					// does it have any components?
-					if (child[name].contains(AttributeNames::GAMEOBJECT_COMPONENTS)) {
-						// texturepath
-						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SPRITE)) {
-							std::string path = child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SPRITE][AttributeNames::TEXTURE_PATH];
-							if (std::find(result.begin(), result.end(), path) == result.end())
-								result.push_back(path);
-						}
-						// sound path
-						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SOUND)) {
+		//	if ((*currentJson).contains(AttributeNames::GAMEOBJECT_CHILDREN)) {
+		//		int index = 0;
+		//		for (auto child : (*currentJson)[AttributeNames::GAMEOBJECT_CHILDREN]) {
+		//			std::string name = child.begin().key();
+		//			// does it have any components?
+		//			if (child[name].contains(AttributeNames::GAMEOBJECT_COMPONENTS)) {
+		//				// texturepath
+		//				if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SPRITE)) {
+		//					std::string path = child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SPRITE][AttributeNames::TEXTURE_PATH];
+		//					if (std::find(result.begin(), result.end(), path) == result.end())
+		//						result.push_back(path);
+		//				}
+		//				// sound path
+		//				if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SOUND)) {
 
-							for (auto& sound : child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SOUND]) {
-								if (sound.contains(AttributeNames::SOUND_PATH)) {
-									std::string path = sound.at(AttributeNames::SOUND_PATH);
-									if (std::find(result.begin(), result.end(), path) == result.end())
-										result.push_back(path);
-								}
-							}
+		//					for (auto& sound : child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SOUND]) {
+		//						if (sound.contains(AttributeNames::SOUND_PATH)) {
+		//							std::string path = sound.at(AttributeNames::SOUND_PATH);
+		//							if (std::find(result.begin(), result.end(), path) == result.end())
+		//								result.push_back(path);
+		//						}
+		//					}
 
-						}
-						// texturepath
-						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_PARTICLEEMITTER)) {
-							std::string path = child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PARTICLEEMITTER][AttributeNames::TEXTURE_PATH];
-							if (std::find(result.begin(), result.end(), path) == result.end())
-								result.push_back(path);
-						}
-					}
+		//				}
+		//				// texturepath
+		//				if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_PARTICLEEMITTER)) {
+		//					std::string path = child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_PARTICLEEMITTER][AttributeNames::TEXTURE_PATH];
+		//					if (std::find(result.begin(), result.end(), path) == result.end())
+		//						result.push_back(path);
+		//				}
+		//			}
 
-					// does it have children?
-					if (child[name].contains(AttributeNames::GAMEOBJECT_CHILDREN)) {
-						openJsons.push_back(&(*currentJson)[AttributeNames::GAMEOBJECT_CHILDREN][index][name]);
-					}
-					index++;
-				}
-			}
+		//			// does it have children?
+		//			if (child[name].contains(AttributeNames::GAMEOBJECT_CHILDREN)) {
+		//				openJsons.push_back(&(*currentJson)[AttributeNames::GAMEOBJECT_CHILDREN][index][name]);
+		//			}
+		//			index++;
+		//		}
+		//	}
 
-			openJsons.erase(openJsons.begin());
+		//	openJsons.erase(openJsons.begin());
 
-		}
+		//}
 		return result;
 	}
 

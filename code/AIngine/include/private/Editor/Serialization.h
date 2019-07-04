@@ -2,6 +2,8 @@
 
 #include "Structures/Traverser.h"
 #include "Structures/Rectangle.h"
+#include "Assets/Assets.h"
+#include "Rendering/texture.h"
 
 #include "nlohmann/json.hpp"
 #include "glm/glm.hpp"
@@ -38,6 +40,7 @@ namespace AIngine {
 namespace AIngine::Editor::Serialization
 {
 	std::vector<std::string> ExtractPathsFromScene(const std::string& sceneFilePath);
+	std::string SerializePath(const std::string& path);
 
 	class Serializer {
 	public:
@@ -89,7 +92,6 @@ namespace AIngine::Editor::Serialization
 		nlohmann::json* m_children;
 		std::vector<AIngine::GameObject*> m_spawnedObjects;
 
-		std::string SerializePath(const std::string& path);
 
 	};
 
@@ -146,27 +148,27 @@ namespace AIngine::Structures
 	}
 }
 
-//namespace AIngine::Rendering
-//{
-//	inline void to_json(nlohmann::json& j, const AIngine::Rendering::Texture2D& texture)
-//	{
-//		j = nlohmann::json{
-//			{"path", AIngine::Editor::Serialization::SerializePath(texture.FileName)},
-//			{"wrapS", texture.Wrap_S},
-//			{"wrapT", texture.Wrap_T},
-//			{"filterMin", texture.Filter_Min},
-//			{"filterMax", texture.Filter_Max},
-//			{"imageFormat", texture.Image_Format},
-//		};
-//	}
-//
-//	inline void from_json(const nlohmann::json& j, AIngine::Rendering::Texture2D& texture) {
-//		j.at("wrapS").get_to(texture.Wrap_S);
-//		j.at("wrapT").get_to(texture.Wrap_T);
-//		j.at("filterMin").get_to(texture.Filter_Min);
-//		j.at("filterMax").get_to(texture.Filter_Max);
-//		j.at("imageFormat").get_to(texture.Image_Format);
-//		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(j.at("path"))->GetBitmap();
-//		texture.Generate(bitmap);
-//	}
-//}
+namespace AIngine::Rendering
+{
+	inline void to_json(nlohmann::json& j, const AIngine::Rendering::Texture2D& texture)
+	{
+		j = nlohmann::json{
+			{"path", AIngine::Editor::Serialization::SerializePath(texture.FileName)},
+			{"wrapS", texture.Wrap_S},
+			{"wrapT", texture.Wrap_T},
+			{"filterMin", texture.Filter_Min},
+			{"filterMax", texture.Filter_Max},
+			{"imageFormat", texture.Image_Format},
+		};
+	}
+
+	inline void from_json(const nlohmann::json& j, AIngine::Rendering::Texture2D& texture) {
+		j.at("wrapS").get_to(texture.Wrap_S);
+		j.at("wrapT").get_to(texture.Wrap_T);
+		j.at("filterMin").get_to(texture.Filter_Min);
+		j.at("filterMax").get_to(texture.Filter_Max);
+		j.at("imageFormat").get_to(texture.Image_Format);
+		AIngine::Rendering::Bitmap& bitmap = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(j.at("path"))->GetBitmap();
+		texture.Generate(bitmap);
+	}
+}
