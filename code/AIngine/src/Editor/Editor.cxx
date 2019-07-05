@@ -439,7 +439,7 @@ namespace AIngine::Editor {
 		}
 	}
 
-	bool Editor::CreateMoveablePositionVertex(glm::vec2 & worldPosition, float vertexSize, const glm::vec3 & colorInteract, const glm::vec3 & colorNormal)
+	bool Editor::CreateMoveablePositionVertex(glm::vec2 & worldPosition, float vertexSize, const glm::vec4 & colorInteract, const glm::vec4 & colorNormal)
 	{
 		glm::vec2 mouseScreenPos = glm::vec2(AIngine::Input::GetMousePosition().first, AIngine::Input::GetMousePosition().second);
 		glm::vec2 mouseWorldPos = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(mouseScreenPos);
@@ -461,7 +461,7 @@ namespace AIngine::Editor {
 			AIngine::Graphics::Point(worldPosition, vertexSize, colorNormal);
 		}
 
-		AIngine::Graphics::BoxScreen(vertexRectangle, glm::vec3(1, 1, 0));
+		AIngine::Graphics::BoxScreen(vertexRectangle, glm::vec4(1, 1, 0,1));
 		return bInteracted;
 	}
 

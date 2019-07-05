@@ -42,7 +42,7 @@ namespace AIngine::Editor::Widget::Component {
 				ImGui::Separator();
 
 				// Draw CheckBox rect
-				AIngine::Graphics::BoxScreen(checkbox->GetRectangle(), glm::vec3(1, 1, 0));
+				AIngine::Graphics::BoxScreen(checkbox->GetRectangle(), glm::vec4(1, 1, 0,1));
 			}
 		}
 	}

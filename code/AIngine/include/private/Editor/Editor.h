@@ -110,7 +110,7 @@ namespace AIngine::Editor {
 		static void SaveBuildScenes();
 		static void AddCurrentSceneToBuild();
 
-		static bool CreateMoveablePositionVertex(glm::vec2& worldPosition, float vertexSize, const glm::vec3& colorInteract = glm::vec3(0, 1, 0), const glm::vec3& colorNormal = glm::vec3(1, 0, 0));
+		static bool CreateMoveablePositionVertex(glm::vec2& worldPosition, float vertexSize, const glm::vec4& colorInteract = glm::vec4(0, 1, 0,1), const glm::vec4& colorNormal = glm::vec4(1, 0, 0,1));
 
 		static void CreateNewScene();
 		static void LoadScene(const std::string& path);

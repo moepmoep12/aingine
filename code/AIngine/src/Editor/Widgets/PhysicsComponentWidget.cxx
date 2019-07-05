@@ -178,7 +178,7 @@ namespace AIngine::Editor::Widget::Component {
 		bodyInformation.verticesCount = 4;
 	}
 
-	void PhysicsComponentWidget::CreateMoveableVertex(glm::vec2 & localPosition, const b2Transform & transform, float size, const glm::vec3 & colorInteract, const glm::vec3 & colorNormal)
+	void PhysicsComponentWidget::CreateMoveableVertex(glm::vec2 & localPosition, const b2Transform & transform, float size, const glm::vec4 & colorInteract, const glm::vec4 & colorNormal)
 	{
 		glm::vec2 mouseScreenPos = glm::vec2(AIngine::Input::GetMousePosition().first, AIngine::Input::GetMousePosition().second);
 		glm::vec2 mouseWorldPos = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(mouseScreenPos);
@@ -204,27 +204,27 @@ namespace AIngine::Editor::Widget::Component {
 
 		AIngine::Structures::RectangleI rect((int)vertexRectangle.x, (int)vertexRectangle.y, (int)vertexRectangle.width, (int)
 			vertexRectangle.height);
-		AIngine::Graphics::BoxScreen(rect, glm::vec3(1, 1, 0));
+		AIngine::Graphics::BoxScreen(rect, glm::vec4(1, 1, 0, 1));
 	}
 
 	void PhysicsComponentWidget::CreateCircleUI(AIngine::Physics::PhysicsComponent * physComp)
 	{
 		float* offset[] = { &physComp->m_offset.x,&physComp->m_offset.y };
 		AIngine::Physics::PhysicsBodyInformation& bodyInfo = physComp->m_bodyInformation;
-		glm::vec3 color;
+		glm::vec4 color;
 
 		// Circle attributes
 		ImGui::DragFloat2("Offset", *offset, 0.05f);
 		if (ImGui::DragFloat("Radius", &bodyInfo.radius, bodyInfo.radius != 0 ? bodyInfo.radius * 0.01f : 0.01f)) {
-			color = glm::vec3(0, 1, 0);
+			color = glm::vec4(0, 1, 0, 1);
 		}
 		else {
-			color = glm::vec3(1, 0, 0);
+			color = glm::vec4(1, 0, 0, 1);
 		}
 
 
 		// Draw the circle shape
-		AIngine::Graphics::CircleWorld(physComp->GetOwner()->GetWorldPosition() + physComp->m_offset, bodyInfo.radius, glm::vec3(1, 0, 0));
+		AIngine::Graphics::CircleWorld(physComp->GetOwner()->GetWorldPosition() + physComp->m_offset, bodyInfo.radius, glm::vec4(1, 0, 0, 1));
 
 		// draw the center point
 		AIngine::Graphics::Point(physComp->GetOwner()->GetWorldPosition() + physComp->m_offset, 5, color);
@@ -249,7 +249,7 @@ namespace AIngine::Editor::Widget::Component {
 		}
 
 		// draw the box shape
-		AIngine::Graphics::BoxWorld(vertices, glm::vec3(0, 0, 1));
+		AIngine::Graphics::BoxWorld(vertices, glm::vec4(0, 0, 1, 1));
 	}
 
 	void PhysicsComponentWidget::CreatePolygonUI(AIngine::Physics::PhysicsComponent * physComp)
@@ -292,7 +292,7 @@ namespace AIngine::Editor::Widget::Component {
 		for (unsigned int i = 0; i < bodyInfo.verticesCount; i++) {
 			const b2Transform& xf = physComp->m_body->GetTransform();
 			if (i == vertexUnderChangeIndex) {
-				CreateMoveableVertex(bodyInfo.vertices[i], xf, 7, glm::vec3(0, 1, 0), glm::vec3(0, 1, 0));
+				CreateMoveableVertex(bodyInfo.vertices[i], xf, 7, glm::vec4(0, 1, 0, 1), glm::vec4(0, 1, 0, 1));
 			}
 			else {
 				CreateMoveableVertex(bodyInfo.vertices[i], xf, 7);
@@ -301,7 +301,7 @@ namespace AIngine::Editor::Widget::Component {
 			vertices[i] = glm::vec2(result.x, result.y);
 		}
 
-		AIngine::Graphics::PolygonWorld(vertices, bodyInfo.verticesCount, glm::vec3(0, 0, 1));
+		AIngine::Graphics::PolygonWorld(vertices, bodyInfo.verticesCount, glm::vec4(0, 0, 1, 1));
 	}
 
 	void PhysicsComponentWidget::CreateEdgeUI(AIngine::Physics::PhysicsComponent * physComp)
@@ -325,7 +325,7 @@ namespace AIngine::Editor::Widget::Component {
 		for (unsigned int i = 0; i < 2; i++) {
 			const b2Transform& xf = physComp->m_body->GetTransform();
 			if (i == vertexUnderChangeIndex) {
-				CreateMoveableVertex(bodyInfo.vertices[i], xf, 7, glm::vec3(0, 1, 0), glm::vec3(0, 1, 0));
+				CreateMoveableVertex(bodyInfo.vertices[i], xf, 7, glm::vec4(0, 1, 0, 1), glm::vec4(0, 1, 0, 1));
 			}
 			else {
 				CreateMoveableVertex(bodyInfo.vertices[i], xf, 7);
@@ -334,7 +334,7 @@ namespace AIngine::Editor::Widget::Component {
 			vertices[i] = glm::vec2(result.x, result.y);
 		}
 
-		AIngine::Graphics::Line(vertices[0], vertices[1], glm::vec3(0, 0, 1));
+		AIngine::Graphics::Line(vertices[0], vertices[1], glm::vec4(0, 0, 1, 1));
 	}
 
 	glm::vec2 PhysicsComponentWidget::CalculateWorldPosition(const glm::vec2 & localPos, const b2Transform & transform)

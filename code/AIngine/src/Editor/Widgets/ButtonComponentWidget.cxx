@@ -103,7 +103,7 @@ namespace AIngine::Editor::Widget::Component {
 				ImGui::Separator();
 
 				// Draw button rect
-				AIngine::Graphics::BoxScreen(btn->GetRectangle(), glm::vec3(1, 1, 0));
+				AIngine::Graphics::BoxScreen(btn->GetRectangle(), glm::vec4(1, 1, 0, 1));
 			}
 		}
 	}

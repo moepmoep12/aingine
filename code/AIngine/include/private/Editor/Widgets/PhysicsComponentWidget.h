@@ -16,7 +16,7 @@ namespace AIngine::Editor::Widget::Component {
 
 	private:
 		void UpdateBoxVertices(AIngine::Physics::PhysicsComponent& physComp) const;
-		void CreateMoveableVertex(glm::vec2& localPosition, const b2Transform& transform, float size, const glm::vec3& colorInteract = glm::vec3(0,1,0), const glm::vec3& colorNormal = glm::vec3(1,0,0));
+		void CreateMoveableVertex(glm::vec2& localPosition, const b2Transform& transform, float size, const glm::vec4& colorInteract = glm::vec4(0, 1, 0, 1), const glm::vec4& colorNormal = glm::vec4(1, 0, 0, 1));
 		//void DrawVertex(const glm::vec2& worldPosition, const glm::vec3& color = glm::vec3(1, 0, 0));
 
 		void CreateCircleUI(AIngine::Physics::PhysicsComponent* physComp);

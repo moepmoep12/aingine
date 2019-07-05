@@ -87,7 +87,7 @@ namespace AIngine::Editor::Widget::Component {
 			break;
 		}
 
-		AIngine::Graphics::PointScreen(anchorpos, 50, glm::vec3(0.35, 0.72, 0));
+		AIngine::Graphics::PointScreen(anchorpos, 50, glm::vec4(0.35, 0.72, 0, 1));
 
 		return changed;
 	}

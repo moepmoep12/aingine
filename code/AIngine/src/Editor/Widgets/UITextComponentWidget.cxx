@@ -107,7 +107,7 @@ namespace AIngine::Editor::Widget::Component {
 				ImGui::Separator();
 
 				// Draw Text rect
-				AIngine::Graphics::BoxScreen(txt->GetRectangle(), glm::vec3(1, 1, 0));
+				AIngine::Graphics::BoxScreen(txt->GetRectangle(), glm::vec4(1, 1, 0, 1));
 			}
 		}
 	}

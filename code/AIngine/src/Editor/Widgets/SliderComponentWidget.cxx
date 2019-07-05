@@ -91,9 +91,9 @@ namespace AIngine::Editor::Widget::Component {
 				ImGui::Separator();
 
 				// Draw SliderBackground rect
-				AIngine::Graphics::BoxScreen(checkbox->GetRectangle(), glm::vec3(1, 1, 0));
+				AIngine::Graphics::BoxScreen(checkbox->GetRectangle(), glm::vec4(1, 1, 0, 1));
 				// Draw SliderHandle rect
-				AIngine::Graphics::BoxScreen(checkbox->m_sliderHandle->GetRectangle(), glm::vec3(1, 1, 0));
+				AIngine::Graphics::BoxScreen(checkbox->m_sliderHandle->GetRectangle(), glm::vec4(1, 1, 0, 1));
 			}
 		}
 	}

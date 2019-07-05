@@ -41,7 +41,7 @@ namespace AIngine::Editor::Widget::Component {
 				canvas->SetRectangle(rect);
 
 				// Draw button rect
-				AIngine::Graphics::BoxScreen(rect, glm::vec3(1, 1, 0));
+				AIngine::Graphics::BoxScreen(rect, glm::vec4(1, 1, 0,1));
 
 				ImGui::NewLine();
 				ImGui::Separator();

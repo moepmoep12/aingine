@@ -68,7 +68,7 @@ namespace AIngine::Editor::Widget::Component {
 				ImGui::Separator();
 
 				// Draw Image rect
-				AIngine::Graphics::BoxScreen(img->GetRectangle(), glm::vec3(1, 1, 0));
+				AIngine::Graphics::BoxScreen(img->GetRectangle(), glm::vec4(1, 1, 0, 1));
 			}
 		}
 	}
