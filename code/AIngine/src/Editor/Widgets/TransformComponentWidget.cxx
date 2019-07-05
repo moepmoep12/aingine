@@ -68,10 +68,15 @@ namespace AIngine::Editor::Widget::Component {
 			ImGui::DragFloat2("Position", *position, translationSliderSpeed);
 			ImGui::DragFloat2("Scale", *scale, scaleSliderSpeed);
 			ImGui::DragFloat("Rotation", &rotDegree, rotationSliderSpeed);
+			if (ImGui::IsItemHovered()) {
+				ImGui::BeginTooltip();
+				ImGui::Text(std::to_string(rotDegree * D2R).c_str());
+				ImGui::EndTooltip();
+			}
 
 			// create vertex at the objects center to move it around with the mouse
 			if (activeGameObject != &AIngine::Editor::Editor::GetSceneGraph()->GetRoot())
-				AIngine::Editor::Editor::CreateMoveablePositionVertex(activeGameObject->m_position, 15, glm::vec3(0, 1, 0), glm::vec3(0, 0, 1));
+				AIngine::Editor::Editor::CreateMoveablePositionVertex(activeGameObject->m_position, 15, glm::vec4(0, 1, 0, 1), glm::vec4(0, 0, 1, 1));
 
 			glm::vec2 newPosition = activeGameObject->GetLocalPosition();
 			glm::vec newScale = activeGameObject->GetLocalScale();
