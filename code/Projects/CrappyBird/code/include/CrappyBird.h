@@ -16,6 +16,7 @@ namespace CrappyBird {
 		static float s_GameSpeed;
 		static bool s_bObstacleRotation;
 		static int s_levelIndex;
+		static bool s_DieOnCollision;
 
 		const static float s_originalGameSpeed;
 	};

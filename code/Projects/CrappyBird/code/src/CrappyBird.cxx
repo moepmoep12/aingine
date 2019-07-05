@@ -12,6 +12,7 @@ namespace CrappyBird {
 
 	float CrappyBird::s_GameSpeed = CrappyBird::s_originalGameSpeed;
 	bool CrappyBird::s_bObstacleRotation = false;
+	bool CrappyBird::s_DieOnCollision = false;
 	int CrappyBird::s_levelIndex = 3;
 
 	// Constructor

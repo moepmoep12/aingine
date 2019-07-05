@@ -25,7 +25,7 @@ namespace CrappyBird {
 		StartButton->OnClickedEvent += OnStartClickedHandler;
 
 		SpeedSlider = AIngine::World::GetGameObject("SpeedSlider")->GetComponent<AIngine::UI::Slider>();
-		SpeedSlider->OnValueChangedEvent += std::bind(&MainMenu::OnSpeedChanged, this, std::placeholders::_1);	
+		SpeedSlider->OnValueChangedEvent += std::bind(&MainMenu::OnSpeedChanged, this, std::placeholders::_1);
 
 		ImpulseSlider = AIngine::World::GetGameObject("ImpulseSlider")->GetComponent<AIngine::UI::Slider>();
 		ImpulseSlider->OnValueChangedEvent += std::bind(&MainMenu::OnImpulseChanged, this, std::placeholders::_1);
@@ -33,6 +33,11 @@ namespace CrappyBird {
 		RotationCheckBox = AIngine::World::GetGameObject("CheckBoxRotation")->GetComponent<AIngine::UI::CheckBox>();
 		RotationCheckBox->OnStateChangedEvent += std::bind(&MainMenu::OnObstacleRotationValueChanged, this, std::placeholders::_1);
 
+		CollisionCheckBox = AIngine::World::GetGameObject("CheckBoxCollision")->GetComponent<AIngine::UI::CheckBox>();
+		CollisionCheckBox->OnStateChangedEvent += std::bind(&MainMenu::OnGameOverCheckBoxValueChanged, this, std::placeholders::_1);
+
+		Obstacles[0] = AIngine::World::GetGameObject("Obstacle1");
+		Obstacles[1] = AIngine::World::GetGameObject("Obstacle2");
 
 		for (int i = 0; i < 4; i++) {
 			std::stringstream ss;
@@ -53,11 +58,13 @@ namespace CrappyBird {
 		SpeedSlider->OnValueChangedEvent = AIngine::Events::Event<void, float>();
 		ImpulseSlider->OnValueChangedEvent = AIngine::Events::Event<void, float>();
 		RotationCheckBox->OnStateChangedEvent = AIngine::Events::Event<void, bool>();
+		CollisionCheckBox->OnStateChangedEvent = AIngine::Events::Event<void, bool>();
 	}
 
 	// Update is called once per frame
 	void MainMenu::Update(float delta)
 	{
+		RotateObstacles(delta);
 	}
 
 	// Callback for events
@@ -73,9 +80,38 @@ namespace CrappyBird {
 			rect.y -= i;
 			rect.width += 2 * i;
 			rect.height += 2 * i;
-			Graphics::BoxScreen(rect, glm::vec3(1, 1, 0));
+			Graphics::BoxScreen(rect, glm::vec4(1, 1, 0, 1));
 		}
 	}
+
+	static float rotationDirection = 0;
+
+	void MainMenu::RotateObstacles(float delta)
+	{
+		if (!rotationDirection) return;
+
+		static const float angle1 = -23 * AIngine::D2R;
+		static const float angle2 = -69 * AIngine::D2R;
+		static const float Duration = 1;
+		static float currentDuration = 0;
+
+		currentDuration += delta * rotationDirection;
+
+		if (currentDuration >= Duration && rotationDirection == 1) {
+			currentDuration = Duration;
+			rotationDirection = 0;
+		}
+		else if (currentDuration <= 0 && rotationDirection == -1) {
+			currentDuration = 0;
+			rotationDirection = 0;
+		}
+
+		float t = AIngine::Math::SmoothStep(currentDuration / Duration);
+
+		Obstacles[0]->SetRotation(t * angle1);
+		Obstacles[1]->SetRotation(t * angle2);
+	}
+
 	void MainMenu::OnStartClicked()
 	{
 		AIngine::Application::LoadScene(1);
@@ -104,5 +140,14 @@ namespace CrappyBird {
 	void MainMenu::OnObstacleRotationValueChanged(bool value)
 	{
 		CrappyBird::s_bObstacleRotation = value;
+		if (value)
+			rotationDirection = 1;
+		else
+			rotationDirection = -1;
+	}
+
+	void MainMenu::OnGameOverCheckBoxValueChanged(bool value)
+	{
+		CrappyBird::s_DieOnCollision = value;
 	}
 }

@@ -88,7 +88,8 @@ namespace CrappyBird {
 			UpdateGameOverScreen(delta);
 			return;
 		}
-		if (GetOwner()->GetWorldPosition().x <= -1) {
+		// Check if GameOver
+		if (GetOwner()->GetWorldPosition().x < 0) {
 			OnGameOverEvent();
 		}
 
@@ -153,9 +154,11 @@ namespace CrappyBird {
 
 	void Player::OnCollision(PhysicsComponent * other)
 	{
-		//if (other->GetOwner()->GetName() == "Obstacle") {
-		//	GetOwner()->SetActive(false);
-		//}
+		if (CrappyBird::s_DieOnCollision) {
+			if (other->GetOwner()->GetName() == "Obstacle") {
+				OnGameOverEvent();
+			}
+		}
 	}
 
 	static float s_lifeTime = 0.35f;

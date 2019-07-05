@@ -61,6 +61,135 @@
 }
 },
 {
+"Rocket": {
+"a_active": true,
+"a_name": "Rocket",
+"a_posX": 5.0,
+"a_posY": 2.5,
+"a_rotation": 1.2479100227355957,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"particleemitter": {
+"active": true,
+"amount": 10000,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\Circle.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+},
+"script": [
+8
+],
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 2.0,
+"sizeY": 3.0,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "textures\\rocket_nofire.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+}
+},
+{
+"Obstacles": {
+"a_active": true,
+"a_name": "Obstacles",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null
+},
+"c_children": [
+{
+"Obstacle1": {
+"a_active": true,
+"a_name": "Obstacle1",
+"a_posX": 5.5,
+"a_posY": 0.5,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 1.5,
+"sizeY": 1.5,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "textures\\set8_example_1.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+}
+},
+{
+"Obstacle2": {
+"a_active": true,
+"a_name": "Obstacle2",
+"a_posX": 4.0,
+"a_posY": 0.5,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 1.5,
+"sizeY": 1.0,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "textures\\set8_example_1.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+}
+}
+]
+}
+},
+{
 "Canvas": {
 "a_active": true,
 "a_name": "Canvas",
@@ -294,6 +423,72 @@
 }
 },
 {
+"CheckBoxCollision": {
+"a_active": true,
+"a_name": "CheckBoxCollision",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"checkbox": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 50,
+"width": 50,
+"x": 5,
+"y": 200
+},
+"state": false,
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+}
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "AIngine\\fonts\\arial.ttf",
+"fontsize": 30,
+"horizontalAlign": 0,
+"isdisabled": false,
+"rectangle": {
+"height": 50,
+"width": 364,
+"x": 60,
+"y": 200
+},
+"text": "Game Over on collision?",
+"tintColor": {
+"w": 1.0,
+"x": 9.999999974752427e-07,
+"y": 9.999899930335232e-07,
+"z": 9.999899930335232e-07
+},
+"verticalAlign": 1
+}
+}
+}
+},
+{
 "SpeedSlider": {
 "a_active": true,
 "a_name": "SpeedSlider",
@@ -322,96 +517,6 @@
 "isdisabled": false,
 "maxvalue": 1.0,
 "minvalue": -0.5,
-"rectangle": {
-"height": 30,
-"width": 380,
-"x": 10,
-"y": 225
-},
-"textureBackground": {
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6408,
-"path": "AIngine\\textures\\SliderArea.png",
-"wrapS": 10497,
-"wrapT": 10497
-},
-"textureHandler": {
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6407,
-"path": "AIngine\\textures\\White.png",
-"wrapS": 10497,
-"wrapT": 10497
-},
-"tintColor": {
-"w": 1.0,
-"x": 0.7730000019073486,
-"y": 0.6669999957084656,
-"z": 0.3799999952316284
-},
-"value": 0.5
-},
-"text": {
-"active": true,
-"anchor": 1,
-"disabledColor": {
-"w": 1.0,
-"x": 0.20000000298023224,
-"y": 0.20000000298023224,
-"z": 0.20000000298023224
-},
-"fontpath": "AIngine\\fonts\\arial.ttf",
-"fontsize": 33,
-"horizontalAlign": 1,
-"isdisabled": false,
-"rectangle": {
-"height": 42,
-"width": 380,
-"x": 10,
-"y": 183
-},
-"text": "Speed",
-"tintColor": {
-"w": 1.0,
-"x": 1.0,
-"y": 1.0,
-"z": 1.0
-},
-"verticalAlign": 0
-}
-}
-}
-},
-{
-"ImpulseSlider": {
-"a_active": true,
-"a_name": "ImpulseSlider",
-"a_posX": 0.0,
-"a_posY": 0.0,
-"a_rotation": 0.0,
-"a_scaleX": 1.0,
-"a_scaleY": 1.0,
-"b_components": {
-"script": null,
-"slider": {
-"active": true,
-"anchor": 1,
-"disabledColor": {
-"w": 1.0,
-"x": 0.20000000298023224,
-"y": 0.20000000298023224,
-"z": 0.20000000298023224
-},
-"dragColor": {
-"w": 1.0,
-"x": 0.9700000286102295,
-"y": 1.0,
-"z": 0.4000000059604645
-},
-"isdisabled": false,
-"maxvalue": 2.0,
-"minvalue": 0.5,
 "rectangle": {
 "height": 30,
 "width": 380,
@@ -460,6 +565,96 @@
 "width": 380,
 "x": 10,
 "y": 283
+},
+"text": "Speed",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 0
+}
+}
+}
+},
+{
+"ImpulseSlider": {
+"a_active": true,
+"a_name": "ImpulseSlider",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"slider": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"dragColor": {
+"w": 1.0,
+"x": 0.9700000286102295,
+"y": 1.0,
+"z": 0.4000000059604645
+},
+"isdisabled": false,
+"maxvalue": 2.0,
+"minvalue": 0.75,
+"rectangle": {
+"height": 30,
+"width": 380,
+"x": 10,
+"y": 426
+},
+"textureBackground": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\SliderArea.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"textureHandler": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "AIngine\\textures\\White.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 0.7730000019073486,
+"y": 0.6669999957084656,
+"z": 0.3799999952316284
+},
+"value": 0.5
+},
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "AIngine\\fonts\\arial.ttf",
+"fontsize": 33,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 42,
+"width": 380,
+"x": 10,
+"y": 384
 },
 "text": "Impulse",
 "tintColor": {
@@ -882,53 +1077,6 @@
 }
 }
 ]
-}
-},
-{
-"Rocket": {
-"a_active": true,
-"a_name": "Rocket",
-"a_posX": 5.0,
-"a_posY": 2.5,
-"a_rotation": 1.2479100227355957,
-"a_scaleX": 1.0,
-"a_scaleY": 1.0,
-"b_components": {
-"particleemitter": {
-"active": true,
-"amount": 10000,
-"texture": {
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6408,
-"path": "AIngine\\textures\\Circle.png",
-"wrapS": 10497,
-"wrapT": 10497
-}
-},
-"script": [
-8
-],
-"sprite": {
-"active": true,
-"alpha": 1.0,
-"colorB": 1.0,
-"colorG": 1.0,
-"colorR": 1.0,
-"parallaxX": 1.0,
-"parallaxY": 1.0,
-"sizeX": 2.0,
-"sizeY": 3.0,
-"texture": {
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6408,
-"path": "textures\\rocket_nofire.png",
-"wrapS": 10497,
-"wrapT": 10497
-}
-}
-}
 }
 }
 ]
