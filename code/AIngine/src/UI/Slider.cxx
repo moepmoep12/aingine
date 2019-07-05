@@ -15,14 +15,24 @@ namespace AIngine::UI {
 
 	bool Slider::Render(AIngine::Rendering::GLShaderProgram & shader) const
 	{
+		auto rect = GetRectangleNative();
 		if (m_sliderHandle) {
-			auto rect = GetRectangleNative();
 			glm::vec2 pos = rect.GetPosition();
-			m_sliderHandle->SetHeight(rect.height);
-			// the handle has a width of 10% of the background width
-			m_sliderHandle->SetWidth(rect.width * 0.1f);
-			pos.x += (Value * rect.width) - m_sliderHandle->GetRectangle().width * 0.5f;
+			// the handle has a width of 5% of the background width
+			m_sliderHandle->SetWidth(rect.width * 0.05f);
+
+			pos.x = std::clamp(pos.x + (Value * rect.width) - m_sliderHandle->GetRectangle().width * 0.5f, pos.x, pos.x + rect.width - m_sliderHandle->GetRectangle().width * 0.5f);
+			pos.y -= 0.15f * rect.height;
+			m_sliderHandle->SetHeight(rect.height + rect.height * 2 * 0.15f);
 			m_sliderHandle->SetPosition(pos);
+		}
+
+		if (TextComponent) {
+			glm::vec2 pos = rect.GetPosition();
+			pos.y -= m_sliderHandle->GetRectangle().height;
+			TextComponent->SetPosition(pos);
+			TextComponent->SetHeight(m_sliderHandle->GetRectangle().height);
+			TextComponent->SetWidth(rect.width);
 		}
 
 		TextureBackGround.Bind();
@@ -35,7 +45,8 @@ namespace AIngine::UI {
 	{
 		m_sliderHandle = GetOwner()->AddComponent<SliderHandle>();
 		m_sliderHandle->m_slider = this;
-		TextureBackGround.Generate(AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>("AIngine/textures/HILLBLU_button_background.png")->GetBitmap());
+		TextureBackGround.Generate(AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>("AIngine/textures/SliderArea.png")->GetBitmap());
+		TextComponent = GetOwner()->AddComponent<UIText>();
 	}
 
 	Component * Slider::Copy(GameObject * const owner) const
@@ -72,7 +83,7 @@ namespace AIngine::UI {
 			float deltaPercent = delta / m_slider->GetRectangle().width;
 
 			m_slider->Value = std::clamp(m_slider->Value + deltaPercent, 0.0f, 1.0f);
-			m_slider->OnValueChangedEvent(m_slider->Value * m_slider->Max);
+			m_slider->OnValueChangedEvent(m_slider->Min + m_slider->Value * m_slider->Max);
 
 			m_lastPosition = currentMousePos;
 		}
@@ -89,3 +100,6 @@ namespace AIngine::UI {
 		return true;
 	}
 }
+
+// initialize EventHandler for OnValueChangedEvent
+int AIngine::Events::EventHandler<void, float>::counter = 0;

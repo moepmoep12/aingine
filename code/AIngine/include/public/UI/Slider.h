@@ -2,6 +2,7 @@
 #include "UI/UIELement.h"
 #include "Events/Event.h"
 #include "Rendering/texture.h"
+#include "UI/Text.h"
 
 namespace AIngine::UI {
 
@@ -25,6 +26,7 @@ namespace AIngine::UI {
 		typedef AIngine::Events::EventHandler<void, float> OnValueChangedEventHandler;
 
 		SliderHandle* m_sliderHandle;
+		UIText* TextComponent;
 	protected:
 		virtual Component* Copy(GameObject* const owner) const override;
 

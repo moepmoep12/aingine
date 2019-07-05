@@ -58,3 +58,6 @@ namespace AIngine::UI {
 		return copy;
 	}
 }
+
+// initialize EventHandler for OnStateChangedEvent
+int AIngine::Events::EventHandler<void, bool>::counter = 0;
