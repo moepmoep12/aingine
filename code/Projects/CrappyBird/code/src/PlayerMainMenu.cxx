@@ -1,5 +1,6 @@
 #include "PlayerMainMenu.h"
 #include "CrappyBird.h"
+#include "Player.h"
 
 #include <random>
 
@@ -36,6 +37,23 @@ namespace CrappyBird {
 	void PlayerMainMenu::Update(float delta)
 	{
 		m_delta = delta;
+
+		static const float duration = 0.25;
+		static float currentDuration = 0;
+		static const float startHeight = GetOwner()->GetLocalPosition().y;
+		const float maxHeight = startHeight - Player::s_Impulse;
+		const float distance = startHeight - maxHeight;
+		static float direction = -1; // -1 = upwards
+
+		currentDuration += delta;
+		if (currentDuration >= duration) {
+			currentDuration = 0;
+			direction *= -1;
+		}
+		float t = AIngine::Math::CosErp(currentDuration / duration);
+		float heightDest = direction == -1 ? startHeight - t * distance : maxHeight + t * distance;
+
+		GetOwner()->SetLocalPosition(glm::vec2(GetOwner()->GetLocalPosition().x, heightDest));
 
 		// basic fire
 		m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 100);

@@ -294,9 +294,9 @@
 }
 },
 {
-"Slider1": {
+"SpeedSlider": {
 "a_active": true,
-"a_name": "Slider1",
+"a_name": "SpeedSlider",
 "a_posX": 0.0,
 "a_posY": 0.0,
 "a_rotation": 0.0,
@@ -321,18 +321,18 @@
 },
 "isdisabled": false,
 "maxvalue": 1.0,
-"minvalue": 0.0,
+"minvalue": -0.5,
 "rectangle": {
 "height": 30,
-"width": 400,
-"x": 0,
+"width": 380,
+"x": 10,
 "y": 225
 },
 "textureBackground": {
 "filterMax": 9729,
 "filterMin": 9729,
 "imageFormat": 6408,
-"path": "AIngine\\textures\\HILLBLU_button_background.png",
+"path": "AIngine\\textures\\SliderArea.png",
 "wrapS": 10497,
 "wrapT": 10497
 },
@@ -346,11 +346,129 @@
 },
 "tintColor": {
 "w": 1.0,
+"x": 0.7730000019073486,
+"y": 0.6669999957084656,
+"z": 0.3799999952316284
+},
+"value": 0.5
+},
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "AIngine\\fonts\\arial.ttf",
+"fontsize": 33,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 42,
+"width": 380,
+"x": 10,
+"y": 183
+},
+"text": "Speed",
+"tintColor": {
+"w": 1.0,
 "x": 1.0,
 "y": 1.0,
 "z": 1.0
 },
+"verticalAlign": 0
+}
+}
+}
+},
+{
+"ImpulseSlider": {
+"a_active": true,
+"a_name": "ImpulseSlider",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"slider": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"dragColor": {
+"w": 1.0,
+"x": 0.9700000286102295,
+"y": 1.0,
+"z": 0.4000000059604645
+},
+"isdisabled": false,
+"maxvalue": 2.0,
+"minvalue": 0.5,
+"rectangle": {
+"height": 30,
+"width": 380,
+"x": 10,
+"y": 325
+},
+"textureBackground": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\SliderArea.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"textureHandler": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "AIngine\\textures\\White.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 0.7730000019073486,
+"y": 0.6669999957084656,
+"z": 0.3799999952316284
+},
 "value": 0.5
+},
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "AIngine\\fonts\\arial.ttf",
+"fontsize": 33,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 42,
+"width": 380,
+"x": 10,
+"y": 283
+},
+"text": "Impulse",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 0
 }
 }
 }

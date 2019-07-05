@@ -55,6 +55,10 @@ namespace CrappyBird {
 
 		bool IsGameOver = false;
 
+		/* The impulse the rocket receives on button press*/
+		static const float s_standardImpulse;
+		static float s_Impulse;
+
 	private:
 		/* Callbacks */
 		void OnCollision(PhysicsComponent* other);

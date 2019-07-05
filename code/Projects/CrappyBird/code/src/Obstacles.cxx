@@ -217,7 +217,8 @@ namespace CrappyBird {
 						map[i][0].rectangle.width,
 						chosenHeight
 					});
-				//obj->SetRotation(rotation);
+				if (CrappyBird::s_bObstacleRotation)
+					obj->SetRotation(rotation);
 			}
 		}
 
@@ -248,7 +249,8 @@ namespace CrappyBird {
 						map[i][0].rectangle.width,
 						chosenHeight
 					});
-				//obj->SetRotation(rotation);
+				if (CrappyBird::s_bObstacleRotation)
+					obj->SetRotation(rotation);
 			}
 		}
 

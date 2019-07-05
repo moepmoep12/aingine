@@ -7,6 +7,9 @@
 
 namespace CrappyBird {
 
+	const float Player::s_standardImpulse = 0.075f;
+	float Player::s_Impulse = Player::s_standardImpulse;
+
 	// Constructor
 	Player::Player()
 	{
@@ -95,7 +98,7 @@ namespace CrappyBird {
 		if (AIngine::Input::IsMouseButtonPressed(0) || AIngine::Input::IsKeyPressed(AIngine::KeyCodes::SPACE)) {
 			// accelerate
 			m_emitter->Update(delta, 75);
-			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -0.075f));
+			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -s_Impulse));
 			PlayEngineSound();
 		}
 
