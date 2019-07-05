@@ -16,12 +16,17 @@ namespace AIngine::UI {
 	Component * Image::Copy(GameObject * const owner) const
 	{
 		Image* copy = new Image();
+
+		//  Component 
 		copy->SetEnabled(IsEnabled());
 		copy->m_owner = owner;
+		copy->PostInit();
+
+		// UIElement
 		copy->m_isDisabled = m_isDisabled;
 		copy->DisabledColor = DisabledColor;
 		copy->TintColor = TintColor;
-		copy->AnchorPos = AnchorPos;
+		copy->SetAnchor(AnchorPos);
 		copy->SetRectangle(GetRectangleNative());
 
 		copy->Texture = Texture;

@@ -31,6 +31,7 @@ namespace AIngine::UI {
 		virtual Component* Copy(GameObject* const owner) const override;
 
 	private:
+		void RenderLines() const;
 	};
 
 	class SliderHandle : public UIElement {
@@ -48,6 +49,9 @@ namespace AIngine::UI {
 		Slider* m_slider;
 
 	private:
+		friend class Slider;
+		virtual Component* Copy(GameObject* const owner) const override;
+
 		bool m_isDragging = false;
 		glm::vec2 m_lastPosition;
 	};

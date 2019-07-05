@@ -34,7 +34,7 @@ namespace AIngine::UI {
 		inline unsigned int GetFontSize() const { return FontSize; }
 		void ChangeFontSize(unsigned int size);
 
-		inline const AIngine::Rendering::Font& GetFont() const { return *m_currentFont; }
+		inline  AIngine::Rendering::Font& GetFont() { return *m_currentFont; }
 		void SetFont(AIngine::Rendering::Font* font);
 
 		glm::vec2 GetTextSize() const;

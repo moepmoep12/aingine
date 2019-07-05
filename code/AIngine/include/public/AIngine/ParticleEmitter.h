@@ -66,6 +66,8 @@ namespace AIngine {
 	protected:
 		int GetAvailableParticle() const;
 
+		virtual Component* Copy(GameObject* const owner) const override;
+
 	private:
 		friend class AIngine::Editor::ParticleEmitterWidget;
 

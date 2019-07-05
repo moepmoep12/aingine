@@ -67,7 +67,12 @@ namespace AIngine {
 		inline virtual Component* Copy(GameObject* const owner) const override
 		{
 			Script* copy = new Script();
+
+			// generic Component 
+			copy->SetEnabled(IsEnabled());
 			copy->m_owner = owner;
+			copy->PostInit();
+
 			copy->ScriptIndex = ScriptIndex;
 			copy->SetName(GetName());
 			return std::move(copy);

@@ -46,15 +46,27 @@ namespace AIngine::UI {
 	Component * CheckBox::Copy(GameObject * const owner) const
 	{
 		CheckBox* copy = new CheckBox();
+
+		//  Component 
 		copy->SetEnabled(IsEnabled());
 		copy->m_owner = owner;
+		copy->PostInit();
+
+		// UIElement
 		copy->m_isDisabled = m_isDisabled;
 		copy->DisabledColor = DisabledColor;
 		copy->TintColor = TintColor;
-		copy->AnchorPos = AnchorPos;
+		copy->SetAnchor(AnchorPos);
 		copy->SetRectangle(GetRectangleNative());
 
+
+		copy->TextComponent->Text = TextComponent->Text;
+		copy->TextComponent->SetFont(&TextComponent->GetFont());
+		copy->TextComponent->AlignHorizontal = TextComponent->AlignHorizontal;
+		copy->TextComponent->AlignVertical = TextComponent->AlignVertical;
+
 		copy->m_bState = m_bState;
+
 		return copy;
 	}
 }

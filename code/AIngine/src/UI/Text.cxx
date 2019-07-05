@@ -64,16 +64,24 @@ namespace AIngine::UI {
 	Component * UIText::Copy(GameObject * const owner) const
 	{
 		UIText* copy = new UIText();
+
+		//  Component 
 		copy->SetEnabled(IsEnabled());
 		copy->m_owner = owner;
+		copy->PostInit();
+
+		// UIElement
 		copy->m_isDisabled = m_isDisabled;
 		copy->DisabledColor = DisabledColor;
 		copy->TintColor = TintColor;
-		copy->AnchorPos = AnchorPos;
+		copy->SetAnchor(AnchorPos);
 		copy->SetRectangle(GetRectangleNative());
 
+		//Text
 		copy->Text = Text;
 		copy->SetFont(m_currentFont);
+		copy->AlignHorizontal = AlignHorizontal;
+		copy->AlignVertical = AlignVertical;
 
 		return copy;
 	}

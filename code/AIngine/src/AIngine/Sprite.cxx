@@ -11,7 +11,12 @@ namespace AIngine {
 	Component * Sprite::Copy(GameObject* const owner) const
 	{
 		Sprite* copy = new Sprite();
+
+		// generic Component 
+		copy->SetEnabled(IsEnabled());
 		copy->m_owner = owner;
+		copy->PostInit();
+
 		copy->m_texture = m_texture;
 		copy->m_localWorldSize = m_localWorldSize;
 		copy->m_parallaxFactor = m_parallaxFactor;

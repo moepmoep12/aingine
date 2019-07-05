@@ -17,6 +17,7 @@
 #include "AIngine/ParticleEmitter.h"
 #include "AIngine/Graphics.h"
 #include "AIngine/Script.h"
+#include "AIngine/Constants.h"
 #include "Rendering/Font.h"
 #include "Sounds.h"
 #include "World.h"

@@ -104,7 +104,11 @@ namespace AIngine {
 	Component * SoundComponent::Copy(GameObject * const owner) const
 	{
 		SoundComponent* copy = new SoundComponent();
+
+		// generic Component 
+		copy->SetEnabled(IsEnabled());
 		copy->m_owner = owner;
+		copy->PostInit();
 
 		copy->SetName(GetName());
 

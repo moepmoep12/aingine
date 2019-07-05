@@ -185,6 +185,22 @@ namespace AIngine {
 		s_lastParticleUsed = 0;
 		return 0;
 	}
+	Component * ParticleEmitter::Copy(GameObject * const owner) const
+	{
+		ParticleEmitter* copy = new ParticleEmitter();
+		// generic Component 
+		copy->SetEnabled(IsEnabled());
+		copy->m_owner = owner;
+		copy->PostInit();
+
+		// specific to this component
+		copy->BlendFunc = BlendFunc;
+		copy->m_amount = m_amount;
+		copy->m_localSpawnPosition = m_localSpawnPosition;
+		copy->m_texture = m_texture;
+
+		return copy;
+	}
 }
 
 namespace AIngine::Events {

@@ -2,6 +2,7 @@
 #include "AIngine/Input.h"
 #include "Rendering/shader.h"
 #include "Assets/Assets.h"
+#include "AIngine/Graphics.h"
 
 #include <algorithm>
 
@@ -35,6 +36,8 @@ namespace AIngine::UI {
 			TextComponent->SetWidth(rect.width);
 		}
 
+		//RenderLines();
+
 		TextureBackGround.Bind();
 		shader.SetVector4f(5 /*spriteColor*/, TintColor);
 
@@ -51,7 +54,49 @@ namespace AIngine::UI {
 
 	Component * Slider::Copy(GameObject * const owner) const
 	{
-		return nullptr;
+		Slider* copy = new Slider();
+
+		//  Component 
+		copy->SetEnabled(IsEnabled());
+		copy->m_owner = owner;
+		copy->PostInit();
+
+		// UIElement
+		copy->m_isDisabled = m_isDisabled;
+		copy->DisabledColor = DisabledColor;
+		copy->TintColor = TintColor;
+		copy->SetAnchor(AnchorPos);
+		copy->SetRectangle(GetRectangleNative());
+
+		// Slider
+		copy->Max = Max;
+		copy->Min = Min;
+		copy->TextureBackGround = TextureBackGround;
+		copy->Value = Value;
+
+		// TextComponent
+		copy->TextComponent->Text = TextComponent->Text;
+		copy->TextComponent->SetFont(&TextComponent->GetFont());
+		copy->TextComponent->AlignHorizontal = TextComponent->AlignHorizontal;
+		copy->TextComponent->AlignVertical = TextComponent->AlignVertical;
+
+		// SliderHandle
+		copy->m_sliderHandle->DragColor = m_sliderHandle->DragColor;
+		copy->m_sliderHandle->TextureSlider = m_sliderHandle->TextureSlider;
+
+		return std::move(copy);
+	}
+
+	void Slider::RenderLines() const
+	{
+		float step = std::abs(Max - Min) * 0.1f;
+		auto rect = GetRectangle();
+		for (float pos = rect.x + step; pos < rect.x + rect.width; pos += step)
+		{
+			glm::vec2 p1(pos, rect.y);
+			glm::vec2 p2(pos, rect.GetMax().y);
+			AIngine::Graphics::LineScreen(p1, p2, glm::vec4(0, 0, 0, 1), true);
+		}
 	}
 
 	/*----------------------------------------- SLIDERHANDLE ----------------------------------------------*/
@@ -98,6 +143,29 @@ namespace AIngine::UI {
 		}
 		shader.SetVector4f(5 /*spriteColor*/, Color);
 		return true;
+	}
+
+	Component * SliderHandle::Copy(GameObject * const owner) const
+	{
+		SliderHandle* copy = new SliderHandle();
+
+		//  Component 
+		copy->SetEnabled(IsEnabled());
+		copy->m_owner = owner;
+		copy->PostInit();
+
+		// UIElement
+		copy->m_isDisabled = m_isDisabled;
+		copy->DisabledColor = DisabledColor;
+		copy->TintColor = TintColor;
+		copy->SetAnchor(AnchorPos);
+		copy->SetRectangle(GetRectangleNative());
+
+		// SliderHandle
+		copy->DragColor = DragColor;
+		copy->TextureSlider = TextureSlider;
+
+		return std::move(copy);
 	}
 }
 

@@ -310,8 +310,13 @@ namespace AIngine::Physics {
 	Component * PhysicsComponent::Copy(GameObject * const owner) const
 	{
 		PhysicsComponent* copy = new PhysicsComponent();
-		copy->m_owner = owner;
 
+		// generic Component 
+		copy->SetEnabled(IsEnabled());
+		copy->m_owner = owner;
+		copy->PostInit();
+
+		// specific to this component
 		switch (m_bodyInformation.shape) {
 		case PhysicsShape::e_Box:
 			copy->CreateBoxBody(m_properties, m_bodyInformation.type, m_bodyInformation.width, m_bodyInformation.height, m_bodyInformation.isTrigger);
