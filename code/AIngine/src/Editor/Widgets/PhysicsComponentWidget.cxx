@@ -9,6 +9,7 @@
 #include "imgui.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <sstream>
+#include "Box2D/Box2D.h"
 
 namespace AIngine::Editor::Widget::Component {
 	void PhysicsComponentWidget::OnImGuiRender()

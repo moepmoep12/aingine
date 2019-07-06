@@ -2,7 +2,7 @@
 
 #include "Editor/Widgets/ComponentWidget.h"
 
-#include "Box2D/Box2D.h"
+struct b2Transform;
 
 namespace AIngine::Physics {
 	class PhysicsComponent;

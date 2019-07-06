@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <map>
 #include <sstream>
+#include <Box2D/Box2D.h>
 
 namespace AIngine {
 
@@ -779,7 +780,7 @@ namespace AIngine {
 		Triangles(pos1World, pos2World, pos3World, color, instant);
 	}
 
-	void Graphics::Point(const glm::vec2 & vWorl, float32 size, const glm::vec4 & color, bool instant)
+	void Graphics::Point(const glm::vec2 & vWorl, float size, const glm::vec4 & color, bool instant)
 	{
 		Points(
 			{ vWorl },
@@ -789,7 +790,7 @@ namespace AIngine {
 		);
 	}
 
-	void Graphics::Point(const b2Vec2 & vWorl, float32 size, const b2Color & color, bool instant)
+	void Graphics::Point(const b2Vec2 & vWorl, float size, const b2Color & color, bool instant)
 	{
 		Points(
 			{ glm::vec2(vWorl.x, vWorl.y) },
@@ -799,7 +800,7 @@ namespace AIngine {
 		);
 	}
 
-	void Graphics::Points(const std::vector<glm::vec2>& vWorl, const std::vector<float32>& sizes, const std::vector< glm::vec4>& colors, bool instant)
+	void Graphics::Points(const std::vector<glm::vec2>& vWorl, const std::vector<float>& sizes, const std::vector< glm::vec4>& colors, bool instant)
 	{
 		assert(vWorl.size() == sizes.size() && colors.size() == sizes.size());
 
@@ -815,7 +816,7 @@ namespace AIngine {
 		}
 	}
 
-	void Graphics::PointScreen(const glm::vec2 & vScreen, float32 size, const glm::vec4 & color, bool instant)
+	void Graphics::PointScreen(const glm::vec2 & vScreen, float size, const glm::vec4 & color, bool instant)
 	{
 		Points(
 			{ AIngine::Rendering::Camera::Get().ScreenToWorldPoint(vScreen) },
@@ -825,7 +826,7 @@ namespace AIngine {
 		);
 	}
 
-	void Graphics::PointsScreen(const std::vector<glm::vec2>& vScreen, const std::vector<float32>& size, const std::vector<glm::vec4>& colors, bool instant)
+	void Graphics::PointsScreen(const std::vector<glm::vec2>& vScreen, const std::vector<float>& size, const std::vector<glm::vec4>& colors, bool instant)
 	{
 		std::vector<glm::vec2> vertices;
 		for (int i = 0; i < vScreen.size(); i++) {

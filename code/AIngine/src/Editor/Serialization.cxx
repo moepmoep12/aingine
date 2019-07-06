@@ -378,23 +378,25 @@ namespace AIngine::Editor::Serialization {
 		properties.density = (*j)[AttributeNames::PHYSICS_DENSITY];
 		properties.friction = (*j)[AttributeNames::PHYSICS_FRICTION];
 		properties.restitution = (*j)[AttributeNames::PHYSICS_RESTITUTION];
+		physComp->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 
 		float width = 0.0f;
 		float height = 0.0f;
-		float32 radius = 0.0f;
+		float radius = 0.0f;
 		std::vector<glm::vec2> vertices;
 		int vertexCount = 0;
+		bool active = physComp->IsActive();
 
 		switch (shape) {
 		case(Physics::PhysicsShape::e_Box):
 			width = (*j)[AttributeNames::PHYSICS_WIDTH];
 			height = (*j)[AttributeNames::PHYSICS_HEIGHT];
-			physComp->CreateBoxBody(properties, type, width, height, isTrigger);
+			physComp->CreateBoxBody(properties, type, width, height, isTrigger, active);
 			break;
 
 		case(Physics::PhysicsShape::e_Circle):
 			radius = (*j)[AttributeNames::PHYSICS_RADIUS];
-			physComp->CreateCircleBody(properties, type, radius, isTrigger);
+			physComp->CreateCircleBody(properties, type, radius, isTrigger, active);
 			break;
 
 		case Physics::PhysicsShape::e_Edge:
@@ -402,7 +404,7 @@ namespace AIngine::Editor::Serialization {
 				vertices.push_back(glm::vec2(vertex.at("x"), vertex.at("y")));
 			}
 			vertexCount = (*j)[AttributeNames::PHYSICS_VERTEXCOUNT];
-			physComp->CreateEdgeBody(properties, type, vertices[0], vertices[1], isTrigger);
+			physComp->CreateEdgeBody(properties, type, vertices[0], vertices[1], isTrigger, active);
 			break;
 
 		case(Physics::PhysicsShape::e_Polygon):
@@ -411,11 +413,10 @@ namespace AIngine::Editor::Serialization {
 			}
 
 			vertexCount = (*j)[AttributeNames::PHYSICS_VERTEXCOUNT];
-			physComp->CreatePolygonBody(properties, type, vertices.data(), vertexCount, isTrigger);
+			physComp->CreatePolygonBody(properties, type, vertices.data(), vertexCount, isTrigger, active);
 			break;
 		}
 
-		physComp->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 
 		return physComp;
 	}
@@ -545,7 +546,7 @@ namespace AIngine::Editor::Serialization {
 		slider->TextureBackGround = (*j)[AttributeNames::SLIDER_TEXTUREBACKGROUND];
 		slider->m_sliderHandle->TextureSlider = (*j)[AttributeNames::SLIDER_TEXTUREHANDLER];
 		slider->m_sliderHandle->DragColor = (*j)[AttributeNames::SLIDER_DRAGCOLOR];
-;
+		;
 		slider->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
 

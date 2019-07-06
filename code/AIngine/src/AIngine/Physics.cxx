@@ -66,7 +66,7 @@ namespace AIngine::Physics {
 		}
 	}
 
-	void PhysicsComponent::CreateCircleBody(const PhysicsProperties & properties, PhysicsBodyType type, float radius, bool isTrigger)
+	void PhysicsComponent::CreateCircleBody(const PhysicsProperties & properties, PhysicsBodyType type, float radius, bool isTrigger, bool active)
 	{
 		if (m_body) {
 			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
@@ -96,6 +96,7 @@ namespace AIngine::Physics {
 		glm::vec2 worldPos = m_owner->GetWorldPosition();
 		bodyDef.position.Set(worldPos.x, worldPos.y);
 		bodyDef.angle = m_owner->GetWorldRotation();
+		bodyDef.active = active;
 
 		b2CircleShape shape;
 		shape.m_radius = radius;
@@ -108,7 +109,7 @@ namespace AIngine::Physics {
 		m_body->SetUserData(this);
 	}
 
-	void PhysicsComponent::CreateBoxBody(const PhysicsProperties & properties, PhysicsBodyType type, float width, float height, bool isTrigger)
+	void PhysicsComponent::CreateBoxBody(const PhysicsProperties & properties, PhysicsBodyType type, float width, float height, bool isTrigger, bool active)
 	{
 		if (m_body) {
 			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
@@ -138,6 +139,7 @@ namespace AIngine::Physics {
 		glm::vec2 worldPos = m_owner->GetWorldPosition();
 		bodyDef.position.Set(worldPos.x, worldPos.y);
 		bodyDef.angle = m_owner->GetWorldRotation();
+		bodyDef.active = true;
 
 		b2PolygonShape shape;
 		shape.SetAsBox(width / 2.0f, height / 2.0f);
@@ -167,7 +169,7 @@ namespace AIngine::Physics {
 		m_bodyInformation.verticesCount = 4;
 	}
 
-	void PhysicsComponent::CreateEdgeBody(const PhysicsProperties & properties, PhysicsBodyType type, const glm::vec2 & p1Offset, const glm::vec2 & p2Offset, bool isTrigger)
+	void PhysicsComponent::CreateEdgeBody(const PhysicsProperties & properties, PhysicsBodyType type, const glm::vec2 & p1Offset, const glm::vec2 & p2Offset, bool isTrigger, bool active)
 	{
 		if (m_body) {
 			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
@@ -196,6 +198,7 @@ namespace AIngine::Physics {
 		glm::vec2 worldPos = m_owner->GetWorldPosition();
 		bodyDef.position.Set(worldPos.x, worldPos.y);
 		bodyDef.angle = m_owner->GetWorldRotation();
+		bodyDef.active = true;
 
 		b2EdgeShape shape;
 		shape.Set(b2Vec2(p1Offset.x, p1Offset.y), b2Vec2(p2Offset.x, p2Offset.y));
@@ -212,7 +215,7 @@ namespace AIngine::Physics {
 		m_bodyInformation.verticesCount = 2;
 	}
 
-	void PhysicsComponent::CreatePolygonBody(const PhysicsProperties & properties, PhysicsBodyType type, const glm::vec2 * vertices, unsigned int count, bool isTrigger)
+	void PhysicsComponent::CreatePolygonBody(const PhysicsProperties & properties, PhysicsBodyType type, const glm::vec2 * vertices, unsigned int count, bool isTrigger, bool active)
 	{
 		if (m_body) {
 			AIngine::World::s_instance->m_physicsWorld->DestroyBody(m_body);
@@ -241,6 +244,7 @@ namespace AIngine::Physics {
 		glm::vec2 worldPos = m_owner->GetWorldPosition();
 		bodyDef.position.Set(worldPos.x, worldPos.y);
 		bodyDef.angle = m_owner->GetWorldRotation();
+		bodyDef.active = true;
 
 		b2PolygonShape shape;
 		b2Vec2 Vertices[maxVertices];

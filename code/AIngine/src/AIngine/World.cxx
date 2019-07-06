@@ -6,6 +6,7 @@
 #include "Rendering/PhysicsRenderer.h"
 #include "Application.h"
 
+#include <Box2D/Box2D.h>
 
 namespace AIngine {
 
@@ -202,11 +203,21 @@ namespace AIngine {
 		}
 	}
 
+	b2Body * World::CreateBody(const b2BodyDef & bodydef)
+	{
+		if (s_instance) return s_instance->m_physicsWorld->CreateBody(&bodydef); else return nullptr;
+	}
+
 	void World::SetPhysicsDebugDrawActive(const bool & active)
 	{
 		if (s_instance) {
 			s_instance->m_isPhysicsDebugDrawn = active;
 		}
+	}
+
+	const b2World & World::GetPhysicsWorld()
+	{
+		return *s_instance->m_physicsWorld;
 	}
 
 	AIngine::Structures::SceneGraph & World::GetSceneGraph()

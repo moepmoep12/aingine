@@ -18,8 +18,8 @@ namespace AIngine {
 		Sound(Sound&& other);
 		Sound& operator=(Sound&& other);
 
-		inline bool IsPlaying() const { if (m_playingSound) return m_playingSound->active && !m_playingSound->paused; else return false; }
-		inline bool IsPaused() const { if (m_playingSound) return m_playingSound->paused; else return false; }
+		inline bool IsPlaying() const { if (m_playingSound && m_playingSound->loaded_sound) return m_playingSound->active && !m_playingSound->paused; else return false; }
+		inline bool IsPaused() const { if (m_playingSound&& m_playingSound->loaded_sound) return m_playingSound->paused; else return false; }
 		inline bool IsLooping() const { return m_soundDef.looped; }
 		inline int SampleCount() const { return m_soundDef.loaded->sample_count; }
 		inline int SampleRate() const { return m_soundDef.loaded->sample_rate; }
@@ -27,7 +27,7 @@ namespace AIngine {
 		inline float GetPan() const { return m_soundDef.pan; }
 		inline float GetPitch() const { return m_soundDef.pitch; }
 		inline float GetDelay() const { return m_soundDef.delay; }
-		inline float GetProgress() const { if (m_playingSound) return (float)m_playingSound->sample_index / (float)m_playingSound->loaded_sound->sample_count; else return 0; }
+		inline float GetProgress() const { if (m_playingSound&& m_playingSound->loaded_sound) return (float)m_playingSound->sample_index / (float)m_playingSound->loaded_sound->sample_count; else return 0; }
 		float DurationSeconds() const;
 		inline std::string GetName() const { return m_name; }
 		inline std::string GetPath() const { return m_path; }
