@@ -23,15 +23,15 @@ namespace AIngine {
 
 		/* Returns whether this component is enabled AND all parents of the owner */
 		inline bool IsActive() const {
-			GameObject* parent = m_owner->GetParent();
-			bool isTreeActive = m_owner->IsActive();
+			if (!m_owner->IsActive()) return false;
 
+			GameObject* parent = m_owner->GetParent();
 			while (parent) {
-				isTreeActive &= parent->IsActive();
+				if (!parent->IsActive()) return false;
 				parent = parent->GetParent();
 			}
 
-			return m_isEnabled && isTreeActive;
+			return m_isEnabled;
 		}
 
 		inline void Destroy() { m_wantsDestroy = true; }
