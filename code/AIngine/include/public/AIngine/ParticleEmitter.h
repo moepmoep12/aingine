@@ -48,9 +48,11 @@ namespace AIngine {
 
 
 		AIngine::Events::Event<void, Particle&, const glm::vec2&> SpawnParticleEvent;
+		AIngine::Events::Event<void, Particle*, int, const glm::vec2&> SpawnParticleBatchEvent;
 		AIngine::Events::Event<void, Particle&> UpdateParticleEvent;
 
 		typedef AIngine::Events::EventHandler<void, Particle&, const glm::vec2&> SpawnParticleHandler;
+		typedef AIngine::Events::EventHandler<void, Particle*, int, const glm::vec2&> SpawnParticleBatchHandler;
 		typedef AIngine::Events::EventHandler<void, Particle&>  UpdateParticleHandler;
 
 		GLuint BlendFunc = GL_ONE;
@@ -62,6 +64,8 @@ namespace AIngine {
 		GLuint m_ColorVBO;
 
 		enum { maxParticles = 10000 };
+
+		bool SpawnParticleInBatch = false;
 
 	protected:
 		int GetAvailableParticle() const;

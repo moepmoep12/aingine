@@ -157,10 +157,18 @@ namespace AIngine {
 
 	void ParticleEmitter::Update(float delta, int particlesToSpawn)
 	{
+		std::vector<Particle*> particles;
+
 		for (int i = 0; i < particlesToSpawn; i++) {
 			int availableParticle = GetAvailableParticle();
-			SpawnParticleEvent(m_particles[availableParticle], m_localSpawnPosition);
+			if (!SpawnParticleInBatch)
+				SpawnParticleEvent(m_particles[availableParticle], m_localSpawnPosition);
+			else
+				particles.push_back(&m_particles[availableParticle]);
 		}
+
+		if (SpawnParticleInBatch)
+			SpawnParticleBatchEvent(particles[0], particlesToSpawn, m_localSpawnPosition);
 	}
 
 	int s_lastParticleUsed = 0;
@@ -207,6 +215,7 @@ namespace AIngine::Events {
 
 	// initialize EventHandler for OnSpawnParticle
 	int AIngine::Events::EventHandler<void, AIngine::Particle&, const glm::vec2&>::counter = 0;
+	int AIngine::Events::EventHandler<void, AIngine::Particle*, int, const glm::vec2&>::counter = 0;
 	// UpdateParticle
 	int AIngine::Events::EventHandler<void, AIngine::Particle&>::counter = 0;
 }
