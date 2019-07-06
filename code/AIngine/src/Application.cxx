@@ -193,7 +193,7 @@ namespace AIngine {
 		delete m_Graphics;
 		delete m_viewport;
 		delete m_particleRenderer;
-		delete m_uiRenderer; 
+		delete m_uiRenderer;
 	}
 
 	void Application::PropagateEventData(AIngine::Events::EventData & e)
@@ -246,13 +246,16 @@ namespace AIngine {
 				s_instance->m_wantsLoadLevel = false;
 				std::vector<AIngine::Editor::Scene> scenes = AIngine::Editor::Editor::LoadBuildScenes();
 				if (index < scenes.size()) {
+					// propagate exiplaymodeEvent
 					if (s_instance->m_editor)
 						AIngine::Editor::Editor::SetIsInPlayMode(false);
 					else {
 						s_instance->PropagateEventData(AIngine::Events::ExitPlayModeEventData());
 					}
 					AIngine::Editor::Editor::ResetSceneGraph(s_instance);
+					s_instance->OnLoadLevelStart(index);
 					AIngine::Editor::Editor::LoadScene(scenes[index].Path);
+					s_instance->OnLoadLevelFinished(index);
 				}
 			}
 			else {

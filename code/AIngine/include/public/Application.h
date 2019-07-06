@@ -91,6 +91,10 @@ namespace AIngine {
 		virtual void OnAppUpdate() = 0;
 		/* AppEvent propagates events */
 		virtual void OnAppEvent(AIngine::Events::EventData& e) {}
+		/* Called when level loading starts, can be used for loading screen etc. */
+		virtual void OnLoadLevelStart(int index) {}
+		/* Called when level loading is finished */
+		virtual void OnLoadLevelFinished(int index) {}
 
 		/* Shuts the App down. This is equal to closing the window. */
 		void ShutDown();
