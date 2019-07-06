@@ -150,7 +150,7 @@ namespace AIngine {
 			p.Lifetime -= deltatime; // reduce life
 			if (p.Lifetime > 0.0f)
 			{	// particle is alive, thus update
-				UpdateParticleEvent(p);
+				UpdateParticleEvent(p, deltatime);
 			}
 		}
 	}
@@ -161,14 +161,10 @@ namespace AIngine {
 
 		for (int i = 0; i < particlesToSpawn; i++) {
 			int availableParticle = GetAvailableParticle();
-			if (!SpawnParticleInBatch)
-				SpawnParticleEvent(m_particles[availableParticle], m_localSpawnPosition);
-			else
-				particles.push_back(&m_particles[availableParticle]);
+			particles.push_back(&m_particles[availableParticle]);
 		}
 
-		if (SpawnParticleInBatch)
-			SpawnParticleBatchEvent(particles[0], particlesToSpawn, m_localSpawnPosition);
+		SpawnParticlesEvent(particles[0], particlesToSpawn, m_localSpawnPosition);
 	}
 
 	int s_lastParticleUsed = 0;
@@ -213,9 +209,8 @@ namespace AIngine {
 
 namespace AIngine::Events {
 
-	// initialize EventHandler for OnSpawnParticle
-	int AIngine::Events::EventHandler<void, AIngine::Particle&, const glm::vec2&>::counter = 0;
+	// initialize EventHandler for OnSpawnParticles
 	int AIngine::Events::EventHandler<void, AIngine::Particle*, int, const glm::vec2&>::counter = 0;
 	// UpdateParticle
-	int AIngine::Events::EventHandler<void, AIngine::Particle&>::counter = 0;
+	int AIngine::Events::EventHandler<void, AIngine::Particle&, float>::counter = 0;
 }
