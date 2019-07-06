@@ -30,8 +30,9 @@ namespace AIngine::Physics {
 		Component::SetEnabled(active);
 
 		if (m_body) {
-			//m_body->SetActive(active);
-			m_body->SetAwake(active);
+			if (!m_body->GetWorld()->IsLocked())
+				m_body->SetActive(active);
+			//m_body->SetAwake(active);
 			m_bIsTouching = false;
 		}
 	}
@@ -139,7 +140,7 @@ namespace AIngine::Physics {
 		glm::vec2 worldPos = m_owner->GetWorldPosition();
 		bodyDef.position.Set(worldPos.x, worldPos.y);
 		bodyDef.angle = m_owner->GetWorldRotation();
-		bodyDef.active = true;
+		bodyDef.active = active;
 
 		b2PolygonShape shape;
 		shape.SetAsBox(width / 2.0f, height / 2.0f);
@@ -198,7 +199,7 @@ namespace AIngine::Physics {
 		glm::vec2 worldPos = m_owner->GetWorldPosition();
 		bodyDef.position.Set(worldPos.x, worldPos.y);
 		bodyDef.angle = m_owner->GetWorldRotation();
-		bodyDef.active = true;
+		bodyDef.active = active;
 
 		b2EdgeShape shape;
 		shape.Set(b2Vec2(p1Offset.x, p1Offset.y), b2Vec2(p2Offset.x, p2Offset.y));
@@ -244,7 +245,7 @@ namespace AIngine::Physics {
 		glm::vec2 worldPos = m_owner->GetWorldPosition();
 		bodyDef.position.Set(worldPos.x, worldPos.y);
 		bodyDef.angle = m_owner->GetWorldRotation();
-		bodyDef.active = true;
+		bodyDef.active = active;
 
 		b2PolygonShape shape;
 		b2Vec2 Vertices[maxVertices];
