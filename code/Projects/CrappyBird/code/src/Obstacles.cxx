@@ -33,7 +33,7 @@ namespace CrappyBird {
 	// Start is called when gameplay starts for this script
 	void Obstacles::OnStart()
 	{
-		m_newScreenHandler = AIngine::Events::EventHandler<void, AIngine::Structures::RectangleI&>(std::bind(&Obstacles::SpawnObstaclesInArea, this, std::placeholders::_1));
+		m_newScreenHandler = AIngine::Events::EventHandler<void, AIngine::Structures::RectangleF&>(std::bind(&Obstacles::SpawnObstaclesInArea, this, std::placeholders::_1));
 		m_player = AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>();
 		m_player->OnEnterNewScreen += m_newScreenHandler;
 		m_pickUpFactory = AIngine::World::GetGameObject("PickUpFactory")->GetComponent<PickUpFactory>();
@@ -74,7 +74,7 @@ namespace CrappyBird {
 		bool isClosed = false;
 	};
 
-	void Obstacles::SpawnObstaclesInArea(const AIngine::Structures::RectangleI & worldRect)
+	void Obstacles::SpawnObstaclesInArea(const AIngine::Structures::RectangleF & worldRect)
 	{
 		static std::default_random_engine generator;
 		static std::normal_distribution<double> distribution(0, 0.25);
@@ -248,7 +248,7 @@ namespace CrappyBird {
 				obj->GetComponent<Obstacle>()->Set(AIngine::Structures::RectangleF
 					{
 						map[i][0].rectangle.x,
-						5.0f - chosenHeight,
+						5.625f - chosenHeight,
 						map[i][0].rectangle.width,
 						chosenHeight
 					});

@@ -15,7 +15,7 @@ namespace CrappyBird {
 		virtual void Update(float delta) override;
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
 
-		void SpawnObstaclesInArea(const AIngine::Structures::RectangleI& worldRect);
+		void SpawnObstaclesInArea(const AIngine::Structures::RectangleF& worldRect);
 
 	private:
 		GameObject* GetAvailableObstacle();
@@ -23,7 +23,7 @@ namespace CrappyBird {
 
 	private:
 		std::vector<AIngine::Rendering::Texture2D> m_obstacleTextures;
-		AIngine::Events::EventHandler<void, AIngine::Structures::RectangleI&> m_newScreenHandler;
+		AIngine::Events::EventHandler<void, AIngine::Structures::RectangleF&> m_newScreenHandler;
 		Player* m_player;
 		PickUpFactory* m_pickUpFactory;
 	};

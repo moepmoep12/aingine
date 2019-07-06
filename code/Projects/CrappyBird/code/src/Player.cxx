@@ -116,6 +116,10 @@ namespace CrappyBird {
 			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -s_Impulse));
 			PlayEngineSound();
 		}
+		else if (AIngine::Input::IsMouseButtonPressed(AIngine::MouseButton::BUTTON_RIGHT))
+		{
+			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, s_Impulse * 0.15f));
+		}
 		else {
 			velMultiplier = 1.5f * CrappyBird::s_GameSpeed / m_originalGameSpeed;
 			m_emitter->Update(delta, 50);
@@ -128,7 +132,7 @@ namespace CrappyBird {
 		if (m_distanceTraveled >= CurrentScreenIndex * 10) {
 			CurrentScreenIndex++;
 			glm::vec4 bounds = AIngine::World::GetBounds();
-			AIngine::Structures::RectangleI nextScreen(bounds.y, 0, bounds.y, bounds.w / 2.0f);
+			AIngine::Structures::RectangleF nextScreen(bounds.y, 0, bounds.y, bounds.w / 2.0f);
 			OnEnterNewScreen(nextScreen);
 		}
 
@@ -161,8 +165,8 @@ namespace CrappyBird {
 		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent::KeyPressedEventData)) {
 			AIngine::Events::KeyPressedEvent::KeyPressedEventData pressedEvent = dynamic_cast<AIngine::Events::KeyPressedEvent::KeyPressedEventData&>(e);
 
-			if (pressedEvent.GetKeyCode() == AIngine::KeyCode::SPACE) {
-				OnGameOverEvent();
+			if (pressedEvent.GetKeyCode() == AIngine::KeyCode::ESCAPE) {
+				CrappyBird::LoadScene(0);
 			}
 		}
 	}
@@ -358,3 +362,5 @@ namespace CrappyBird {
 			GetOwner()->GetComponent<SoundComponent>()->Play(0);
 	}
 }
+
+int AIngine::Events::EventHandler<void, AIngine::Structures::RectangleF&>::counter = 0;

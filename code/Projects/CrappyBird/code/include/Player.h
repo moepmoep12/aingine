@@ -15,7 +15,7 @@ namespace CrappyBird {
 		virtual void OnGUI() override;
 
 		// Event is fired when the player enters the next screen
-		AIngine::Events::Event<void, AIngine::Structures::RectangleI&> OnEnterNewScreen;
+		AIngine::Events::Event<void, AIngine::Structures::RectangleF&> OnEnterNewScreen;
 
 		AIngine::Events::Event<void> OnGameOverEvent;
 		typedef AIngine::Events::EventHandler<void> OnGameOverEventHandler;
