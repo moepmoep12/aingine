@@ -64,53 +64,6 @@ namespace AIngine {
 					physCompB->m_contact = contac;
 					physCompB->OnCollisionBegin(contac);
 				}
-
-
-				//if (bodyUserData) {
-				//	b2WorldManifold worldmanifold;
-				//	contact->GetWorldManifold(&worldmanifold);
-				//	AIngine::Physics::PhysicsComponent* physCompA = static_cast<AIngine::Physics::PhysicsComponent*> (bodyUserData);
-				//	Contact cont{
-				//			static_cast<AIngine::Physics::PhysicsComponent*>(contact->GetFixtureB()->GetBody()->GetUserData()),
-				//			 glm::vec2(worldmanifold.normal.x,worldmanifold.normal.y),
-				//			 glm::vec2(worldmanifold.points[0].x,worldmanifold.points[0].y),
-				//			 contact->IsTouching(),
-				//			 contact->GetFriction(),
-				//			 contact->GetRestitution(),
-				//			 contact->GetTangentSpeed(),
-				//			 contact->GetManifold()->pointCount
-				//			 //ContactPoints
-				//	};
-				//	if (physCompA) {
-				//		physCompA->OnCollisionBegin(cont);
-				//		physCompA->m_bIsTouching = true;
-				//		physCompA->m_contact = cont;
-				//	}
-				//}
-
-				//bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-				//if (bodyUserData)
-				//{
-				//	b2WorldManifold worldmani;
-				//	contact->GetWorldManifold(&worldmani);
-				//	AIngine::Physics::PhysicsComponent* physCompB = static_cast<AIngine::Physics::PhysicsComponent*> (bodyUserData);
-				//	if (physCompB) {
-				//		Contact cont{
-				//				static_cast<AIngine::Physics::PhysicsComponent*>(contact->GetFixtureA()->GetBody()->GetUserData()),
-				//				 glm::vec2(worldmani.normal.x,worldmani.normal.y),
-				//				 glm::vec2(worldmani.points[0].x,worldmani.points[0].y),
-				//				 contact->IsTouching(),
-				//				 contact->GetFriction(),
-				//				 contact->GetRestitution(),
-				//				 contact->GetTangentSpeed(),
-				//				 contact->GetManifold()->pointCount
-				//				 //ContactPoints
-				//		};
-				//		physCompB->OnCollisionBegin(cont);
-				//		physCompB->m_bIsTouching = true;
-				//		physCompB->m_contact = cont;
-				//	}
-				//}
 			}
 
 			// Called when two fixtures cease to touch

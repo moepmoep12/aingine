@@ -123,6 +123,7 @@ namespace AIngine {
 		};
 
 #else
+		m_window->SetFullScreen(true);
 		AIngine::Structures::Rectangle viewportRect = AIngine::Structures::RectangleI(m_window->GetX(), 0, m_window->GetWidth(), m_window->GetHeight());
 		OnViewportChanged(viewportRect);
 		// we're in release, load default scene
@@ -334,7 +335,7 @@ namespace AIngine {
 
 	void Application::OnWindowResize(unsigned int width, unsigned int height)
 	{
-		if (m_viewport)
+		if (m_viewport && !m_window->IsFullScreen())
 			m_spriteRenderer->SetViewport();
 	}
 

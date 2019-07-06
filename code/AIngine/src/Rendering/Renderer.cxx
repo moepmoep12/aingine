@@ -68,10 +68,11 @@ namespace AIngine::Rendering {
 	{
 		const Camera& cam = Camera::Get();
 		const Viewport& viewport = cam.GetViewport();
-		GLfloat windowHeight = static_cast<GLfloat>(viewport.GetWindowHeight());
-		glm::vec2 bottomLeft = glm::vec2(viewport.GetTopLeftCornerPosition().x, viewport.GetTopLeftCornerPosition().y + viewport.GetViewportHeight());
+		GLint windowHeight = static_cast<GLint>(viewport.GetWindowHeight());
+		glm::vec<2, int> bottomLeft = glm::vec<2, int>(viewport.GetRectangle().x, viewport.GetRectangle().y + viewport.GetViewportHeight());
+		GLint y = windowHeight - bottomLeft.y;
 
-		glViewport((GLint)bottomLeft.x, (GLint)(viewport.GetWindowHeight() - bottomLeft.y), (GLsizei)viewport.GetViewportWidth(), (GLsizei)viewport.GetViewportHeight());
+		glViewport((GLint)bottomLeft.x, y, (GLsizei)viewport.GetViewportWidth(), (GLsizei)viewport.GetViewportHeight());
 	}
 
 	void SpriteRenderer::RenderSprite(AIngine::Sprite& sprite, GLShaderProgram* shader)
@@ -157,7 +158,7 @@ namespace AIngine::Rendering {
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		
+
 		// configure shader
 		m_shader->SetMatrix4(2 /*projection*/, Camera::Get().GetProjectionMatrix(), true);
 		m_outlineShader->SetMatrix4(2 /*projection*/, Camera::Get().GetProjectionMatrix(), true);
@@ -173,7 +174,7 @@ namespace AIngine::Rendering {
 		else {
 			m_outlineShader->SetFloat("time", 3.55f);
 		}
-		
+
 		return root->Accept(*this);
 
 	}

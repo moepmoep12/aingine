@@ -270,6 +270,7 @@ namespace AIngine::Editor {
 	void Editor::EnterFullScreenMode()
 	{
 		m_isFullScreen = true;
+		m_app.m_window->SetFullScreen(true);
 		AIngine::Structures::Rectangle viewportRect = AIngine::Structures::RectangleI(m_app.GetWindow().GetX(), 0, m_app.GetWindow().GetWidth(), m_app.GetWindow().GetHeight());
 		OnViewportChangedEvent(viewportRect);
 	}
@@ -277,6 +278,7 @@ namespace AIngine::Editor {
 	void Editor::LeaveFullScreenMode()
 	{
 		m_isFullScreen = false;
+		m_app.m_window->SetFullScreen(false);
 		AIngine::Structures::Rectangle viewportRect = CalculateViewportRect(glm::vec2(m_app.GetWindow().GetWidth(), m_app.GetWindow().GetHeight()));
 		OnViewportChangedEvent(viewportRect);
 	}
@@ -461,7 +463,7 @@ namespace AIngine::Editor {
 			AIngine::Graphics::Point(worldPosition, vertexSize, colorNormal);
 		}
 
-		AIngine::Graphics::BoxScreen(vertexRectangle, glm::vec4(1, 1, 0,1));
+		AIngine::Graphics::BoxScreen(vertexRectangle, glm::vec4(1, 1, 0, 1));
 		return bInteracted;
 	}
 
@@ -518,7 +520,7 @@ namespace AIngine::Editor {
 	{
 		static const char* filterList = "txt,json";
 		std::string path;
-		AIngine::Util::Filesystem::Result result = AIngine::Util::Filesystem::SaveFile(filterList, &path,"scenes");
+		AIngine::Util::Filesystem::Result result = AIngine::Util::Filesystem::SaveFile(filterList, &path, "scenes");
 
 		if (result == AIngine::Util::Filesystem::Result::OKAY)
 		{
