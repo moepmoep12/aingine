@@ -45,6 +45,9 @@ namespace CrappyBird {
 			LevelButtons[i] = AIngine::World::GetGameObject(ss.str())->GetComponent<AIngine::UI::Button>();
 			LevelButtons[i]->OnClickedEvent += std::bind(&MainMenu::OnLevelButtonClicked, this);
 		}
+
+		//play music
+		AIngine::World::GetGameObject("BackGround")->GetComponent<SoundComponent>()->Play(CrappyBird::s_levelIndex);
 	}
 
 	// End is called when gameplay ends for this script
@@ -121,8 +124,12 @@ namespace CrappyBird {
 	{
 		for (int i = 0; i < 4; i++) {
 			if (LevelButtons[i]->IsClicked()) {
+				//stop music
+				AIngine::World::GetGameObject("BackGround")->GetComponent<SoundComponent>()->Stop(CrappyBird::s_levelIndex);
 				CrappyBird::s_levelIndex = i;
 				AIngine::World::GetGameObject("BackGround")->GetComponent<Sprite>()->SetTexture(BackGrounds[i]);
+				//play music
+				AIngine::World::GetGameObject("BackGround")->GetComponent<SoundComponent>()->Play(CrappyBird::s_levelIndex);
 			}
 		}
 	}

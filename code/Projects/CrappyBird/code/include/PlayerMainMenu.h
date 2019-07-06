@@ -13,7 +13,7 @@ namespace CrappyBird {
 
 	private:
 		/* Callbacks */
-		void OnSpawnParticle(Particle& particle, const glm::vec2& pos);
+		void OnSpawnParticles(Particle* particles, int count, const glm::vec2& pos);
 		void OnUpdateParticle(Particle& particle);
 
 	private:
@@ -23,7 +23,7 @@ namespace CrappyBird {
 		float m_delta = 0;
 
 		// EventHandler for the callbacks. Need to be kept in order to unsubscribe from events
-		AIngine::ParticleEmitter::SpawnParticleHandler OnSpawnParticleHandler;
+		AIngine::ParticleEmitter::SpawnParticlesHandler OnSpawnParticleHandler;
 		AIngine::ParticleEmitter::UpdateParticleHandler OnUpdateParticleHandler;
 	};
 }

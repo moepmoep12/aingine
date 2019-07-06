@@ -8,7 +8,10 @@
 namespace CrappyBird {
 
 	const float Player::s_standardImpulse = 0.075f;
+	const float Player::s_lifeTime = 0.15f;
 	float Player::s_Impulse = Player::s_standardImpulse;
+	const glm::vec4 Player::s_finalFireColor1(1, 0, 0, 0);
+	const glm::vec4 Player::s_finalFireColor2(0.47, 0.11, 1, 0);
 
 	// Constructor
 	Player::Player()
@@ -39,19 +42,26 @@ namespace CrappyBird {
 	void Player::OnStart()
 	{
 		m_emitter = GetOwner()->GetComponent<ParticleEmitter>();
+		m_collisionEmitter = GetOwner()->GetChildren()[0]->GetComponent<ParticleEmitter>();
 		m_physBody = GetOwner()->GetComponent<AIngine::Physics::PhysicsComponent>();
 		m_physBody->SetFixedRotation(true);
 
 		// create EventHandlers
-		OnCollisionEventHandler = AIngine::Events::EventHandler<void, PhysicsComponent*>(std::bind(&Player::OnCollision, this, std::placeholders::_1));
-		OnSpawnParticleHandler = AIngine::ParticleEmitter::SpawnParticleHandler(std::bind(&Player::OnSpawnParticle, this, std::placeholders::_1, std::placeholders::_2));
-		OnUpdateParticleHandler = AIngine::ParticleEmitter::UpdateParticleHandler(std::bind(&Player::OnUpdateParticle, this, std::placeholders::_1));
+		OnCollisionEventHandler = AIngine::Events::EventHandler<void, AIngine::Physics::Contact>(std::bind(&Player::OnCollision, this, std::placeholders::_1));
+		OnSpawnFireParticlesHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(std::bind(&Player::OnSpawnFireParticles, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+		OnSpawnCollisionParticlesHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(std::bind(&Player::OnSpawnCollisionParticle, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+		OnUpdateParticleHandler = AIngine::ParticleEmitter::UpdateParticleHandler(std::bind(&Player::OnUpdateParticle, this, std::placeholders::_1, std::placeholders::_2));
+		OnUpdateCollisionParticleHandler = AIngine::ParticleEmitter::UpdateParticleHandler(std::bind(&Player::OnUpdateCollisionParticle, this, std::placeholders::_1, std::placeholders::_2));
 		OnGameOverHandler = OnGameOverEventHandler(std::bind(&Player::OnGameOver, this));
 
 		// register callbacks
 		m_physBody->OnCollisionBegin += OnCollisionEventHandler;
-		m_emitter->SpawnParticleEvent += OnSpawnParticleHandler;
+		m_emitter->SpawnParticlesEvent += OnSpawnFireParticlesHandler;
 		m_emitter->UpdateParticleEvent += OnUpdateParticleHandler;
+		m_collisionEmitter->SpawnParticlesEvent += OnSpawnCollisionParticlesHandler;
+		m_collisionEmitter->UpdateParticleEvent += OnUpdateCollisionParticleHandler;
+
+
 		OnGameOverEvent += OnGameOverHandler;
 
 		for (int i = 0; i < m_physBody->GetBodyInformation().verticesCount; i++) {
@@ -71,13 +81,17 @@ namespace CrappyBird {
 
 		// unsubscribe from events
 		m_physBody->OnCollisionBegin -= OnCollisionEventHandler;
-		m_emitter->SpawnParticleEvent -= OnSpawnParticleHandler;
+		m_emitter->SpawnParticlesEvent -= OnSpawnFireParticlesHandler;
 		m_emitter->UpdateParticleEvent -= OnUpdateParticleHandler;
+		m_collisionEmitter->SpawnParticlesEvent -= OnSpawnCollisionParticlesHandler;
+		m_collisionEmitter->UpdateParticleEvent -= OnUpdateCollisionParticleHandler;
 		OnGameOverEvent -= OnGameOverHandler;
 		retryButton->OnClickedEvent -= OnRetryClickedHandler;
 
 		m_activeEffects.clear();
 	}
+
+	static float velMultiplier = 1.5f;
 
 	// Update is called once per frame
 	void Player::Update(float delta)
@@ -93,14 +107,18 @@ namespace CrappyBird {
 			OnGameOverEvent();
 		}
 
-		// basic fire
-		m_emitter->Update(delta, 20);
+
 
 		if (AIngine::Input::IsMouseButtonPressed(0) || AIngine::Input::IsKeyPressed(AIngine::KeyCodes::SPACE)) {
 			// accelerate
-			m_emitter->Update(delta, 75);
+			velMultiplier = CrappyBird::s_GameSpeed;
+			m_emitter->Update(delta, 100);
 			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -s_Impulse));
 			PlayEngineSound();
+		}
+		else {
+			velMultiplier = 1.5f * CrappyBird::s_GameSpeed / m_originalGameSpeed;
+			m_emitter->Update(delta, 50);
 		}
 
 		// update score
@@ -129,6 +147,11 @@ namespace CrappyBird {
 				it++;
 			}
 		}
+
+		if (m_physBody->GetContact()) {
+			//AIngine::Graphics::Point(m_physBody->GetContact()->ContactPoints[0].WorldPoint, 15, glm::vec4(1));
+			m_collisionEmitter->Update(delta, 10 * m_physBody->GetVelocity().length());
+		}
 	}
 
 	// Callback for events
@@ -152,18 +175,17 @@ namespace CrappyBird {
 		Graphics::Text(ss.str(), glm::vec2(10, 35), glm::vec2(2));
 	}
 
-	void Player::OnCollision(PhysicsComponent * other)
+	void Player::OnCollision(AIngine::Physics::Contact contact)
 	{
 		if (CrappyBird::s_DieOnCollision) {
-			if (other->GetOwner()->GetName() == "Obstacle") {
+			if (contact.Other->GetOwner()->GetName() == "Obstacle") {
 				OnGameOverEvent();
 			}
 		}
 	}
 
-	static float s_lifeTime = 0.35f;
 
-	void Player::OnSpawnParticle(Particle & particle, const glm::vec2 & pos)
+	void Player::OnSpawnFireParticles(Particle* particles, int count, const glm::vec2 & pos)
 	{
 		std::vector<glm::vec2> m_splinePoints = {
 		   glm::vec2(-0.19,-0.08) * GetOwner()->GetLocalScale(),
@@ -179,36 +201,84 @@ namespace CrappyBird {
 			return (2.0 / 9.0) * val * val + (-2.0 / 3.0) * val + (1.0);
 		};
 
-		float value = std::clamp(distribution(generator), 0.0, 3.0);
-		glm::vec2 p = AIngine::Math::catmull_rom_spline(m_splinePoints, value);
+		for (int i = 0; i < count; i++) {
+			Particle& particle = particles[i];
+			float value = std::clamp(distribution(generator), 0.0, 3.0);
+			glm::vec2 p = AIngine::Math::catmull_rom_spline(m_splinePoints, value);
 
 
-		particle.Lifetime = s_lifeTime;
+			particle.Lifetime = s_lifeTime;
 
-		particle.Velocity = glm::vec2(-0.6, 0.3) * CrappyBird::s_GameSpeed;
-		// randomize velocity a little
-		particle.Velocity *= std::clamp(veldistribution(generator), 0.1, 2.0);
+			particle.Velocity = glm::vec2(-0.6, 0.3) * velMultiplier;
+			// randomize velocity a little
+			particle.Velocity *= std::clamp(veldistribution(generator), 0.1, 2.0);
 
-		particle.AngularVelocity = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2.0 - 0)));
+			particle.AngularVelocity = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2.0 - 0)));
 
-		particle.Position = pos + p;
+			particle.Position = pos + p;
 
-		// color is more red in the middle
-		particle.Color = glm::vec4(1.0 * coldistribution(generator), colFunc(value), 0, 1);
+			// color is more red in the middle
+			static const glm::vec4 Color1(1.0 * coldistribution(generator), colFunc(value), 0, 1);
+			static const glm::vec4 Color2(0.01, 0, 1 * coldistribution(generator), 1);
+			particle.Color = (CrappyBird::s_levelIndex == 1 || CrappyBird::s_levelIndex == 3) ? Color1 : Color2;
 
-		particle.Size = glm::vec2(0.03) * (float)coldistribution(generator);
+			particle.Size = glm::vec2(0.03) * (float)coldistribution(generator);
+		}
 	}
 
-	void Player::OnUpdateParticle(Particle & particle)
+	static const float s_collisionParticleLifeTime = 0.05f;
+
+	void Player::OnSpawnCollisionParticle(Particle* particles, int count, const glm::vec2 & pos)
 	{
-		float dt = m_delta;
+		static std::default_random_engine generator;
+		static std::normal_distribution<double> lifeTimeDistribution(1.0, 0.3);
+		static std::normal_distribution<double> velocityDistribution(1.0, 0.5);
+		static const glm::vec2 particleSize(0.012);
+		// orange
+		static const glm::vec4 startColor(1.0, 0.66, 0.1, 1.0);
+
+		glm::vec2 origin = m_physBody->GetContact()->ContactPoints[0].WorldPoint - GetOwner()->GetWorldPosition();
+	/*	DEBUG_INFO("{0}  {1}", origin.x, origin.y);*/
+		glm::vec2 normal = m_physBody->GetContact()->Normal;
+		normal *= -1;
+		const glm::vec2 perpendicular(-normal.y, normal.x);
+		float rotationStep = M_PI / count;
+		for (int i = 0; i < count; i++) {
+			Particle& particle = particles[i];
+			particle.Lifetime = s_collisionParticleLifeTime * lifeTimeDistribution(generator);
+			glm::mat4 mat(1);
+			mat = glm::rotate(mat, -rotationStep * i, glm::vec3(0, 0, 1));
+			glm::vec4 vel = glm::vec4(perpendicular.x, perpendicular.y, 0, 1) * mat;
+			particle.Velocity = vel;
+			particle.Velocity *= (double)m_physBody->GetVelocity().length() * std::clamp(velocityDistribution(generator), 0.1, 2.0);
+			particle.AngularVelocity = 0;
+			particle.Position = pos + origin;
+			particle.Size = particleSize;
+			particle.Size *= velocityDistribution(generator);
+			particle.Color = startColor;
+		}
+	}
+
+
+	void Player::OnUpdateParticle(Particle & particle, float delta)
+	{
+		float dt = delta;
 		particle.Position += particle.Velocity * dt;
-		static glm::vec4 finalColor(1, 0, 0, 0);
 		float t = AIngine::Math::CosErp(particle.Lifetime / s_lifeTime);
-		float u = AIngine::Math::CosErp(particle.Lifetime / s_lifeTime);
+		float u = AIngine::Math::SinErp(particle.Lifetime / s_lifeTime);
 		glm::vec4 a = glm::vec4(t, t, 0, u);
+		glm::vec4 finalColor = (CrappyBird::s_levelIndex == 1 || CrappyBird::s_levelIndex == 3) ? s_finalFireColor1 : s_finalFireColor2;
 		particle.Color = glm::mix(finalColor, particle.Color, a); // value = 1 => firstColor
 		particle.Rotation += particle.AngularVelocity * dt;
+	}
+
+	void Player::OnUpdateCollisionParticle(Particle & particle, float delta)
+	{
+		static const glm::vec4 finalColor(0.984, 1.0, 0.1, 1);
+		float dt = delta;
+		particle.Position += particle.Velocity * dt;
+		particle.Rotation += particle.AngularVelocity * dt;
+		particle.Color = glm::mix(finalColor, particle.Color, AIngine::Math::CosErp(particle.Lifetime / s_lifeTime));
 	}
 
 	void Player::OnGameOver()
@@ -229,6 +299,11 @@ namespace CrappyBird {
 		static const float yScale = 0.75;
 		float xsize = Graphics::GetTextSize(chosenText, glm::vec2(xScale, yScale)).x;
 		retryButton->TextScale = glm::vec2(xScale, yScale);
+
+		//for (auto& effect : m_activeEffects)
+		//	effect->End();
+
+		//m_activeEffects.clear();
 	}
 
 	void Player::UpdateGameOverScreen(float delta)

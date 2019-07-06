@@ -64,10 +64,10 @@ namespace CrappyBird {
 			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -0.055f));
 		}
 
-		if (m_physBody->IsCollided() && m_physBody->GetOtherCollider()->GetOwner()->GetName().find("PickUp") == std::string::npos) {
-			xcsr->reward(-1, true);
-			GetOwner()->SetWorldPosition(s_spawnPos);
-		}
+		//if (m_physBody->IsCollided() && m_physBody->GetOtherCollider()->GetOwner()->GetName().find("PickUp") == std::string::npos) {
+		//	xcsr->reward(-1, true);
+		//	GetOwner()->SetWorldPosition(s_spawnPos);
+		//}
 		else {
 			xcsr->reward(-std::abs(currentheight - s_spawnPos.y) + 0.1);
 		}

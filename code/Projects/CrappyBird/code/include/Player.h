@@ -16,7 +16,7 @@ namespace CrappyBird {
 
 		// Event is fired when the player enters the next screen
 		AIngine::Events::Event<void, AIngine::Structures::RectangleI&> OnEnterNewScreen;
-		
+
 		AIngine::Events::Event<void> OnGameOverEvent;
 		typedef AIngine::Events::EventHandler<void> OnGameOverEventHandler;
 
@@ -58,12 +58,17 @@ namespace CrappyBird {
 		/* The impulse the rocket receives on button press*/
 		static const float s_standardImpulse;
 		static float s_Impulse;
+		static const glm::vec4 s_finalFireColor1;
+		static const glm::vec4 s_finalFireColor2;
+		static const float s_lifeTime;
 
 	private:
 		/* Callbacks */
-		void OnCollision(PhysicsComponent* other);
-		void OnSpawnParticle(Particle& particle, const glm::vec2& pos);
-		void OnUpdateParticle(Particle& particle);
+		void OnCollision(AIngine::Physics::Contact contact);
+		void OnSpawnFireParticles(Particle* particles, int count, const glm::vec2& pos);
+		void OnUpdateParticle(Particle& particle, float delta);
+		void OnSpawnCollisionParticle(Particle* particles, int count, const glm::vec2& pos);
+		void OnUpdateCollisionParticle(Particle& particle, float delta);
 		void OnGameOver();
 		void UpdateGameOverScreen(float delta);
 
@@ -86,6 +91,7 @@ namespace CrappyBird {
 
 		// the particle emitter which emitts fire
 		ParticleEmitter* m_emitter;
+		ParticleEmitter* m_collisionEmitter;
 
 		const glm::vec2 m_spawnPosition = glm::vec2(1, 2.5);
 
@@ -95,9 +101,11 @@ namespace CrappyBird {
 		AIngine::UI::Button::OnClickedEventHandler OnRetryClickedHandler;
 
 		// EventHandler for the callbacks. Need to be kept in order to unsubscribe from events
-		AIngine::ParticleEmitter::SpawnParticleHandler OnSpawnParticleHandler;
+		AIngine::ParticleEmitter::SpawnParticlesHandler OnSpawnFireParticlesHandler;
+		AIngine::ParticleEmitter::SpawnParticlesHandler OnSpawnCollisionParticlesHandler;
 		AIngine::ParticleEmitter::UpdateParticleHandler OnUpdateParticleHandler;
-		AIngine::Events::EventHandler<void, PhysicsComponent*> OnCollisionEventHandler;
+		AIngine::ParticleEmitter::UpdateParticleHandler OnUpdateCollisionParticleHandler;
+		AIngine::Events::EventHandler<void, AIngine::Physics::Contact> OnCollisionEventHandler;
 		OnGameOverEventHandler OnGameOverHandler;
 	};
 }

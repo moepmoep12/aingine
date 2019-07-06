@@ -25,11 +25,38 @@
 1
 ],
 "soundComponent": {
-"Off_Limits": {
+"Sci-fi Pulse Loop": {
 "delay": 0.0,
 "looped": true,
 "pan": 0.5,
-"path": "sounds\\Off_Limits.wav",
+"path": "sounds\\Sci-fi Pulse Loop.wav",
+"ptich": 1.0,
+"volumeLeft": 1.0,
+"volumeRight": 1.0
+},
+"Space Cube": {
+"delay": 0.0,
+"looped": true,
+"pan": 0.5,
+"path": "sounds\\Space Cube.wav",
+"ptich": 1.0,
+"volumeLeft": 1.0,
+"volumeRight": 1.0
+},
+"Space Loop": {
+"delay": 0.0,
+"looped": true,
+"pan": 0.5,
+"path": "sounds\\Space Loop.wav",
+"ptich": 1.0,
+"volumeLeft": 1.0,
+"volumeRight": 1.0
+},
+"Starlight": {
+"delay": 0.0,
+"looped": true,
+"pan": 0.5,
+"path": "sounds\\Starlight.wav",
 "ptich": 1.0,
 "volumeLeft": 1.0,
 "volumeRight": 1.0
@@ -546,7 +573,35 @@
 "wrapT": 10497
 }
 }
+},
+"c_children": [
+{
+"CollisionParticleSystem": {
+"a_active": true,
+"a_name": "CollisionParticleSystem",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"particleemitter": {
+"active": true,
+"amount": 5000,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\Circle.png",
+"wrapS": 10497,
+"wrapT": 10497
 }
+},
+"script": null
+}
+}
+}
+]
 }
 },
 {

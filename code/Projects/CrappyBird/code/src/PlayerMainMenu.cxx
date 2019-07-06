@@ -3,6 +3,7 @@
 #include "Player.h"
 
 #include <random>
+#include <imgui.h>
 
 namespace CrappyBird {
 
@@ -17,11 +18,11 @@ namespace CrappyBird {
 	void PlayerMainMenu::OnStart()
 	{
 		m_emitter = GetOwner()->GetComponent<ParticleEmitter>();
-		OnSpawnParticleHandler = AIngine::ParticleEmitter::SpawnParticleHandler(std::bind(&PlayerMainMenu::OnSpawnParticle, this, std::placeholders::_1, std::placeholders::_2));
+		OnSpawnParticleHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(std::bind(&PlayerMainMenu::OnSpawnParticles, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 		OnUpdateParticleHandler = AIngine::ParticleEmitter::UpdateParticleHandler(std::bind(&PlayerMainMenu::OnUpdateParticle, this, std::placeholders::_1));
 
 		// register callbacks
-		m_emitter->SpawnParticleEvent += OnSpawnParticleHandler;
+		m_emitter->SpawnParticlesEvent += OnSpawnParticleHandler;
 		m_emitter->UpdateParticleEvent += OnUpdateParticleHandler;
 	}
 
@@ -29,7 +30,7 @@ namespace CrappyBird {
 	void PlayerMainMenu::OnEnd()
 	{
 		// unsubscribe from events
-		m_emitter->SpawnParticleEvent -= OnSpawnParticleHandler;
+		m_emitter->SpawnParticlesEvent -= OnSpawnParticleHandler;
 		m_emitter->UpdateParticleEvent -= OnUpdateParticleHandler;
 	}
 
@@ -56,7 +57,7 @@ namespace CrappyBird {
 		GetOwner()->SetLocalPosition(glm::vec2(GetOwner()->GetLocalPosition().x, heightDest));
 
 		// basic fire
-		m_emitter->Update(AIngine::Application::Get().GetDeltaTime(), 100);
+		m_emitter->Update(delta, 100);
 	}
 
 	// Callback for events
@@ -64,9 +65,7 @@ namespace CrappyBird {
 	{
 	}
 
-	static float s_lifeTime = 0.15f;
-
-	void PlayerMainMenu::OnSpawnParticle(Particle & particle, const glm::vec2 & pos)
+	void PlayerMainMenu::OnSpawnParticles(Particle*  particles, int count, const glm::vec2 & pos)
 	{
 		std::vector<glm::vec2> m_splinePoints = {
 		   glm::vec2(-0.19,-0.08) * GetOwner()->GetLocalScale(),
@@ -82,34 +81,39 @@ namespace CrappyBird {
 			return (2.0 / 9.0) * val * val + (-2.0 / 3.0) * val + (1.0);
 		};
 
-		float value = std::clamp(distribution(generator), 0.0, 3.0);
-		glm::vec2 p = AIngine::Math::catmull_rom_spline(m_splinePoints, value);
+		for (int i = 0; i < count; i++) {
+			Particle& particle = particles[i];
+			float value = std::clamp(distribution(generator), 0.0, 3.0);
+			glm::vec2 p = AIngine::Math::catmull_rom_spline(m_splinePoints, value);
 
 
-		particle.Lifetime = s_lifeTime;
+			particle.Lifetime = Player::s_lifeTime;
 
-		particle.Velocity = glm::vec2(-0.6, 0.3) * CrappyBird::s_GameSpeed;
-		// randomize velocity a little
-		particle.Velocity *= std::clamp(veldistribution(generator), 0.1, 2.0);
+			particle.Velocity = glm::vec2(-0.6, 0.3) * 1.5f * (CrappyBird::s_GameSpeed / CrappyBird::s_originalGameSpeed);
+			// randomize velocity a little
+			particle.Velocity *= std::clamp(veldistribution(generator), 0.1, 2.0);
 
-		particle.AngularVelocity = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2.0 - 0)));
+			particle.AngularVelocity = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2.0 - 0)));
 
-		particle.Position = pos + p;
+			particle.Position = pos + p;
 
-		// color is more red in the middle
-		particle.Color = glm::vec4(1.0 * coldistribution(generator), colFunc(value), 0, 1);
+			static const glm::vec4 Color1(1.0 * coldistribution(generator), colFunc(value), 0, 1);
+			static const glm::vec4 Color2(0.01, 0, 1 * coldistribution(generator), 1);
+			particle.Color = (CrappyBird::s_levelIndex == 1 || CrappyBird::s_levelIndex == 3) ? Color1 : Color2;
 
-		particle.Size = glm::vec2(0.03) * (float)coldistribution(generator);
+			particle.Size = glm::vec2(0.03) * (float)coldistribution(generator);
+		}
 	}
 
 	void PlayerMainMenu::OnUpdateParticle(Particle & particle)
 	{
 		float dt = m_delta;
 		particle.Position += particle.Velocity * dt;
-		static glm::vec4 finalColor(1, 0, 0, 0);
-		float t = AIngine::Math::CosErp(particle.Lifetime / s_lifeTime);
-		float u = AIngine::Math::SinErp(particle.Lifetime / s_lifeTime);
-		glm::vec4 a = glm::vec4(t, t, 0, u);
+		static const glm::vec4 finalColor1(1, 0, 0, 0);
+		float t = AIngine::Math::CosErp(particle.Lifetime / Player::s_lifeTime);
+		float u = AIngine::Math::SinErp(particle.Lifetime / Player::s_lifeTime);
+		glm::vec4 a = glm::vec4(t, t, t, u);
+		glm::vec4 finalColor = (CrappyBird::s_levelIndex == 1 || CrappyBird::s_levelIndex == 3) ? Player::s_finalFireColor1 : Player::s_finalFireColor2;
 		particle.Color = glm::mix(finalColor, particle.Color, a); // value = 1 => firstColor
 		particle.Rotation += particle.AngularVelocity * dt;
 	}

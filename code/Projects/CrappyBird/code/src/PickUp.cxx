@@ -16,7 +16,7 @@ namespace CrappyBird {
 	void PickUp::OnStart()
 	{
 		// create event handler
-		m_collisionHandler = AIngine::Events::EventHandler<void, PhysicsComponent*>(std::bind(&PickUp::OnCollision, this, std::placeholders::_1));
+		m_collisionHandler = AIngine::Physics::OnCollisionHandler(std::bind(&PickUp::OnCollision, this, std::placeholders::_1));
 		// register callback
 		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin += m_collisionHandler;
 
@@ -44,12 +44,18 @@ namespace CrappyBird {
 		}
 	}
 
-	void PickUp::OnCollision(AIngine::Physics::PhysicsComponent * other)
+	void PickUp::OnCollision(AIngine::Physics::Contact contact)
 	{
-		if (other->GetOwner()->GetName() == "PlayerRocket") {
-			m_player->AddEffect(std::move(m_Effect));
-			m_Effect = nullptr;
-			GetOwner()->SetActive(false);
+		if (contact.Other->GetOwner()->GetComponent<Player>()) {
+			if (m_Effect) {
+				m_player->AddEffect(std::move(m_Effect));
+				m_Effect = nullptr;
+				GetOwner()->SetActive(false);
+			}
+			else 
+			{
+				int x;
+			}
 		}
 	}
 

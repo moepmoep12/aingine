@@ -14,7 +14,7 @@ namespace CrappyBird {
 	void BackGround::OnStart()
 	{
 		SoundComponent* soundComp = m_owner->GetComponent<SoundComponent>();
-		soundComp->Play(0);
+		soundComp->Play(CrappyBird::s_levelIndex);
 		m_player = AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>();
 
 		OnGameOverHandler = Player::OnGameOverEventHandler(std::bind(&BackGround::OnGameOver, this));
@@ -29,7 +29,7 @@ namespace CrappyBird {
 			std::stringstream ss;
 			ss << "textures/Background/" << CrappyBird::s_levelIndex + 1 << "/" << j << ".png";
 			children[i]->GetComponent<Sprite>()->SetTexture(Texture2D(Assets::Load<BitmapAsset>(ss.str())->GetBitmap()));
-			if ((i+1) % 2 == 0) {
+			if ((i + 1) % 2 == 0) {
 				j--;
 			}
 		}
@@ -39,7 +39,7 @@ namespace CrappyBird {
 	void BackGround::OnEnd()
 	{
 		SoundComponent* soundComp = m_owner->GetComponent<SoundComponent>();
-		soundComp->Stop(0);
+		soundComp->Stop(CrappyBird::s_levelIndex);
 
 		m_player->OnGameOverEvent -= OnGameOverHandler;
 		m_player->OnRestartGame -= OnRestartGameHandler;
@@ -75,14 +75,14 @@ namespace CrappyBird {
 	void BackGround::OnGameOver()
 	{
 		SoundComponent* soundComp = m_owner->GetComponent<SoundComponent>();
-		soundComp->Stop(0);
-		soundComp->Play(1);
+		soundComp->Stop(CrappyBird::s_levelIndex);
+		soundComp->Play(4);
 	}
 
 	void BackGround::OnRestartGame()
 	{
 		SoundComponent* soundComp = m_owner->GetComponent<SoundComponent>();
-		soundComp->Play(0);
-		soundComp->Stop(1);
+		soundComp->Play(CrappyBird::s_levelIndex);
+		soundComp->Stop(4);
 	}
 }

@@ -4,3 +4,7 @@ reduce.png Icons made by https://www.freepik.com from www.flaticon.com
 metal-set https://opengameart.org/content/free-metal-texture-creation-set-08
 qubodup-PowerDrain.wav : https://opengameart.org/content/energy-drain
 rocket_launch_short.wav : https://opengameart.org/content/rocket-launch-0 (edited)
+Sci-fi Pulse Loop.wav : https://www.dl-sounds.com/royalty-free/sci-fi-pulse-loop/
+Space Loop.wav : https://www.dl-sounds.com/royalty-free/space-loop/
+Starlight.wav : https://www.dl-sounds.com/royalty-free/starlight/
+Space Cube.wav : https://www.dl-sounds.com/royalty-free/space-cube-loop/
