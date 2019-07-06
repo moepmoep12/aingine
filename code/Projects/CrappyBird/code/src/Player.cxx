@@ -109,7 +109,7 @@ namespace CrappyBird {
 
 
 
-		if (AIngine::Input::IsMouseButtonPressed(0) || AIngine::Input::IsKeyPressed(AIngine::KeyCodes::SPACE)) {
+		if (AIngine::Input::IsMouseButtonPressed(AIngine::MouseButton::BUTTON_LEFT) || AIngine::Input::IsKeyPressed(AIngine::KeyCode::SPACE)) {
 			// accelerate
 			velMultiplier = CrappyBird::s_GameSpeed;
 			m_emitter->Update(delta, 100);
@@ -161,7 +161,7 @@ namespace CrappyBird {
 		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent::KeyPressedEventData)) {
 			AIngine::Events::KeyPressedEvent::KeyPressedEventData pressedEvent = dynamic_cast<AIngine::Events::KeyPressedEvent::KeyPressedEventData&>(e);
 
-			if (pressedEvent.GetKeyCode() == AIngine::KeyCodes::SPACE) {
+			if (pressedEvent.GetKeyCode() == AIngine::KeyCode::SPACE) {
 				OnGameOverEvent();
 			}
 		}
@@ -238,7 +238,7 @@ namespace CrappyBird {
 		static const glm::vec4 startColor(1.0, 0.66, 0.1, 1.0);
 
 		glm::vec2 origin = m_physBody->GetContact()->ContactPoints[0].WorldPoint - GetOwner()->GetWorldPosition();
-	/*	DEBUG_INFO("{0}  {1}", origin.x, origin.y);*/
+		/*	DEBUG_INFO("{0}  {1}", origin.x, origin.y);*/
 		glm::vec2 normal = m_physBody->GetContact()->Normal;
 		normal *= -1;
 		const glm::vec2 perpendicular(-normal.y, normal.x);
@@ -320,10 +320,10 @@ namespace CrappyBird {
 		glm::vec2 pos = center;
 		pos.x -= actualTextSize.x * 0.5f;
 		pos.y -= actualTextSize.y * 0.5f;
-		glm::vec2 buttonPos = center;
-		buttonPos.y += actualTextSize.y * 0.75;
-		buttonPos.x -= retryButton->GetRectangle().width * 0.5;
-		retryButton->SetPosition(buttonPos);
+		//glm::vec2 buttonPos = center;
+		//buttonPos.y += actualTextSize.y * 0.75;
+		//buttonPos.x -= retryButton->GetRectangle().width * 0.5;
+		//retryButton->SetPosition(buttonPos);
 		AIngine::Graphics::Text("Game Over", pos, glm::vec2(scale), glm::vec3(1, 0, 0), 1, &gameOverFont->GetFont());
 	}
 
@@ -353,7 +353,7 @@ namespace CrappyBird {
 
 	void Player::PlayEngineSound()
 	{
-		static AIngine::Sound* sound = GetOwner()->GetComponent<SoundComponent>()->GetSound(0);
+		AIngine::Sound* sound = GetOwner()->GetComponent<SoundComponent>()->GetSound(0);
 		if (!sound->IsPlaying())
 			GetOwner()->GetComponent<SoundComponent>()->Play(0);
 	}

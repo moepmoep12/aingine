@@ -20,6 +20,7 @@ namespace CrappyBird {
 			availableObj->SetLocalPosition(pos);
 			AddEffect(*availableObj->GetComponent<PickUp>());
 			availableObj->SetActive(true);
+			availableObj->GetComponent<PhysicsComponent>()->SetEnabled(true);
 		}
 	}
 

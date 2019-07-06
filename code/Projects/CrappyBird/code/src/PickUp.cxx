@@ -16,9 +16,11 @@ namespace CrappyBird {
 	void PickUp::OnStart()
 	{
 		// create event handler
-		m_collisionHandler = AIngine::Physics::OnCollisionHandler(std::bind(&PickUp::OnCollision, this, std::placeholders::_1));
+		m_collisionBeginHandler = AIngine::Physics::OnCollisionHandler(std::bind(&PickUp::OnCollisionBegin, this, std::placeholders::_1));
+		m_collisionEndHandler = AIngine::Physics::OnCollisionHandler(std::bind(&PickUp::OnCollisionEnd, this, std::placeholders::_1));
 		// register callback
-		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin += m_collisionHandler;
+		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin += m_collisionBeginHandler;
+		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionEnd += m_collisionEndHandler;
 
 		m_player = AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>();
 	}
@@ -26,7 +28,8 @@ namespace CrappyBird {
 	// End is called when gameplay ends for this script
 	void PickUp::OnEnd()
 	{
-		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin -= this->m_collisionHandler;
+		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin -= this->m_collisionBeginHandler;
+		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionEnd -= this->m_collisionEndHandler;
 		GetOwner()->SetActive(false);
 	}
 
@@ -44,7 +47,7 @@ namespace CrappyBird {
 		}
 	}
 
-	void PickUp::OnCollision(AIngine::Physics::Contact contact)
+	void PickUp::OnCollisionBegin(AIngine::Physics::Contact contact)
 	{
 		if (contact.Other->GetOwner()->GetComponent<Player>()) {
 			if (m_Effect) {
@@ -52,15 +55,19 @@ namespace CrappyBird {
 				m_Effect = nullptr;
 				GetOwner()->SetActive(false);
 			}
-			else 
-			{
-				int x;
-			}
+		}
+	}
+
+	void PickUp::OnCollisionEnd(AIngine::Physics::Contact contact)
+	{
+		if (contact.Other->GetOwner()->GetComponent<Player>()) {
+			GetOwner()->GetComponent<PhysicsComponent>()->SetEnabled(false);
 		}
 	}
 
 	// Callback for events
 	void PickUp::OnEventData(AIngine::Events::EventData & e)
 	{
+
 	}
 }

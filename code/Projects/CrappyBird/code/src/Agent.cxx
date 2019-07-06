@@ -80,7 +80,7 @@ namespace CrappyBird {
 		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent::KeyPressedEventData)) {
 			AIngine::Events::KeyPressedEvent::KeyPressedEventData pressedEvent = dynamic_cast<AIngine::Events::KeyPressedEvent::KeyPressedEventData&>(e);
 			int i = 0;
-			if (pressedEvent.GetKeyCode() == AIngine::KeyCodes::SPACE) {
+			if (pressedEvent.GetKeyCode() == AIngine::KeyCode::SPACE) {
 
 			}
 		}

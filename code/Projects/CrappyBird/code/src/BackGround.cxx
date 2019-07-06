@@ -82,7 +82,7 @@ namespace CrappyBird {
 	void BackGround::OnRestartGame()
 	{
 		SoundComponent* soundComp = m_owner->GetComponent<SoundComponent>();
-		soundComp->Play(CrappyBird::s_levelIndex);
 		soundComp->Stop(4);
+		soundComp->Play(CrappyBird::s_levelIndex);
 	}
 }

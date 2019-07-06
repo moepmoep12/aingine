@@ -55,6 +55,7 @@ namespace CrappyBird {
 				if (child->GetWorldPosition().x < -child->GetComponent<Obstacle>()->GetRectangle().width) {
 					//child->RemoveComponent<Obstacle>();
 					child->SetActive(false);
+					child->GetComponent<PhysicsComponent>()->SetEnabled(false);
 				}
 			}
 		}
@@ -210,6 +211,7 @@ namespace CrappyBird {
 			if (obj) {
 				obj->SetActive(true);
 				obj->GetComponent<Sprite>()->SetTexture(m_obstacleTextures[textureIndex]);
+				obj->GetComponent<PhysicsComponent>()->SetEnabled(true);
 				obj->GetComponent<Obstacle>()->Set(AIngine::Structures::RectangleF
 					{
 						map[i][0].rectangle.x,
@@ -242,6 +244,7 @@ namespace CrappyBird {
 			if (obj) {
 				obj->SetActive(true);
 				obj->GetComponent<Sprite>()->SetTexture(m_obstacleTextures[textureIndex]);
+				obj->GetComponent<PhysicsComponent>()->SetEnabled(true);
 				obj->GetComponent<Obstacle>()->Set(AIngine::Structures::RectangleF
 					{
 						map[i][0].rectangle.x,

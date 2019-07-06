@@ -19,10 +19,12 @@ namespace CrappyBird {
 
 	private:
 		/* Callback*/
-		void OnCollision(AIngine::Physics::Contact contact);
+		void OnCollisionBegin(AIngine::Physics::Contact contact);
+		void OnCollisionEnd(AIngine::Physics::Contact contact);
 
 		/* EventHandler*/
-		AIngine::Physics::OnCollisionHandler m_collisionHandler;
+		AIngine::Physics::OnCollisionHandler m_collisionBeginHandler;
+		AIngine::Physics::OnCollisionHandler m_collisionEndHandler;
 
 		Player* m_player;
 	};
