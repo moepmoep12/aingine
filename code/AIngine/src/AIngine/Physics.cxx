@@ -4,6 +4,8 @@
 #include "AIngine/GameObject.h"
 #include "AIngine/World.h"
 
+#include <Box2D/Box2D.h>
+
 namespace AIngine::Physics {
 	PhysicsComponent::~PhysicsComponent()
 	{
@@ -30,6 +32,7 @@ namespace AIngine::Physics {
 		if (m_body) {
 			//m_body->SetActive(active);
 			m_body->SetAwake(active);
+			m_bIsTouching = false;
 		}
 	}
 
@@ -300,13 +303,6 @@ namespace AIngine::Physics {
 		}
 	}
 
-	PhysicsComponent* PhysicsComponent::GetOtherCollider() {
-		if (m_otherCollided) {
-			return static_cast<PhysicsComponent*>(m_otherCollided->GetBody()->GetUserData());
-		}
-		return nullptr;
-	}
-
 	Component * PhysicsComponent::Copy(GameObject * const owner) const
 	{
 		PhysicsComponent* copy = new PhysicsComponent();
@@ -334,6 +330,13 @@ namespace AIngine::Physics {
 		return std::move(copy);
 	}
 
+	const Contact * const PhysicsComponent::GetContact() const
+	{
+		if (m_bIsTouching)
+			return &m_contact;
+		return nullptr;
+	}
+
 	glm::vec2 PhysicsComponent::GetVelocity() const {
 		b2Vec2 vel = m_body->GetLinearVelocity();
 		return glm::vec2(vel.x, vel.y);
@@ -349,38 +352,17 @@ namespace AIngine::Physics {
 
 	void PhysicsComponent::ApplyForce(const glm::vec2 & force, const glm::vec2 & point)
 	{
-		ApplyForce(b2Vec2(force.x, force.y), b2Vec2(point.x, point.y));
-	}
-	void PhysicsComponent::ApplyForce(const b2Vec2 & force, const b2Vec2 & point)
-	{
-		m_body->ApplyForce(force, point, true);
-	}
-	void PhysicsComponent::ApplyForceToCenter(const glm::vec2 & force)
-	{
-		ApplyForceToCenter(b2Vec2(force.x, force.y));
-	}
-	void PhysicsComponent::ApplyForceToCenter(const b2Vec2 & force)
-	{
-		m_body->ApplyForceToCenter(force, true);
-	}
-	void PhysicsComponent::ApplyLinearImpulseToCenter(const glm::vec2 & impulse)
-	{
-		ApplyLinearImpulseToCenter(b2Vec2(impulse.x, impulse.y));
-	}
-	void PhysicsComponent::ApplyLinearImpulseToCenter(const b2Vec2 & impulse)
-	{
-		m_body->ApplyLinearImpulseToCenter(impulse, true);
+		m_body->ApplyForce(b2Vec2(force.x, force.y), b2Vec2(point.x, point.y), true);
 	}
 
-	void PhysicsComponent::SetCollision(bool collided, b2Fixture * other)
+	void PhysicsComponent::ApplyForceToCenter(const glm::vec2 & force)
 	{
-		if (IsActive()) {
-			m_collided = collided;
-			m_otherCollided = other;
-			if (collided)
-				OnCollisionBegin(GetOtherCollider());
-			else OnCollisionEnd(GetOtherCollider());
-		}
+		m_body->ApplyForceToCenter(b2Vec2(force.x, force.y), true);
+	}
+
+	void PhysicsComponent::ApplyLinearImpulseToCenter(const glm::vec2 & impulse)
+	{
+		m_body->ApplyLinearImpulseToCenter(b2Vec2(impulse.x, impulse.y), true);
 	}
 
 	bool PhysicsComponent::IsFixedRotation() const
@@ -400,4 +382,4 @@ namespace AIngine::Physics {
 
 
 // initialize EventHandler for OnCollionEvent
-int AIngine::Events::EventHandler<void, AIngine::Physics::PhysicsComponent*>::counter = 0;
+int AIngine::Events::EventHandler<void, AIngine::Physics::Contact>::counter = 0;

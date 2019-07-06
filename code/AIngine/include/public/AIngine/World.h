@@ -13,6 +13,7 @@ namespace AIngine {
 	namespace Physics {
 		class PhysicsComponent;
 		class ContactListener;
+		class ContactListener;
 	}
 
 	namespace Editor {
@@ -29,6 +30,7 @@ namespace AIngine {
 }
 
 namespace AIngine {
+
 	class World final : public AIngine::Structures::Layer {
 
 		friend class AIngine::Editor::Editor;

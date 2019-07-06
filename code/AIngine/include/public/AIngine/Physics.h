@@ -2,8 +2,9 @@
 #include "AIngine/Component.h"
 #include "Events/Event.h"
 
-#include <Box2D/Box2D.h>
 #include <glm/glm.hpp>
+
+class b2Body;
 
 namespace AIngine::Editor::Widget {
 	class SceneGraphWidget;
@@ -16,14 +17,14 @@ namespace AIngine::Physics {
 
 	enum { maxVertices = 8 };
 
-	enum PhysicsShape {
+	enum class PhysicsShape {
 		e_Circle = 0,
 		e_Box = 1,
 		e_Polygon = 2,
 		e_Edge = 3
 	};
 
-	enum PhysicsBodyType {
+	enum class  PhysicsBodyType {
 		e_Static = 0,
 		e_Dynamic = 1,
 		e_Kinematic = 2
@@ -37,29 +38,48 @@ namespace AIngine::Physics {
 			density = 1.0f;
 		}
 
-		float32 friction;
-		float32 restitution;
-		float32 density;
+		float friction;
+		float restitution;
+		float density;
 	};
 
 	struct PhysicsBodyInformation {
 		PhysicsBodyType type = PhysicsBodyType::e_Static;
 		PhysicsShape shape = PhysicsShape::e_Circle;
 		bool isTrigger = false;
-		float32 radius = 0;
-		float32 width = 0;
-		float32 height = 0;
+		float radius = 0;
+		float width = 0;
+		float height = 0;
 		glm::vec2 vertices[maxVertices];
 		unsigned int verticesCount = 0;
 	};
 
 
+	struct ContactPoint {
+		glm::vec2 WorldPoint;
+		float NormalImpulse;
+		float TangentImpulse;
+	};
+
+	class PhysicsComponent;
+
+	struct Contact {
+		PhysicsComponent* Other;
+		glm::vec2 Normal;
+		bool IsTouching;
+		float Friction;
+		float Restitution;
+		float TangentSpeed;
+		int PointCount;
+		ContactPoint ContactPoints[2];
+	};
+
+	typedef AIngine::Events::EventHandler<void, Contact> OnCollisionHandler;
+	typedef AIngine::Events::Event<void, Contact> CollisionEvent;
+
 	class PhysicsComponent final : public AIngine::Component {
 	public:
 
-		class CollisionEvent : public AIngine::Events::Event<void, PhysicsComponent*> {
-
-		};
 
 		friend class AIngine::Editor::Widget::SceneGraphWidget;
 		friend class AIngine::Editor::Widget::Component::PhysicsComponentWidget;
@@ -83,14 +103,8 @@ namespace AIngine::Physics {
 		void AdjustPolyShape(const glm::vec2* vertices, unsigned int count);
 
 		void ApplyForce(const glm::vec2& force, const glm::vec2& point);
-		void ApplyForce(const b2Vec2& force, const b2Vec2& point);
 		void ApplyForceToCenter(const glm::vec2& force);
-		void ApplyForceToCenter(const b2Vec2& force);
 		void ApplyLinearImpulseToCenter(const glm::vec2& impulse);
-		void ApplyLinearImpulseToCenter(const b2Vec2& impulse);
-
-		inline bool IsCollided() const { return m_collided; }
-		void SetCollision(bool collided, b2Fixture* other);
 
 		inline glm::vec2 GetOffset() const { return m_offset; }
 		inline void SetOffset(const glm::vec2& offset) { m_offset = offset; }
@@ -100,13 +114,11 @@ namespace AIngine::Physics {
 
 		inline const PhysicsProperties& GetProperties() const { return m_properties; }
 		inline const PhysicsBodyInformation& GetBodyInformation() const { return m_bodyInformation; }
-
-		//query data
+		const Contact* const GetContact() const;
 
 		glm::vec2 GetVelocity() const;
 		float GetInertia() const;
-
-		PhysicsComponent* GetOtherCollider();
+		inline bool IsTouching() const { return m_bIsTouching; }
 
 	public:
 		CollisionEvent OnCollisionBegin;
@@ -116,41 +128,14 @@ namespace AIngine::Physics {
 		virtual Component* Copy(GameObject* const owner) const override;
 
 	private:
+		friend class ContactListener;
+		bool m_bIsTouching = false;
+		Contact m_contact;
 		b2Body* m_body = nullptr;
-		b2Fixture* m_otherCollided = nullptr;
-		bool m_collided = false;
 		PhysicsProperties m_properties;
 		PhysicsBodyInformation m_bodyInformation;
 		glm::vec2 m_offset = glm::vec2(0);
 	};
 
 
-	class ContactListener : public b2ContactListener {
-	public:
-		// Called when two fixtures begin to touch
-		virtual void BeginContact(b2Contact* contact) override
-		{
-			void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-			if (bodyUserData)
-				static_cast<PhysicsComponent*> (bodyUserData)->SetCollision(true, contact->GetFixtureB());
-
-			bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-			if (bodyUserData)
-				static_cast<PhysicsComponent*> (bodyUserData)->SetCollision(true, contact->GetFixtureA());
-		}
-
-		// Called when two fixtures cease to touch
-		virtual void EndContact(b2Contact* contact) override
-		{
-			void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-			if (bodyUserData)
-				static_cast<PhysicsComponent*> (bodyUserData)->SetCollision(false, nullptr);
-
-			//check if fixture B was a ball
-			bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-			if (bodyUserData)
-				static_cast<PhysicsComponent*> (bodyUserData)->SetCollision(false, nullptr);
-		}
-
-	};
 }

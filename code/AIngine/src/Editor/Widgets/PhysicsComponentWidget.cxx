@@ -56,13 +56,13 @@ namespace AIngine::Editor::Widget::Component {
 				{
 					static const PhysicsBodyType choosableBodyTypes[] = { PhysicsBodyType::e_Static, PhysicsBodyType::e_Dynamic, PhysicsBodyType::e_Kinematic };
 					static const char* bodyTypesNames[] = { "Static", "Dynamic", "Kinematic" };
-					static int currentType = bodyInfo.type;
+					static int currentType = (int)bodyInfo.type;
 					if (ImGui::BeginCombo("BodyType", bodyTypesNames[currentType]))
 					{
 						for (int i = 0; i < IM_ARRAYSIZE(bodyTypesNames); i++) {
-							bool isSelected = choosableBodyTypes[i] == currentType;
+							bool isSelected = (int)choosableBodyTypes[i] == currentType;
 							if (ImGui::Selectable(bodyTypesNames[i], isSelected)) {
-								currentType = choosableBodyTypes[i];
+								currentType = (int)choosableBodyTypes[i];
 								bodyInfo.type = choosableBodyTypes[i];
 							}
 							if (isSelected) {
@@ -81,7 +81,7 @@ namespace AIngine::Editor::Widget::Component {
 				{
 					static const PhysicsShape choosablePhysicsShapes[] = { PhysicsShape::e_Circle, PhysicsShape::e_Box, PhysicsShape::e_Polygon,  PhysicsShape::e_Edge, };
 					static const char* shapeNames[] = { "Circle","Box", "Polygon", "Edge" };
-					if (ImGui::BeginCombo("Shape", shapeNames[shape])) {
+					if (ImGui::BeginCombo("Shape", shapeNames[(int)shape])) {
 						for (int i = 0; i < IM_ARRAYSIZE(shapeNames); i++) {
 							bool isSelected = choosablePhysicsShapes[i] == shape;
 							if (ImGui::Selectable(shapeNames[i], isSelected)) {

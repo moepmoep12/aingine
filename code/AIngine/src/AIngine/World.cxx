@@ -9,6 +9,165 @@
 
 namespace AIngine {
 
+	namespace Physics {
+		class ContactListener : public b2ContactListener {
+		public:
+			// Called when two fixtures begin to touch
+			virtual void BeginContact(b2Contact* contact) override
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+
+				AIngine::Physics::PhysicsComponent* physCompA = static_cast<PhysicsComponent*>(contact->GetFixtureA()->GetBody()->GetUserData());
+				AIngine::Physics::PhysicsComponent* physCompB = static_cast<PhysicsComponent*>(contact->GetFixtureB()->GetBody()->GetUserData());
+
+				b2WorldManifold worldManifold;
+				contact->GetWorldManifold(&worldManifold);
+				ContactPoint points[2] = {
+					ContactPoint {
+							glm::vec2(worldManifold.points[0].x,worldManifold.points[0].y),
+							contact->GetManifold()->points[0].normalImpulse,
+							contact->GetManifold()->points[0].tangentImpulse
+							}
+				};
+				if (contact->GetManifold()->pointCount == 2)
+				{
+					points[1] = ContactPoint{
+								glm::vec2(worldManifold.points[1].x,worldManifold.points[1].y),
+								contact->GetManifold()->points[1].normalImpulse,
+								contact->GetManifold()->points[1].tangentImpulse
+					};
+				}
+				Contact contac{
+							physCompB,
+							glm::vec2(worldManifold.normal.x,worldManifold.normal.y),
+							contact->IsTouching(),
+							contact->GetFriction(),
+							contact->GetRestitution(),
+							contact->GetTangentSpeed(),
+							contact->GetManifold()->pointCount,
+
+				};
+
+				contac.ContactPoints[0] = points[0];
+				if (contac.PointCount == 2) contac.ContactPoints[1] = points[1];
+
+				if (physCompA) {
+					physCompA->m_bIsTouching = true;
+					physCompA->m_contact = contac;
+					physCompA->OnCollisionBegin(contac);
+				}
+
+				if (physCompB) {
+					contac.Other = physCompA;
+					physCompB->m_bIsTouching = true;
+					physCompB->m_contact = contac;
+					physCompB->OnCollisionBegin(contac);
+				}
+
+
+				//if (bodyUserData) {
+				//	b2WorldManifold worldmanifold;
+				//	contact->GetWorldManifold(&worldmanifold);
+				//	AIngine::Physics::PhysicsComponent* physCompA = static_cast<AIngine::Physics::PhysicsComponent*> (bodyUserData);
+				//	Contact cont{
+				//			static_cast<AIngine::Physics::PhysicsComponent*>(contact->GetFixtureB()->GetBody()->GetUserData()),
+				//			 glm::vec2(worldmanifold.normal.x,worldmanifold.normal.y),
+				//			 glm::vec2(worldmanifold.points[0].x,worldmanifold.points[0].y),
+				//			 contact->IsTouching(),
+				//			 contact->GetFriction(),
+				//			 contact->GetRestitution(),
+				//			 contact->GetTangentSpeed(),
+				//			 contact->GetManifold()->pointCount
+				//			 //ContactPoints
+				//	};
+				//	if (physCompA) {
+				//		physCompA->OnCollisionBegin(cont);
+				//		physCompA->m_bIsTouching = true;
+				//		physCompA->m_contact = cont;
+				//	}
+				//}
+
+				//bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+				//if (bodyUserData)
+				//{
+				//	b2WorldManifold worldmani;
+				//	contact->GetWorldManifold(&worldmani);
+				//	AIngine::Physics::PhysicsComponent* physCompB = static_cast<AIngine::Physics::PhysicsComponent*> (bodyUserData);
+				//	if (physCompB) {
+				//		Contact cont{
+				//				static_cast<AIngine::Physics::PhysicsComponent*>(contact->GetFixtureA()->GetBody()->GetUserData()),
+				//				 glm::vec2(worldmani.normal.x,worldmani.normal.y),
+				//				 glm::vec2(worldmani.points[0].x,worldmani.points[0].y),
+				//				 contact->IsTouching(),
+				//				 contact->GetFriction(),
+				//				 contact->GetRestitution(),
+				//				 contact->GetTangentSpeed(),
+				//				 contact->GetManifold()->pointCount
+				//				 //ContactPoints
+				//		};
+				//		physCompB->OnCollisionBegin(cont);
+				//		physCompB->m_bIsTouching = true;
+				//		physCompB->m_contact = cont;
+				//	}
+				//}
+			}
+
+			// Called when two fixtures cease to touch
+			virtual void EndContact(b2Contact* contact) override
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+
+				AIngine::Physics::PhysicsComponent* physCompA = static_cast<PhysicsComponent*>(contact->GetFixtureA()->GetBody()->GetUserData());
+				AIngine::Physics::PhysicsComponent* physCompB = static_cast<PhysicsComponent*>(contact->GetFixtureB()->GetBody()->GetUserData());
+
+				b2WorldManifold worldManifold;
+				contact->GetWorldManifold(&worldManifold);
+				ContactPoint points[2] = {
+					ContactPoint {
+							glm::vec2(worldManifold.points[0].x,worldManifold.points[0].y),
+							contact->GetManifold()->points[0].normalImpulse,
+							contact->GetManifold()->points[0].tangentImpulse
+							}
+				};
+				if (contact->GetManifold()->pointCount == 2)
+				{
+					points[1] = ContactPoint{
+								glm::vec2(worldManifold.points[1].x,worldManifold.points[1].y),
+								contact->GetManifold()->points[1].normalImpulse,
+								contact->GetManifold()->points[1].tangentImpulse
+					};
+				}
+				Contact contac{
+							physCompB,
+							glm::vec2(worldManifold.normal.x,worldManifold.normal.y),
+							contact->IsTouching(),
+							contact->GetFriction(),
+							contact->GetRestitution(),
+							contact->GetTangentSpeed(),
+							contact->GetManifold()->pointCount,
+
+				};
+
+				contac.ContactPoints[0] = points[0];
+				if (contac.PointCount == 2) contac.ContactPoints[1] = points[1];
+
+				if (physCompA) {
+					physCompA->m_bIsTouching = false;
+					physCompA->m_contact = contac;
+					physCompA->OnCollisionEnd(contac);
+				}
+
+				if (physCompB) {
+					contac.Other = physCompA;
+					physCompB->m_bIsTouching = false;
+					physCompB->m_contact = contac;
+					physCompB->OnCollisionEnd(contac);
+				}
+			}
+
+		};
+	}
+
 	World* World::s_instance = nullptr;
 
 	GameObject * const AIngine::World::SpawnObject(const std::string & name, GameObject * parent, const glm::vec2 & position, const glm::vec2 & scale, const float rotation)
