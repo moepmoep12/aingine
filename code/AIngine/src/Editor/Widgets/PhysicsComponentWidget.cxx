@@ -189,7 +189,7 @@ namespace AIngine::Editor::Widget::Component {
 
 		if (vertexRectangle.Contains(mouseScreenPos))
 		{
-			if (AIngine::Input::IsMouseButtonPressed(0)) {
+			if (AIngine::Input::IsMouseButtonPressed(MouseButton::BUTTON_LEFT)) {
 				glm::vec2 diff = mouseWorldPos - vertexWorldPos;
 				localPosition += diff;
 				vertexWorldPos = CalculateWorldPosition(localPosition, transform);

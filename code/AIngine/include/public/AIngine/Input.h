@@ -1,4 +1,5 @@
 #pragma once
+#include "AIngine/KeyCodes.h"
 
 #include <utility>
 
@@ -6,16 +7,16 @@ namespace AIngine {
 
 	class Input {
 	public:
-		inline static bool IsKeyPressed(int keycode) { return getInstance().IsKeyPressedImpl(keycode); }
+		inline static bool IsKeyPressed(KeyCode key) { return getInstance().IsKeyPressedImpl(key); }
 
-		inline static bool IsMouseButtonPressed(int button) { return getInstance().IsMouseButtonPressedImpl(button); }
+		inline static bool IsMouseButtonPressed(MouseButton mouseButton) { return getInstance().IsMouseButtonPressedImpl(mouseButton); }
 		inline static std::pair<float, float> GetMousePosition() { return getInstance().GetMousePositionImpl(); }
 		inline static float GetMouseX() { return getInstance().GetMouseXImpl(); }
 		inline static float GetMouseY() { return getInstance().GetMouseYImpl(); }
 	protected:
-		virtual bool IsKeyPressedImpl(int keycode) = 0;
+		virtual bool IsKeyPressedImpl(KeyCode key) = 0;
 
-		virtual bool IsMouseButtonPressedImpl(int button) = 0;
+		virtual bool IsMouseButtonPressedImpl(MouseButton mouseButton) = 0;
 		virtual std::pair<float, float> GetMousePositionImpl() = 0;
 		virtual float GetMouseXImpl() = 0;
 		virtual float GetMouseYImpl() = 0;
@@ -28,9 +29,9 @@ namespace AIngine {
 
 	class WindowsInput final : public Input {
 	protected:
-		virtual bool IsKeyPressedImpl(int keycode) override;
+		virtual bool IsKeyPressedImpl(KeyCode key) override;
 
-		virtual bool IsMouseButtonPressedImpl(int button) override;
+		virtual bool IsMouseButtonPressedImpl(MouseButton mouseButton) override;
 		virtual std::pair<float, float> GetMousePositionImpl() override;
 		virtual float GetMouseXImpl() override;
 		virtual float GetMouseYImpl() override;

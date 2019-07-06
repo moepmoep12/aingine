@@ -1,9 +1,10 @@
 #pragma once
 
+
 namespace AIngine {
 
 	/* From glfw */
-	enum KeyCodes {
+	enum class KeyCode {
 		SPACE = 32,
 		APOSTROPHE = 39,
 		COMMA = 44,
@@ -131,7 +132,7 @@ namespace AIngine {
 	};
 
 	/* from glfw */
-	enum MouseCodes {
+	enum class MouseButton {
 		BUTTON_1 = 0,
 		BUTTON_2 = 1,
 		BUTTON_3 = 2,

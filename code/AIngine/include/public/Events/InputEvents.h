@@ -66,21 +66,21 @@ namespace AIngine::Events {
 
 
 
-	class  MouseButtonEvent : public Event<void, int>
+	class  MouseButtonEvent : public Event<void, MouseButton>
 	{
 	public:
 		class MouseButtonEventData : public EventData {
 		public:
-			inline int GetMouseButton() const { return m_Button; }
+			inline MouseButton GetMouseButton() const { return m_Button; }
 
 			EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
 
 		protected:
-			MouseButtonEventData(int button)
+			MouseButtonEventData(MouseButton button)
 				: m_Button(button) {}
 
-			int m_Button;
+			MouseButton m_Button;
 		};
 	};
 
@@ -91,13 +91,13 @@ namespace AIngine::Events {
 	public:
 		class MouseButtonPressedEventData : public MouseButtonEventData {
 		public:
-			MouseButtonPressedEventData(int button)
+			MouseButtonPressedEventData(MouseButton button)
 				: MouseButtonEventData(button) {}
 
 			std::string ToString() const override
 			{
 				std::stringstream ss;
-				ss << "MouseButtonPressedEvent: " << m_Button;
+				ss << "MouseButtonPressedEvent: " << static_cast<int>(m_Button);
 				return ss.str();
 			}
 
@@ -112,13 +112,13 @@ namespace AIngine::Events {
 	public:
 		class MouseButtonReleasedEventData : public MouseButtonEventData {
 		public:
-			MouseButtonReleasedEventData(int button)
+			MouseButtonReleasedEventData(MouseButton button)
 				: MouseButtonEventData(button) {}
 
 			std::string ToString() const override
 			{
 				std::stringstream ss;
-				ss << "MouseButtonReleasedEvent: " << m_Button;
+				ss << "MouseButtonReleasedEvent: " << static_cast<int>(m_Button);
 				return ss.str();
 			}
 
@@ -132,20 +132,20 @@ namespace AIngine::Events {
 	//**************************************************************************************
 	//**************************************************************************************
 
-	class  KeyEvent : public Event<void, KeyCodes>
+	class  KeyEvent : public Event<void, KeyCode>
 	{
 	public:
 		class KeyEventData : public EventData {
 		public:
-			inline int GetKeyCode() const { return m_KeyCode; }
+			inline KeyCode GetKeyCode() const { return m_KeyCode; }
 
 			EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 
 		protected:
-			KeyEventData(AIngine::KeyCodes keycode)
+			KeyEventData(AIngine::KeyCode keycode)
 				: m_KeyCode(keycode) {}
 
-			AIngine::KeyCodes m_KeyCode;
+			AIngine::KeyCode m_KeyCode;
 		};
 	};
 
@@ -156,7 +156,7 @@ namespace AIngine::Events {
 	public:
 		class KeyPressedEventData : public KeyEventData {
 		public:
-			KeyPressedEventData(AIngine::KeyCodes keycode, int repeatCount)
+			KeyPressedEventData(AIngine::KeyCode keycode, int repeatCount)
 				: KeyEventData(keycode), m_RepeatCount(repeatCount) {}
 
 			inline int GetRepeatCount() const { return m_RepeatCount; }
@@ -164,7 +164,7 @@ namespace AIngine::Events {
 			std::string ToString() const override
 			{
 				std::stringstream ss;
-				ss << "KeyPressedEvent: " << m_KeyCode << " (" << m_RepeatCount << " repeats)";
+				ss << "KeyPressedEvent: " << static_cast<int>(m_KeyCode) << " (" << m_RepeatCount << " repeats)";
 				return ss.str();
 			}
 
@@ -182,13 +182,13 @@ namespace AIngine::Events {
 	public:
 		class KeyReleasedEventData : public KeyEventData {
 		public:
-			KeyReleasedEventData(AIngine::KeyCodes keycode)
+			KeyReleasedEventData(AIngine::KeyCode keycode)
 				: KeyEventData(keycode) {}
 
 			std::string ToString() const override
 			{
 				std::stringstream ss;
-				ss << "KeyReleasedEvent: " << m_KeyCode;
+				ss << "KeyReleasedEvent: " << static_cast<int>(m_KeyCode);
 				return ss.str();
 			}
 
@@ -201,13 +201,13 @@ namespace AIngine::Events {
 	public:
 		class KeyTypedEventData : public KeyEventData {
 		public:
-			KeyTypedEventData(AIngine::KeyCodes keycode)
+			KeyTypedEventData(AIngine::KeyCode keycode)
 				: KeyEventData(keycode) {}
 
 			std::string ToString() const override
 			{
 				std::stringstream ss;
-				ss << "KeyTypedEvent: " << m_KeyCode;
+				ss << "KeyTypedEvent: " << static_cast<int>(m_KeyCode);
 				return ss.str();
 			}
 

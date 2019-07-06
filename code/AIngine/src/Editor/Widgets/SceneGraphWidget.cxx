@@ -69,14 +69,14 @@ namespace AIngine::Editor::Widget {
 		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent::KeyPressedEventData)) {
 			// delete event
 			AIngine::Events::KeyPressedEvent::KeyPressedEventData keyevent = dynamic_cast<AIngine::Events::KeyPressedEvent::KeyPressedEventData&>(e);
-			if (s_selectedNode && keyevent.GetKeyCode() == AIngine::KeyCodes::DEL) {
+			if (s_selectedNode && keyevent.GetKeyCode() == AIngine::KeyCode::DEL) {
 				AIngine::Structures::DeleteTraverser deletetraverser(m_sceneGraph.m_gameObjectPool);
 				deletetraverser.Traverse(s_selectedNode);
 				s_selectedNode = nullptr;
 			}
 
 			// duplicate
-			if (s_selectedNode && keyevent.GetKeyCode() == AIngine::KeyCodes::D && AIngine::Input::IsKeyPressed(AIngine::KeyCodes::LEFT_CONTROL))
+			if (s_selectedNode && keyevent.GetKeyCode() == AIngine::KeyCode::D && AIngine::Input::IsKeyPressed(AIngine::KeyCode::LEFT_CONTROL))
 			{
 				if (&m_sceneGraph.GetRoot() != s_selectedNode)
 					s_selectedNode = &m_sceneGraph.Copy(*s_selectedNode);

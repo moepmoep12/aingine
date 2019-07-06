@@ -220,21 +220,21 @@ void AIngine::Window::SetGLFWCallbacks()
 		{
 			//AIngine::Events::KeyPressedEvent event(key, 0);
 			//data.EventCallback(event);
-			data.OnKeyPressedEvent((AIngine::KeyCodes)key);
+			data.OnKeyPressedEvent((AIngine::KeyCode)key);
 			break;
 		}
 		case GLFW_RELEASE:
 		{
 			//AIngine::Events::KeyReleasedEvent event(key);
 			//data.EventCallback(event);
-			data.OnKeyReleasedEvent((AIngine::KeyCodes)key);
+			data.OnKeyReleasedEvent((AIngine::KeyCode)key);
 			break;
 		}
 		case GLFW_REPEAT:
 		{
 			//AIngine::Events::KeyPressedEvent event(key, 1);
 			//data.EventCallback(event);
-			data.OnKeyPressedEvent((AIngine::KeyCodes)key);
+			data.OnKeyPressedEvent((AIngine::KeyCode)key);
 			break;
 		}
 		}
@@ -246,7 +246,7 @@ void AIngine::Window::SetGLFWCallbacks()
 
 		//AIngine::Events::KeyTypedEvent event(keycode);
 		//data.EventCallback(event);
-		data.OnKeyTypedEvent((AIngine::KeyCodes)keycode);
+		data.OnKeyTypedEvent((AIngine::KeyCode)keycode);
 	});
 
 	// MouseButton
@@ -260,14 +260,14 @@ void AIngine::Window::SetGLFWCallbacks()
 		{
 			//AIngine::Events::MouseButtonPressedEvent event(button);
 			//data.EventCallback(event);
-			data.OnMouseButtonPressedEvent(button);
+			data.OnMouseButtonPressedEvent(static_cast<MouseButton>(button));
 			break;
 		}
 		case GLFW_RELEASE:
 		{
 			//AIngine::Events::MouseButtonReleasedEvent event(button);
 			//data.EventCallback(event);
-			data.OnMouseButtonReleasedEvent(button);
+			data.OnMouseButtonReleasedEvent(static_cast<MouseButton>(button));
 			break;
 		}
 		}
@@ -300,5 +300,6 @@ namespace AIngine::Events {
 	int EventHandler<void, unsigned int, unsigned int>::counter = 0;
 	int EventHandler<void, float, float>::counter = 0;
 	int EventHandler<void, int>::counter = 0;
-	int EventHandler<void, AIngine::KeyCodes>::counter = 0;
+	int EventHandler<void, AIngine::KeyCode>::counter = 0;
+	int EventHandler<void, AIngine::MouseButton>::counter = 0;
 }

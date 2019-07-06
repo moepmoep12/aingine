@@ -277,23 +277,23 @@ namespace AIngine {
 
 	void Application::RegisterCallbacks()
 	{
-		m_window->GetWindowData().OnKeyPressedEvent += [=](AIngine::KeyCodes key) {
+		m_window->GetWindowData().OnKeyPressedEvent += [=](AIngine::KeyCode key) {
 			this->PropagateEventData(AIngine::Events::KeyPressedEvent::KeyPressedEventData(key, 1));
 		};
 
-		m_window->GetWindowData().OnKeyReleasedEvent += [=](AIngine::KeyCodes key) {
+		m_window->GetWindowData().OnKeyReleasedEvent += [=](AIngine::KeyCode key) {
 			this->PropagateEventData(AIngine::Events::KeyReleasedEvent::KeyReleasedEventData(key));
 		};
 
-		m_window->GetWindowData().OnKeyTypedEvent += [=](AIngine::KeyCodes key) {
+		m_window->GetWindowData().OnKeyTypedEvent += [=](AIngine::KeyCode key) {
 			this->PropagateEventData(AIngine::Events::KeyTypedEvent::KeyTypedEventData(key));
 		};
 
-		m_window->GetWindowData().OnMouseButtonPressedEvent += [=](int button) {
+		m_window->GetWindowData().OnMouseButtonPressedEvent += [=](MouseButton button) {
 			this->PropagateEventData(AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData(button));
 		};
 
-		m_window->GetWindowData().OnMouseButtonReleasedEvent += [=](int button) {
+		m_window->GetWindowData().OnMouseButtonReleasedEvent += [=](MouseButton button) {
 			this->PropagateEventData(AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData(button));
 		};
 

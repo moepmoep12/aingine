@@ -89,18 +89,18 @@ namespace AIngine::Editor {
 	bool Editor::OnKeyPressed(AIngine::Events::KeyPressedEvent::KeyPressedEventData & e)
 	{
 		// Toggle PhysicsDebugDraw
-		if (e.GetKeyCode() == AIngine::KeyCodes::F1)
+		if (e.GetKeyCode() == AIngine::KeyCode::F1)
 		{
 			AIngine::World::SetPhysicsDebugDrawActive(!AIngine::World::s_instance->m_isPhysicsDebugDrawn);
 			return true;
 		}
 
-		if (e.GetKeyCode() == AIngine::KeyCodes::F2)
+		if (e.GetKeyCode() == AIngine::KeyCode::F2)
 		{
 			m_displayingFramerate = !m_displayingFramerate;
 		}
 
-		if (e.GetKeyCode() == AIngine::KeyCodes::F4)
+		if (e.GetKeyCode() == AIngine::KeyCode::F4)
 		{
 			SetFullScreenPlayMode(!m_isFullScreen);
 		}
@@ -136,7 +136,7 @@ namespace AIngine::Editor {
 
 	bool Editor::OnMouseButtonPressed(AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData & e)
 	{
-		if (e.GetMouseButton() == 0) {
+		if (e.GetMouseButton() == MouseButton::BUTTON_LEFT) {
 			glm::vec2 mousePos = glm::vec2(AIngine::Input::GetMousePosition().first, AIngine::Input::GetMousePosition().first);
 			m_hasViewportFocus = m_app.GetViewport().Contains(mousePos);
 		}
@@ -147,34 +147,34 @@ namespace AIngine::Editor {
 	{
 		AIngine::Rendering::Camera* camera = m_app.m_camera;
 
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::A))
+		if (AIngine::Input::IsKeyPressed(AIngine::KeyCode::A))
 		{
 			camera->Translate(glm::vec2(-translationrate, 0.0));
 		}
 
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::D))
+		if (AIngine::Input::IsKeyPressed(AIngine::KeyCode::D))
 		{
 			camera->Translate(glm::vec2(translationrate, 0.0));
 		}
 
 
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::W))
+		if (AIngine::Input::IsKeyPressed(AIngine::KeyCode::W))
 		{
 			camera->Translate(glm::vec2(0.0, -translationrate));
 		}
 
 
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::S))
+		if (AIngine::Input::IsKeyPressed(AIngine::KeyCode::S))
 		{
 			camera->Translate(glm::vec2(0.0, +translationrate));
 		}
 
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::E))
+		if (AIngine::Input::IsKeyPressed(AIngine::KeyCode::E))
 		{
 			camera->Rotate(rotationrate *  AIngine::D2R * delta);
 		}
 
-		if (AIngine::Input::IsKeyPressed(AIngine::KeyCodes::Q))
+		if (AIngine::Input::IsKeyPressed(AIngine::KeyCode::Q))
 		{
 			camera->Rotate(-rotationrate * AIngine::D2R * delta);
 		}
@@ -448,7 +448,7 @@ namespace AIngine::Editor {
 		bool bInteracted = false;
 
 		if (vertexRectangle.Contains(mouseScreenPos)) {
-			if (AIngine::Input::IsMouseButtonPressed(0)) {
+			if (AIngine::Input::IsMouseButtonPressed(MouseButton::BUTTON_LEFT)) {
 				glm::vec2 diff = mouseWorldPos - worldPosition;
 				worldPosition += diff;
 				screenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(worldPosition);

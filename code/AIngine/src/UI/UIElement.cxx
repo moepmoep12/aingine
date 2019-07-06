@@ -37,7 +37,7 @@ namespace AIngine::UI {
 
 	bool UIElement::OnMouseButtonPressed(AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData & e)
 	{
-		if (e.GetMouseButton() == 0) {
+		if (e.GetMouseButton() == MouseButton::BUTTON_LEFT) {
 			if (IsHovered()) {
 				OnClicked();
 				m_isClicked = true;
@@ -49,7 +49,7 @@ namespace AIngine::UI {
 	}
 	bool UIElement::OnMouseButtonReleased(AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData & e)
 	{
-		if (e.GetMouseButton() == 0) {
+		if (e.GetMouseButton() == MouseButton::BUTTON_LEFT) {
 			if (m_isClicked) {
 				OnMouseReleased();
 				m_isClicked = false;
