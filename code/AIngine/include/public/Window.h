@@ -65,6 +65,7 @@ namespace AIngine {
 		inline  int GetX() const { return m_windowData.XPos; }
 		inline  int GetY() const { return m_windowData.YPos; }
 		inline bool IsWindowActive() const { return !glfwWindowShouldClose(m_window); }
+		bool IsFullScreen() const;
 		virtual void* GetNativeWindow() const { return m_window; }
 		glm::vec2 GetMonitorResolution() const;
 		float GetAspectRatio() const;
@@ -75,6 +76,7 @@ namespace AIngine {
 		void SetWindowSizeLimits(int wMin, int wMax, int hMin, int hMax);
 		void SetWindowResize(bool enabled);
 		void SetWindowPosition(const glm::vec2& pos);
+		void SetFullScreen(bool fullscreen);
 		void Close();
 		inline WindowData& GetWindowData() { return m_windowData; }
 

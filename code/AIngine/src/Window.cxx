@@ -37,7 +37,7 @@ AIngine::Window::Window(const WindowConfig & config)
 	m_window = glfwCreateWindow((int)m_config.Width, (int)m_config.Height, m_config.Title.c_str(), nullptr, nullptr);
 
 	ASSERT(m_window, "Could not create window");
-	
+
 	glfwMakeContextCurrent(m_window);
 	glfwSetWindowUserPointer(m_window, &m_windowData);
 	SetVSync(true);
@@ -102,6 +102,11 @@ bool AIngine::Window::IsVSyncActive() const
 	return m_bVsync;
 }
 
+bool AIngine::Window::IsFullScreen() const
+{
+	return glfwGetWindowMonitor(m_window) != nullptr;
+}
+
 glm::vec2 AIngine::Window::GetMonitorResolution() const
 {
 	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -155,6 +160,33 @@ void AIngine::Window::SetWindowPosition(const glm::vec2 & pos)
 	glfwGetWindowFrameSize(m_window, &m_leftEdge, &m_topEdge, &m_rightEdge, &m_bottomEdge);
 	glfwGetWindowPos(m_window, &m_windowData.XPos, &m_windowData.YPos);
 	m_windowData.OnWindowMovedEvent(pos.x, pos.y);
+}
+
+void AIngine::Window::SetFullScreen(bool fullscreen)
+{
+	if (IsFullScreen() == fullscreen)
+		return;
+
+	if (fullscreen)
+	{
+		// get reolution of monitor
+		const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+		// swithc to full screen
+		glfwSetWindowMonitor(m_window, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, 0);
+		if (IsVSyncActive())
+			SetVSync(true);
+	}
+	else
+	{
+		// restore last window size and position
+		glfwSetWindowMonitor(m_window, nullptr, m_windowData.XPos, m_windowData.YPos, m_windowData.Width, m_windowData.Height, 0);
+	}
+
+	glfwMakeContextCurrent(m_window);
+	glfwGetWindowSize(m_window, &m_windowData.Width, &m_windowData.Height);
+	glfwGetWindowFrameSize(m_window, &m_leftEdge, &m_topEdge, &m_rightEdge, &m_bottomEdge);
+	glfwGetWindowPos(m_window, &m_windowData.XPos, &m_windowData.YPos);
 }
 
 void AIngine::Window::Close()
