@@ -128,7 +128,7 @@ namespace AIngine::UI {
 			float deltaPercent = delta / m_slider->GetRectangle().width;
 
 			m_slider->Value = std::clamp(m_slider->Value + deltaPercent, 0.0f, 1.0f);
-			m_slider->OnValueChangedEvent(m_slider->Min + m_slider->Value * m_slider->Max);
+			m_slider->OnValueChangedEvent( m_slider->Value * (m_slider->Max - m_slider->Min) + m_slider->Min);
 
 			m_lastPosition = currentMousePos;
 		}
