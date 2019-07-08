@@ -13,6 +13,7 @@ namespace CrappyBird {
 		virtual void Update(float delta) override;
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
 		virtual void OnGUI() override;
+		virtual void PostInit() override;
 
 		// Event is fired when the player enters the next screen
 		AIngine::Events::Event<void, AIngine::Structures::RectangleF&> OnEnterNewScreen;
@@ -54,26 +55,23 @@ namespace CrappyBird {
 		int CurrentScreenIndex = 1;
 
 		bool IsGameOver = false;
-
-		/* The impulse the rocket receives on button press*/
-		static const float s_standardImpulse;
-		static float s_Impulse;
+;
 		static const glm::vec4 s_finalFireColor1;
 		static const glm::vec4 s_finalFireColor2;
 		static const float s_lifeTime;
 
-	private:
+	protected:
 		/* Callbacks */
-		void OnCollision(AIngine::Physics::Contact contact);
-		void OnSpawnFireParticles(Particle* particles, int count, const glm::vec2& pos);
-		void OnUpdateParticle(Particle& particle, float delta);
-		void OnSpawnCollisionParticle(Particle* particles, int count, const glm::vec2& pos);
-		void OnUpdateCollisionParticle(Particle& particle, float delta);
-		void OnGameOver();
-		void UpdateGameOverScreen(float delta);
-
-		void ResetGame();
-		void PlayEngineSound();
+		virtual void OnCollision(AIngine::Physics::Contact contact);
+		virtual void OnSpawnFireParticles(Particle* particles, int count, const glm::vec2& pos);
+		virtual void OnUpdateParticle(Particle& particle, float delta);
+		virtual void OnSpawnCollisionParticle(Particle* particles, int count, const glm::vec2& pos);
+		virtual void OnUpdateCollisionParticle(Particle& particle, float delta);
+		virtual void OnGameOver();
+		virtual void UpdateGameOverScreen(float delta);
+		
+		virtual void ResetGame();
+		virtual void PlayEngineSound();
 
 		// all effects currently affecting the player
 		std::vector<std::unique_ptr<Effect>> m_activeEffects;

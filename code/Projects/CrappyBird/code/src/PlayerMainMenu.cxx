@@ -42,7 +42,7 @@ namespace CrappyBird {
 		static const float duration = 0.25;
 		static float currentDuration = 0;
 		static const float startHeight = GetOwner()->GetLocalPosition().y;
-		const float maxHeight = startHeight - Player::s_Impulse;
+		const float maxHeight = startHeight - CrappyBird::s_Impulse;
 		const float distance = startHeight - maxHeight;
 		static float direction = -1; // -1 = upwards
 

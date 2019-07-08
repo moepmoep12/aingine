@@ -445,8 +445,8 @@
 "isdisabled": false,
 "rectangle": {
 "height": 50,
-"width": 299,
-"x": 60,
+"width": 208,
+"x": 43,
 "y": 130
 },
 "text": "Rotating Obstacles?",
@@ -511,8 +511,8 @@
 "isdisabled": false,
 "rectangle": {
 "height": 50,
-"width": 364,
-"x": 60,
+"width": 253,
+"x": 43,
 "y": 200
 },
 "text": "Game Over on collision?",
@@ -600,10 +600,10 @@
 "horizontalAlign": 1,
 "isdisabled": false,
 "rectangle": {
-"height": 42,
+"height": 29,
 "width": 380,
 "x": 10,
-"y": 283
+"y": 296
 },
 "text": "Speed",
 "tintColor": {
@@ -644,8 +644,8 @@
 "z": 0.4000000059604645
 },
 "isdisabled": false,
-"maxvalue": 2.0,
-"minvalue": 0.75,
+"maxvalue": 0.10000000149011612,
+"minvalue": -0.01875000074505806,
 "rectangle": {
 "height": 30,
 "width": 380,
@@ -690,10 +690,10 @@
 "horizontalAlign": 1,
 "isdisabled": false,
 "rectangle": {
-"height": 42,
+"height": 29,
 "width": 380,
 "x": 10,
-"y": 384
+"y": 397
 },
 "text": "Impulse",
 "tintColor": {
@@ -703,6 +703,72 @@
 "z": 1.0
 },
 "verticalAlign": 0
+}
+}
+}
+},
+{
+"CheckBoxAgent": {
+"a_active": true,
+"a_name": "CheckBoxAgent",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"checkbox": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 50,
+"width": 50,
+"x": 5,
+"y": 520
+},
+"state": false,
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+}
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "AIngine\\fonts\\arial.ttf",
+"fontsize": 30,
+"horizontalAlign": 0,
+"isdisabled": false,
+"rectangle": {
+"height": 50,
+"width": 171,
+"x": 43,
+"y": 520
+},
+"text": "Learning Agent?",
+"tintColor": {
+"w": 1.0,
+"x": 9.999999974752427e-07,
+"y": 9.999899930335232e-07,
+"z": 9.999899930335232e-07
+},
+"verticalAlign": 1
 }
 }
 }

@@ -19,6 +19,7 @@ set(SRC
     code/src/Agent.cxx
     code/src/MainMenu.cxx
     code/src/PlayerMainMenu.cxx
+    code/src/AgentXCSR.cxx
     code/src/${PROJECT_NAME}.cxx
     code/src/Scripting_generated.cxx
      )
@@ -37,6 +38,7 @@ set(HEADER
     code/include/Agent.h
     code/include/MainMenu.h
     code/include/PlayerMainMenu.h
+    code/include/AgentXCSR.h
 	   code/include/${PROJECT_NAME}.h
     )
 

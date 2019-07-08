@@ -475,7 +475,7 @@
 },
 {
 "PlayerRocket": {
-"a_active": true,
+"a_active": false,
 "a_name": "PlayerRocket",
 "a_posX": 1.0,
 "a_posY": 2.5,
@@ -606,7 +606,7 @@
 },
 {
 "AgentRocket": {
-"a_active": false,
+"a_active": true,
 "a_name": "AgentRocket",
 "a_posX": 2.5,
 "a_posY": 2.5,
@@ -659,7 +659,7 @@
 ]
 },
 "script": [
-5
+9
 ],
 "sprite": {
 "active": true,
@@ -7078,8 +7078,8 @@
 "canvas": {
 "active": true,
 "rectangle": {
-"height": 2,
-"width": 5,
+"height": 0,
+"width": 0,
 "x": 0,
 "y": 0
 }

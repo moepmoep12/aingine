@@ -1,6 +1,7 @@
 #include "Obstacles.h"
 #include "CrappyBird.h"
 #include "Obstacle.h"
+#include "AgentXCSR.h"
 
 #include <cmath>
 #include <math.h>
@@ -34,7 +35,7 @@ namespace CrappyBird {
 	void Obstacles::OnStart()
 	{
 		m_newScreenHandler = AIngine::Events::EventHandler<void, AIngine::Structures::RectangleF&>(std::bind(&Obstacles::SpawnObstaclesInArea, this, std::placeholders::_1));
-		m_player = AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>();
+		m_player = CrappyBird::s_AgentLearning ? AIngine::World::GetGameObject("AgentRocket")->GetComponent<AgentXCSR>() : AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>();
 		m_player->OnEnterNewScreen += m_newScreenHandler;
 		m_pickUpFactory = AIngine::World::GetGameObject("PickUpFactory")->GetComponent<PickUpFactory>();
 	}

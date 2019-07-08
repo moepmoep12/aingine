@@ -17,7 +17,11 @@ namespace CrappyBird {
 		static bool s_bObstacleRotation;
 		static int s_levelIndex;
 		static bool s_DieOnCollision;
+		static bool s_AgentLearning;
+		static float s_Impulse;
 
 		const static float s_originalGameSpeed;
+		/* The impulse the rocket receives on button press*/
+		static const float s_standardImpulse;
 	};
 }

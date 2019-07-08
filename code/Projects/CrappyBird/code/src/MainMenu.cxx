@@ -26,15 +26,23 @@ namespace CrappyBird {
 
 		SpeedSlider = AIngine::World::GetGameObject("SpeedSlider")->GetComponent<AIngine::UI::Slider>();
 		SpeedSlider->OnValueChangedEvent += std::bind(&MainMenu::OnSpeedChanged, this, std::placeholders::_1);
+		SpeedSlider->Value =((CrappyBird::s_GameSpeed - CrappyBird::s_originalGameSpeed) - SpeedSlider->Min) / (SpeedSlider->Max - SpeedSlider->Min);
 
 		ImpulseSlider = AIngine::World::GetGameObject("ImpulseSlider")->GetComponent<AIngine::UI::Slider>();
 		ImpulseSlider->OnValueChangedEvent += std::bind(&MainMenu::OnImpulseChanged, this, std::placeholders::_1);
+		ImpulseSlider->Value = ((CrappyBird::s_Impulse - CrappyBird::s_standardImpulse) - ImpulseSlider->Min) / (ImpulseSlider->Max - ImpulseSlider->Min);
 
 		RotationCheckBox = AIngine::World::GetGameObject("CheckBoxRotation")->GetComponent<AIngine::UI::CheckBox>();
 		RotationCheckBox->OnStateChangedEvent += std::bind(&MainMenu::OnObstacleRotationValueChanged, this, std::placeholders::_1);
+		RotationCheckBox->SetState(CrappyBird::s_bObstacleRotation);
 
 		CollisionCheckBox = AIngine::World::GetGameObject("CheckBoxCollision")->GetComponent<AIngine::UI::CheckBox>();
 		CollisionCheckBox->OnStateChangedEvent += std::bind(&MainMenu::OnGameOverCheckBoxValueChanged, this, std::placeholders::_1);
+		CollisionCheckBox->SetState(CrappyBird::s_DieOnCollision);
+
+		AgentCheckBox = AIngine::World::GetGameObject("CheckBoxAgent")->GetComponent<AIngine::UI::CheckBox>();
+		AgentCheckBox->OnStateChangedEvent += std::bind(&MainMenu::OnAgentCheckBoxValueChanged, this, std::placeholders::_1);
+		AgentCheckBox->SetState(CrappyBird::s_AgentLearning);
 
 		Obstacles[0] = AIngine::World::GetGameObject("Obstacle1");
 		Obstacles[1] = AIngine::World::GetGameObject("Obstacle2");
@@ -62,6 +70,7 @@ namespace CrappyBird {
 		ImpulseSlider->OnValueChangedEvent = AIngine::Events::Event<void, float>();
 		RotationCheckBox->OnStateChangedEvent = AIngine::Events::Event<void, bool>();
 		CollisionCheckBox->OnStateChangedEvent = AIngine::Events::Event<void, bool>();
+		AgentCheckBox->OnStateChangedEvent = AIngine::Events::Event<void, bool>();
 	}
 
 	// Update is called once per frame
@@ -141,7 +150,7 @@ namespace CrappyBird {
 
 	void MainMenu::OnImpulseChanged(float value)
 	{
-		Player::s_Impulse = Player::s_standardImpulse * value;
+		CrappyBird::s_Impulse = CrappyBird::s_standardImpulse + value;
 	}
 
 	void MainMenu::OnObstacleRotationValueChanged(bool value)
@@ -156,5 +165,9 @@ namespace CrappyBird {
 	void MainMenu::OnGameOverCheckBoxValueChanged(bool value)
 	{
 		CrappyBird::s_DieOnCollision = value;
+	}
+	void MainMenu::OnAgentCheckBoxValueChanged(bool value)
+	{
+		CrappyBird::s_AgentLearning = value;
 	}
 }

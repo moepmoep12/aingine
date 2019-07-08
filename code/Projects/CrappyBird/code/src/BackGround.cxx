@@ -1,5 +1,6 @@
 #include "BackGround.h"
 #include "CrappyBird.h"
+#include "AgentXCSR.h"
 
 namespace CrappyBird {
 
@@ -15,7 +16,7 @@ namespace CrappyBird {
 	{
 		SoundComponent* soundComp = m_owner->GetComponent<SoundComponent>();
 		soundComp->Play(CrappyBird::s_levelIndex);
-		m_player = AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>();
+		m_player = CrappyBird::s_AgentLearning ? AIngine::World::GetGameObject("AgentRocket")->GetComponent<AgentXCSR>(): AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>();
 
 		OnGameOverHandler = Player::OnGameOverEventHandler(std::bind(&BackGround::OnGameOver, this));
 		OnRestartGameHandler = Player::OnRestartGameEventHandler(std::bind(&BackGround::OnRestartGame, this));

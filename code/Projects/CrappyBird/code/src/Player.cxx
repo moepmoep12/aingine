@@ -7,9 +7,7 @@
 
 namespace CrappyBird {
 
-	const float Player::s_standardImpulse = 0.075f;
 	const float Player::s_lifeTime = 0.15f;
-	float Player::s_Impulse = Player::s_standardImpulse;
 	const glm::vec4 Player::s_finalFireColor1(1, 0, 0, 0);
 	const glm::vec4 Player::s_finalFireColor2(0.47, 0.11, 1, 0);
 
@@ -44,6 +42,7 @@ namespace CrappyBird {
 		m_emitter = GetOwner()->GetComponent<ParticleEmitter>();
 		m_collisionEmitter = GetOwner()->GetChildren()[0]->GetComponent<ParticleEmitter>();
 		m_physBody = GetOwner()->GetComponent<AIngine::Physics::PhysicsComponent>();
+		m_physBody->SetEnabled(true);
 		m_physBody->SetFixedRotation(true);
 
 		// create EventHandlers
@@ -113,12 +112,12 @@ namespace CrappyBird {
 			// accelerate
 			velMultiplier = CrappyBird::s_GameSpeed;
 			m_emitter->Update(delta, 100);
-			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -s_Impulse));
+			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -CrappyBird::s_Impulse));
 			PlayEngineSound();
 		}
 		else if (AIngine::Input::IsMouseButtonPressed(AIngine::MouseButton::BUTTON_RIGHT))
 		{
-			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, s_Impulse * 0.15f));
+			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, CrappyBird::s_Impulse * 0.15f));
 		}
 		else {
 			velMultiplier = 1.5f * CrappyBird::s_GameSpeed / m_originalGameSpeed;
@@ -152,8 +151,8 @@ namespace CrappyBird {
 			}
 		}
 
+		// Create Collision Particles
 		if (m_physBody->GetContact()) {
-			//AIngine::Graphics::Point(m_physBody->GetContact()->ContactPoints[0].WorldPoint, 15, glm::vec4(1));
 			m_collisionEmitter->Update(delta, 10 * m_physBody->GetVelocity().length());
 		}
 	}
@@ -177,6 +176,11 @@ namespace CrappyBird {
 		std::stringstream ss;
 		ss << "Score: " << (int)m_distanceTraveled;
 		Graphics::Text(ss.str(), glm::vec2(10, 35), glm::vec2(2));
+	}
+
+	void Player::PostInit()
+	{
+		GetOwner()->SetActive(!CrappyBird::s_AgentLearning);
 	}
 
 	void Player::OnCollision(AIngine::Physics::Contact contact)

@@ -25,6 +25,7 @@ namespace CrappyBird {
 		void OnImpulseChanged(float value);
 		void OnObstacleRotationValueChanged(bool value);
 		void OnGameOverCheckBoxValueChanged(bool value);
+		void OnAgentCheckBoxValueChanged(bool value);
 
 	private:
 
@@ -35,6 +36,7 @@ namespace CrappyBird {
 		AIngine::UI::Slider* ImpulseSlider;
 		AIngine::UI::CheckBox* RotationCheckBox;
 		AIngine::UI::CheckBox* CollisionCheckBox;
+		AIngine::UI::CheckBox* AgentCheckBox;
 
 		GameObject* Obstacles[2];
 

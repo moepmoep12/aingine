@@ -11,6 +11,7 @@
 "Agent",
 "Obstacle",
 "MainMenu",
-"PlayerMainMenu"
+"PlayerMainMenu",
+"AgentXCSR"
 ]
 }
