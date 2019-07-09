@@ -370,6 +370,12 @@ namespace AIngine::Physics {
 		m_body->ApplyLinearImpulseToCenter(b2Vec2(impulse.x, impulse.y), true);
 	}
 
+	void PhysicsComponent::SetLinearVelocity(const glm::vec2 & vel)
+	{
+		if (m_body)
+			m_body->SetLinearVelocity(b2Vec2(vel.x, vel.y));
+	}
+
 	bool PhysicsComponent::IsFixedRotation() const
 	{
 		if (m_body)

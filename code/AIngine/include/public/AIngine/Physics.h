@@ -105,6 +105,7 @@ namespace AIngine::Physics {
 		void ApplyForce(const glm::vec2& force, const glm::vec2& point);
 		void ApplyForceToCenter(const glm::vec2& force);
 		void ApplyLinearImpulseToCenter(const glm::vec2& impulse);
+		void SetLinearVelocity(const glm::vec2& vel);
 
 		inline glm::vec2 GetOffset() const { return m_offset; }
 		inline void SetOffset(const glm::vec2& offset) { m_offset = offset; }

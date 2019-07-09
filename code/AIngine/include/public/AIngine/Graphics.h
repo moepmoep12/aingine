@@ -61,6 +61,7 @@ namespace AIngine {
 
 		static void BoxWorld(const glm::vec2* vertices, const glm::vec4& color);
 		static void BoxWorld(const AIngine::Structures::RectangleI& rect, const glm::vec4& color);
+		static void BoxWorld(const AIngine::Structures::RectangleF& rect, const glm::vec4& color);
 		static void BoxScreen(const glm::vec2* vertices, const glm::vec4& color);
 		static void BoxScreen(const AIngine::Structures::RectangleI& rect, const glm::vec4& color);
 

@@ -324,6 +324,9 @@ namespace ProjectLauncher {
 		std::filesystem::create_directories(std::filesystem::path(codePath + "\\src"));
 		std::filesystem::create_directories(std::filesystem::path(path + "lib"));
 		std::filesystem::create_directories(std::filesystem::path(path + "Resources"));
+		std::filesystem::create_directories(std::filesystem::path(path + "Resources\\scenes"));
+		std::filesystem::create_directories(std::filesystem::path(path + "Resources\\textures"));
+		std::filesystem::create_directories(std::filesystem::path(path + "Resources\\sounds"));
 		std::filesystem::create_directories(std::filesystem::path(path + "out\\CMake"));
 		std::filesystem::create_directories(std::filesystem::path(path + "out\\bin\\Debug"));
 		std::filesystem::create_directories(std::filesystem::path(path + "out\\bin\\Release"));
@@ -422,7 +425,7 @@ namespace ProjectLauncher {
 		command << path[0] << ":" << " &&";
 		// move to folder
 		command << "cd " << cmakeBinPath << " && ";
-		command << name << ".sln";
+		command << "start " << name << ".sln";
 		AIngine::Util::System::Exec({ command.str() });
 	}
 }
