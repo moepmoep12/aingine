@@ -1,0 +1,581 @@
+{
+"Root": {
+"a_active": true,
+"a_name": "Root",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null
+},
+"c_children": [
+{
+"PlayerOne": {
+"a_active": true,
+"a_name": "PlayerOne",
+"a_posX": 0.5,
+"a_posY": 2.799999952316284,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"physics": {
+"active": true,
+"bodyType": 0,
+"density": 1.0,
+"friction": 0.0,
+"height": 1.0,
+"isTrigger": false,
+"restitution": 1.0,
+"shape": 1,
+"vertexcount": 4,
+"vertices": [
+{
+"x": -0.125,
+"y": -0.5
+},
+{
+"x": 0.125,
+"y": -0.5
+},
+{
+"x": 0.125,
+"y": 0.5
+},
+{
+"x": -0.125,
+"y": 0.5
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+}
+],
+"width": 0.25
+},
+"script": [
+2
+],
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 0.25,
+"sizeY": 1.0,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "AIngine\\textures\\White.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+}
+},
+{
+"PlayerTwo": {
+"a_active": true,
+"a_name": "PlayerTwo",
+"a_posX": 9.5,
+"a_posY": 2.799999952316284,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"physics": {
+"active": true,
+"bodyType": 2,
+"density": 1.0,
+"friction": 0.0,
+"height": 1.0,
+"isTrigger": false,
+"restitution": 1.0,
+"shape": 1,
+"vertexcount": 4,
+"vertices": [
+{
+"x": -0.125,
+"y": -0.5
+},
+{
+"x": 0.125,
+"y": -0.5
+},
+{
+"x": 0.125,
+"y": 0.5
+},
+{
+"x": -0.125,
+"y": 0.5
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+}
+],
+"width": 0.25
+},
+"script": [
+3
+],
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 0.25,
+"sizeY": 1.0,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "AIngine\\textures\\White.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+}
+},
+{
+"Ball": {
+"a_active": true,
+"a_name": "Ball",
+"a_posX": 5.0,
+"a_posY": 2.799999952316284,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"physics": {
+"active": true,
+"bodyType": 1,
+"density": 2.0,
+"friction": 0.0,
+"isTrigger": false,
+"radius": 0.125,
+"restitution": 0.0,
+"shape": 0,
+"vertexcount": 1,
+"vertices": [
+{
+"x": 5.0,
+"y": 2.799999952316284
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+}
+]
+},
+"script": [
+1
+],
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 0.25,
+"sizeY": 0.25,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\Circle.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+}
+},
+{
+"Edges": {
+"a_active": true,
+"a_name": "Edges",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null
+},
+"c_children": [
+{
+"TopEdge": {
+"a_active": true,
+"a_name": "TopEdge",
+"a_posX": 5.0,
+"a_posY": -0.5,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"physics": {
+"active": true,
+"bodyType": 0,
+"density": 1.0,
+"friction": 0.0,
+"height": 1.0,
+"isTrigger": false,
+"restitution": 1.0,
+"shape": 1,
+"vertexcount": 4,
+"vertices": [
+{
+"x": -5.0,
+"y": -0.5
+},
+{
+"x": 5.0,
+"y": -0.5
+},
+{
+"x": 5.0,
+"y": 0.5
+},
+{
+"x": -5.0,
+"y": 0.5
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+}
+],
+"width": 10.0
+},
+"script": null
+}
+}
+},
+{
+"RightEdge": {
+"a_active": true,
+"a_name": "RightEdge",
+"a_posX": 10.5,
+"a_posY": 2.8125,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"physics": {
+"active": true,
+"bodyType": 0,
+"density": 1.0,
+"friction": 0.0,
+"height": 5.625,
+"isTrigger": false,
+"restitution": 1.0,
+"shape": 1,
+"vertexcount": 4,
+"vertices": [
+{
+"x": -0.5,
+"y": -2.8125
+},
+{
+"x": 0.5,
+"y": -2.8125
+},
+{
+"x": 0.5,
+"y": 2.8125
+},
+{
+"x": -0.5,
+"y": 2.8125
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+}
+],
+"width": 1.0
+},
+"script": null
+}
+}
+},
+{
+"BottomEdge": {
+"a_active": true,
+"a_name": "BottomEdge",
+"a_posX": 5.0,
+"a_posY": 6.125,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"physics": {
+"active": true,
+"bodyType": 0,
+"density": 1.0,
+"friction": 0.0,
+"height": 1.0,
+"isTrigger": false,
+"restitution": 1.0,
+"shape": 1,
+"vertexcount": 4,
+"vertices": [
+{
+"x": -5.0,
+"y": -0.5
+},
+{
+"x": 5.0,
+"y": -0.5
+},
+{
+"x": 5.0,
+"y": 0.5
+},
+{
+"x": -5.0,
+"y": 0.5
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+}
+],
+"width": 10.0
+},
+"script": null
+}
+}
+},
+{
+"LeftEdge": {
+"a_active": true,
+"a_name": "LeftEdge",
+"a_posX": -0.5,
+"a_posY": 2.8125,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"physics": {
+"active": true,
+"bodyType": 0,
+"density": 1.0,
+"friction": 0.0,
+"height": 5.625,
+"isTrigger": false,
+"restitution": 1.0,
+"shape": 1,
+"vertexcount": 4,
+"vertices": [
+{
+"x": -0.5,
+"y": -2.8125
+},
+{
+"x": 0.5,
+"y": -2.8125
+},
+{
+"x": 0.5,
+"y": 2.8125
+},
+{
+"x": -0.5,
+"y": 2.8125
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+}
+],
+"width": 1.0
+},
+"script": null
+}
+}
+}
+]
+}
+},
+{
+"Canvas": {
+"a_active": true,
+"a_name": "Canvas",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"canvas": {
+"active": true,
+"rectangle": {
+"height": 0,
+"width": 0,
+"x": 0,
+"y": 0
+}
+},
+"script": null
+},
+"c_children": [
+{
+"ScoreText": {
+"a_active": true,
+"a_name": "ScoreText",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "AIngine\\fonts\\arial.ttf",
+"fontsize": 100,
+"horizontalAlign": 0,
+"isdisabled": false,
+"rectangle": {
+"height": 2,
+"width": 5,
+"x": 860,
+"y": 100
+},
+"text": "0 : 0",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 0
+}
+}
+}
+}
+]
+}
+}
+]
+}
+}

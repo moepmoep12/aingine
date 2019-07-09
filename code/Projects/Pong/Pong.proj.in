@@ -2,5 +2,10 @@
 "installPath": "@InstallPath@",
 "name": "Pong",
 "path": "@projectDir@",
-"scripts": []
+"scripts": [
+"Player",
+"Ball",
+"HumanPlayer",
+"AgentPlayer"
+]
 }

@@ -6,11 +6,19 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/out/CMake/Module
 
 #--- Source Files
 set(SRC
+    code/src/Player.cxx
+    code/src/Ball.cxx
+    code/src/HumanPlayer.cxx
+    code/src/AgentPlayer.cxx
     code/src/${PROJECT_NAME}.cxx
     code/src/Scripting_generated.cxx
      )
 
 set(HEADER
+    code/include/Player.h
+    code/include/Ball.h
+    code/include/HumanPlayer.h
+    code/include/AgentPlayer.h
 	   code/include/${PROJECT_NAME}.h
     )
 
