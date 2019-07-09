@@ -5,6 +5,14 @@
 #include "PickUpFactory.h"
 
 namespace CrappyBird {
+	struct Quadrant {
+		int x;
+		int	y;
+		AIngine::Structures::RectangleF rectangle;
+		bool isPlayerPath = false;
+		bool isClosed = false;
+	};
+
 	class Obstacles : public AIngine::Script {
 	public:
 		Obstacles();
@@ -17,7 +25,14 @@ namespace CrappyBird {
 
 		void SpawnObstaclesInArea(const AIngine::Structures::RectangleF& worldRect);
 
+
+
+		static std::vector<std::vector<Quadrant>> s_CurrentMap;
+
+
 	private:
+		void ResetMap();
+		void InitMap(const AIngine::Structures::RectangleF& worldRect);
 		GameObject* GetAvailableObstacle();
 		int m_lastObstacleHeight = -1;
 

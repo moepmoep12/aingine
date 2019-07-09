@@ -10,6 +10,8 @@
 
 namespace CrappyBird {
 
+	std::vector<std::vector<Quadrant>> Obstacles::s_CurrentMap;
+
 	// Constructor
 	Obstacles::Obstacles()
 	{
@@ -67,14 +69,6 @@ namespace CrappyBird {
 	{
 	}
 
-	struct Quadrant {
-		int x;
-		int	y;
-		AIngine::Structures::RectangleF rectangle;
-		bool isPlayerPath = false;
-		bool isClosed = false;
-	};
-
 	void Obstacles::SpawnObstaclesInArea(const AIngine::Structures::RectangleF & worldRect)
 	{
 		static std::default_random_engine generator;
@@ -88,23 +82,10 @@ namespace CrappyBird {
 		// if it's the first screen, choose a random height
 		if (m_lastObstacleHeight == -1) {
 			m_lastObstacleHeight = rand() % QuadrantsY;
+			InitMap(worldRect);
 		}
-
-		std::vector<std::vector<Quadrant>> map;
-
-		// initialize map
-		for (int i = 0; i < QuadrantsX; i++) {
-			map.push_back(std::vector<Quadrant>());
-			for (int j = 0; j < QuadrantsY; j++) {
-				map[i].push_back(Quadrant
-					{
-						i,
-						j,
-						AIngine::Structures::RectangleF(worldRect.x + i * playerSize.x, worldRect.y + j * playerSize.y,playerSize.x, playerSize.y),
-						false,
-						false
-					});
-			}
+		else {
+			ResetMap();
 		}
 
 		int index = -1;
@@ -123,12 +104,12 @@ namespace CrappyBird {
 				if (heightIndex - 1 >= 0)
 				{
 					// quadrant direct above
-					if (!map[index][heightIndex - 1].isPlayerPath)
+					if (!s_CurrentMap[index][heightIndex - 1].isPlayerPath)
 						Options.push_back(glm::vec2(index, heightIndex - 1));
 
 					// quadrant right-above
 					if (index + 1 < QuadrantsX) {
-						if (!map[index + 1][heightIndex - 1].isPlayerPath)
+						if (!s_CurrentMap[index + 1][heightIndex - 1].isPlayerPath)
 							Options.push_back(glm::vec2(index + 1, heightIndex - 1));
 					}
 				}
@@ -137,12 +118,12 @@ namespace CrappyBird {
 				if (heightIndex + 1 < QuadrantsY) {
 
 					// quadrant direct below
-					if (!map[index][heightIndex + 1].isPlayerPath)
+					if (!s_CurrentMap[index][heightIndex + 1].isPlayerPath)
 						Options.push_back(glm::vec2(index, heightIndex + 1));
 
 					// quadrant right-below
 					if (index + 1 < QuadrantsX) {
-						if (!map[index + 1][heightIndex + 1].isPlayerPath)
+						if (!s_CurrentMap[index + 1][heightIndex + 1].isPlayerPath)
 							Options.push_back(glm::vec2(index + 1, heightIndex + 1));
 					}
 				}
@@ -150,7 +131,7 @@ namespace CrappyBird {
 				// right is possible
 				if (index + 1 < QuadrantsX) {
 					// quadrant to the right
-					if (!map[index + 1][heightIndex].isPlayerPath)
+					if (!s_CurrentMap[index + 1][heightIndex].isPlayerPath)
 						Options.push_back(glm::vec2(index + 1, heightIndex));
 				}
 			}
@@ -172,15 +153,15 @@ namespace CrappyBird {
 
 			// if we take a diagonal path we also take the direct path right
 			if (chosenOption.x == index + 1 && chosenOption.y != heightIndex) {
-				map[index + 1][heightIndex].isPlayerPath = true;
-				path.push_back(&map[index + 1][heightIndex]);
+				s_CurrentMap[index + 1][heightIndex].isPlayerPath = true;
+				path.push_back(&s_CurrentMap[index + 1][heightIndex]);
 			}
 
 			m_lastObstacleHeight = chosenOption.y;
 			index = chosenOption.x;
 			heightIndex = chosenOption.y;
-			map[index][heightIndex].isPlayerPath = true;
-			path.push_back(&map[index][heightIndex]);
+			s_CurrentMap[index][heightIndex].isPlayerPath = true;
+			path.push_back(&s_CurrentMap[index][heightIndex]);
 			Options.clear();
 		}
 
@@ -194,7 +175,7 @@ namespace CrappyBird {
 		// obstacles from top to bottom
 		for (int i = 0; i < QuadrantsX; i++) {
 			for (int j = 0; j < QuadrantsY; j++) {
-				if (map[i][j].isPlayerPath) {
+				if (s_CurrentMap[i][j].isPlayerPath) {
 					pathHeightIndex = j;
 					break;
 				}
@@ -204,7 +185,7 @@ namespace CrappyBird {
 				continue;
 			}
 
-			maxHeight = map[i][pathHeightIndex].rectangle.GetPosition().y;
+			maxHeight = s_CurrentMap[i][pathHeightIndex].rectangle.GetPosition().y;
 			minHeight = maxHeight - 0.75f * playerSize.y;
 			chosenHeight = minHeight + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (maxHeight - minHeight)));
 
@@ -215,9 +196,9 @@ namespace CrappyBird {
 				obj->GetComponent<PhysicsComponent>()->SetEnabled(true);
 				obj->GetComponent<Obstacle>()->Set(AIngine::Structures::RectangleF
 					{
-						map[i][0].rectangle.x,
-						map[i][0].rectangle.y,
-						map[i][0].rectangle.width,
+						s_CurrentMap[i][0].rectangle.x,
+						s_CurrentMap[i][0].rectangle.y,
+						s_CurrentMap[i][0].rectangle.width,
 						chosenHeight
 					});
 				if (CrappyBird::s_bObstacleRotation)
@@ -227,7 +208,7 @@ namespace CrappyBird {
 
 		for (int i = 0; i < QuadrantsX; i++) {
 			for (int j = QuadrantsY - 1; j >= 0; j--) {
-				if (map[i][j].isPlayerPath) {
+				if (s_CurrentMap[i][j].isPlayerPath) {
 					pathHeightIndex = j;
 					break;
 				}
@@ -237,7 +218,7 @@ namespace CrappyBird {
 				continue;
 			}
 
-			maxHeight = QuadrantsY * playerSize.y - map[i][pathHeightIndex].rectangle.GetMax().y;
+			maxHeight = QuadrantsY * playerSize.y - s_CurrentMap[i][pathHeightIndex].rectangle.GetMax().y;
 			minHeight = maxHeight - 0.75f * playerSize.y;
 			chosenHeight = minHeight + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (maxHeight - minHeight)));
 
@@ -248,9 +229,9 @@ namespace CrappyBird {
 				obj->GetComponent<PhysicsComponent>()->SetEnabled(true);
 				obj->GetComponent<Obstacle>()->Set(AIngine::Structures::RectangleF
 					{
-						map[i][0].rectangle.x,
+						s_CurrentMap[i][0].rectangle.x,
 						5.625f - chosenHeight,
-						map[i][0].rectangle.width,
+						s_CurrentMap[i][0].rectangle.width,
 						chosenHeight
 					});
 				if (CrappyBird::s_bObstacleRotation)
@@ -272,6 +253,37 @@ namespace CrappyBird {
 		//	m_pickUpFactory->SpawnPickUp(path[pickUpIndex]->rectangle.GetCenter());
 		//	path.erase(path.begin() + pickUpIndex);
 		//}
+	}
+
+	void Obstacles::ResetMap()
+	{
+		for (int i = 0; i < s_CurrentMap.size(); i++) {
+			for (int j = 0; j < s_CurrentMap[0].size(); j++) {
+				s_CurrentMap[i][j].isClosed = false;
+				s_CurrentMap[i][j].isPlayerPath = false;
+			}
+		}
+	}
+
+	void Obstacles::InitMap(const AIngine::Structures::RectangleF& worldRect)
+	{
+		static const glm::vec2 playerSize(2, 1);
+		int QuadrantsX = floor((float)worldRect.width / playerSize.x);
+		int QuadrantsY = floor((float)worldRect.height / playerSize.y);
+		// initialize s_CurrentMap
+		for (int i = 0; i < QuadrantsX; i++) {
+			s_CurrentMap.push_back(std::vector<Quadrant>());
+			for (int j = 0; j < QuadrantsY; j++) {
+				s_CurrentMap[i].push_back(Quadrant
+					{
+						i,
+						j,
+						AIngine::Structures::RectangleF(worldRect.x + i * playerSize.x, worldRect.y + j * playerSize.y,playerSize.x, playerSize.y),
+						false,
+						false
+					});
+			}
+		}
 	}
 
 	GameObject * Obstacles::GetAvailableObstacle()
