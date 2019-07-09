@@ -45,7 +45,8 @@ namespace Pong {
 	void Player::ReceiveBall()
 	{
 		glm::vec playerSize = GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize();
-		float xPos = GetOwner()->GetWorldPosition().x + playerSize.x * 0.6 + m_BallBody->GetBodyInformation().radius;
+		int direction = Role == PlayerRole::One ? 1 : -1;
+		float xPos = GetOwner()->GetWorldPosition().x + direction * playerSize.x * 0.6 + direction * m_BallBody->GetBodyInformation().radius;
 		float minHeight = GetOwner()->GetWorldPosition().y - playerSize.y * 0.5f + +m_BallBody->GetBodyInformation().radius;
 		float maxHeight = GetOwner()->GetWorldPosition().y + playerSize.y * 0.5f - +m_BallBody->GetBodyInformation().radius;
 		float height = AIngine::Util::Random::RandomFloat(minHeight, maxHeight);
@@ -66,7 +67,7 @@ namespace Pong {
 
 		glm::vec2 currentMousePos = glm::vec2(Input::GetMouseX(), Input::GetMouseY());
 		float delta = (currentMousePos.y - lastMousePos.y);
-		if(delta < 0) delta = -TranslationRate * Pong::Get().GetDeltaTime();
+		if (delta < 0) delta = -TranslationRate * Pong::Get().GetDeltaTime();
 		else delta = TranslationRate * Pong::Get().GetDeltaTime();
 		float currentHeight = GetOwner()->GetWorldPosition().y;
 

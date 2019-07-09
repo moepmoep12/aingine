@@ -23,5 +23,8 @@ namespace Pong {
 	private:
 		xxr::XCSR<>* m_xcsr;
 		Ball* m_ball;
+		PlayerRole goalie;
+		bool scored = false;
+		int currentTick = 0;
 	};
 }

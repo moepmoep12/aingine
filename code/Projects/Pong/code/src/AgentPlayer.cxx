@@ -19,7 +19,8 @@ namespace Pong {
 
 		static auto constants = xxr::XCSRConstants();
 		constants.n = 300;
-		constants.epsilonZero = 5;
+		constants.useMAM = true;
+		constants.epsilonZero = 10;
 		static std::unordered_set<int> options = std::unordered_set<int>{ 1, 2 };
 		m_xcsr = new xxr::XCSR<>(xxr::CSR, options, constants);
 	}
@@ -33,14 +34,15 @@ namespace Pong {
 	// Update is called once per frame
 
 	static const int tickRate = 60;
-	static int currentTick = 0;
 
 	void AgentPlayer::Update(float delta)
 	{
 		Player::Update(delta);
 
 		currentTick++;
-		if (currentTick == tickRate) {
+		if (currentTick >= tickRate) {
+			currentTick = 0;
+
 			if (m_HasBall)
 				Player::StartBall();
 
@@ -49,13 +51,23 @@ namespace Pong {
 			MoveAgent(action);
 
 
-			if (m_rigidBody->GetContact() && m_rigidBody->GetContact()->Other->GetOwner()->GetComponent<Ball>()) {
-				m_xcsr->reward(10, false);
+			if (scored)
+			{
+				if (goalie == this->Role) {
+					m_xcsr->reward(1000, true);
+				}
+				else {
+					m_xcsr->reward(-1000, true);
+				}
+				scored = false;
+				return;
+			}
+			else if (m_rigidBody->GetContact() && m_rigidBody->GetContact()->Other->GetOwner()->GetComponent<Ball>()) {
+				m_xcsr->reward(100, false);
 			}
 			else {
-				m_xcsr->reward(-0.02, false);
+				m_xcsr->reward(0.2, false);
 			}
-			currentTick = 0;
 		}
 	}
 
@@ -66,12 +78,8 @@ namespace Pong {
 
 	void AgentPlayer::OnScored(PlayerRole role)
 	{
-		if (role == this->Role) {
-			m_xcsr->reward(500, true);
-		}
-		else {
-			m_xcsr->reward(-500, true);
-		}
+		goalie = role;
+		scored = true;
 	}
 
 	std::vector<double> AgentPlayer::situation()

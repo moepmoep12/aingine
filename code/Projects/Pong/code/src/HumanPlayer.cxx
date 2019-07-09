@@ -14,7 +14,6 @@ namespace Pong {
 	void HumanPlayer::OnStart()
 	{
 		Player::OnStart();
-		Player::ReceiveBall();
 	}
 
 	// End is called when gameplay ends for this script

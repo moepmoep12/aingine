@@ -16,18 +16,19 @@ namespace Pong {
 		LeftEdge = AIngine::World::GetGameObject("LeftEdge")->GetComponent<PhysicsComponent>();
 		RightEdge = AIngine::World::GetGameObject("RightEdge")->GetComponent<PhysicsComponent>();
 		auto comps = AIngine::World::GetGameObject("PlayerOne")->GetComponents();
-		for (auto& comp : comps)
-			if (static_cast<Player*>(comp)) {
-				PlayerOne = static_cast<Player*>(comp);
+		for (auto comp : comps)
+			if (dynamic_cast<Player*>(comp)) {
+				PlayerOne = dynamic_cast<Player*>(comp);
 				break;
 			}
 
 		PlayerOne->Role = PlayerRole::One;
+		PlayerOne->ReceiveBall();
 
 		 comps = AIngine::World::GetGameObject("PlayerTwo")->GetComponents();
-		for (auto& comp : comps)
-			if (static_cast<Player*>(comp)) {
-				PlayerTwo = static_cast<Player*>(comp);
+		for (auto comp : comps)
+			if (dynamic_cast<Player*>(comp)) {
+				PlayerTwo = dynamic_cast<Player*>(comp);
 				break;
 			}
 
