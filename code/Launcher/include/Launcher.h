@@ -29,12 +29,12 @@ namespace ProjectLauncher {
 		static std::string GetProjectNameFromProjectFile(const std::string& projectFilePath);
 		static void RunCMake(const std::string& name, const std::string& path, unsigned int bit);
 		static void OpenVSSolution(const std::string& name, const std::string& path);
+		static void CreateDirectories(const std::string& path);
+		static void CopyDirectories(const std::string& path);
 
 	private:
 		void LoadProjectsFromFile();
 		void SaveProjectsToFile();
-		static void CreateDirectories(const std::string& path);
-		static void CopyDirectories(const std::string& path);
 		static void CreateTemplateFiles(const std::string& name, const std::string& path);
 		static void CreateProjectFile(const std::string& name, const std::string& path);
 		static void CreateScriptingFile(const std::string& path);

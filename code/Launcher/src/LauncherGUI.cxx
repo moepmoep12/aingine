@@ -177,6 +177,8 @@ namespace ProjectLauncher {
 
 					if (ImGui::Button("Create##newcmake"))
 					{
+						Launcher::CreateDirectories(projectRoot + "\\");
+						Launcher::CopyDirectories(projectRoot + "\\");
 						Launcher::RunCMake(projectName, projectRoot, choosableModes[currentIndex]);
 						Launcher::AddProject(projectName, projectRoot);
 						ImGui::CloseCurrentPopup();
