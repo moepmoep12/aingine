@@ -1,0 +1,6 @@
+{
+"installPath": "@InstallPath@",
+"name": "Pong",
+"path": "@projectDir@",
+"scripts": []
+}
