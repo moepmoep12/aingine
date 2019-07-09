@@ -76,12 +76,20 @@ namespace AIngine {
 		/* Loads a Scene with the given index. The index was specified in the build process */
 		static void LoadScene(int index);
 
+		static void UseFixedTimeStep(bool use);
+
+	public:
+		/* Determines whether the App will render. Useful for training scenarios where rendering is not necessary */
+		bool bRender = true;
+
+		/* The targeted timestep at which the App wil be updated */
+		static double FIXED_TIMESTEP;
+
 	protected:
 		std::unique_ptr<Window> m_window = NULL;
 		WindowConfig m_windowConfig;
 		glm::vec2 m_gravity;
 		glm::vec4 m_bounds;
-
 
 		/* StartUp is called once when Playmode is entered */
 		virtual void OnAppStartUp() = 0;
@@ -134,6 +142,7 @@ namespace AIngine {
 		World* m_world = nullptr;
 		bool m_isRunning = false;
 		bool m_wantsLoadLevel = false;
+		bool m_usesFixedTimeStep = false;
 		int m_sceneToLoadIndex = 0;
 		float m_deltaTime = 0.0f;
 

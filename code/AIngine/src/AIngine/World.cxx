@@ -191,12 +191,9 @@ namespace AIngine {
 	void World::OnUpdate(float delta)
 	{
 		if ((AIngine::Application::IsRunning()))
-			m_physicsWorld->Step(1.0f / 60.0f, 8, 3);
+			m_physicsWorld->Step(Application::FIXED_TIMESTEP, 8, 3);
 
 		m_sceneGraph->OnUpdate(delta);
-
-		if (m_isPhysicsDebugDrawn)
-			m_physicsWorld->DrawDebugData();
 	}
 
 	void World::OnEvent(AIngine::Events::EventData & e)
@@ -207,6 +204,9 @@ namespace AIngine {
 	void World::OnImGuiRender()
 	{
 		m_sceneGraph->OnImGuiRender();
+
+		if (m_isPhysicsDebugDrawn)
+			m_physicsWorld->DrawDebugData();
 	}
 
 	World::World(const glm::vec4 & bounds, const glm::vec2 & gravity)

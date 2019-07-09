@@ -20,6 +20,7 @@
 namespace AIngine {
 
 	Application* Application::s_instance = nullptr;
+	double Application::FIXED_TIMESTEP = 1.0 / 60.0;
 
 	Application::Application()
 	{
@@ -98,6 +99,8 @@ namespace AIngine {
 
 	static float s_currentFrame = 0.0f;
 	static float s_lastFrame = 0.0f;
+	static float s_accumulated = 0.0f;
+	static const float MAX_TIMESTEP = 0.2;
 
 	void Application::Run()
 	{
@@ -146,22 +149,42 @@ namespace AIngine {
 			s_currentFrame = (float)glfwGetTime();
 			m_deltaTime = s_currentFrame - s_lastFrame;
 			s_lastFrame = s_currentFrame;
+			if (m_deltaTime > MAX_TIMESTEP) m_deltaTime = MAX_TIMESTEP;
+			s_accumulated += m_deltaTime;
 
 			// handle user input
 			m_window->PollInput();
 
-			if ((AIngine::Editor::Editor::IsGameRunning()))
-				// update game
-				OnAppUpdate();
+			if (m_usesFixedTimeStep) {
+				while (s_accumulated >= FIXED_TIMESTEP) {
+					if ((AIngine::Editor::Editor::IsGameRunning()))
+						// update game
+						OnAppUpdate();
 
-			// update logic
-			for (AIngine::Structures::Layer* layer : m_layerStack)
-				layer->OnUpdate(GetDeltaTime());
+					// update logic
+					for (AIngine::Structures::Layer* layer : m_layerStack)
+						layer->OnUpdate(FIXED_TIMESTEP);
 
-			// scene rendering
-			m_spriteRenderer->Traverse(&m_world->GetSceneGraph().GetRoot());
-			m_particleRenderer->Traverse(&m_world->GetSceneGraph().GetRoot());
-			m_uiRenderer->Traverse(&m_world->GetSceneGraph().GetRoot());
+					s_accumulated -= FIXED_TIMESTEP;
+				}
+			}
+			else {
+				if ((AIngine::Editor::Editor::IsGameRunning()))
+					// update game
+					OnAppUpdate();
+
+				// update logic
+				for (AIngine::Structures::Layer* layer : m_layerStack)
+					layer->OnUpdate(GetDeltaTime());
+			}
+
+			/// RENDERING 
+			if (bRender) {
+				// scene rendering
+				m_spriteRenderer->Traverse(&m_world->GetSceneGraph().GetRoot());
+				m_particleRenderer->Traverse(&m_world->GetSceneGraph().GetRoot());
+				m_uiRenderer->Traverse(&m_world->GetSceneGraph().GetRoot());
+			}
 
 			// ui rendering
 			m_imGuiLayer->OnBegin();
@@ -264,6 +287,12 @@ namespace AIngine {
 				s_instance->m_sceneToLoadIndex = index;
 			}
 		}
+	}
+
+	void Application::UseFixedTimeStep(bool use)
+	{
+		s_instance->m_usesFixedTimeStep = use;
+		s_instance->m_window->SetVSync(use);
 	}
 
 	bool Application::IsRunning()
