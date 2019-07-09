@@ -136,13 +136,15 @@ namespace AIngine::Editor {
 		bool OnWindowResized(AIngine::Events::WindowResizeEvent::WindowResizeEventData& e);
 		bool OnMouseScrolled(AIngine::Events::MouseScrolledEvent::MouseScrolledEventData& e);
 		bool OnMouseButtonPressed(AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData& e);
+		bool OnMouseButtonReleased(AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData& e);
 		void OnWindowClose();
 
 		/* Calculates the available viewport size to be used for rendering the scene
 		* @returns : Returns the viewport Rectangle with a screen position & size */
 		AIngine::Structures::RectangleI CalculateViewportRect(const glm::vec2& windowSize) const;
 
-		void MoveCamera(float delta);
+		void MoveCameraWithKeys(float delta);
+		void MoveCameraWithMouse(float delta);
 
 		void LoadLastScene();
 		void SaveOpenScene();
@@ -167,6 +169,7 @@ namespace AIngine::Editor {
 		AIngine::Events::ViewportChangedEvent OnViewportChangedEvent;
 		bool m_isInPlayMode = false;
 		bool m_isGamePaused = false;
+		bool m_isDraggingCamera = false;
 		std::string m_currentSceneFilePath;
 	};
 }

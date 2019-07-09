@@ -32,6 +32,8 @@ namespace AIngine::Editor {
 	Editor* Editor::Editor::s_instance = nullptr;
 	AIngine::Events::Event<void> Editor::PauseGameEvent;
 	AIngine::Events::Event<void> Editor::ResumeGameEvent;
+	static glm::vec2 lastMousePos;
+
 
 	void Editor::OnAttach()
 	{
@@ -51,7 +53,8 @@ namespace AIngine::Editor {
 			OnViewportChangedEvent(viewportRect);
 		}
 
-		if (m_hasViewportFocus) MoveCamera(delta);
+		if (m_hasViewportFocus) MoveCameraWithKeys(delta);
+		if (m_isDraggingCamera) MoveCameraWithMouse(delta);
 		if (m_displayingFramerate) DisplayFramerate(delta);
 	}
 
@@ -62,6 +65,7 @@ namespace AIngine::Editor {
 		dispatcher.Dispatch<AIngine::Events::KeyPressedEvent::KeyPressedEventData>(BIND_EVENT_TO_FN(Editor::OnKeyPressed));
 		dispatcher.Dispatch<AIngine::Events::MouseScrolledEvent::MouseScrolledEventData>(BIND_EVENT_TO_FN(Editor::OnMouseScrolled));
 		dispatcher.Dispatch<AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData>(BIND_EVENT_TO_FN(Editor::OnMouseButtonPressed));
+		dispatcher.Dispatch<AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData>(BIND_EVENT_TO_FN(Editor::OnMouseButtonReleased));
 
 		auto it = m_widgets.begin();
 		while (it != m_widgets.end()) {
@@ -136,14 +140,25 @@ namespace AIngine::Editor {
 
 	bool Editor::OnMouseButtonPressed(AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData & e)
 	{
-		if (e.GetMouseButton() == MouseButton::BUTTON_LEFT) {
-			glm::vec2 mousePos = glm::vec2(AIngine::Input::GetMousePosition().first, AIngine::Input::GetMousePosition().first);
-			m_hasViewportFocus = m_app.GetViewport().Contains(mousePos);
+		glm::vec2 mousePos = glm::vec2(AIngine::Input::GetMousePosition().first, AIngine::Input::GetMousePosition().first);
+		m_hasViewportFocus = m_app.GetViewport().Contains(mousePos);
+
+		if (e.GetMouseButton() == MouseButton::BUTTON_MIDDLE) {
+			if (m_hasViewportFocus) {
+				lastMousePos = glm::vec2(Input::GetMouseX(), Input::GetMouseY());
+				m_isDraggingCamera = true;
+			}
 		}
 		return false;
 	}
 
-	void Editor::MoveCamera(float delta)
+	bool Editor::OnMouseButtonReleased(AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData & e)
+	{
+		m_isDraggingCamera = false;
+		return false;
+	}
+
+	void Editor::MoveCameraWithKeys(float delta)
 	{
 		AIngine::Rendering::Camera* camera = m_app.m_camera;
 
@@ -178,6 +193,14 @@ namespace AIngine::Editor {
 		{
 			camera->Rotate(-rotationrate * AIngine::D2R * delta);
 		}
+	}
+
+	void Editor::MoveCameraWithMouse(float delta)
+	{
+		glm::vec2 currentMousePos = glm::vec2(Input::GetMouseX(), Input::GetMouseY());
+		glm::vec2 del = currentMousePos - lastMousePos;
+		m_app.m_camera->Translate(del * delta * m_app.m_camera->GetZoom());
+		lastMousePos = currentMousePos;
 	}
 
 	// the path to the file that contains the path to the scene that was last opened
