@@ -1,6 +1,7 @@
 #include "AgentXCSR.h"
 #include "CrappyBird.h"
 #include "Obstacle.h"
+#include "Obstacles.h"
 #include "Player.h"
 
 namespace CrappyBird {
@@ -18,6 +19,8 @@ namespace CrappyBird {
 	void AgentXCSR::OnStart()
 	{
 		CrappyBird::s_DieOnCollision = true;
+		//CrappyBird::FIXED_TIMESTEP = 1.0 / 120.0;
+		//CrappyBird::UseFixedTimeStep(true);
 
 		m_physBody = GetOwner()->GetComponent<AIngine::Physics::PhysicsComponent>();
 		m_physBody->SetFixedRotation(true);
@@ -32,9 +35,9 @@ namespace CrappyBird {
 
 		static auto constants = xxr::XCSRConstants();
 		constants.n = 300;
+		constants.epsilonZero = 10;
 		static std::unordered_set<int> options = std::unordered_set<int>{ 0, 1 };
 		m_xcsr = new xxr::XCSR<>(xxr::CSR, options, constants);
-		//m_spawnPosition = GetOwner()->GetWorldPosition();
 	}
 
 	// End is called when gameplay ends for this script
@@ -49,11 +52,7 @@ namespace CrappyBird {
 	// Update is called once per frame
 	void AgentXCSR::Update(float delta)
 	{
-		// Check if GameOver
-		if (GetOwner()->GetWorldPosition().x < 0) {
-			OnGameOverEvent();
-		}
-
+		if (IsGameOver) return;
 		// update score
 		m_distanceTraveled += CrappyBird::s_GameSpeed * delta;
 
@@ -71,19 +70,35 @@ namespace CrappyBird {
 			// accelerate
 			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, -CrappyBird::s_Impulse));
 		}
-
-		if (m_physBody->GetContact()) 
-		{
-			m_xcsr->reward(-100, true);
-			return;
+		else {
+			m_physBody->ApplyLinearImpulseToCenter(glm::vec2(0, 0.2 * CrappyBird::s_Impulse));
 		}
 
-		m_xcsr->reward(0.1f, false);
+		if (m_distanceTraveled > 200) {
+			m_xcsr->reward(1000, true);
+			ResetGame();
+			return;
+		}
+		else if (m_physBody->GetContact() && m_physBody->GetContact()->Other->GetOwner()->GetComponent<Obstacle>()) {
+			OnGameOverEvent();
+			return;
+		}
+		else {
+			m_xcsr->reward(1, false);
+		}
 	}
 
 	// Callback for events
 	void AgentXCSR::OnEventData(AIngine::Events::EventData & e)
 	{
+		// key pressed
+		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent::KeyPressedEventData)) {
+			AIngine::Events::KeyPressedEvent::KeyPressedEventData pressedEvent = dynamic_cast<AIngine::Events::KeyPressedEvent::KeyPressedEventData&>(e);
+
+			if (pressedEvent.GetKeyCode() == AIngine::KeyCode::R) {
+				CrappyBird::Get().bRender = false;
+			}
+		}
 	}
 
 	void AgentXCSR::PostInit()
@@ -117,25 +132,50 @@ namespace CrappyBird {
 	{
 		IsGameOver = true;
 		m_physBody->SetEnabled(false);
+		m_xcsr->reward(-500 + m_distanceTraveled, true);
 		ResetGame();
 	}
 
 	void AgentXCSR::OnCollision(AIngine::Physics::Contact contact)
 	{
-		if (CrappyBird::s_DieOnCollision) {
-			if (contact.Other->GetOwner()->GetComponent<Obstacle>()) {
-				OnGameOverEvent();
-			}
-		}
+
 	}
 
 	std::vector<double> AgentXCSR::situation()
 	{
-		return
+		std::vector<double> result =
 		{
 			GetOwner()->GetLocalPosition().y / 5.625,
-			m_physBody->GetVelocity().length() / 10.0
+			CrappyBird::s_GameSpeed / 3.5,
+			m_physBody->GetVelocity().y / 10.0
 		};
+
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++) {
+				if (!Obstacles::s_CurrentMap.empty()) {
+					if (Obstacles::s_CurrentMap[i][j].isClosed) {
+						result.push_back(Obstacles::s_CurrentMap[i][j].rectangle.x / 10.0);
+						result.push_back(Obstacles::s_CurrentMap[i][j].rectangle.y / 5.625);
+						result.push_back(Obstacles::s_CurrentMap[i][j].rectangle.width / 10.0);
+						result.push_back(Obstacles::s_CurrentMap[i][j].rectangle.height / 5.625);
+					}
+					else {
+						result.push_back(1);
+						result.push_back(1);
+						result.push_back(1);
+						result.push_back(1);
+					}
+				}
+				else {
+					result.push_back(0);
+					result.push_back(0);
+					result.push_back(0);
+					result.push_back(0);
+				}
+			}
+		}
+
+		return result;
 	}
 
 	double AgentXCSR::executeAction(bool action)
