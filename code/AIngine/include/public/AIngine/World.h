@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Structures/Layer.h"
+#include "Structures/Rectangle.h"
 
 #include <glm/glm.hpp>
 #include <string>
@@ -48,12 +49,14 @@ namespace AIngine {
 		static GameObject* const GetGameObject(const std::string& name);
 		static void DestroyObject(GameObject& gameobject);
 		static inline glm::vec4 GetBounds() { if (s_instance) return s_instance->m_bounds; else return glm::vec4(1.0); }
+		static AIngine::Structures::RectangleF GetWorldRect();
 		static inline glm::vec2 GetGravity() { if (s_instance) return s_instance->m_gravity; else return glm::vec2(0); }
 		static void SetGravity(const glm::vec2& gravity);
 		static b2Body* CreateBody(const b2BodyDef& bodydef);
 		static inline bool IsDebugPhysicsDrawn() { if (s_instance) return s_instance->m_isPhysicsDebugDrawn; else return false; }
 		static void SetPhysicsDebugDrawActive(const bool& active);
 		static const b2World& GetPhysicsWorld();
+		static glm::vec2 GetCenter();
 
 		AIngine::Structures::SceneGraph& GetSceneGraph();
 

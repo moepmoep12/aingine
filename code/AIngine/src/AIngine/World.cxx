@@ -148,6 +148,11 @@ namespace AIngine {
 		}
 	}
 
+	AIngine::Structures::RectangleF World::GetWorldRect()
+	{
+		return AIngine::Structures::RectangleF(s_instance->m_bounds.x, s_instance->m_bounds.z, s_instance->m_bounds.y, s_instance->m_bounds.w);
+	}
+
 	void World::SetGravity(const glm::vec2 & gravity)
 	{
 		if (s_instance) {
@@ -171,6 +176,12 @@ namespace AIngine {
 	const b2World & World::GetPhysicsWorld()
 	{
 		return *s_instance->m_physicsWorld;
+	}
+
+	glm::vec2 World::GetCenter()
+	{
+		glm::vec4 bounds = GetBounds();
+		return glm::vec2((bounds.y - bounds.x) / 2.0, (bounds.w - bounds.z) / 2.0);
 	}
 
 	AIngine::Structures::SceneGraph & World::GetSceneGraph()
