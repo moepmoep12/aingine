@@ -31,6 +31,7 @@ namespace ProjectLauncher {
 
 		GLFWmonitor* primary = glfwGetPrimaryMonitor();
 		const GLFWvidmode* mode = glfwGetVideoMode(primary);
+		m_windowConfig.startFullScreen = false;
 		m_window->SetWindowSize(s_windowSize.x, s_windowSize.y);
 		m_window->SetWindowTitle("Launcher");
 		m_window->SetWindowSizeLimits(s_windowSize.x, s_windowSize.y, s_windowSize.x, s_windowSize.y);
