@@ -10,6 +10,7 @@ set(SRC
     code/src/Ball.cxx
     code/src/HumanPlayer.cxx
     code/src/AgentPlayer.cxx
+    code/src/GameManager.cxx
     code/src/${PROJECT_NAME}.cxx
     code/src/Scripting_generated.cxx
      )
@@ -19,6 +20,7 @@ set(HEADER
     code/include/Ball.h
     code/include/HumanPlayer.h
     code/include/AgentPlayer.h
+    code/include/GameManager.h
 	   code/include/${PROJECT_NAME}.h
     )
 

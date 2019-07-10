@@ -6,6 +6,7 @@
 "Player",
 "Ball",
 "HumanPlayer",
-"AgentPlayer"
+"AgentPlayer",
+"GameManager"
 ]
 }

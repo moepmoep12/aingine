@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Pong.h"
 #include "Rendering/Camera.h"
+#include "GameManager.h"
 
 namespace Pong {
 
@@ -59,7 +60,9 @@ namespace Pong {
 		m_HasBall = false;
 		float forceY =/* AIngine::Util::Random::RandomFloat(-8, 8)*/ 10;
 		if (forceY == 0) forceY = 1;
-		m_BallBody->ApplyForceToCenter(glm::vec2(25, forceY));
+		glm::vec2 force = GameManager::ForceOnBall;
+		force *= Pong::Get().AppSpeedMulitplier;
+		m_BallBody->ApplyForceToCenter(force);
 	}
 
 	void Player::MovePlayerWithMouse()

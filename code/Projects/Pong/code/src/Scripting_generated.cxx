@@ -4,6 +4,7 @@
 #include "Ball.h"
 #include "HumanPlayer.h"
 #include "AgentPlayer.h"
+#include "GameManager.h"
 #include <vector>
 #include <string>
 
@@ -12,6 +13,7 @@ std::vector<std::string> AIngine::ApplicationComponentNames = {
     "Ball",
     "HumanPlayer",
     "AgentPlayer",
+    "GameManager",
 };
 
 void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
@@ -30,6 +32,10 @@ void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
 
 	case 3:
 		obj->AddComponent<Pong::AgentPlayer>()->ScriptIndex = 3;
+		break;
+
+	case 4:
+		obj->AddComponent<Pong::GameManager>()->ScriptIndex = 4;
 		break;
 
 	}

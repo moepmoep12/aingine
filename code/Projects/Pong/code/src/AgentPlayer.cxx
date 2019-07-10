@@ -106,11 +106,6 @@ namespace Pong {
 
 		label << "Explore?##" << static_cast<const void*>(this);
 		ImGui::Checkbox(label.str().c_str(), &explore);
-		float gamespeed = (float)(Pong::Get().AppSpeedMulitplier);
-
-		if (ImGui::DragFloat("GameSpeed", &gamespeed, 0.1, 0.5f, 10.0f)) {
-			Pong::Get().AppSpeedMulitplier = gamespeed;
-		}
 
 		label.str(std::string());
 		label << "Population Size : " << m_xcsr->populationSize();
