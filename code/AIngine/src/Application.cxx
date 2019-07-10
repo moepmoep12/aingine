@@ -147,7 +147,7 @@ namespace AIngine {
 		{
 			// calc delta time
 			s_currentFrame = (float)glfwGetTime();
-			m_deltaTime = s_currentFrame - s_lastFrame;
+			m_deltaTime = (s_currentFrame - s_lastFrame);
 			s_lastFrame = s_currentFrame;
 			if (m_deltaTime > MAX_TIMESTEP) m_deltaTime = MAX_TIMESTEP;
 			s_accumulated += m_deltaTime;
@@ -163,7 +163,7 @@ namespace AIngine {
 
 					// update logic
 					for (AIngine::Structures::Layer* layer : m_layerStack)
-						layer->OnUpdate(FIXED_TIMESTEP);
+						layer->OnUpdate(FIXED_TIMESTEP * AppSpeedMulitplier);
 
 					s_accumulated -= FIXED_TIMESTEP;
 				}
@@ -175,7 +175,7 @@ namespace AIngine {
 
 				// update logic
 				for (AIngine::Structures::Layer* layer : m_layerStack)
-					layer->OnUpdate(GetDeltaTime());
+					layer->OnUpdate(GetDeltaTimeScaled());
 			}
 
 			/// RENDERING 
@@ -246,6 +246,16 @@ namespace AIngine {
 		OnAppShutDown();
 	}
 
+	float Application::GetDeltaTimeScaled()
+	{
+		return s_instance->GetDeltaTime() * s_instance->AppSpeedMulitplier;
+	}
+
+	float Application::GetDeltaTimeReal()
+	{
+		return s_instance->m_deltaTime;
+	}
+
 	void Application::PushLayer(AIngine::Structures::Layer * layer)
 	{
 		m_layerStack.PushLayer(layer);
@@ -258,9 +268,9 @@ namespace AIngine {
 		overlay->OnAttach();
 	}
 
-	float Application::GetDeltaTime()
+	float Application::GetDeltaTime() const
 	{
-		return m_deltaTime;
+		return m_usesFixedTimeStep ? FIXED_TIMESTEP : m_deltaTime;
 	}
 
 	void Application::LoadScene(int index)
@@ -292,7 +302,7 @@ namespace AIngine {
 	void Application::UseFixedTimeStep(bool use)
 	{
 		s_instance->m_usesFixedTimeStep = use;
-		s_instance->m_window->SetVSync(use);
+		s_instance->m_window->SetVSync(!use);
 	}
 
 	bool Application::IsRunning()

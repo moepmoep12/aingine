@@ -52,10 +52,9 @@ namespace AIngine::Editor {
 			AIngine::Structures::Rectangle viewportRect = CalculateViewportRect(glm::vec2(m_app.GetWindow().GetWidth(), m_app.GetWindow().GetHeight()));
 			OnViewportChangedEvent(viewportRect);
 		}
-
+		delta = m_app.GetDeltaTimeReal();
 		if (m_hasViewportFocus) MoveCameraWithKeys(delta);
 		if (m_isDraggingCamera) MoveCameraWithMouse(delta);
-		if (m_displayingFramerate) DisplayFramerate(delta);
 	}
 
 	void Editor::OnEvent(AIngine::Events::EventData & e)
@@ -86,7 +85,8 @@ namespace AIngine::Editor {
 				it++;
 			}
 
-			if (m_showingFpsGraph) DrawFpsGraph(m_app.GetDeltaTime());
+			if (m_showingFpsGraph) DrawFpsGraph(m_app.GetDeltaTimeReal());
+			if (m_displayingFramerate) DisplayFramerate(m_app.GetDeltaTimeReal());
 		}
 	}
 

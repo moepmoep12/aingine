@@ -202,7 +202,7 @@ namespace AIngine {
 	void World::OnUpdate(float delta)
 	{
 		if ((AIngine::Application::IsRunning()))
-			m_physicsWorld->Step(Application::FIXED_TIMESTEP, 8, 3);
+			m_physicsWorld->Step(Application::FIXED_TIMESTEP *Application::Get().AppSpeedMulitplier, 8, 3);
 
 		m_sceneGraph->OnUpdate(delta);
 	}

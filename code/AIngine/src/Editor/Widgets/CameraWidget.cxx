@@ -69,7 +69,7 @@ namespace AIngine::Editor::Widget {
 			ImGui::Text("World To Screen (%.2f | %.2f)", WorldToScreen.x, WorldToScreen.y);
 			ImGui::Text("Viewport Size (%i | %i)", AIngine::Application::GetViewport().GetViewportWidth(), AIngine::Application::GetViewport().GetViewportHeight());
 
-			float deltaTime = AIngine::Application::Get().GetDeltaTime();
+			float deltaTime = AIngine::Application::Get().GetDeltaTimeReal();
 
 			ImGuiIO& io = ImGui::GetIO();
 			ImGui::Text("%.3f ms/frame (%.1f FPS)", deltaTime * 1000.0f, 1.0f / deltaTime);

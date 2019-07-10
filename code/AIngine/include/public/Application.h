@@ -60,7 +60,10 @@ namespace AIngine {
 		static bool IsRunning();
 
 		/* Returns the time it took to process the last frame in seconds */
-		float GetDeltaTime();
+		float GetDeltaTime() const;
+
+		static float GetDeltaTimeScaled();
+		static float GetDeltaTimeReal();
 
 		/* Adds a layer to the layerstack */
 		void PushLayer(AIngine::Structures::Layer* layer);
@@ -84,6 +87,9 @@ namespace AIngine {
 
 		/* The targeted timestep at which the App wil be updated */
 		static double FIXED_TIMESTEP;
+
+		/* A speed multiplier for achieving slow-motion effects */
+		double AppSpeedMulitplier = 1.0;
 
 	protected:
 		std::unique_ptr<Window> m_window = NULL;
