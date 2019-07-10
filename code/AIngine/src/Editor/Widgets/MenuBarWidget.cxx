@@ -55,12 +55,18 @@ namespace AIngine::Editor::Widget {
 
 			if (ImGui::BeginMenu("Edit"))
 			{
+				bool isPlayMode = AIngine::Editor::Editor::GetIsInPlayMode();
+
 				if (ImGui::MenuItem("Undo")) {
 
 				}
 
 				if (ImGui::MenuItem("Redo")) {
 
+				}
+
+				if (ImGui::MenuItem("Toggle Playmode", "F5", &isPlayMode, true)) {
+					AIngine::Editor::Editor::SetIsInPlayMode(!isPlayMode);
 				}
 
 				ImGui::EndMenu();
@@ -91,8 +97,6 @@ namespace AIngine::Editor::Widget {
 				if (ImGui::MenuItem("Show FPS Graph", "F4", &showFPSGraph, true)) {
 					AIngine::Editor::Editor::SetShowFpsGraph(showFPSGraph);
 				}
-
-
 
 				ImGui::EndMenu();
 			}

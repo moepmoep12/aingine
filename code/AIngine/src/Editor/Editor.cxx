@@ -109,6 +109,11 @@ namespace AIngine::Editor {
 			SetFullScreenPlayMode(!m_isFullScreen);
 		}
 
+		if (e.GetKeyCode() == AIngine::KeyCode::F5)
+		{
+			SetIsInPlayMode(!m_isInPlayMode);
+		}
+
 		return false;
 	}
 
