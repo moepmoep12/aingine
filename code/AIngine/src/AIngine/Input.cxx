@@ -1,6 +1,8 @@
 #include "AIngine/Input.h"
 #include "Application.h"
+
 #include <GLFW/glfw3.h>
+#include <Windows.h>
 
 namespace AIngine {
 
@@ -43,5 +45,10 @@ namespace AIngine {
 	{
 		auto[x, y] = GetMousePositionImpl();
 		return y;
+	}
+
+	void WindowsInput::SetMousePosImpl(std::pair<int, int> pos)
+	{
+		SetCursorPos(pos.first, pos.second);
 	}
 }

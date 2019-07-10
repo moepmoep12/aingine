@@ -13,6 +13,7 @@ namespace AIngine {
 		inline static std::pair<float, float> GetMousePosition() { return getInstance().GetMousePositionImpl(); }
 		inline static float GetMouseX() { return getInstance().GetMouseXImpl(); }
 		inline static float GetMouseY() { return getInstance().GetMouseYImpl(); }
+		inline static void SetMousePos(std::pair<int, int> pos) { getInstance().SetMousePosImpl(pos); }
 	protected:
 		virtual bool IsKeyPressedImpl(KeyCode key) = 0;
 
@@ -20,7 +21,7 @@ namespace AIngine {
 		virtual std::pair<float, float> GetMousePositionImpl() = 0;
 		virtual float GetMouseXImpl() = 0;
 		virtual float GetMouseYImpl() = 0;
-
+		virtual void SetMousePosImpl(std::pair<int, int> pos) = 0;
 	private:
 		static Input& getInstance();
 
@@ -35,5 +36,6 @@ namespace AIngine {
 		virtual std::pair<float, float> GetMousePositionImpl() override;
 		virtual float GetMouseXImpl() override;
 		virtual float GetMouseYImpl() override;
+		virtual void SetMousePosImpl(std::pair<int, int> pos) override;
 	};
 }
