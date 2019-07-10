@@ -5,25 +5,17 @@
 
 namespace AIngine::Util::Random {
 
-	static bool s_init = false;
-
 	int RandomInt(int min, int max)
 	{
-		if (!s_init) {
-			srand(time(NULL));
-			s_init = true;
-		}
-
-		return rand() % max + min;
+		static std::random_device rd;
+		std::uniform_int_distribution<int> uni(min, max);
+		return uni(std::mt19937(rd()));
 	}
 
 	float RandomFloat(float min, float max)
 	{
-		if (!s_init) {
-			srand(time(NULL));
-			s_init = true;
-		}
-
-		return min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
+		static std::random_device rd;
+		std::uniform_real_distribution<float> uni(min, max);
+		return uni(std::mt19937(rd()));
 	}
 }
