@@ -126,7 +126,7 @@ namespace AIngine {
 		};
 
 #else
-		m_window->SetFullScreen(true);
+		m_window->SetFullScreen(m_windowConfig.startFullScreen);
 		AIngine::Structures::Rectangle viewportRect = AIngine::Structures::RectangleI(m_window->GetX(), 0, m_window->GetWidth(), m_window->GetHeight());
 		OnViewportChanged(viewportRect);
 		// we're in release, load default scene

@@ -15,11 +15,12 @@ namespace AIngine {
 		std::string Title;
 		unsigned int Width;
 		unsigned int Height;
+		bool startFullScreen;
 
 		WindowConfig(const std::string title = "Application",
 			unsigned int width = 1920,
 			unsigned int height = 1080)
-			: Title(title), Width(width), Height(height) {}
+			: Title(title), Width(width), Height(height), startFullScreen(true) {}
 	};
 
 	struct WindowData {
