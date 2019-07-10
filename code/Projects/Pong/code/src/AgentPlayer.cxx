@@ -18,6 +18,7 @@ namespace Pong {
 		constants.n = 500;
 		//constants.useMAM = true;
 		constants.epsilonZero = 10;
+		constants.minValue = -1;
 		static std::unordered_set<int> options = std::unordered_set<int>{ 1, 2,3 };
 		m_xcsr = new xxr::XCSR<>(xxr::CSR, options, constants);
 	}
@@ -69,16 +70,16 @@ namespace Pong {
 					m_xcsr->reward(1000, true);
 				}
 				else {
-					m_xcsr->reward(0.1, true);
+					m_xcsr->reward(-0, true);
 				}
 				scored = false;
 				return;
 			}
 			else if (m_rigidBody->GetContact() && m_rigidBody->GetContact()->Other->GetOwner()->GetComponent<Ball>()) {
-				m_xcsr->reward(50, false);
+				m_xcsr->reward(100, false);
 			}
 			else {
-				m_xcsr->reward(0.1, false);
+				m_xcsr->reward(0, false);
 			}
 		}
 	}

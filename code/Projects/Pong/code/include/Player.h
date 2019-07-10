@@ -23,7 +23,7 @@ namespace Pong {
 		virtual void OnBallCollision(AIngine::Physics::Contact contact) {}
 
 	public:
-		float TranslationRate = 5;
+		float TranslationRate = 11.25;
 		PlayerRole Role;
 
 	protected:

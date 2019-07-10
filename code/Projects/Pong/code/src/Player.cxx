@@ -61,8 +61,8 @@ namespace Pong {
 		float forceY =/* AIngine::Util::Random::RandomFloat(-8, 8)*/ 10;
 		if (forceY == 0) forceY = 1;
 		glm::vec2 force = GameManager::ForceOnBall;
-		force *= Pong::Get().AppSpeedMulitplier;
-		m_BallBody->ApplyForceToCenter(force);
+		//force /= Pong::Get().AppSpeedMulitplier;
+		m_BallBody->ApplyLinearImpulseToCenter(force);
 	}
 
 	void Player::MovePlayerWithMouse()

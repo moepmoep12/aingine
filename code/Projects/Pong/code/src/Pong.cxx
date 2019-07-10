@@ -21,7 +21,7 @@ namespace Pong {
 
 		// Set the window title
 		m_window->SetWindowTitle("Pong");
-		m_window->SetVSync(false);
+		//m_window->SetVSync(false);
 		// Set the window size to be the whole screen
 		const glm::vec2 monitorResolution = m_window->GetMonitorResolution();
 		m_window->SetWindowSize(monitorResolution.x, monitorResolution.y);
