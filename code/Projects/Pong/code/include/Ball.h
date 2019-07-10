@@ -1,6 +1,7 @@
 #pragma once
 #include "AIngine/Core.h"
 #include "Player.h"
+#include "UI/Text.h"
 
 namespace Pong {
 	class Ball : public AIngine::Script {
@@ -11,6 +12,7 @@ namespace Pong {
 		virtual void OnEnd() override;
 		virtual void Update(float delta) override;
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
+		virtual void OnGUI() override;
 
 		PhysicsComponent* LeftEdge;
 		PhysicsComponent* RightEdge;
@@ -21,5 +23,7 @@ namespace Pong {
 		void OnCollisionLeft(AIngine::Physics::Contact contact);
 		void OnCollisionRight(AIngine::Physics::Contact contact);
 
+	private:
+		AIngine::UI::UIText* ScoreText;
 	};
 }

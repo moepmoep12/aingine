@@ -15,7 +15,5 @@ namespace Pong {
 
 		static int ScorePlayerOne, ScorePlayerTwo;
 
-	private:
-		AIngine::UI::UIText* ScoreText;
 	};
 }

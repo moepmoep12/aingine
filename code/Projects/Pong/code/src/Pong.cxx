@@ -21,7 +21,7 @@ namespace Pong {
 
 		// Set the window title
 		m_window->SetWindowTitle("Pong");
-
+		m_window->SetVSync(false);
 		// Set the window size to be the whole screen
 		const glm::vec2 monitorResolution = m_window->GetMonitorResolution();
 		m_window->SetWindowSize(monitorResolution.x, monitorResolution.y);
@@ -30,7 +30,6 @@ namespace Pong {
 	// StartUp is called after the scene and engine subsystems have been initialized
 	void Pong::OnAppStartUp()
 	{
-		ScoreText = AIngine::World::GetGameObject("ScoreText")->GetComponent<AIngine::UI::UIText>();
 	}
 
 	// ShutDown is called before the scene and engine subystems have been shut down
@@ -41,16 +40,19 @@ namespace Pong {
 	// Update is called once per frame
 	void Pong::OnAppUpdate()
 	{
-		std::stringstream ss;
-		ss << ScorePlayerOne << "  :  " << ScorePlayerTwo;
-		ScoreText->Text = ss.str();
 
-		static AIngine::Structures::RectangleF worldRect = AIngine::World::GetWorldRect();
-		AIngine::Graphics::BoxWorld(worldRect, glm::vec4(0, 0, 0, 1));
 	}
 
 	// Here you can react to events
 	void Pong::OnAppEvent(AIngine::Events::EventData & e)
 	{
+		// key pressed
+		if (typeid(e) == typeid(AIngine::Events::KeyPressedEvent::KeyPressedEventData)) {
+			AIngine::Events::KeyPressedEvent::KeyPressedEventData pressedEvent = dynamic_cast<AIngine::Events::KeyPressedEvent::KeyPressedEventData&>(e);
+
+			if (pressedEvent.GetKeyCode() == AIngine::KeyCode::R) {
+				bRender = !bRender;
+			}
+		}
 	}
 }

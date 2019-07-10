@@ -25,15 +25,19 @@ namespace Pong {
 		PlayerOne->Role = PlayerRole::One;
 		PlayerOne->ReceiveBall();
 
-		 comps = AIngine::World::GetGameObject("PlayerTwo")->GetComponents();
+		comps = AIngine::World::GetGameObject("PlayerTwo")->GetComponents();
 		for (auto comp : comps)
 			if (dynamic_cast<Player*>(comp)) {
 				PlayerTwo = dynamic_cast<Player*>(comp);
 				break;
 			}
+		PlayerTwo->Role = PlayerRole::Two;
 
 		LeftEdge->OnCollisionBegin += std::bind(&Ball::OnCollisionLeft, this, std::placeholders::_1);
 		RightEdge->OnCollisionBegin += std::bind(&Ball::OnCollisionRight, this, std::placeholders::_1);
+
+		ScoreText = AIngine::World::GetGameObject("ScoreText")->GetComponent<AIngine::UI::UIText>();
+
 	}
 
 	// End is called when gameplay ends for this script
@@ -56,12 +60,22 @@ namespace Pong {
 	{
 	}
 
+	void Ball::OnGUI()
+	{
+		std::stringstream ss;
+		ss << Pong::ScorePlayerOne << "  :  " << Pong::ScorePlayerTwo;
+		ScoreText->Text = ss.str();
+
+		static AIngine::Structures::RectangleF worldRect = AIngine::World::GetWorldRect();
+		AIngine::Graphics::BoxWorld(worldRect, glm::vec4(0, 0, 0, 1));
+	}
+
 	void Ball::OnCollisionLeft(AIngine::Physics::Contact contact)
 	{
 		Pong::ScorePlayerTwo++;
 		PlayerTwo->OnScored(PlayerRole::Two);
 		PlayerOne->OnScored(PlayerRole::Two);
-		PlayerOne->ReceiveBall();
+		PlayerTwo->ReceiveBall();
 	}
 
 	void Ball::OnCollisionRight(AIngine::Physics::Contact contact)
@@ -69,6 +83,6 @@ namespace Pong {
 		Pong::ScorePlayerOne++;
 		PlayerTwo->OnScored(PlayerRole::One);
 		PlayerOne->OnScored(PlayerRole::One);
-		PlayerTwo->ReceiveBall();
+		PlayerOne->ReceiveBall();
 	}
 }

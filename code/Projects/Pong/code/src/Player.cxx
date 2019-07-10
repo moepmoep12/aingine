@@ -57,7 +57,9 @@ namespace Pong {
 	void Player::StartBall()
 	{
 		m_HasBall = false;
-		m_BallBody->ApplyForceToCenter(glm::vec2(50, AIngine::Util::Random::RandomFloat(-10, 10)));
+		float forceY =/* AIngine::Util::Random::RandomFloat(-8, 8)*/ 10;
+		if (forceY == 0) forceY = 1;
+		m_BallBody->ApplyForceToCenter(glm::vec2(25, forceY));
 	}
 
 	void Player::MovePlayerWithMouse()
