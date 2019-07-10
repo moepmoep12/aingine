@@ -27,6 +27,9 @@ namespace AIngine {
 		/* Here should rendering happen */
 		virtual void OnGUI() {}
 
+		/* Custom editor widgets can be created here */
+		virtual void OnWidget() {}
+
 		/* Index used to uniquely identify a script and for serialization */
 		int ScriptIndex = 0;
 
@@ -57,6 +60,15 @@ namespace AIngine {
 			}
 			if (typeid(e) == typeid(AIngine::Events::ExitPlayModeEventData)) {
 				OnEnd();
+				return;
+			}
+
+			// Don't propagte events if we're in Editor
+			if (!AIngine::Application::IsRunning() &&
+				(dynamic_cast<AIngine::Events::KeyEvent::KeyEventData*>(&e)
+					|| dynamic_cast<AIngine::Events::MouseButtonEvent::MouseButtonEventData*>(&e)
+					|| dynamic_cast<AIngine::Events::MouseMovedEvent::MouseMovedEventData*>(&e)
+					|| dynamic_cast<AIngine::Events::MouseScrolledEvent::MouseScrolledEventData*>(&e))) {
 				return;
 			}
 
