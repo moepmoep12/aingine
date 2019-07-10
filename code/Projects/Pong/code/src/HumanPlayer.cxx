@@ -1,6 +1,6 @@
 #include "HumanPlayer.h"
 #include "Pong.h"
-
+#include "Rendering/Camera.h"
 namespace Pong {
 
 	// Constructor
@@ -14,6 +14,10 @@ namespace Pong {
 	void HumanPlayer::OnStart()
 	{
 		Player::OnStart();
+
+		glm::vec2 screenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(GetOwner()->GetWorldPosition());
+
+		AIngine::Input::SetMousePos({ screenPos.x, screenPos.y });
 	}
 
 	// End is called when gameplay ends for this script

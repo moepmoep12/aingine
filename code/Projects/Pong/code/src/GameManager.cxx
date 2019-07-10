@@ -5,7 +5,7 @@
 
 namespace Pong {
 
-	glm::vec2 GameManager::ForceOnBall(0.6, 0.05);
+	glm::vec2 GameManager::ForceOnBall(0.7, 0.5);
 
 	// Constructor
 	GameManager::GameManager()

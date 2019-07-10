@@ -21,7 +21,6 @@ namespace Pong {
 
 	private:
 		virtual std::vector<double> situation();
-		void MoveAgent(int direction);
 
 	private:
 		xxr::XCSR<>* m_xcsr;
@@ -30,5 +29,7 @@ namespace Pong {
 		bool scored = false;
 		bool explore = true;
 		int currentTick = 0;
+		int guiTick = 0;
+		const int guiTicks = 60;
 	};
 }

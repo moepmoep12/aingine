@@ -23,7 +23,6 @@ namespace Pong {
 			}
 
 		PlayerOne->Role = PlayerRole::One;
-		PlayerOne->ReceiveBall();
 
 		comps = AIngine::World::GetGameObject("PlayerTwo")->GetComponents();
 		for (auto comp : comps)
@@ -38,6 +37,7 @@ namespace Pong {
 
 		ScoreText = AIngine::World::GetGameObject("ScoreText")->GetComponent<AIngine::UI::UIText>();
 
+		PlayerOne->ReceiveBall();
 	}
 
 	// End is called when gameplay ends for this script
@@ -75,7 +75,7 @@ namespace Pong {
 		Pong::ScorePlayerTwo++;
 		PlayerTwo->OnScored(PlayerRole::Two);
 		PlayerOne->OnScored(PlayerRole::Two);
-		PlayerTwo->ReceiveBall();
+		PlayerOne->ReceiveBall();
 	}
 
 	void Ball::OnCollisionRight(AIngine::Physics::Contact contact)

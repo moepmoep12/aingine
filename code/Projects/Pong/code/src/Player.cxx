@@ -3,6 +3,8 @@
 #include "Rendering/Camera.h"
 #include "GameManager.h"
 
+#include <imgui.h>
+
 namespace Pong {
 
 	// Constructor
@@ -22,12 +24,17 @@ namespace Pong {
 		lastMousePos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(AIngine::World::GetCenter());
 
 		m_rigidBody->OnCollisionBegin += std::bind(&Player::OnBallCollision, this, std::placeholders::_1);
+
+
+		//ImGui::SetMouseCursor(ImGuiMouseCursor_None);
 	}
 
 	// End is called when gameplay ends for this script
 	void Player::OnEnd()
 	{
 		m_rigidBody->OnCollisionBegin = AIngine::Physics::CollisionEvent();
+		//ImGui::SetMouseCursor(ImGuiMouseCursor_);
+
 	}
 
 	// Update is called once per frame
@@ -58,10 +65,10 @@ namespace Pong {
 	void Player::StartBall()
 	{
 		m_HasBall = false;
-		float forceY =/* AIngine::Util::Random::RandomFloat(-8, 8)*/ 10;
-		if (forceY == 0) forceY = 1;
 		glm::vec2 force = GameManager::ForceOnBall;
 		//force /= Pong::Get().AppSpeedMulitplier;
+		force.y = AIngine::Util::Random::RandomFloat(-1, 1);
+		if (force.y == 0) force.y = 0.5;
 		m_BallBody->ApplyLinearImpulseToCenter(force);
 	}
 
@@ -71,9 +78,12 @@ namespace Pong {
 		static float maxY = AIngine::World::GetBounds().w - GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize().y * 0.5;
 
 		glm::vec2 currentMousePos = glm::vec2(Input::GetMouseX(), Input::GetMouseY());
-		float delta = (currentMousePos.y - lastMousePos.y);
-		if (delta < 0) delta = -TranslationRate * Pong::Get().GetDeltaTime();
-		else delta = TranslationRate * Pong::Get().GetDeltaTime();
+		glm::vec2 mouseWorldPos = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(currentMousePos);
+		glm::vec2 currentPos = GetOwner()->GetWorldPosition();
+
+		float delta = (mouseWorldPos.y - currentPos.y);
+		//if (delta < 0) delta = -TranslationRate * Pong::Get().GetDeltaTime();
+		//else delta = TranslationRate * Pong::Get().GetDeltaTime();
 		float currentHeight = GetOwner()->GetWorldPosition().y;
 
 		if (currentHeight + delta > maxY) {
@@ -83,8 +93,8 @@ namespace Pong {
 			delta = minY - currentHeight;
 		}
 
-		m_rigidBody->GetOwner()->Translate(glm::vec2(0, delta));
-		lastMousePos = currentMousePos;
+		m_rigidBody->GetOwner()->SetWorldPosition(glm::vec2(currentPos.x, currentPos.y + delta));
+		//lastMousePos = currentMousePos;
 
 	}
 
@@ -112,6 +122,24 @@ namespace Pong {
 		}
 
 		m_rigidBody->GetOwner()->Translate(glm::vec2(0, delta));
+	}
+
+	void Player::Move(int direction)
+	{
+		static float minY = AIngine::World::GetBounds().z + GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize().y * 0.5;
+		static float maxY = AIngine::World::GetBounds().w - GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize().y * 0.5;
+		float del = 0;
+		float currentHeight = GetOwner()->GetWorldPosition().y;
+		del = TranslationRate * direction * Pong::Get().GetDeltaTime();
+
+		if (currentHeight + del > maxY) {
+			del = maxY - currentHeight;
+		}
+		else if (currentHeight + del < minY) {
+			del = minY - currentHeight;
+		}
+
+		m_rigidBody->GetOwner()->Translate(glm::vec2(0, del));
 	}
 
 }

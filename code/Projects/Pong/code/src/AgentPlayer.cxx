@@ -5,6 +5,7 @@
 #include <iostream>
 #include "imgui.h"
 #include <sstream>
+#include <algorithm>
 
 namespace Pong {
 
@@ -15,10 +16,11 @@ namespace Pong {
 		SetName(typeid(*this).name());
 
 		static auto constants = xxr::XCSRConstants();
-		constants.n = 500;
+		constants.n = 800;
 		//constants.useMAM = true;
 		constants.epsilonZero = 10;
 		constants.minValue = -1;
+		constants.exploreProbability = 0.5;
 		static std::unordered_set<int> options = std::unordered_set<int>{ 1, 2,3 };
 		m_xcsr = new xxr::XCSR<>(xxr::CSR, options, constants);
 	}
@@ -41,11 +43,12 @@ namespace Pong {
 	// End is called when gameplay ends for this script
 	void AgentPlayer::OnEnd()
 	{
+		Player::OnEnd();
 	}
 
 	// Update is called once per frame
 
-	static const int tickRate = 2;
+	static const int tickRate = 1;
 
 	void AgentPlayer::Update(float delta)
 	{
@@ -61,7 +64,7 @@ namespace Pong {
 			int action = explore ? m_xcsr->explore(situation()) : m_xcsr->exploit(situation(), true);
 			if (action == 2) action = -1;
 			if (action == 3) action = 0;
-			MoveAgent(action);
+			Move(action);
 
 
 			if (scored)
@@ -70,13 +73,15 @@ namespace Pong {
 					m_xcsr->reward(1000, true);
 				}
 				else {
-					m_xcsr->reward(-0, true);
+					m_xcsr->reward(0, true);
 				}
 				scored = false;
 				return;
 			}
 			else if (m_rigidBody->GetContact() && m_rigidBody->GetContact()->Other->GetOwner()->GetComponent<Ball>()) {
-				m_xcsr->reward(100, false);
+				Player* other = Role == PlayerRole::One ? m_ball->PlayerTwo : m_ball->PlayerOne;
+				other->ReceiveBall();
+				m_xcsr->reward(1000, true);
 			}
 			else {
 				m_xcsr->reward(0, false);
@@ -99,6 +104,141 @@ namespace Pong {
 
 	void AgentPlayer::OnGUI()
 	{
+		auto xcsrCS = dynamic_cast<const xxr::xcsr_impl::csr::Experiment<double, int>*>(&m_xcsr->GetExperiment());
+		if (xcsrCS) {
+			auto pop = xcsrCS->GetPopulation();
+
+			double accuracy = 0;
+			double fitness = 0;
+			double epsilon = 0;
+			double prediction = 0;
+			static std::vector<float> fitnessValues;
+			static std::vector<float> accuracyValues;
+			fitnessValues.clear();
+			accuracyValues.clear();
+			int numerosity = 0;
+
+			for (auto cl : pop) {
+				accuracy += cl->accuracy();
+				fitness += cl->fitness;
+				fitnessValues.push_back(cl->fitness);
+				accuracyValues.push_back(cl->accuracy());
+				epsilon += cl->epsilon;
+				prediction += cl->prediction;
+				numerosity += cl->numerosity;
+			}
+
+			accuracy /= pop.size();
+			fitness /= pop.size();
+			epsilon /= pop.size();
+			prediction /= pop.size();
+			std::sort(fitnessValues.begin(), fitnessValues.end());
+			std::sort(accuracyValues.begin(), accuracyValues.end());
+
+			static bool open = true;
+			if (ImGui::Begin("Agent", &open, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+				{
+					struct Funcs
+					{
+						static float Get(void*, int i) { return fitnessValues[i]; }
+					};
+					float(*func)(void*, int) = Funcs::Get;
+					ImGui::PlotLines("FitnessValues", func, NULL, fitnessValues.size(), 0, NULL, 0, 1, ImVec2(0, 150));
+				}
+
+				{
+					static std::vector<float> FitnessQueue;
+					static float FitnessMax = 0;
+					static float FitnessMin = 10;
+					struct Funcs
+					{
+						static float Get(void*, int i) { return FitnessQueue[i]; }
+
+					};
+
+					if (FitnessQueue.size() >= 2000) {
+						FitnessQueue.erase(FitnessQueue.begin());
+					}
+					if (fitness > FitnessMax)
+						FitnessMax = fitness;
+					if (fitness < FitnessMin) {
+						FitnessMin = fitness;
+					}
+					FitnessQueue.push_back(fitness);
+					float(*func)(void*, int) = Funcs::Get;
+
+					std::string t = std::to_string(fitness);
+					ImGui::PlotLines("Fitness Average", func, NULL, FitnessQueue.size(), 0, t.c_str(), FitnessMin, FitnessMax, ImVec2(0, 150));
+				}
+
+				{
+					static std::vector<float> EpsilonQueue;
+					static float EpsilonMax = 0;
+					static float EpsilonMin = 10;
+					struct Funcs
+					{
+						static float Get(void*, int i) { return EpsilonQueue[i]; }
+
+					};
+
+					if (EpsilonQueue.size() >= 2000) {
+						EpsilonQueue.erase(EpsilonQueue.begin());
+					}
+					if (epsilon > EpsilonMax)
+						EpsilonMax = epsilon;
+					if (epsilon < EpsilonMin) {
+						EpsilonMin = epsilon;
+					}
+					EpsilonQueue.push_back(epsilon);
+					float(*func)(void*, int) = Funcs::Get;
+					std::string t = std::to_string(epsilon);
+					ImGui::PlotLines("Epsilon Average", func, NULL, EpsilonQueue.size(), 0, t.c_str(), EpsilonMin, EpsilonMax, ImVec2(0, 150));
+				}
+
+				{
+					struct Funcs
+					{
+						static float Get(void*, int i) { return accuracyValues[i]; }
+					};
+					float(*func)(void*, int) = Funcs::Get;
+					ImGui::PlotLines("AccuracyValues", func, NULL, accuracyValues.size(), 0, NULL, 0, 1, ImVec2(0, 150));
+				}
+
+				{
+					static std::vector<float> AccuracyQueue;
+					static float AccuracyMax = 0;
+					static float AccuracyMin = 1;
+					struct Funcs
+					{
+						static float Get(void*, int i) { return AccuracyQueue[i]; }
+
+					};
+
+					if (AccuracyQueue.size() >= 2000) {
+						AccuracyQueue.erase(AccuracyQueue.begin());
+					}
+					if (accuracy > AccuracyMax)
+						AccuracyMax = accuracy;
+					if (accuracy < AccuracyMin) {
+						AccuracyMin = accuracy;
+					}
+					AccuracyQueue.push_back(accuracy);
+					float(*func)(void*, int) = Funcs::Get;
+					std::string t = std::to_string(accuracy);
+					ImGui::PlotLines("Accuracy Average", func, NULL, AccuracyQueue.size(), 0, t.c_str(), AccuracyMin, AccuracyMax, ImVec2(0, 150));
+				}
+				std::stringstream ss;
+				ss << "Population Size : " << pop.size();
+				ImGui::Text(ss.str().c_str());
+
+				ss.str(std::string());
+				ss << "Numerosity Sum : " << numerosity;
+				ImGui::Text(ss.str().c_str());
+
+				ImGui::End();
+			}
+		}
 	}
 
 	void AgentPlayer::OnWidget()
@@ -145,8 +285,13 @@ namespace Pong {
 				m_xcsr->loadPopulationCSV(path, true);
 			}
 		}
+		label.str(std::string());
+		label << "Condensation Mode##" << static_cast<const void*>(this);
 
-		//	ImGui::Separator();
+		if (ImGui::Button(label.str().c_str())) {
+			m_xcsr->switchToCondensationMode();
+		}
+
 	}
 
 	void AgentPlayer::OnScored(PlayerRole role)
@@ -158,12 +303,12 @@ namespace Pong {
 	std::vector<double> AgentPlayer::situation()
 	{
 		static auto rect = AIngine::World::GetWorldRect();
-		static Player* other = Role == PlayerRole::One ? m_ball->PlayerTwo : m_ball->PlayerOne;
+		Player* other = Role == PlayerRole::One ? m_ball->PlayerTwo : m_ball->PlayerOne;
 
 		std::vector<double> result =
 		{
 			GetOwner()->GetWorldPosition().y / rect.height,
-			other->GetOwner()->GetWorldPosition().y / rect.height,
+			//other->GetOwner()->GetWorldPosition().y / rect.height,
 			m_BallBody->GetVelocity().x / 10.0,
 			m_BallBody->GetVelocity().y / 10.0,
 			m_ball->GetOwner()->GetWorldPosition().x / rect.width,
@@ -171,23 +316,5 @@ namespace Pong {
 		};
 
 		return result;
-	}
-
-	void AgentPlayer::MoveAgent(int direction)
-	{
-		static float minY = AIngine::World::GetBounds().z + GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize().y * 0.5;
-		static float maxY = AIngine::World::GetBounds().w - GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize().y * 0.5;
-		float del = 0;
-		float currentHeight = GetOwner()->GetWorldPosition().y;
-		del = TranslationRate * direction * Pong::Get().GetDeltaTime();
-
-		if (currentHeight + del > maxY) {
-			del = maxY - currentHeight;
-		}
-		else if (currentHeight + del < minY) {
-			del = minY - currentHeight;
-		}
-
-		m_rigidBody->GetOwner()->Translate(glm::vec2(0, del));
 	}
 }

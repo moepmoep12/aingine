@@ -23,13 +23,15 @@ namespace Pong {
 		virtual void OnBallCollision(AIngine::Physics::Contact contact) {}
 
 	public:
-		float TranslationRate = 11.25;
+		float TranslationRate = 6;
 		PlayerRole Role;
 
 	protected:
 		virtual void StartBall();
 		virtual void MovePlayerWithMouse();
 		virtual void MovePlayerWithKeyboard(AIngine::Events::KeyPressedEvent::KeyEventData& e, AIngine::KeyCode up, AIngine::KeyCode down);
+		void Move(int direction);
+
 
 	protected:
 		PhysicsComponent* m_rigidBody;
