@@ -43,6 +43,10 @@ set(AINGINE_HEADER_DEBUG
 		include/public/Debug/log.h
 )
 
+set(AINGINE_HEADER_EDITOR
+		include/public/Editor/Widgets/ComponentWidget.h
+)
+
 set(AINGINE_HEADER_EVENTS
 		include/public/Events/Event.h
 		include/public/Events/ApplicationEvents.h
@@ -94,7 +98,6 @@ set(AIngine_HEADER_PRIVATE
 		include/private/Editor/Widgets/Common.h
 		include/private/Editor/Widgets/EditorWidget.h
 		include/private/Editor/Widgets/CameraWidget.h
-		include/private/Editor/Widgets/ComponentWidget.h
 		include/private/Editor/Widgets/ImageComponentWidget.h
 		include/private/Editor/Widgets/LogWidget.h
 		include/private/Editor/Widgets/MenuBarWidget.h
@@ -189,8 +192,8 @@ set(AINGINE_SRC
 
 find_package(OpenGL REQUIRED)
 
-add_library(AIngineEditor STATIC ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES}  ${AINGINE_HEADER_UTIL} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
-add_library(AIngine STATIC ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES}  ${AINGINE_HEADER_UTIL} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
+add_library(AIngineEditor STATIC ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AIngine_HEADER_EDITOR} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES}  ${AINGINE_HEADER_UTIL} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
+add_library(AIngine STATIC ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AIngine_HEADER_EDITOR} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES}  ${AINGINE_HEADER_UTIL} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
 
 set_target_properties(AIngineEditor PROPERTIES
         CXX_STANDARD 17
@@ -251,7 +254,7 @@ target_link_libraries(AIngine
 # --- Code Editor
 #
 
-assign_source_group( ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES} ${AINGINE_HEADER_UTIL} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
+assign_source_group( ${AINGINE_HEADER} ${AINGINE_HEADER_AINGINE} ${AIngine_HEADER_ASSETS} ${AIngine_HEADER_EDITOR} ${AINGINE_HEADER_DEBUG} ${AINGINE_HEADER_EVENTS} ${AINGINE_HEADER_RENDERING} ${AINGINE_HEADER_STRUCTURES} ${AINGINE_HEADER_UTIL} ${AINGINE_HEADER_UI} ${AIngine_HEADER_PRIVATE} ${AINGINE_SRC})
 
 set_target_properties(AIngineEditor PROPERTIES FOLDER AIngine)
 set_target_properties(AIngine PROPERTIES FOLDER AIngine)
@@ -282,6 +285,7 @@ install(EXPORT AIngine DESTINATION "lib/AIngine"
 install(FILES ${AINGINE_HEADER}  DESTINATION "include/AIngine")
 install(FILES ${AINGINE_HEADER_AINGINE} DESTINATION "include/AIngine/AIngine")
 install(DIRECTORY include/public/Assets DESTINATION "include/AIngine")
+install(DIRECTORY include/public/Editor/Widgets DESTINATION "include/AIngine/Editor/Widgets")
 install(FILES ${AINGINE_HEADER_DEBUG} DESTINATION "include/AIngine/Debug")
 install(FILES ${AINGINE_HEADER_EVENTS} DESTINATION "include/AIngine/Events")
 install(FILES ${AINGINE_HEADER_RENDERING} DESTINATION "include/AIngine/Rendering")

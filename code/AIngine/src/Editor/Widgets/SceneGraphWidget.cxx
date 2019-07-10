@@ -195,13 +195,16 @@ namespace AIngine::Editor::Widget {
 			if (script) {
 				ImGui::TextColored(ImVec4(0.34f, 0.448f, 0.33f, 1), script->GetName().c_str());
 				if (ImGui::BeginPopupContextItem("RemoveScript")) {
-					if (ImGui::Selectable("Remove##script")) {
+					std::stringstream label;
+					label << "Remove " << script->GetName() << "##" << script->GetName();
+					if (ImGui::Selectable(label.str().c_str())) {
 						scriptToRemove = script;
 						ImGui::EndPopup();
 					}
 					else
 						ImGui::EndPopup();
 				}
+				script->OnWidget();
 			}
 		}
 		if (scriptToRemove) {
