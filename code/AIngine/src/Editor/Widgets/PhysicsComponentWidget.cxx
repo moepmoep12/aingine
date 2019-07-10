@@ -19,13 +19,16 @@ namespace AIngine::Editor::Widget::Component {
 			AIngine::GameObject* obj = m_activeGameObjects[0];
 			PhysicsComponent* physComp = obj->GetComponent<PhysicsComponent>();
 			if (physComp) {
+				std::stringstream ss;
 				ImGui::Separator();
 
 				// Title
 				bool active = physComp->IsEnabled();
-				if (ImGui::Checkbox("Active##physcomp", &active)) {
+				ss << "Activate##" << static_cast<const void*>(physComp);
+				if (ImGui::Checkbox(ss.str().c_str(), &active)) {
 					physComp->SetEnabled(active);
 				}
+				ss.str(std::string());
 				ImGui::SameLine();
 				float textWidth = ImGui::CalcTextSize("Physics Component").x;
 				ImGui::SetCursorPosX((ImGui::GetWindowWidth() - textWidth) * 0.5f);
@@ -43,9 +46,15 @@ namespace AIngine::Editor::Widget::Component {
 
 				// PhysicsProperties
 				const PhysicsProperties& properties = physComp->GetProperties();
-				ImGui::DragFloat("Density", &(float)properties.density, properties.density != 0 ? 0.01f * properties.density : 0.01f);
-				ImGui::DragFloat("Friction", &(float)properties.friction, properties.friction != 0 ? 0.01f * properties.friction : 0.01f);
-				ImGui::DragFloat("Restitution", &(float)properties.restitution, properties.restitution != 0 ? 0.01f * properties.restitution : 0.01f);
+				ss << "Density##" << static_cast<const void*>(physComp);
+				ImGui::DragFloat(ss.str().c_str(), &(float)properties.density, properties.density != 0 ? 0.01f * properties.density : 0.01f);
+				ss.str(std::string());
+				ss << "Friction##" << static_cast<const void*>(physComp);
+				ImGui::DragFloat(ss.str().c_str(), &(float)properties.friction, properties.friction != 0 ? 0.01f * properties.friction : 0.01f);
+				ss.str(std::string());
+				ss << "Restitution##" << static_cast<const void*>(physComp);
+				ImGui::DragFloat(ss.str().c_str(), &(float)properties.restitution, properties.restitution != 0 ? 0.01f * properties.restitution : 0.01f);
+				ss.str(std::string());
 
 				ImGui::NewLine();
 				ImGui::NewLine();
@@ -57,8 +66,9 @@ namespace AIngine::Editor::Widget::Component {
 				{
 					static const PhysicsBodyType choosableBodyTypes[] = { PhysicsBodyType::e_Static, PhysicsBodyType::e_Dynamic, PhysicsBodyType::e_Kinematic };
 					static const char* bodyTypesNames[] = { "Static", "Dynamic", "Kinematic" };
-					static int currentType = (int)bodyInfo.type;
-					if (ImGui::BeginCombo("BodyType", bodyTypesNames[currentType]))
+					int currentType = (int)bodyInfo.type;
+					ss << "BodyType##" << static_cast<const void*>(physComp);
+					if (ImGui::BeginCombo(ss.str().c_str(), bodyTypesNames[currentType]))
 					{
 						for (int i = 0; i < IM_ARRAYSIZE(bodyTypesNames); i++) {
 							bool isSelected = (int)choosableBodyTypes[i] == currentType;
@@ -73,16 +83,20 @@ namespace AIngine::Editor::Widget::Component {
 						ImGui::EndCombo();
 					}
 				}
+				ss.str(std::string());
 
 				// IsTrigger CheckBox
-				ImGui::Checkbox("Is Trigger", &bodyInfo.isTrigger);
+				ss << "Is Trigger?##" << static_cast<const void*>(physComp);
+				ImGui::Checkbox(ss.str().c_str(), &bodyInfo.isTrigger);
+				ss.str(std::string());
 
 				// Shape Combo
 				PhysicsShape& shape = bodyInfo.shape;
 				{
 					static const PhysicsShape choosablePhysicsShapes[] = { PhysicsShape::e_Circle, PhysicsShape::e_Box, PhysicsShape::e_Polygon,  PhysicsShape::e_Edge, };
 					static const char* shapeNames[] = { "Circle","Box", "Polygon", "Edge" };
-					if (ImGui::BeginCombo("Shape", shapeNames[(int)shape])) {
+					ss << "Shape##" << static_cast<const void*>(physComp);
+					if (ImGui::BeginCombo(ss.str().c_str(), shapeNames[(int)shape])) {
 						for (int i = 0; i < IM_ARRAYSIZE(shapeNames); i++) {
 							bool isSelected = choosablePhysicsShapes[i] == shape;
 							if (ImGui::Selectable(shapeNames[i], isSelected)) {
@@ -96,6 +110,7 @@ namespace AIngine::Editor::Widget::Component {
 						ImGui::EndCombo();
 					}
 				}
+				ss.str(std::string());
 
 				float* pos[] = { &physComp->m_offset.x,&physComp->m_offset.y };
 
@@ -125,8 +140,9 @@ namespace AIngine::Editor::Widget::Component {
 
 				ImGui::NewLine();
 				ImGui::NewLine();
+				ss << "ApplyChanges##" << static_cast<const void*>(physComp);
 
-				if (ImGui::Button("Apply Changes##physComp"))
+				if (ImGui::Button(ss.str().c_str()))
 				{
 					switch (shape) {
 					case PhysicsShape::e_Circle:

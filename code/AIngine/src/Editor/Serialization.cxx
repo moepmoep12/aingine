@@ -740,7 +740,7 @@ namespace AIngine::Editor::Serialization {
 		}
 
 		j[AttributeNames::PHYSICS_SHAPE] = bodyInfo.shape;
-		j[AttributeNames::PHYSICS_BODYTYPE] = bodyInfo.type;
+		j[AttributeNames::PHYSICS_BODYTYPE] = (int)bodyInfo.type;
 		j[AttributeNames::PHYSICS_ISTRIGGER] = bodyInfo.isTrigger;
 		j[AttributeNames::PHYSICS_VERTICES] = bodyInfo.vertices;
 		j[AttributeNames::PHYSICS_VERTEXCOUNT] = bodyInfo.verticesCount;
