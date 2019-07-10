@@ -46,6 +46,7 @@ namespace CrappyBird {
 	void Obstacles::OnEnd()
 	{
 		m_player->OnEnterNewScreen -= m_newScreenHandler;
+		ResetMap();
 	}
 
 	// Update is called once per frame
@@ -257,8 +258,10 @@ namespace CrappyBird {
 
 	void Obstacles::ResetMap()
 	{
+		if (s_CurrentMap.empty()) return;
 		for (int i = 0; i < s_CurrentMap.size(); i++) {
 			for (int j = 0; j < s_CurrentMap[0].size(); j++) {
+				assert(!s_CurrentMap[0].empty());
 				s_CurrentMap[i][j].isClosed = false;
 				s_CurrentMap[i][j].isPlayerPath = false;
 			}

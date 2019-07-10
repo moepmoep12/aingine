@@ -32,7 +32,7 @@
 "a_active": true,
 "a_name": "BackGround",
 "a_posX": 5.0,
-"a_posY": 2.5,
+"a_posY": 2.8125,
 "a_rotation": 0.0,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
@@ -86,7 +86,7 @@
 "parallaxX": 1.0,
 "parallaxY": 1.0,
 "sizeX": 10.0,
-"sizeY": 5.0,
+"sizeY": 5.625,
 "texture": {
 "filterMax": 9729,
 "filterMin": 9729,
@@ -445,7 +445,7 @@
 "isdisabled": false,
 "rectangle": {
 "height": 50,
-"width": 208,
+"width": 211,
 "x": 43,
 "y": 130
 },
@@ -511,7 +511,7 @@
 "isdisabled": false,
 "rectangle": {
 "height": 50,
-"width": 253,
+"width": 257,
 "x": 43,
 "y": 200
 },
@@ -600,10 +600,10 @@
 "horizontalAlign": 1,
 "isdisabled": false,
 "rectangle": {
-"height": 29,
+"height": 30,
 "width": 380,
 "x": 10,
-"y": 296
+"y": 295
 },
 "text": "Speed",
 "tintColor": {
@@ -690,10 +690,10 @@
 "horizontalAlign": 1,
 "isdisabled": false,
 "rectangle": {
-"height": 29,
+"height": 30,
 "width": 380,
 "x": 10,
-"y": 397
+"y": 396
 },
 "text": "Impulse",
 "tintColor": {
@@ -709,7 +709,7 @@
 },
 {
 "CheckBoxAgent": {
-"a_active": true,
+"a_active": false,
 "a_name": "CheckBoxAgent",
 "a_posX": 0.0,
 "a_posY": 0.0,
@@ -757,7 +757,7 @@
 "isdisabled": false,
 "rectangle": {
 "height": 50,
-"width": 171,
+"width": 173,
 "x": 43,
 "y": 520
 },
@@ -788,7 +788,7 @@
 "b_components": {
 "image": {
 "active": true,
-"anchor": 1,
+"anchor": 7,
 "disabledColor": {
 "w": 1.0,
 "x": 0.20000000298023224,
@@ -799,8 +799,8 @@
 "rectangle": {
 "height": 200,
 "width": 1124,
-"x": 398,
-"y": 826
+"x": -562,
+"y": -197
 },
 "texture": {
 "filterMax": 9729,
@@ -857,7 +857,7 @@
 "height": 166,
 "width": 1120,
 "x": -560,
-"y": 300
+"y": 362
 },
 "text": "START",
 "textColor": {

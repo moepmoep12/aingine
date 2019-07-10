@@ -475,7 +475,7 @@
 },
 {
 "PlayerRocket": {
-"a_active": false,
+"a_active": true,
 "a_name": "PlayerRocket",
 "a_posX": 1.0,
 "a_posY": 2.5,
@@ -606,7 +606,7 @@
 },
 {
 "AgentRocket": {
-"a_active": true,
+"a_active": false,
 "a_name": "AgentRocket",
 "a_posX": 2.5,
 "a_posY": 2.5,

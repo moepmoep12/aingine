@@ -8,9 +8,9 @@ AIngine::Application* AIngine::CreateApplication() {
 
 namespace CrappyBird {
 
-	const float CrappyBird::s_originalGameSpeed = 2.5f;
+	const float CrappyBird::s_originalGameSpeed = 3.0f;
 
-	const float CrappyBird::s_standardImpulse = 0.075f;
+	const float CrappyBird::s_standardImpulse = 0.085f;
 	float CrappyBird::s_Impulse = CrappyBird::s_standardImpulse;
 	float CrappyBird::s_GameSpeed = CrappyBird::s_originalGameSpeed;
 	bool CrappyBird::s_bObstacleRotation = false;
