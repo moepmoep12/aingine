@@ -588,6 +588,9 @@ namespace AIngine::Editor {
 			};
 
 			if (fpsqueue.size() >= 500) {
+				if (*fpsqueue.begin()._Ptr == min) {
+					min = 1000;
+				}
 				fpsqueue.erase(fpsqueue.begin());
 			}
 			float fps = 1.0f / delta;

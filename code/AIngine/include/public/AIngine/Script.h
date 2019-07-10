@@ -59,6 +59,7 @@ namespace AIngine {
 				}
 			}
 			if (typeid(e) == typeid(AIngine::Events::ExitPlayModeEventData)) {
+				m_startCalled = false;
 				OnEnd();
 				return;
 			}
