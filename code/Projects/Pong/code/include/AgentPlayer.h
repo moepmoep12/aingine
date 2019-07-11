@@ -21,6 +21,7 @@ namespace Pong {
 
 	private:
 		virtual std::vector<double> situation();
+		void EndExperiment(float reward);
 
 	private:
 		xxr::XCSR<>* m_xcsr;
@@ -30,6 +31,7 @@ namespace Pong {
 		bool explore = true;
 		int currentTick = 0;
 		int guiTick = 0;
+		int lastActionTaken = 0;
 		const int guiTicks = 60;
 	};
 }
