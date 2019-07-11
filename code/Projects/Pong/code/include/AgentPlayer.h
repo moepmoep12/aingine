@@ -19,6 +19,8 @@ namespace Pong {
 
 		virtual void OnScored(PlayerRole role) override;
 
+		void CreateConstantsWidget(xxr::XCSRConstants& constants);
+
 	private:
 		virtual std::vector<double> situation();
 		void EndExperiment(float reward);
@@ -33,5 +35,7 @@ namespace Pong {
 		int guiTick = 0;
 		int lastActionTaken = 0;
 		const int guiTicks = 60;
+		bool giveEnemyBall = true;
+		xxr::XCSRConstants Constants;
 	};
 }

@@ -75,7 +75,7 @@ namespace Pong {
 		Pong::ScorePlayerTwo++;
 		PlayerTwo->OnScored(PlayerRole::Two);
 		PlayerOne->OnScored(PlayerRole::Two);
-		PlayerOne->ReceiveBall();
+		PlayerTwo->ReceiveBall();
 	}
 
 	void Ball::OnCollisionRight(AIngine::Physics::Contact contact)
