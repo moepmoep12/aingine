@@ -13,6 +13,7 @@
 #include "Editor/Widgets/UITextComponentWidget.h"
 #include "Editor/Widgets/CheckBoxComponentWidget.h"
 #include "Editor/Widgets/SliderComponentWidget.h"
+#include "Editor/Widgets/AgentComponentWidget.h"
 
 #include <unordered_map>
 
@@ -49,6 +50,8 @@ namespace AIngine::Editor::Widget {
 		Component::UITextComponentWidget* m_textComponentWidget;
 		Component::CheckBoxComponentWidget* m_checkBoxComponentWidget;
 		Component::SliderComponentWidget* m_sliderComponentWidget;
+		Component::AgentSupervisorComponentWidget* m_agentSupervisorWidget;
+		Component::AgentComponentWidget* m_agentWidget;
 
 		void ShowSelectedNodeWidget(GameObject* node);
 		void ShowUserScripts(GameObject* node);

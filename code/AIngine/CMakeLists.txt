@@ -17,6 +17,7 @@ set(AINGINE_HEADER
 	)
 
 set(AINGINE_HEADER_AINGINE
+		include/public/AIngine/Agent.h
 		include/public/AIngine/Core.h
 		include/public/AIngine/Component.h
 		include/public/AIngine/Constants.h
@@ -33,6 +34,7 @@ set(AINGINE_HEADER_AINGINE
 		include/public/AIngine/Sounds.h
 		include/public/AIngine/Sprite.h
 		include/public/AIngine/World.h
+		include/public/AIngine/XCSAgents.h
 	)
 
 set(AIngine_HEADER_ASSETS
@@ -92,6 +94,7 @@ set(AIngine_HEADER_PRIVATE
 		include/private/Editor/ScriptingAPI.h
 		include/private/Editor/Serialization.h
 		include/private/Editor/Widgets/AddComponentWidget.h
+		include/private/Editor/Widgets/AgentComponentWidget.h
 		include/private/Editor/Widgets/ButtonComponentWidget.h
 		include/private/Editor/Widgets/CanvasComponentWidget.h
 		include/private/Editor/Widgets/CheckBoxComponentWidget.h
@@ -125,6 +128,7 @@ set(AIngine_HEADER_PRIVATE
 set(AINGINE_SRC
         src/Application.cxx
 		src/Window.cxx
+		src/AIngine/Agent.cxx
 		src/AIngine/GameObject.cxx
 		src/AIngine/Graphics.cxx
 		src/AIngine/Input.cxx
@@ -134,12 +138,14 @@ set(AINGINE_SRC
 		src/AIngine/Sounds.cxx
 		src/AIngine/Sprite.cxx
 		src/AIngine/World.cxx
+		src/AIngine/XCSAgents.cxx
         src/Assets/Assets.cxx
 		src/Debug/gl_error.cxx
 		src/Debug/log.cxx
 		src/Editor/Editor.cxx
 		src/Editor/ScriptingAPI.cxx
 		src/Editor/Serialization.cxx
+		src/Editor/Widgets/AgentComponentWidget.cxx
 		src/Editor/Widgets/AddComponentWidget.cxx
 		src/Editor/Widgets/ButtonComponentWidget.cxx
 		src/Editor/Widgets/CanvasComponentWidget.cxx
@@ -227,7 +233,6 @@ target_link_libraries(AIngineEditor
 		Box2D-cmake
 		nlohmann_json
 		nativefiledialog
-		cxxopts
 		xcsrlib
 		freetype
 		cute_sound
@@ -244,7 +249,6 @@ target_link_libraries(AIngine
 		Box2D-cmake
 		nlohmann_json
 		nativefiledialog
-		cxxopts
 		xcsrlib
 		freetype
 		cute_sound

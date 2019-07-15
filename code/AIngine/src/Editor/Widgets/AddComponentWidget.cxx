@@ -11,6 +11,7 @@
 #include "UI/CheckBox.h"
 #include "UI/Slider.h"
 #include "Rendering/UIRenderer.h"
+#include "AIngine/XCSAgents.h"
 #include "Application.h"
 
 #include <vector>
@@ -50,7 +51,7 @@ namespace AIngine::Editor::Widget::Component {
 				std::vector<std::string > componentNames = AIngine::GetAvailableComponentNames();
 
 				ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
-				static const int engineComponentsCount = 10;
+				static const int engineComponentsCount = 11;
 				ImGui::BeginChild("addComponentChildWindow", ImVec2(buttonWidth, 30 * engineComponentsCount), true, 0);
 
 				filter.Draw("", buttonWidth);
@@ -113,12 +114,17 @@ namespace AIngine::Editor::Widget::Component {
 									obj->AddComponent<AIngine::UI::Slider>();
 									break;
 								}
+							case 10:
+								if (!obj->GetComponent<AIngine::XCSAgentSupervisor>()) {
+									obj->AddComponent<AIngine::XCSAgentSupervisor>();
+									break;
+								}
 							default:
 								AIngine::OnAddComponent(obj, i - engineComponentsCount);
 								break;
 							}
 						}
-						if (i == engineComponentsCount -1)
+						if (i == engineComponentsCount - 1)
 							ImGui::Separator();
 
 					}

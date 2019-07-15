@@ -15,6 +15,7 @@ namespace AIngine {
 	class Sprite;
 	class SoundComponent;
 	class ParticleEmitter;
+	class XCSAgentSupervisor;
 
 	namespace Rendering {
 		class Texture2D;
@@ -65,6 +66,7 @@ namespace AIngine::Editor::Serialization
 		static void RestoreUIText(const nlohmann::json* const j, AIngine::GameObject* obj);
 		static void RestoreCheckBox(const nlohmann::json* const j, AIngine::GameObject* obj);
 		static void RestoreSlider(const nlohmann::json* const j, AIngine::GameObject* obj);
+		static void RestoreXCSAgentSupervisor(const nlohmann::json* const j, AIngine::GameObject* obj);
 	};
 
 	class SceneGraphSerializer : public AIngine::Traverser {
@@ -91,6 +93,7 @@ namespace AIngine::Editor::Serialization
 		nlohmann::json SerializeText(AIngine::UI::UIText& uitext);
 		nlohmann::json SerializeCheckBox(AIngine::UI::CheckBox& checkbox);
 		nlohmann::json SerializeSlider(AIngine::UI::Slider& slider);
+		nlohmann::json SerializeXCSAgentSuperviros(AIngine::XCSAgentSupervisor& supervisor);
 		std::vector<nlohmann::json*> m_prevChildren;
 		nlohmann::json* m_children;
 		std::vector<AIngine::GameObject*> m_spawnedObjects;

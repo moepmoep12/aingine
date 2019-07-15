@@ -20,6 +20,7 @@
 #include "UI/Text.h"
 #include "UI/CheckBox.h"
 #include "UI/Slider.h"
+#include "AIngine/XCSAgents.h"
 
 
 namespace AIngine::Editor::Widget {
@@ -98,6 +99,8 @@ namespace AIngine::Editor::Widget {
 		delete m_textComponentWidget;
 		delete m_checkBoxComponentWidget;
 		delete m_sliderComponentWidget;
+		delete m_agentSupervisorWidget;
+		delete m_agentWidget;
 	}
 
 
@@ -116,6 +119,8 @@ namespace AIngine::Editor::Widget {
 		m_textComponentWidget = new Component::UITextComponentWidget();
 		m_checkBoxComponentWidget = new Component::CheckBoxComponentWidget();
 		m_sliderComponentWidget = new Component::SliderComponentWidget();
+		m_agentSupervisorWidget = new Component::AgentSupervisorComponentWidget();
+		m_agentWidget = new Component::AgentComponentWidget();
 	}
 
 	void SceneGraphWidget::ShowSelectedNodeWidget(GameObject * node)
@@ -171,6 +176,16 @@ namespace AIngine::Editor::Widget {
 			AIngine::UI::Slider* slider = node->GetComponent<AIngine::UI::Slider>();
 			if (slider) {
 				m_sliderComponentWidget->Render({ node });
+			}
+			AIngine::XCSAgentSupervisor* supervisor = node->GetComponent<AIngine::XCSAgentSupervisor>();
+			if (supervisor) {
+				m_agentSupervisorWidget->Render({ node });
+			}
+
+			for (auto& comp : node->GetComponents()) {
+				if (dynamic_cast<AIngine::Agent*>(comp)) {
+					m_agentWidget->Render({ node });
+				}
 			}
 
 			ShowUserScripts(node);

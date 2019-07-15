@@ -18,6 +18,7 @@
 #include "UI/Slider.h"
 #include "Rendering/UIRenderer.h"
 #include "Util/Project.h"
+#include "AIngine/XCSAgents.h"
 
 #include <fstream>
 #include <vector>
@@ -71,6 +72,7 @@ namespace AIngine::Editor::Serialization {
 		const char* COMPONENT_TEXT = "text";
 		const char* COMPONENT_CHECKBOX = "checkbox";
 		const char* COMPONENT_SLIDER = "slider";
+		const char* COMPONENT_XCSAGENTSUPERVISOR = "xcsAgentSupervisor";
 
 		// Script
 		const char* SCRIPT_INDEX = "index";
@@ -147,6 +149,16 @@ namespace AIngine::Editor::Serialization {
 		const char* SLIDER_TEXTUREBACKGROUND = "textureBackground";
 		const char* SLIDER_TEXTUREHANDLER = "textureHandler";
 		const char* SLIDER_DRAGCOLOR = "dragColor";
+
+		// XCSAgentSupervisor
+		const char* XCSAGENTSUPERVISOR_ACTIONS = "possibleActions";
+		const char* XCSAGENTSUPERVISOR_STEPRATE = "stepRate";
+		const char* XCSAGENTSUPERVISOR_MAXSTEPS = "maxSteps";
+		const char* XCSAGENTSUPERVISOR_REPR = "representation";
+		const char* XCSAGENTSUPERVISOR_OBSERVATIONSSIZE = "observationsSize";
+		const char* XCSAGENTSUPERVISOR_EXPLORE = "explore";
+		const char* XCSAGENTSUPERVISOR_POPULATIONPATH = "populationPath";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_N = "constants_n";
 
 	}
 
@@ -238,6 +250,10 @@ namespace AIngine::Editor::Serialization {
 						// restore Slider
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_SLIDER)) {
 							RestoreSlider(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SLIDER], restoredObject);
+						}
+						// restore XCSAgentSupervisor
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_XCSAGENTSUPERVISOR)) {
+							RestoreXCSAgentSupervisor(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_XCSAGENTSUPERVISOR], restoredObject);
 						}
 
 						//restore scripts
@@ -550,6 +566,33 @@ namespace AIngine::Editor::Serialization {
 		slider->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
 
+	void Serializer::RestoreXCSAgentSupervisor(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		AIngine::XCSAgentSupervisor* supervisor = obj->AddComponent<AIngine::XCSAgentSupervisor>();
+		supervisor->Exploration = (*j)[AttributeNames::XCSAGENTSUPERVISOR_EXPLORE];
+		supervisor->MaxSteps = (*j)[AttributeNames::XCSAGENTSUPERVISOR_MAXSTEPS];
+		supervisor->ObservationsSize = (*j)[AttributeNames::XCSAGENTSUPERVISOR_OBSERVATIONSSIZE];
+		supervisor->PopulationPath = (*j)[AttributeNames::XCSAGENTSUPERVISOR_POPULATIONPATH];
+		supervisor->ChangeRepresentation((xxr::XCSRRepr)(*j)[AttributeNames::XCSAGENTSUPERVISOR_REPR]);
+		supervisor->GetConstants().n = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_N];
+		supervisor->PossibleActions.clear();
+		std::vector<int> actions;
+		for (auto action : (*j)[AttributeNames::XCSAGENTSUPERVISOR_ACTIONS]) {
+			actions.push_back(action);
+		}
+		std::unordered_set<int> set;
+		std::copy(actions.begin(), actions.end(), std::inserter(set, set.end()));
+		supervisor->PossibleActions = set;
+		supervisor->StepRate = (*j)[AttributeNames::XCSAGENTSUPERVISOR_STEPRATE];
+
+		if (std::filesystem::exists(supervisor->PopulationPath)) {
+			supervisor->m_xcsr->loadPopulationCSV(supervisor->PopulationPath, true);
+		}
+
+
+		supervisor->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
+	}
+
 
 	/* -------------------------------------------- SCENEGRAPH SERIALIZER -------------------------------------------------------*/
 
@@ -682,6 +725,12 @@ namespace AIngine::Editor::Serialization {
 		AIngine::UI::Slider* slider = obj.GetComponent<AIngine::UI::Slider>();
 		if (slider) {
 			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SLIDER] = SerializeSlider(*slider);
+		}
+
+		// serialize XCSAgentSupervisor
+		AIngine::XCSAgentSupervisor* supervisor = obj.GetComponent<AIngine::XCSAgentSupervisor>();
+		if (supervisor) {
+			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_XCSAGENTSUPERVISOR] = SerializeXCSAgentSuperviros(*supervisor);
 		}
 
 		j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SCRIPT] = SerializeScripts(obj);
@@ -876,6 +925,24 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::SLIDER_TEXTUREHANDLER] = slider.m_sliderHandle->TextureSlider;
 
 		j[AttributeNames::COMPONENT_ACTIVE] = slider.IsEnabled();
+
+		return j;
+	}
+
+	nlohmann::json SceneGraphSerializer::SerializeXCSAgentSuperviros(AIngine::XCSAgentSupervisor & supervisor)
+	{
+		nlohmann::json j;
+
+		j[AttributeNames::XCSAGENTSUPERVISOR_ACTIONS] = supervisor.PossibleActions;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_N] = supervisor.GetConstants().n;
+		j[AttributeNames::XCSAGENTSUPERVISOR_EXPLORE] = supervisor.Exploration;
+		j[AttributeNames::XCSAGENTSUPERVISOR_MAXSTEPS] = supervisor.MaxSteps;
+		j[AttributeNames::XCSAGENTSUPERVISOR_REPR] = (int)supervisor.GetRepresentation();
+		j[AttributeNames::XCSAGENTSUPERVISOR_STEPRATE] = supervisor.StepRate;
+		j[AttributeNames::XCSAGENTSUPERVISOR_OBSERVATIONSSIZE] = supervisor.ObservationsSize;
+		j[AttributeNames::XCSAGENTSUPERVISOR_POPULATIONPATH] = SerializePath(supervisor.PopulationPath);
+
+		j[AttributeNames::COMPONENT_ACTIVE] = supervisor.IsEnabled();
 
 		return j;
 	}
