@@ -16,7 +16,7 @@ namespace Pong {
 		SetName(typeid(*this).name());
 
 
-		Constants.n = 150;
+		Constants.n = 100;
 		Constants.beta = 0.1;
 		Constants.dontCareProbability = 0.4;
 		Constants.gamma = 0.6;
@@ -26,7 +26,7 @@ namespace Pong {
 		Constants.minValue = -1;
 		Constants.exploreProbability = 0.5;
 		static std::unordered_set<int> options = std::unordered_set<int>{ 0,-1,1 };
-		m_xcsr = new xxr::XCSR<>(xxr::CSR, options, Constants);
+		m_xcsr = new xxr::XCSR<>(options, Constants, xxr::CSR);
 	}
 
 	AgentPlayer::~AgentPlayer()
@@ -52,7 +52,7 @@ namespace Pong {
 
 	// Update is called once per frame
 
-	static const int tickRate = 1;
+	static const int tickRate = 0;
 
 	void AgentPlayer::Update(float delta)
 	{
@@ -92,10 +92,19 @@ namespace Pong {
 			}
 
 			else if (m_rigidBody->GetContact() && m_rigidBody->GetContact()->Other->GetOwner()->GetComponent<Ball>()) {
+				Pong::ScorePlayerTwo++;
 				EndExperiment(1000);
 			}
 			else {
 				m_xcsr->reward(0, false);
+			}
+
+			if (!explore) {
+				if (Pong::ScorePlayerOne + Pong::ScorePlayerTwo >= 500) {
+					DEBUG_INFO("Performace: {0} : {1} | {2}", Pong::ScorePlayerOne, Pong::ScorePlayerTwo, (float)Pong::ScorePlayerTwo / (float)Pong::ScorePlayerOne);
+					Pong::ScorePlayerOne = 0;
+					Pong::ScorePlayerTwo = 0;
+				}
 			}
 		}
 	}
@@ -124,7 +133,6 @@ namespace Pong {
 		static double epsilonAverage = 0;
 		static double epsilonMax = 0;
 		static double predictionAverage = 0;
-		static int numerosity = 0;
 		static bool open = true;
 
 		guiTick++;
@@ -147,7 +155,6 @@ namespace Pong {
 				fitnessAverage = 0;
 				epsilonAverage = 0;
 				predictionAverage = 0;
-				numerosity = 0;
 				FitnessValues.clear();
 				AccuracyValues.clear();
 
@@ -156,7 +163,6 @@ namespace Pong {
 					fitnessAverage += cl->fitness;
 					epsilonAverage += cl->epsilon;
 					predictionAverage += cl->prediction;
-					numerosity += cl->numerosity;
 					FitnessValues.push_back(cl->fitness);
 					AccuracyValues.push_back(cl->accuracy());
 					EpsilonValues.push_back(cl->epsilon);
@@ -318,7 +324,7 @@ namespace Pong {
 			ImGui::Text(ss.str().c_str());
 
 			ss.str(std::string());
-			ss << "Numerosity Sum : " << numerosity;
+			ss << "Numerosity Sum : " << m_xcsr->numerositySum();
 			ImGui::Text(ss.str().c_str());
 
 			ImGui::End();
@@ -332,7 +338,10 @@ namespace Pong {
 		ImGui::Checkbox("Give Enemy Ball?", &giveEnemyBall);
 
 		label << "Explore?##" << static_cast<const void*>(this);
-		ImGui::Checkbox(label.str().c_str(), &explore);
+		if (ImGui::Checkbox(label.str().c_str(), &explore)) {
+			Pong::ScorePlayerOne = 0;
+			Pong::ScorePlayerTwo = 0;
+		}
 
 		label.str(std::string());
 		label << "Population Size : " << m_xcsr->populationSize();
@@ -378,9 +387,15 @@ namespace Pong {
 			m_xcsr->switchToCondensationMode();
 		}
 
-		auto xcsrCS = dynamic_cast<const xxr::xcsr_impl::csr::Experiment<double, int>*>(&m_xcsr->GetExperiment());
+		static bool showPopulation = false;
+		if (ImGui::Button("ShowPopulation")) {
+			showPopulation = !showPopulation;
+		}
+		if (showPopulation) ShowPopulation(showPopulation);
+
+		auto xcsrCS = dynamic_cast<xxr::xcsr_impl::csr::Experiment<double, int>*>(&m_xcsr->GetExperiment());
 		if (xcsrCS) {
-			CreateConstantsWidget((xxr::XCSRConstants)(xcsrCS->constants));
+			CreateConstantsWidget((xxr::XCSRConstants&)(xcsrCS->GetConstants()));
 		}
 
 	}
@@ -644,6 +659,16 @@ namespace Pong {
 
 		glm::vec2 worldPos = GetOwner()->GetWorldPosition();
 		glm::vec2 ballPos = m_ball->GetOwner()->GetWorldPosition();
+		double collisionPoint = ComputeBallCollisionPoint();
+		double distanceToCollisionPoint = -1;
+
+		if (collisionPoint < 0 || collisionPoint > rect.height)
+			collisionPoint = -1;
+		else {
+			Graphics::Point(glm::vec2(worldPos.x, collisionPoint), 10, glm::vec4(0, 0, 0, 1));
+			distanceToCollisionPoint = (worldPos.y - collisionPoint) / rect.height;
+			collisionPoint /= rect.height;
+		}
 
 		std::vector<double> result =
 		{
@@ -653,7 +678,10 @@ namespace Pong {
 			m_BallBody->GetVelocity().y / 10.0, // relative ball velocity.y
 			ballPos.x / rect.width, // relative ballpos.x
 			ballPos.y / rect.height, // relative ballpos.y
-			(double)lastActionTaken// last action taken
+			(double)lastActionTaken, // last action taken
+			(5.625 - ballPos.y) / rect.height, // relative ball distance to bottom edge
+			collisionPoint,
+			distanceToCollisionPoint
 		};
 
 		return result;
@@ -663,5 +691,52 @@ namespace Pong {
 		Player* other = Role == PlayerRole::One ? m_ball->PlayerTwo : m_ball->PlayerOne;
 		if (giveEnemyBall) other->ReceiveBall();
 		m_xcsr->reward(reward, true);
+	}
+
+	double AgentPlayer::ComputeBallCollisionPoint()
+	{
+		glm::vec2 ballPos = m_ball->GetOwner()->GetWorldPosition();
+		glm::vec2 ballVel = m_BallBody->GetVelocity();
+		double axis = GetOwner()->GetWorldPosition().x;
+
+		/* y = v.y/v.x * x + (p.y - v.y/v.x * p.x)  */
+		return (ballVel.y / ballVel.x) * axis + (ballPos.y - (ballVel.y / ballVel.x) * ballPos.x);
+	}
+
+	void AgentPlayer::ShowPopulation(bool& show)
+	{
+		auto xcsrCS = dynamic_cast<xxr::xcsr_impl::csr::Experiment<double, int>*>(&m_xcsr->GetExperiment());
+		const int max = 25;
+		if (xcsrCS) {
+			auto population = xcsrCS->GetPopulation();
+
+			if (!ImGui::Begin("Population", &show, ImGuiWindowFlags_AlwaysAutoResize)) {
+				ImGui::End();
+				return;
+			}
+
+			std::vector < xxr::xcs_impl::ClassifierPtrSet<xxr::xcsr_impl::StoredClassifier<xxr::xcs_impl::Classifier< xxr::xcsr_impl::ConditionActionPair<xxr::xcsr_impl::Condition<xxr::xcsr_impl::csr::Symbol<double>>, int>>, xxr::xcsr_impl::Constants>>::ClassifierPtr> classifiers;
+			classifiers.reserve(population.size());
+			for (auto& cl : population) {
+				classifiers.push_back(cl);
+			}
+
+			std::sort(classifiers.begin(), classifiers.end(), [](auto x, auto y) {
+				return x->fitness > y->fitness;
+			});
+
+			int i = 0;
+			for (auto& cl : classifiers) {
+				i++;
+				if (i > max) break;
+				std::stringstream label;
+				label << "Numerosity: " << cl->numerosity << " | Fitness: " << cl->fitness << " | Accuracy: " << cl->accuracy() << " | Error: " << cl->epsilon << "\n";
+				label << "Exp: " << cl->experience << " | Prediction: " << cl->prediction;
+				ImGui::Text(label.str().c_str());
+				ImGui::Separator();
+			}
+
+			ImGui::End();
+		}
 	}
 }

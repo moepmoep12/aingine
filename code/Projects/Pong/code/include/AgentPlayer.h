@@ -24,6 +24,8 @@ namespace Pong {
 	private:
 		virtual std::vector<double> situation();
 		void EndExperiment(float reward);
+		double ComputeBallCollisionPoint();
+		void ShowPopulation(bool& show);
 
 	private:
 		xxr::XCSR<>* m_xcsr;

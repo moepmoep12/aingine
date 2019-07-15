@@ -38,5 +38,7 @@ namespace Pong {
 		PhysicsComponent* m_BallBody;
 		glm::vec2 m_ballOffset;
 		bool m_HasBall = false;
+		float minY;
+		float maxY;
 	};
 }

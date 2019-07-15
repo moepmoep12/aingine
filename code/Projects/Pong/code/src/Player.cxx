@@ -25,7 +25,8 @@ namespace Pong {
 
 		m_rigidBody->OnCollisionBegin += std::bind(&Player::OnBallCollision, this, std::placeholders::_1);
 
-
+		minY = AIngine::World::GetBounds().z + GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize().y * 0.5;
+		maxY = AIngine::World::GetBounds().w - GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize().y * 0.5;
 		//ImGui::SetMouseCursor(ImGuiMouseCursor_None);
 	}
 
@@ -126,8 +127,7 @@ namespace Pong {
 
 	void Player::Move(int direction)
 	{
-		static float minY = AIngine::World::GetBounds().z + GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize().y * 0.5;
-		static float maxY = AIngine::World::GetBounds().w - GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize().y * 0.5;
+
 		float del = 0;
 		float currentHeight = GetOwner()->GetWorldPosition().y;
 		del = TranslationRate * direction * Pong::Get().GetDeltaTime();
