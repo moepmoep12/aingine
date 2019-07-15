@@ -41,7 +41,7 @@ namespace Pong {
 		if (m_HasBall)
 			Player::StartBall();
 
-		Move(AIngine::Util::Random::RandomInt(-1, 1));
+		//Move(AIngine::Util::Random::RandomInt(-1, 1));
 	}
 
 	// Callback for events

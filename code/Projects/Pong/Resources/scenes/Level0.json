@@ -32,7 +32,7 @@
 "a_active": true,
 "a_name": "PlayerOne",
 "a_posX": 0.5,
-"a_posY": 2.799999952316284,
+"a_posY": 1.9585506916046143,
 "a_rotation": 0.0,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
@@ -113,7 +113,7 @@
 "a_active": true,
 "a_name": "PlayerTwo",
 "a_posX": 9.5,
-"a_posY": 2.799999952316284,
+"a_posY": 1.25,
 "a_rotation": 0.0,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
@@ -193,9 +193,9 @@
 "Ball": {
 "a_active": true,
 "a_name": "Ball",
-"a_posX": 5.0,
-"a_posY": 2.799999952316284,
-"a_rotation": 0.0,
+"a_posX": 7.667466640472412,
+"a_posY": 1.0075898170471191,
+"a_rotation": 3.229937647120096e-05,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
 "b_components": {
@@ -211,8 +211,8 @@
 "vertexcount": 1,
 "vertices": [
 {
-"x": 5.0,
-"y": 2.799999952316284
+"x": 7.667466640472412,
+"y": 1.0075898170471191
 },
 {
 "x": 0.0,
@@ -575,7 +575,7 @@
 "x": 0,
 "y": 100
 },
-"text": "0 : 0",
+"text": "46  :  237",
 "tintColor": {
 "w": 1.0,
 "x": 1.0,

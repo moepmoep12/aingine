@@ -37,7 +37,7 @@ namespace Pong {
 		int guiTick = 0;
 		int lastActionTaken = 0;
 		const int guiTicks = 60;
-		bool giveEnemyBall = true;
+		bool giveEnemyBall = false;
 		xxr::XCSRConstants Constants;
 	};
 }

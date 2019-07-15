@@ -23,10 +23,13 @@ namespace Pong {
 		Constants.thetaGA = 50;
 		Constants.useMAM = true;
 		Constants.epsilonZero = 10;
-		Constants.minValue = -1;
+		Constants.minValue = -1.1;
+		Constants.maxValue = 1.1;
 		Constants.exploreProbability = 0.5;
+		Constants.doCoveringRandomRangeTruncation = true;
+		TranslationRate = 15;
 		static std::unordered_set<int> options = std::unordered_set<int>{ 0,-1,1 };
-		m_xcsr = new xxr::XCSR<>(options, Constants, xxr::CSR);
+		m_xcsr = new xxr::XCSR<>(options, Constants, xxr::UBR);
 	}
 
 	AgentPlayer::~AgentPlayer()
@@ -96,7 +99,28 @@ namespace Pong {
 				EndExperiment(1000);
 			}
 			else {
-				m_xcsr->reward(0, false);
+				static auto rect = AIngine::World::GetWorldRect();
+
+				glm::vec2 worldPos = GetOwner()->GetWorldPosition();
+				double collisionPoint = ComputeBallCollisionPoint();
+				double distanceToCollisionPoint = -1;
+				float reward = 0;
+				if (collisionPoint < 0 || collisionPoint > rect.height) {
+					if (action == 0) reward = 10; // out of reach
+				}
+				else {
+					if (std::abs(worldPos.y - collisionPoint) > 0.2) {
+						if (collisionPoint > worldPos.y) {
+							if (action == 1) reward = 10;
+						}
+						else
+							if (action == -1) reward = 10;
+					}
+					else {
+						reward = 10; // right position
+					}
+				}
+				m_xcsr->reward(reward, false);
 			}
 
 			if (!explore) {
@@ -145,7 +169,7 @@ namespace Pong {
 			return;
 		}
 
-		auto xcsrCS = dynamic_cast<const xxr::xcsr_impl::csr::Experiment<double, int>*>(&m_xcsr->GetExperiment());
+		auto xcsrCS = dynamic_cast<const xxr::xcsr_impl::ubr::Experiment<double, int>*>(&m_xcsr->GetExperiment());
 		if (xcsrCS) {
 			auto population = xcsrCS->GetPopulation();
 			if (update) {
@@ -393,7 +417,7 @@ namespace Pong {
 		}
 		if (showPopulation) ShowPopulation(showPopulation);
 
-		auto xcsrCS = dynamic_cast<xxr::xcsr_impl::csr::Experiment<double, int>*>(&m_xcsr->GetExperiment());
+		auto xcsrCS = dynamic_cast<xxr::xcsr_impl::ubr::Experiment<double, int>*>(&m_xcsr->GetExperiment());
 		if (xcsrCS) {
 			CreateConstantsWidget((xxr::XCSRConstants&)(xcsrCS->GetConstants()));
 		}
@@ -674,14 +698,15 @@ namespace Pong {
 		{
 			worldPos.y / rect.height, // relative height
 			glm::distance(worldPos, ballPos) / rect.width, // relative distance to ball
-			m_BallBody->GetVelocity().x / 10.0, // relative ball velocity.x
-			m_BallBody->GetVelocity().y / 10.0, // relative ball velocity.y
+			std::clamp(m_BallBody->GetVelocity().x / 10.0,-1.0,1.0), // relative ball velocity.x
+			std::clamp(m_BallBody->GetVelocity().y / 10.0,-1.0,1.0), // relative ball velocity.y
 			ballPos.x / rect.width, // relative ballpos.x
 			ballPos.y / rect.height, // relative ballpos.y
 			(double)lastActionTaken, // last action taken
 			(5.625 - ballPos.y) / rect.height, // relative ball distance to bottom edge
-			collisionPoint,
-			distanceToCollisionPoint
+			std::clamp(collisionPoint,-1.0,1.0),
+			std::clamp(distanceToCollisionPoint,-1.0,1.0),
+			//other->GetOwner()->GetWorldPosition().y / rect.height
 		};
 
 		return result;
@@ -700,12 +725,13 @@ namespace Pong {
 		double axis = GetOwner()->GetWorldPosition().x;
 
 		/* y = v.y/v.x * x + (p.y - v.y/v.x * p.x)  */
+		if (ballVel.length() == 0) return -10;
 		return (ballVel.y / ballVel.x) * axis + (ballPos.y - (ballVel.y / ballVel.x) * ballPos.x);
 	}
 
 	void AgentPlayer::ShowPopulation(bool& show)
 	{
-		auto xcsrCS = dynamic_cast<xxr::xcsr_impl::csr::Experiment<double, int>*>(&m_xcsr->GetExperiment());
+		auto xcsrCS = dynamic_cast<xxr::xcsr_impl::ubr::Experiment<double, int>*>(&m_xcsr->GetExperiment());
 		const int max = 25;
 		if (xcsrCS) {
 			auto population = xcsrCS->GetPopulation();
@@ -715,7 +741,7 @@ namespace Pong {
 				return;
 			}
 
-			std::vector < xxr::xcs_impl::ClassifierPtrSet<xxr::xcsr_impl::StoredClassifier<xxr::xcs_impl::Classifier< xxr::xcsr_impl::ConditionActionPair<xxr::xcsr_impl::Condition<xxr::xcsr_impl::csr::Symbol<double>>, int>>, xxr::xcsr_impl::Constants>>::ClassifierPtr> classifiers;
+			std::vector < xxr::xcs_impl::ClassifierPtrSet<xxr::xcsr_impl::StoredClassifier<xxr::xcs_impl::Classifier< xxr::xcsr_impl::ConditionActionPair<xxr::xcsr_impl::Condition<xxr::xcsr_impl::ubr::Symbol<double>>, int>>, xxr::xcsr_impl::Constants>>::ClassifierPtr> classifiers;
 			classifiers.reserve(population.size());
 			for (auto& cl : population) {
 				classifiers.push_back(cl);

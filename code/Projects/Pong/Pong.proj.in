@@ -8,6 +8,7 @@
 "HumanPlayer",
 "AgentPlayer",
 "GameManager",
-"RandomAgent"
+"RandomAgent",
+"XCSAgent"
 ]
 }
