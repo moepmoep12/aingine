@@ -158,7 +158,37 @@ namespace AIngine::Editor::Serialization {
 		const char* XCSAGENTSUPERVISOR_OBSERVATIONSSIZE = "observationsSize";
 		const char* XCSAGENTSUPERVISOR_EXPLORE = "explore";
 		const char* XCSAGENTSUPERVISOR_POPULATIONPATH = "populationPath";
+		const char* XCSAGENTSUPERVISOR_AGENTS = "agents";
 		const char* XCSAGENTSUPERVISOR_CONSTANTS_N = "constants_n";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_ALPHA = "constants_alpha";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_BETA = "constants_beta";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_CHI = "constants_chi";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_COVERINGMAXSPREAD = "constants_coveringMaxSpread";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_DELTA = "constants_delta";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_DONTCAREPROB = "constants_dontCareProb";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_EPSILONZERO = "constants_epsilonZero";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_EXPLOREPROB = "constants_exploreProb";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_GAMMA = "constants_gamma";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_MAXVALUE = "constants_maxValue";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_MINVALUE = "constants_minValue";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_MU = "constants_mu";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_MUTATIONMAXCHANGE = "constants_mutationMaxChange";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_NU = "constants_nu";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_SUBSUMPTIONTOLERANCE = "constants_subsumptionTolerance";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_TAU = "constants_tau";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_THETADEL = "constants_thetaDel";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_THETAGA = "constants_thetaGA";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_THETAMNA = "constants_thetaMNA";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_THETASUB = "constants_thetaSUB";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_DOACTIONMUTATION = "constants_doActionMutation";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_DOACTIONSETSUBSUMPTION = "constants_doActionSetSubsumption";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_DOGASUBSUMPTION = "constants_doGASubsumption";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_USEMAM = "constants_useMAM";
+
+		// Agent
+		const char* AGENT = "agent";
+		const char* AGENT_ID = "agent_id";
+		const char* AGENT_SUPERVISOR = "agent_supervisor";
 
 	}
 
@@ -172,6 +202,8 @@ namespace AIngine::Editor::Serialization {
 		file << result;
 		file.close();
 	}
+
+	static std::vector<Script*> s_agentScripts;
 
 
 	void Serializer::DeserializeSceneGraph(const std::string & path)
@@ -190,6 +222,8 @@ namespace AIngine::Editor::Serialization {
 
 		json* currentJson = &j["Root"];
 
+		std::map<std::string, AIngine::XCSAgentSupervisor*> agentSuperVisors;
+		std::map<std::string, AIngine::Agent*> agents;
 		std::vector<AIngine::Physics::PhysicsComponent*> physComponents;
 		std::vector<json*> openJsons;
 		std::unordered_map<json*, GameObject*> spawnedObjects;
@@ -253,11 +287,19 @@ namespace AIngine::Editor::Serialization {
 						}
 						// restore XCSAgentSupervisor
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_XCSAGENTSUPERVISOR)) {
-							RestoreXCSAgentSupervisor(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_XCSAGENTSUPERVISOR], restoredObject);
+							AIngine::XCSAgentSupervisor* supervisor = RestoreXCSAgentSupervisor(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_XCSAGENTSUPERVISOR], restoredObject);
+							agentSuperVisors[supervisor->GetOwner()->GetName()] = supervisor;
 						}
+
 
 						//restore scripts
 						RestoreScripts(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SCRIPT], restoredObject);
+
+						// restore agent
+						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::AGENT)) {
+							AIngine::Agent* agent = RestoreAgent(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::AGENT], restoredObject);
+							agents[agent->SupervisorName] = agent;
+						}
 					}
 
 					// does it have children?
@@ -271,6 +313,12 @@ namespace AIngine::Editor::Serialization {
 
 			openJsons.erase(openJsons.begin());
 
+		}
+
+		for (auto pair : agents) {
+			if (agentSuperVisors.find(pair.first) != agentSuperVisors.end()) {
+				agentSuperVisors[pair.first]->AddAgent(pair.second);
+			}
 		}
 	}
 
@@ -566,14 +614,13 @@ namespace AIngine::Editor::Serialization {
 		slider->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
 	}
 
-	void Serializer::RestoreXCSAgentSupervisor(const nlohmann::json * const j, AIngine::GameObject * obj)
+	AIngine::XCSAgentSupervisor* Serializer::RestoreXCSAgentSupervisor(const nlohmann::json * const j, AIngine::GameObject * obj)
 	{
 		AIngine::XCSAgentSupervisor* supervisor = obj->AddComponent<AIngine::XCSAgentSupervisor>();
 		supervisor->Exploration = (*j)[AttributeNames::XCSAGENTSUPERVISOR_EXPLORE];
 		supervisor->MaxSteps = (*j)[AttributeNames::XCSAGENTSUPERVISOR_MAXSTEPS];
 		supervisor->ObservationsSize = (*j)[AttributeNames::XCSAGENTSUPERVISOR_OBSERVATIONSSIZE];
 		supervisor->PopulationPath = (*j)[AttributeNames::XCSAGENTSUPERVISOR_POPULATIONPATH];
-		supervisor->ChangeRepresentation((xxr::XCSRRepr)(*j)[AttributeNames::XCSAGENTSUPERVISOR_REPR]);
 		supervisor->GetConstants().n = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_N];
 		supervisor->PossibleActions.clear();
 		std::vector<int> actions;
@@ -585,12 +632,63 @@ namespace AIngine::Editor::Serialization {
 		supervisor->PossibleActions = set;
 		supervisor->StepRate = (*j)[AttributeNames::XCSAGENTSUPERVISOR_STEPRATE];
 
-		if (std::filesystem::exists(supervisor->PopulationPath)) {
-			supervisor->m_xcsr->loadPopulationCSV(supervisor->PopulationPath, true);
+		supervisor->GetConstants().alpha = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_ALPHA];
+		supervisor->GetConstants().beta = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_BETA];
+		supervisor->GetConstants().chi = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_CHI];
+		supervisor->GetConstants().coveringMaxSpread = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_COVERINGMAXSPREAD];
+		supervisor->GetConstants().delta = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DELTA];
+		supervisor->GetConstants().dontCareProbability = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DONTCAREPROB];
+		supervisor->GetConstants().epsilonZero = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_EPSILONZERO];
+		supervisor->GetConstants().exploreProbability = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_EXPLOREPROB];
+		supervisor->GetConstants().gamma = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_GAMMA];
+		supervisor->GetConstants().maxValue = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_MAXVALUE];
+		supervisor->GetConstants().minValue = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_MINVALUE];
+		supervisor->GetConstants().mu = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_MU];
+		supervisor->GetConstants().mutationMaxChange = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_MUTATIONMAXCHANGE];
+		supervisor->GetConstants().nu = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_NU];
+		supervisor->GetConstants().subsumptionTolerance = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_SUBSUMPTIONTOLERANCE];
+		supervisor->GetConstants().tau = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_TAU];
+		supervisor->GetConstants().thetaDel = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_THETADEL];
+		supervisor->GetConstants().thetaGA = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_THETAGA];
+		supervisor->GetConstants().thetaMna = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_THETAMNA];
+		supervisor->GetConstants().thetaSub = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_THETASUB];
+		supervisor->GetConstants().doActionMutation = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DOACTIONMUTATION];
+		supervisor->GetConstants().doActionSetSubsumption = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DOACTIONSETSUBSUMPTION];
+		supervisor->GetConstants().doGASubsumption = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DOGASUBSUMPTION];
+		supervisor->GetConstants().useMAM = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_USEMAM];
+
+		supervisor->ChangeRepresentation((xxr::XCSRRepr)(*j)[AttributeNames::XCSAGENTSUPERVISOR_REPR]);
+
+		std::string path = AIngine::Util::Project::GetResourceDirectory() + supervisor->PopulationPath;
+
+		if (std::filesystem::exists(path)) {
+			supervisor->m_xcsr->loadPopulationCSV(path, true);
 		}
 
 
 		supervisor->SetEnabled((*j)[AttributeNames::COMPONENT_ACTIVE]);
+
+		return supervisor;
+	}
+
+	AIngine::Agent * Serializer::RestoreAgent(const nlohmann::json * const j, AIngine::GameObject * obj)
+	{
+		AIngine::Agent* agent = nullptr;
+		for (auto& it = obj->GetComponents().begin(); it != obj->GetComponents().end(); it++) {
+			AIngine::Script* script = dynamic_cast<AIngine::Script *>((*it._Ptr));
+			if (script) {
+				if (dynamic_cast<AIngine::Agent*>((*it._Ptr)))
+				{
+					agent = dynamic_cast<AIngine::Agent*>((*it._Ptr));
+					break;
+				}
+			}
+		}
+		if (agent) {
+			agent->ID = (*j)[AttributeNames::AGENT_ID];
+			agent->SupervisorName = (*j)[AttributeNames::AGENT_SUPERVISOR];
+		}
+		return agent;
 	}
 
 
@@ -732,6 +830,11 @@ namespace AIngine::Editor::Serialization {
 		if (supervisor) {
 			j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_XCSAGENTSUPERVISOR] = SerializeXCSAgentSuperviros(*supervisor);
 		}
+
+		// Serialize Agent
+		for (auto comp : obj.GetComponents())
+			if (dynamic_cast<AIngine::Agent*>(comp))
+				j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::AGENT] = SerializeAgent(*dynamic_cast<AIngine::Agent*>(comp));
 
 		j[AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_SCRIPT] = SerializeScripts(obj);
 
@@ -934,16 +1037,53 @@ namespace AIngine::Editor::Serialization {
 		nlohmann::json j;
 
 		j[AttributeNames::XCSAGENTSUPERVISOR_ACTIONS] = supervisor.PossibleActions;
-		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_N] = supervisor.GetConstants().n;
 		j[AttributeNames::XCSAGENTSUPERVISOR_EXPLORE] = supervisor.Exploration;
 		j[AttributeNames::XCSAGENTSUPERVISOR_MAXSTEPS] = supervisor.MaxSteps;
 		j[AttributeNames::XCSAGENTSUPERVISOR_REPR] = (int)supervisor.GetRepresentation();
 		j[AttributeNames::XCSAGENTSUPERVISOR_STEPRATE] = supervisor.StepRate;
 		j[AttributeNames::XCSAGENTSUPERVISOR_OBSERVATIONSSIZE] = supervisor.ObservationsSize;
 		j[AttributeNames::XCSAGENTSUPERVISOR_POPULATIONPATH] = SerializePath(supervisor.PopulationPath);
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_N] = supervisor.GetConstants().n;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_ALPHA] = supervisor.GetConstants().alpha;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_BETA] = supervisor.GetConstants().beta;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_CHI] = supervisor.GetConstants().chi;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_COVERINGMAXSPREAD] = supervisor.GetConstants().coveringMaxSpread;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DELTA] = supervisor.GetConstants().delta;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DONTCAREPROB] = supervisor.GetConstants().dontCareProbability;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_EPSILONZERO] = supervisor.GetConstants().epsilonZero;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_EXPLOREPROB] = supervisor.GetConstants().exploreProbability;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_GAMMA] = supervisor.GetConstants().gamma;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_MAXVALUE] = supervisor.GetConstants().maxValue;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_MINVALUE] = supervisor.GetConstants().minValue;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_MU] = supervisor.GetConstants().mu;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_MUTATIONMAXCHANGE] = supervisor.GetConstants().mutationMaxChange;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_NU] = supervisor.GetConstants().nu;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_SUBSUMPTIONTOLERANCE] = supervisor.GetConstants().subsumptionTolerance;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_TAU] = supervisor.GetConstants().tau;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_THETADEL] = supervisor.GetConstants().thetaDel;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_THETAGA] = supervisor.GetConstants().thetaGA;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_THETAMNA] = supervisor.GetConstants().thetaMna;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_THETASUB] = supervisor.GetConstants().thetaSub;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DOACTIONMUTATION] = supervisor.GetConstants().doActionMutation;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DOACTIONSETSUBSUMPTION] = supervisor.GetConstants().doActionSetSubsumption;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DOGASUBSUMPTION] = supervisor.GetConstants().doGASubsumption;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_USEMAM] = supervisor.GetConstants().useMAM;
+
+		for (auto agent : supervisor.GetAgents())
+			j[AttributeNames::XCSAGENTSUPERVISOR_AGENTS].push_back(agent->ID);
 
 		j[AttributeNames::COMPONENT_ACTIVE] = supervisor.IsEnabled();
 
+		return j;
+	}
+
+	nlohmann::json SceneGraphSerializer::SerializeAgent(AIngine::Agent & agent)
+	{
+		nlohmann::json j;
+		if (agent.ID >= 0) {
+			j[AttributeNames::AGENT_ID] = agent.ID;
+			j[AttributeNames::AGENT_SUPERVISOR] = agent.SupervisorName;
+		}
 		return j;
 	}
 
