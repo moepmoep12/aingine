@@ -3,6 +3,7 @@
 #include "Script.h"
 
 #include <vector>
+#include <string>
 //#include <memory>
 //#include <xxr/xcs.hpp>
 //#include <xxr/xcsr.hpp>
@@ -27,9 +28,13 @@ namespace AIngine {
 		virtual void OnUpdate(float deltatime) override;
 
 		virtual void AddAgent(Agent* agent);
+		virtual void RemoveAgent(int index);
+		virtual void RemoveAgent(Agent* agent);
 
 		virtual void ProvideReward(Agent* agent, bool isEnd) = 0;
 		virtual int ChooseAction(const std::vector<double>& situation) = 0;
+
+		const std::vector<Agent*>& GetAgents() const { return m_agents; }
 
 	protected:
 		std::vector<Agent*> m_agents;
@@ -38,7 +43,7 @@ namespace AIngine {
 		int m_stepCount = 0;
 	};
 
-	class Agent : public Script  {
+	class Agent {
 
 	public:
 		/* Returns the reward accumulated in this episdode so far */
@@ -61,6 +66,8 @@ namespace AIngine {
 
 		virtual void OnMaxStepsReached() = 0;
 
+		virtual std::string Name() const = 0;
+
 		void AddReward(float reward) {
 			m_stepReward += reward;
 			m_cumulativeReward += reward;
@@ -72,6 +79,10 @@ namespace AIngine {
 
 		/* The number of steps taken in this episode */
 		int StepCount = 0;
+
+		int ID = -1;
+
+		std::string SupervisorName;
 
 	private:
 		float m_cumulativeReward;

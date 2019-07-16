@@ -4,8 +4,7 @@ namespace AIngine {
 
 	XCSAgentSupervisor::XCSAgentSupervisor()
 	{
-		xxr::XCSRConstants Constants;
-		m_xcsr = std::make_unique<xxr::xcsr_impl::Experiment<double, int>>(PossibleActions, Constants, Representation);
+		m_xcsr = std::make_unique<xxr::xcsr_impl::Experiment<double, int>>(PossibleActions, xxr::XCSRConstants(), Representation);
 	}
 
 	void XCSAgentSupervisor::ProvideReward(Agent * agent, bool isEnd)
@@ -21,10 +20,14 @@ namespace AIngine {
 	void XCSAgentSupervisor::ChangeRepresentation(xxr::xcsr_impl::Repr repr)
 	{
 		if (repr == Representation) return;
+
+		m_xcsr = std::make_unique<xxr::xcsr_impl::Experiment<double, int>>(PossibleActions, GetConstants(), repr);
+		Representation = repr;
 	}
 
 	xxr::XCSRConstants & XCSAgentSupervisor::GetConstants()
 	{
+		//if (!m_xcsr) return Constants;
 		xxr::xcsr_impl::csr::Experiment<double, int>* xcsrCS;
 		xxr::xcsr_impl::obr::Experiment<double, int>* xcsrOBR;
 		xxr::xcsr_impl::ubr::Experiment<double, int>* xcsrUBR;

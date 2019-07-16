@@ -27,5 +27,6 @@ namespace AIngine {
 
 	private:
 		xxr::xcsr_impl::Repr Representation = xxr::xcsr_impl::Repr::CSR;
+		//xxr::XCSRConstants Constants;
 	};
 }
