@@ -32,6 +32,7 @@ namespace Pong {
 	private:
 		int lastAction = 0;
 		double collisionPointY = 0;
+		double collisionPointX = 0;
 		double distanceToCollisionPoint = 0;
 		bool scored = false;
 		PlayerRole goalie;

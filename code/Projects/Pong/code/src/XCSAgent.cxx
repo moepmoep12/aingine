@@ -54,13 +54,8 @@ namespace Pong {
 		glm::vec2 relativePos = GetOwner()->GetLocalPosition();
 		glm::vec2 ballPos = m_experiment->BallBody->GetOwner()->GetLocalPosition();
 		collisionPointY = ComputeBallCollisionPoint();
-		distanceToCollisionPoint = 0;
+		distanceToCollisionPoint = (relativePos.y - collisionPointY);
 
-		if (collisionPointY < rect.y || collisionPointY > rect.GetMax().y)
-			collisionPointY = m_experiment->ArenaRect.GetCenter().y;
-		else {
-			distanceToCollisionPoint = (relativePos.y - collisionPointY);
-		}
 
 		std::vector<double> result = {
 			relativePos.y / rect.height,
@@ -69,8 +64,8 @@ namespace Pong {
 			std::clamp(m_experiment->BallBody->GetVelocity().y / 10.0, -1.0, 1.0),
 			ballPos.x / rect.width,
 			ballPos.y / rect.height,
-			std::clamp(collisionPointY / rect.height, -1.0, 1.0),
-			std::clamp(distanceToCollisionPoint / rect.height, -1.0, 1.0),
+			std::clamp(collisionPointY / rect.height, -1.05, 1.05),
+			std::clamp(distanceToCollisionPoint / rect.height, -1.05, 1.05),
 			other->GetOwner()->GetLocalPosition().y / rect.height,
 			(double)lastAction
 		};
@@ -104,7 +99,7 @@ namespace Pong {
 		}
 
 		// collision out of reach
-		if (collisionPointY == m_experiment->ArenaRect.GetCenter().y) {
+		if (collisionPointY < m_experiment->ArenaRect.y || collisionPointY > m_experiment->ArenaRect.GetMax().y) {
 
 		}
 		else {
@@ -112,16 +107,16 @@ namespace Pong {
 			if (std::abs(distanceToCollisionPoint) < 0.2f) {
 				AddReward(10);
 				// add more reward if the agent doesn't move once in the right spot
-				if (action == 0) AddReward(1);
+				if (action == 0) AddReward(10);
 			}
 			else
 			{
 				// we should move up
 				if (GetOwner()->GetLocalPosition().y > collisionPointY) {
-					if (action == -1) AddReward(1);
+					if (action == -1) AddReward(10);
 				}
 				// we should move down
-				else if (action == 1) AddReward(1);
+				else if (action == 1) AddReward(10);
 			}
 		}
 	}
