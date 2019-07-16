@@ -78,7 +78,7 @@ namespace AIngine::Editor {
 		static void SetShowFpsGraph(bool show);
 		static inline bool IsFpsGraphVisible() { if (s_instance) return s_instance->m_showingFpsGraph; else return false; }
 
-		static inline void SetSelectedObjects(const std::vector<AIngine::GameObject*>& selectedObjects) { if (s_instance) s_instance->m_selectedObjects = selectedObjects; }
+		static void SetSelectedObjects(const std::vector<AIngine::GameObject*>& selectedObjects);
 		static inline const std::vector<AIngine::GameObject*>* GetSelectedObjects() { if (s_instance) return &s_instance->m_selectedObjects; else return nullptr; }
 
 		virtual ~Editor() override;
@@ -97,6 +97,7 @@ namespace AIngine::Editor {
 		static AIngine::Events::Event<void> ResumeGameEvent;
 		typedef AIngine::Events::EventHandler<void> PauseGameEventHandler;
 		typedef AIngine::Events::EventHandler<void> ResumeGameEventHandler;
+		typedef AIngine::Events::EventHandler<void, const std::vector<GameObject*>&> SelectionChangedEventHandler;
 
 		static inline bool IsFullScreenPlayMode() { if (s_instance) return s_instance->m_isFullScreen; else return true; }
 		static void SetFullScreenPlayMode(bool bFullsceen);
@@ -110,7 +111,7 @@ namespace AIngine::Editor {
 		static void SaveBuildScenes();
 		static void AddCurrentSceneToBuild();
 
-		static bool CreateMoveablePositionVertex(glm::vec2& worldPosition, float vertexSize, const glm::vec4& colorInteract = glm::vec4(0, 1, 0,1), const glm::vec4& colorNormal = glm::vec4(1, 0, 0,1));
+		static bool CreateMoveablePositionVertex(glm::vec2& worldPosition, float vertexSize, const glm::vec4& colorInteract = glm::vec4(0, 1, 0, 1), const glm::vec4& colorNormal = glm::vec4(1, 0, 0, 1));
 
 		static void CreateNewScene();
 		static void LoadScene(const std::string& path);
@@ -121,6 +122,8 @@ namespace AIngine::Editor {
 
 		AIngine::Events::Event<void> OnEnterPlayModeEvent;
 		AIngine::Events::Event<void> OnLeavePlayModeEvent;
+
+		static AIngine::Events::Event<void, const std::vector<GameObject*>&> OnSelectionChangedEvent;
 
 
 	private:

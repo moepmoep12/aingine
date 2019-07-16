@@ -32,6 +32,7 @@ namespace AIngine::Editor {
 	Editor* Editor::Editor::s_instance = nullptr;
 	AIngine::Events::Event<void> Editor::PauseGameEvent;
 	AIngine::Events::Event<void> Editor::ResumeGameEvent;
+	AIngine::Events::Event<void,const std::vector<GameObject*>&> Editor::OnSelectionChangedEvent;
 	static glm::vec2 lastMousePos;
 
 
@@ -394,6 +395,12 @@ namespace AIngine::Editor {
 			s_instance->m_showingFpsGraph = show;
 	}
 
+	void Editor::SetSelectedObjects(const std::vector<AIngine::GameObject*>& selectedObjects)
+	{
+		if (s_instance) s_instance->m_selectedObjects = selectedObjects;
+		OnSelectionChangedEvent(selectedObjects);
+	}
+
 	void Editor::ResetSceneGraph()
 	{
 		m_app.m_world->GetSceneGraph().Reset();
@@ -722,3 +729,4 @@ namespace AIngine::Editor {
 
 // initialize ViewportChangedEventHandler counter
 int AIngine::Events::EventHandler<void, AIngine::Structures::RectangleI&>::counter = 0;
+int AIngine::Editor::Editor::SelectionChangedEventHandler::counter = 0;
