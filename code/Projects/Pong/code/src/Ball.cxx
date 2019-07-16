@@ -13,41 +13,41 @@ namespace Pong {
 	// Start is called when gameplay starts for this script
 	void Ball::OnStart()
 	{
-		LeftEdge = AIngine::World::GetGameObject("LeftEdge")->GetComponent<PhysicsComponent>();
-		RightEdge = AIngine::World::GetGameObject("RightEdge")->GetComponent<PhysicsComponent>();
-		auto comps = AIngine::World::GetGameObject("PlayerOne")->GetComponents();
-		for (auto comp : comps)
-			if (dynamic_cast<Player*>(comp)) {
-				PlayerOne = dynamic_cast<Player*>(comp);
-				break;
-			}
+		//LeftEdge = AIngine::World::GetGameObject("LeftEdge")->GetComponent<PhysicsComponent>();
+		//RightEdge = AIngine::World::GetGameObject("RightEdge")->GetComponent<PhysicsComponent>();
+		//auto comps = AIngine::World::GetGameObject("PlayerOne")->GetComponents();
+		//for (auto comp : comps)
+		//	if (dynamic_cast<Player*>(comp)) {
+		//		PlayerOne = dynamic_cast<Player*>(comp);
+		//		break;
+		//	}
 
-		PlayerOne->Role = PlayerRole::One;
+		//PlayerOne->Role = PlayerRole::One;
 
-		comps = AIngine::World::GetGameObject("PlayerTwo")->GetComponents();
-		for (auto comp : comps)
-			if (dynamic_cast<Player*>(comp)) {
-				PlayerTwo = dynamic_cast<Player*>(comp);
-				break;
-			}
-		PlayerTwo->Role = PlayerRole::Two;
+		//comps = AIngine::World::GetGameObject("PlayerTwo")->GetComponents();
+		//for (auto comp : comps)
+		//	if (dynamic_cast<Player*>(comp)) {
+		//		PlayerTwo = dynamic_cast<Player*>(comp);
+		//		break;
+		//	}
+		//PlayerTwo->Role = PlayerRole::Two;
 
-		LeftEdge->OnCollisionBegin += std::bind(&Ball::OnCollisionLeft, this, std::placeholders::_1);
-		RightEdge->OnCollisionBegin += std::bind(&Ball::OnCollisionRight, this, std::placeholders::_1);
+		//LeftEdge->OnCollisionBegin += std::bind(&Ball::OnCollisionLeft, this, std::placeholders::_1);
+		//RightEdge->OnCollisionBegin += std::bind(&Ball::OnCollisionRight, this, std::placeholders::_1);
 
-		ScoreText = AIngine::World::GetGameObject("ScoreText")->GetComponent<AIngine::UI::UIText>();
+		//ScoreText = AIngine::World::GetGameObject("ScoreText")->GetComponent<AIngine::UI::UIText>();
 
-		PlayerOne->ReceiveBall();
+		//PlayerOne->ReceiveBall();
 	}
 
 	// End is called when gameplay ends for this script
 	void Ball::OnEnd()
 	{
-		LeftEdge->OnCollisionBegin = AIngine::Physics::CollisionEvent();
-		RightEdge->OnCollisionBegin = AIngine::Physics::CollisionEvent();
+		//LeftEdge->OnCollisionBegin = AIngine::Physics::CollisionEvent();
+		//RightEdge->OnCollisionBegin = AIngine::Physics::CollisionEvent();
 
-		Pong::ScorePlayerOne = 0;
-		Pong::ScorePlayerTwo = 0;
+		//Pong::ScorePlayerOne = 0;
+		//Pong::ScorePlayerTwo = 0;
 	}
 
 	// Update is called once per frame
@@ -62,27 +62,27 @@ namespace Pong {
 
 	void Ball::OnGUI()
 	{
-		std::stringstream ss;
-		ss << Pong::ScorePlayerOne << "  :  " << Pong::ScorePlayerTwo;
-		ScoreText->Text = ss.str();
+		//std::stringstream ss;
+		//ss << Pong::ScorePlayerOne << "  :  " << Pong::ScorePlayerTwo;
+		//ScoreText->Text = ss.str();
 
-		static AIngine::Structures::RectangleF worldRect = AIngine::World::GetWorldRect();
-		AIngine::Graphics::BoxWorld(worldRect, glm::vec4(0, 0, 0, 1));
+		//static AIngine::Structures::RectangleF worldRect = AIngine::World::GetWorldRect();
+		//AIngine::Graphics::BoxWorld(worldRect, glm::vec4(0, 0, 0, 1));
 	}
 
-	void Ball::OnCollisionLeft(AIngine::Physics::Contact contact)
-	{
-		Pong::ScorePlayerTwo++;
-		PlayerTwo->OnScored(PlayerRole::Two);
-		PlayerOne->OnScored(PlayerRole::Two);
-		PlayerTwo->ReceiveBall();
-	}
+	//void Ball::OnCollisionLeft(AIngine::Physics::Contact contact)
+	//{
+	//	Pong::ScorePlayerTwo++;
+	//	PlayerTwo->OnScored(PlayerRole::Two);
+	//	PlayerOne->OnScored(PlayerRole::Two);
+	//	PlayerTwo->ReceiveBall();
+	//}
 
-	void Ball::OnCollisionRight(AIngine::Physics::Contact contact)
-	{
-		Pong::ScorePlayerOne++;
-		PlayerTwo->OnScored(PlayerRole::One);
-		PlayerOne->OnScored(PlayerRole::One);
-		PlayerOne->ReceiveBall();
-	}
+	//void Ball::OnCollisionRight(AIngine::Physics::Contact contact)
+	//{
+	//	Pong::ScorePlayerOne++;
+	//	PlayerTwo->OnScored(PlayerRole::One);
+	//	PlayerOne->OnScored(PlayerRole::One);
+	//	PlayerOne->ReceiveBall();
+	//}
 }

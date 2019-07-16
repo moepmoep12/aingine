@@ -13,6 +13,7 @@ set(SRC
     code/src/GameManager.cxx
     code/src/RandomAgent.cxx
     code/src/XCSAgent.cxx
+    code/src/Experiment.cxx
     code/src/${PROJECT_NAME}.cxx
     code/src/Scripting_generated.cxx
      )
@@ -25,6 +26,7 @@ set(HEADER
     code/include/GameManager.h
     code/include/RandomAgent.h
     code/include/XCSAgent.h
+    code/include/Experiment.h
 	   code/include/${PROJECT_NAME}.h
     )
 

@@ -9,6 +9,7 @@
 "AgentPlayer",
 "GameManager",
 "RandomAgent",
-"XCSAgent"
+"XCSAgent",
+"Experiment"
 ]
 }

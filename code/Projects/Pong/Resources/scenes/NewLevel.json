@@ -28,506 +28,64 @@
 }
 },
 {
-"PlayerOne": {
+"AgentSupervisor": {
 "a_active": true,
-"a_name": "PlayerOne",
-"a_posX": 0.5,
-"a_posY": 1.9585506916046143,
-"a_rotation": 0.0,
-"a_scaleX": 1.0,
-"a_scaleY": 1.0,
-"b_components": {
-"physics": {
-"active": true,
-"bodyType": 0,
-"density": 1.0,
-"friction": 0.0,
-"height": 1.0,
-"isTrigger": false,
-"restitution": 1.0,
-"shape": 1,
-"vertexcount": 4,
-"vertices": [
-{
-"x": -0.125,
-"y": -0.5
-},
-{
-"x": -0.125,
-"y": 0.5
-},
-{
-"x": 0.125,
-"y": 0.5
-},
-{
-"x": 0.125,
-"y": -0.5
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-}
-],
-"width": 0.25
-},
-"script": [
-5
-],
-"sprite": {
-"active": true,
-"alpha": 1.0,
-"colorB": 1.0,
-"colorG": 1.0,
-"colorR": 1.0,
-"parallaxX": 1.0,
-"parallaxY": 1.0,
-"sizeX": 0.25,
-"sizeY": 1.0,
-"texture": {
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6407,
-"path": "AIngine\\textures\\White.png",
-"wrapS": 10497,
-"wrapT": 10497
-}
-}
-}
-}
-},
-{
-"PlayerTwo": {
-"a_active": true,
-"a_name": "PlayerTwo",
-"a_posX": 9.5,
-"a_posY": 1.25,
-"a_rotation": 0.0,
-"a_scaleX": 1.0,
-"a_scaleY": 1.0,
-"b_components": {
-"physics": {
-"active": true,
-"bodyType": 0,
-"density": 1.0,
-"friction": 0.0,
-"height": 1.0,
-"isTrigger": false,
-"restitution": 1.0,
-"shape": 1,
-"vertexcount": 4,
-"vertices": [
-{
-"x": -0.125,
-"y": -0.5
-},
-{
-"x": -0.125,
-"y": 0.5
-},
-{
-"x": 0.125,
-"y": 0.5
-},
-{
-"x": 0.125,
-"y": -0.5
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-}
-],
-"width": 0.25
-},
-"script": [
-3
-],
-"sprite": {
-"active": true,
-"alpha": 1.0,
-"colorB": 1.0,
-"colorG": 1.0,
-"colorR": 1.0,
-"parallaxX": 1.0,
-"parallaxY": 1.0,
-"sizeX": 0.25,
-"sizeY": 1.0,
-"texture": {
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6407,
-"path": "AIngine\\textures\\White.png",
-"wrapS": 10497,
-"wrapT": 10497
-}
-}
-}
-}
-},
-{
-"Ball": {
-"a_active": true,
-"a_name": "Ball",
-"a_posX": 7.667466640472412,
-"a_posY": 1.0075898170471191,
-"a_rotation": 3.229937283322215e-05,
-"a_scaleX": 1.0,
-"a_scaleY": 1.0,
-"b_components": {
-"physics": {
-"active": true,
-"bodyType": 1,
-"density": 2.0,
-"friction": 0.0,
-"isTrigger": false,
-"radius": 0.125,
-"restitution": 1.0,
-"shape": 0,
-"vertexcount": 1,
-"vertices": [
-{
-"x": 7.667466640472412,
-"y": 1.0075898170471191
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-}
-]
-},
-"script": [
-1
-],
-"sprite": {
-"active": true,
-"alpha": 1.0,
-"colorB": 1.0,
-"colorG": 1.0,
-"colorR": 1.0,
-"parallaxX": 1.0,
-"parallaxY": 1.0,
-"sizeX": 0.25,
-"sizeY": 0.25,
-"texture": {
-"filterMax": 9729,
-"filterMin": 9729,
-"imageFormat": 6408,
-"path": "AIngine\\textures\\Circle.png",
-"wrapS": 10497,
-"wrapT": 10497
-}
-}
-}
-}
-},
-{
-"Edges": {
-"a_active": true,
-"a_name": "Edges",
+"a_name": "AgentSupervisor",
 "a_posX": 0.0,
 "a_posY": 0.0,
 "a_rotation": 0.0,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
 "b_components": {
-"script": null
-},
-"c_children": [
-{
-"TopEdge": {
-"a_active": true,
-"a_name": "TopEdge",
-"a_posX": 5.0,
-"a_posY": -0.5,
-"a_rotation": 0.0,
-"a_scaleX": 1.0,
-"a_scaleY": 1.0,
-"b_components": {
-"physics": {
+"script": null,
+"xcsAgentSupervisor": {
 "active": true,
-"bodyType": 0,
-"density": 1.0,
-"friction": 0.0,
-"height": 1.0,
-"isTrigger": false,
-"restitution": 1.0,
-"shape": 1,
-"vertexcount": 4,
-"vertices": [
-{
-"x": -5.0,
-"y": -0.5
-},
-{
-"x": 5.0,
-"y": -0.5
-},
-{
-"x": 5.0,
-"y": 0.5
-},
-{
-"x": -5.0,
-"y": 0.5
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-}
+"agents": [
+0
 ],
-"width": 10.0
-},
-"script": null
-}
-}
-},
-{
-"RightEdge": {
-"a_active": true,
-"a_name": "RightEdge",
-"a_posX": 10.5,
-"a_posY": 2.8125,
-"a_rotation": 0.0,
-"a_scaleX": 1.0,
-"a_scaleY": 1.0,
-"b_components": {
-"physics": {
-"active": true,
-"bodyType": 0,
-"density": 1.0,
-"friction": 0.0,
-"height": 5.625,
-"isTrigger": false,
-"restitution": 1.0,
-"shape": 1,
-"vertexcount": 4,
-"vertices": [
-{
-"x": -0.5,
-"y": -2.8125
-},
-{
-"x": 0.5,
-"y": -2.8125
-},
-{
-"x": 0.5,
-"y": 2.8125
-},
-{
-"x": -0.5,
-"y": 2.8125
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-}
+"constants_alpha": 0.1,
+"constants_beta": 0.2,
+"constants_chi": 0.8,
+"constants_coveringMaxSpread": 1.0,
+"constants_delta": 0.1,
+"constants_doActionMutation": true,
+"constants_doActionSetSubsumption": true,
+"constants_doGASubsumption": true,
+"constants_dontCareProb": 0.4000000059604645,
+"constants_epsilonZero": 10.0,
+"constants_exploreProb": 0.5,
+"constants_gamma": 0.71,
+"constants_maxValue": 1.100000023841858,
+"constants_minValue": -1.100000023841858,
+"constants_mu": 0.04,
+"constants_mutationMaxChange": 0.1,
+"constants_n": 1200,
+"constants_nu": 5.0,
+"constants_subsumptionTolerance": 0.0,
+"constants_tau": 0.0,
+"constants_thetaDel": 20,
+"constants_thetaGA": 25,
+"constants_thetaMNA": 0,
+"constants_thetaSUB": 20,
+"constants_useMAM": true,
+"explore": true,
+"maxSteps": 0,
+"observationsSize": 10,
+"populationPath": "",
+"possibleActions": [
+0,
+1,
+-1
 ],
-"width": 1.0
-},
-"script": null
+"representation": 2,
+"stepRate": 0
 }
 }
-},
-{
-"BottomEdge": {
-"a_active": true,
-"a_name": "BottomEdge",
-"a_posX": 5.0,
-"a_posY": 5.625,
-"a_rotation": 0.0,
-"a_scaleX": 1.0,
-"a_scaleY": 1.0,
-"b_components": {
-"physics": {
-"active": true,
-"bodyType": 0,
-"density": 1.0,
-"friction": 0.0,
-"height": 1.0,
-"isTrigger": false,
-"restitution": 0.0,
-"shape": 1,
-"vertexcount": 4,
-"vertices": [
-{
-"x": -5.0,
-"y": -0.5
-},
-{
-"x": -5.0,
-"y": 0.5
-},
-{
-"x": 5.0,
-"y": 0.5
-},
-{
-"x": 5.0,
-"y": -0.5
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-}
-],
-"width": 10.0
-},
-"script": null
-}
-}
-},
-{
-"LeftEdge": {
-"a_active": true,
-"a_name": "LeftEdge",
-"a_posX": -0.5,
-"a_posY": 2.8125,
-"a_rotation": 0.0,
-"a_scaleX": 1.0,
-"a_scaleY": 1.0,
-"b_components": {
-"physics": {
-"active": true,
-"bodyType": 0,
-"density": 1.0,
-"friction": 0.0,
-"height": 5.625,
-"isTrigger": false,
-"restitution": 1.0,
-"shape": 1,
-"vertexcount": 4,
-"vertices": [
-{
-"x": -0.5,
-"y": -2.8125
-},
-{
-"x": 0.5,
-"y": -2.8125
-},
-{
-"x": 0.5,
-"y": 2.8125
-},
-{
-"x": -0.5,
-"y": 2.8125
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-},
-{
-"x": 0.0,
-"y": 0.0
-}
-],
-"width": 1.0
-},
-"script": null
-}
-}
-}
-]
 }
 },
 {
 "Canvas": {
-"a_active": true,
+"a_active": false,
 "a_name": "Canvas",
 "a_posX": 0.0,
 "a_posY": 0.0,
@@ -597,12 +155,14 @@
 "a_active": true,
 "a_name": "Experiment",
 "a_posX": 0.0,
-"a_posY": 10.0,
+"a_posY": 0.0,
 "a_rotation": 0.0,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
 "b_components": {
-"script": null
+"script": [
+7
+]
 },
 "c_children": [
 {
@@ -644,16 +204,16 @@
 "y": -0.5
 },
 {
-"x": -5.0,
-"y": 0.5
-},
-{
-"x": 5.0,
-"y": 0.5
-},
-{
 "x": 5.0,
 "y": -0.5
+},
+{
+"x": 5.0,
+"y": 0.5
+},
+{
+"x": -5.0,
+"y": 0.5
 },
 {
 "x": 0.0,
@@ -743,7 +303,7 @@
 "a_active": true,
 "a_name": "BottomEdge",
 "a_posX": 5.0,
-"a_posY": 5.625,
+"a_posY": 6.125,
 "a_rotation": 0.0,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
@@ -764,16 +324,16 @@
 "y": -0.5
 },
 {
-"x": -5.0,
-"y": 0.5
-},
-{
-"x": 5.0,
-"y": 0.5
-},
-{
 "x": 5.0,
 "y": -0.5
+},
+{
+"x": 5.0,
+"y": 0.5
+},
+{
+"x": -5.0,
+"y": 0.5
 },
 {
 "x": 0.0,
@@ -883,8 +443,8 @@
 "vertexcount": 1,
 "vertices": [
 {
-"x": 7.667466640472412,
-"y": 1.0075898170471191
+"x": 5.0,
+"y": 2.5
 },
 {
 "x": 0.0,
@@ -967,16 +527,16 @@
 "y": -0.5
 },
 {
-"x": -0.125,
-"y": 0.5
-},
-{
-"x": 0.125,
-"y": 0.5
-},
-{
 "x": 0.125,
 "y": -0.5
+},
+{
+"x": 0.125,
+"y": 0.5
+},
+{
+"x": -0.125,
+"y": 0.5
 },
 {
 "x": 0.0,
@@ -997,7 +557,9 @@
 ],
 "width": 0.25
 },
-"script": null,
+"script": [
+5
+],
 "sprite": {
 "active": true,
 "alpha": 1.0,
@@ -1030,6 +592,10 @@
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
 "b_components": {
+"agent": {
+"agent_id": 0,
+"agent_supervisor": "AgentSupervisor"
+},
 "physics": {
 "active": true,
 "bodyType": 0,
@@ -1046,16 +612,16 @@
 "y": -0.5
 },
 {
-"x": -0.125,
-"y": 0.5
-},
-{
-"x": 0.125,
-"y": 0.5
-},
-{
 "x": 0.125,
 "y": -0.5
+},
+{
+"x": 0.125,
+"y": 0.5
+},
+{
+"x": -0.125,
+"y": 0.5
 },
 {
 "x": 0.0,
@@ -1076,7 +642,9 @@
 ],
 "width": 0.25
 },
-"script": null,
+"script": [
+6
+],
 "sprite": {
 "active": true,
 "alpha": 1.0,

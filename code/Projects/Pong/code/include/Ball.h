@@ -14,16 +14,16 @@ namespace Pong {
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
 		virtual void OnGUI() override;
 
-		PhysicsComponent* LeftEdge;
-		PhysicsComponent* RightEdge;
-		Player* PlayerOne;
-		Player* PlayerTwo;
+		//PhysicsComponent* LeftEdge;
+		//PhysicsComponent* RightEdge;
+		//Player* PlayerOne;
+		//Player* PlayerTwo;
 
-	private:
-		void OnCollisionLeft(AIngine::Physics::Contact contact);
-		void OnCollisionRight(AIngine::Physics::Contact contact);
+	//private:
+	//	void OnCollisionLeft(AIngine::Physics::Contact contact);
+	//	void OnCollisionRight(AIngine::Physics::Contact contact);
 
-	private:
-		AIngine::UI::UIText* ScoreText;
+	//private:
+	//	AIngine::UI::UIText* ScoreText;
 	};
 }

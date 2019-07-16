@@ -45,7 +45,21 @@ namespace Pong {
 		}
 
 		if (typeid(e) == typeid(AIngine::Events::MouseMovedEvent::MouseMovedEventData)) {
-			MovePlayerWithMouse();
+			glm::vec2 currentMousePos = glm::vec2(Input::GetMouseX(), Input::GetMouseY());
+			glm::vec2 mouseWorldPos = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(currentMousePos);
+			glm::vec2 currentPos = GetOwner()->GetWorldPosition();
+
+			float delta = (mouseWorldPos.y - currentPos.y);
+			float currentHeight = GetOwner()->GetWorldPosition().y;
+
+			if (currentHeight + delta > maxY) {
+				delta = maxY - currentHeight;
+			}
+			else if (currentHeight + delta < minY) {
+				delta = minY - currentHeight;
+			}
+
+			m_rigidBody->GetOwner()->SetWorldPosition(glm::vec2(currentPos.x, currentPos.y + delta));
 		}
 	}
 }

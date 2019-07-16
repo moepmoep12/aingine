@@ -4,6 +4,11 @@
 #include "UI/Text.h"
 
 namespace Pong {
+	enum class PlayerRole {
+		One,
+		Two
+	};
+
 	class Pong : public AIngine::Application {
 	public:
 		Pong();
@@ -12,8 +17,5 @@ namespace Pong {
 		virtual void OnAppShutDown() override;
 		virtual void OnAppUpdate() override;
 		virtual void OnAppEvent(AIngine::Events::EventData& e) override;
-
-		static int ScorePlayerOne, ScorePlayerTwo;
-
 	};
 }

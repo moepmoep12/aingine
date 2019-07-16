@@ -29,9 +29,6 @@ namespace Pong {
 		if (receivedBall) {
 			receivedBall = false;
 
-			static float minY = AIngine::World::GetBounds().z + GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize().y * 0.5;
-			static float maxY = AIngine::World::GetBounds().w - GetOwner()->GetComponent<Sprite>()->GetLocalWorldSize().y * 0.5;
-
 			float randomHeight = AIngine::Util::Random::RandomFloat(minY, maxY);
 			glm::vec2 pos = GetOwner()->GetWorldPosition();
 			pos.y = randomHeight;

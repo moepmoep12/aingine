@@ -7,10 +7,6 @@ AIngine::Application* AIngine::CreateApplication() {
 }
 
 namespace Pong {
-
-	int Pong::ScorePlayerOne = 0;
-	int Pong::ScorePlayerTwo = 0;
-
 	// Constructor
 	Pong::Pong()
 	{		// Configure the physics world with a gravity of 10 downwards

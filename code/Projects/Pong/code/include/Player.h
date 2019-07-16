@@ -1,12 +1,10 @@
 #pragma once
 #include "AIngine/Core.h"
+#include "Pong.h"
+
 
 namespace Pong {
-
-	enum class PlayerRole {
-		One,
-		Two
-	};
+	class Experiment;
 
 	class Player : public AIngine::Script {
 	public:
@@ -28,14 +26,14 @@ namespace Pong {
 
 	protected:
 		virtual void StartBall();
-		virtual void MovePlayerWithMouse();
-		virtual void MovePlayerWithKeyboard(AIngine::Events::KeyPressedEvent::KeyEventData& e, AIngine::KeyCode up, AIngine::KeyCode down);
+		//virtual void MovePlayerWithMouse();
+		//virtual void MovePlayerWithKeyboard(AIngine::Events::KeyPressedEvent::KeyEventData& e, AIngine::KeyCode up, AIngine::KeyCode down);
 		void Move(int direction);
 
 
 	protected:
+		Experiment* m_experiment = nullptr;
 		PhysicsComponent* m_rigidBody;
-		PhysicsComponent* m_BallBody;
 		glm::vec2 m_ballOffset;
 		bool m_HasBall = false;
 		float minY;

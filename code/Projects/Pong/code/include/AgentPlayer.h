@@ -15,16 +15,16 @@ namespace Pong {
 		virtual void Update(float delta) override;
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
 		virtual void OnGUI() override;
-		virtual void OnWidget() override;
+		//virtual void OnWidget() override;
 
 		virtual void OnScored(PlayerRole role) override;
 
 		void CreateConstantsWidget(xxr::XCSRConstants& constants);
 
 	private:
-		virtual std::vector<double> situation();
+		//virtual std::vector<double> situation();
 		void EndExperiment(float reward);
-		double ComputeBallCollisionPoint();
+		//double ComputeBallCollisionPoint();
 		void ShowPopulation(bool& show);
 
 	private:
