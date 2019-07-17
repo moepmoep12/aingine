@@ -220,6 +220,7 @@ namespace AIngine::Editor {
 		file.close();
 
 		if (m_isInPlayMode) {
+			m_isInPlayMode = false;
 			OnLeavePlayModeEvent();
 		}
 	}

@@ -22,7 +22,7 @@ namespace AIngine {
 				else {
 					agent->StepCount++;
 					const std::vector<double>& observation = agent->Observe();
-
+					if (ObservationsSize == 0) ObservationsSize = observation.size();
 					assert(observation.size() == ObservationsSize);
 
 					int action = ChooseAction(observation);
