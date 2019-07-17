@@ -68,14 +68,8 @@ namespace AIngine {
 				);
 		}
 
-		// load shader
-		std::string vertexPath("AIngine/shader/screenshader/vertexScreen.glsl");
-		std::string fragPath("AIngine/shader/screenshader/fragmentScreen.glsl");
-
-		AIngine::Assets::ShaderAsset* shaderAsset = m_assetRegistry.Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vertexPath, fragPath));
-
 		// create sprite renderer
-		m_spriteRenderer = new AIngine::Rendering::SpriteRenderer(&shaderAsset->GetShader());
+		m_spriteRenderer = new AIngine::Rendering::SpriteRenderer();
 
 		//load basic white texture
 		std::string path = std::string("AIngine/textures/White.png");

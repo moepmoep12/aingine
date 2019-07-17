@@ -49,19 +49,23 @@ namespace AIngine::Rendering {
 
 		glm::mat4 projection = Camera::Get().GetProjectionMatrix();
 
+		// load spriteShader
+		std::string vs("AIngine/shader/screenshader/vertexScreen.glsl");
+		std::string fs("AIngine/shader/screenshader/fragmentScreen.glsl");
+		m_shader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs, fs))->GetShader();
+
 		// configure shader
-		m_shader->SetInteger(4, 0, true);
-		m_shader->SetMatrix4(2, projection);
+		m_shader->SetInteger(4 /*image*/, 0, true);
+		m_shader->SetMatrix4(2 /*projection*/, projection);
 
 		// load outlineShader
-		std::string vs("AIngine/shader/screenshader/vertexScreen.glsl");
-		std::string fs("AIngine/shader/debug/fragmentOutline.glsl");
+		vs = "AIngine/shader/screenshader/vertexScreen.glsl";
+		fs = "AIngine/shader/debug/fragmentOutline.glsl";
 
 		m_outlineShader = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::ShaderAsset>(AIngine::Assets::ShaderPath(vs, fs))->GetShader();
 		m_outlineShader->SetInteger(0, 0, true);
 
 		SetViewport();
-
 	}
 
 	void SpriteRenderer::SetViewport()
@@ -141,11 +145,6 @@ namespace AIngine::Rendering {
 		glStencilMask(0xFF); // no mask
 		glClear(GL_STENCIL_BUFFER_BIT);
 		glDisable(GL_STENCIL_TEST);
-	}
-
-	SpriteRenderer::SpriteRenderer(AIngine::Rendering::GLShaderProgram* shader)
-	{
-		m_shader = shader;
 	}
 
 	SpriteRenderer::~SpriteRenderer()

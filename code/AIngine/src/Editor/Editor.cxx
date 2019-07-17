@@ -134,7 +134,7 @@ namespace AIngine::Editor {
 	// cam settings
 	static float translationrate = 5.0f;
 	static float rotationrate = 0.1f;
-	static float zoomSpeed = 100;
+	float Editor::zoomSpeed = 1200;
 
 	bool Editor::OnMouseScrolled(AIngine::Events::MouseScrolledEvent::MouseScrolledEventData & e)
 	{

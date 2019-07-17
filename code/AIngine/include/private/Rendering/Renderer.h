@@ -16,7 +16,6 @@ namespace AIngine::Rendering {
 	class SpriteRenderer : public AIngine::Traverser {
 	public:
 
-		SpriteRenderer(AIngine::Rendering::GLShaderProgram* shader);
 		virtual ~SpriteRenderer();
 
 		// Inherited via Traverser

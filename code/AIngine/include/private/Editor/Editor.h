@@ -125,6 +125,7 @@ namespace AIngine::Editor {
 
 		static AIngine::Events::Event<void, const std::vector<GameObject*>&> OnSelectionChangedEvent;
 
+		static float zoomSpeed;
 
 	private:
 		void ResetSceneGraph();
