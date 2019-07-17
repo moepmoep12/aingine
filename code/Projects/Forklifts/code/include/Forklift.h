@@ -11,6 +11,10 @@ namespace Forklifts {
 		virtual void Update(float delta) override;
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
 
+	private:
+		virtual void OnCollision(AIngine::Physics::Contact contact);
+		AIngine::Events::EventHandler<void, AIngine::Physics::Contact> OnCollisionEventHandler;
+
 		int currentTaskIndex = 0;
 
 	};

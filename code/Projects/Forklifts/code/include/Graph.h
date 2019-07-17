@@ -78,13 +78,17 @@ namespace Forklifts {
 
 		GraphNode* FindNode(const std::string& name);
 
+
 	public:
 		std::string nodeJsonPath = "Nodes.txt";
 		std::string edgeJsonPath = "Edges.txt";
+		std::unordered_map<GraphNode*, Node*> NodeMap;
+		std::unordered_map<IEdge<EdgeData>*, Edge*> EdgeMap;
+		AIngine::Events::Event<void> GraphLoadedEvent;
 
 	private:
 		void LoadGraph();
-		void SpawnNode(const GraphNode& node);
+		void SpawnNode(GraphNode& node);
 		void SpawnEdge(GraphNode& from, GraphNode& to);
 
 	private:

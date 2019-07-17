@@ -14,10 +14,13 @@ namespace Forklifts {
 		virtual void Update(float delta) override;
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
 
-		const int forkLiftCount = 0;
+		const int forkLiftCount = 1;
+	private:
+		void Init();
 
 	private:
 		std::vector<std::pair<Forklift*, std::vector<Task>>> m_forkLiftTasks;
 		Graph* m_graph;
+		AIngine::Events::EventHandler<void> OnGraphLoadedEventHandler;
 	};
 }

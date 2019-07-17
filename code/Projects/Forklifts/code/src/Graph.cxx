@@ -32,6 +32,8 @@ namespace Forklifts {
 	{
 		delete m_graph;
 		m_graph = nullptr;
+		NodeMap.clear();
+		EdgeMap.clear();
 	}
 
 	// Update is called once per frame
@@ -126,9 +128,11 @@ namespace Forklifts {
 
 		for (auto& node : m_graph->nodes)
 			SpawnNode(*node);
+
+		GraphLoadedEvent();
 	}
 
-	void Graph::SpawnNode(const GraphNode& node)
+	void Graph::SpawnNode(GraphNode& node)
 	{
 		glm::vec2 pos(node.Data().KoordX, node.Data().KoordY);
 		pos *= scale;
@@ -141,7 +145,10 @@ namespace Forklifts {
 		AIngine::Physics::PhysicsProperties properties;
 		physComp->CreateCircleBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, 0.075 / 2.0, true, true);
 
-		spawned->AddComponent<Node>()->node = &node;
+		Node* n = spawned->AddComponent<Node>();
+		n->node = &node;
+		NodeMap[&node] = n;
+
 	}
 
 	void Graph::SpawnEdge(GraphNode& from, GraphNode& to)
@@ -168,6 +175,9 @@ namespace Forklifts {
 		sprite->SetColor(glm::vec4(0.24, 0.7, 1, 1));
 		spawned->SetRotation(glm::acos(glm::dot(glm::normalize(posTo - posFrom), glm::vec2(1, 0))));
 
-		spawned->AddComponent<Edge>()->edge = from.GetEdge(&to);
+		Edge* e = spawned->AddComponent<Edge>();
+		e->edge = from.GetEdge(&to);
+
+		EdgeMap[from.GetEdge(&to)] = e;
 	}
 }

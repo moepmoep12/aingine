@@ -4,8 +4,8 @@
 
 namespace Forklifts {
 	struct Task {
-		IGraphNode<NodeData, EdgeData>* startNode;
-		IGraphNode<NodeData, EdgeData>* endNode;
+		Node* startNode;
+		Node* endNode;
 		int Ticks = 0;
 		int visitedNodes = 0;
 	};

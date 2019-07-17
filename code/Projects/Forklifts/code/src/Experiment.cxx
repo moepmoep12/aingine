@@ -18,7 +18,30 @@ namespace Forklifts {
 	{
 
 		m_graph = GetChild("Graph")->GetComponent<Graph>();
+		OnGraphLoadedEventHandler = AIngine::Events::EventHandler<void>(std::bind(&Experiment::Init, this));
+		m_graph->GraphLoadedEvent += OnGraphLoadedEventHandler;
 
+	}
+
+	// End is called when gameplay ends for this script
+	void Experiment::OnEnd()
+	{
+		m_forkLiftTasks.clear();
+		m_graph->GraphLoadedEvent -= OnGraphLoadedEventHandler;
+	}
+
+	// Update is called once per frame
+	void Experiment::Update(float delta)
+	{
+	}
+
+	// Callback for events
+	void Experiment::OnEventData(AIngine::Events::EventData & e)
+	{
+	}
+
+	void Experiment::Init()
+	{
 		for (int i = 0; i < forkLiftCount; i++) {
 			std::stringstream name;
 			std::stringstream path;
@@ -43,29 +66,14 @@ namespace Forklifts {
 				GraphNode* toNode = m_graph->FindNode(to);
 
 				Task task{
-					fromNode,
-					toNode
+					m_graph->NodeMap[fromNode],
+					m_graph->NodeMap[toNode]
 				};
 
 				m_forkLiftTasks[i].second.push_back(task);
 			}
 
+			forklift->GetOwner()->SetWorldPosition(m_forkLiftTasks[i].second[0].startNode->GetOwner()->GetWorldPosition());
 		}
-	}
-
-	// End is called when gameplay ends for this script
-	void Experiment::OnEnd()
-	{
-		m_forkLiftTasks.clear();
-	}
-
-	// Update is called once per frame
-	void Experiment::Update(float delta)
-	{
-	}
-
-	// Callback for events
-	void Experiment::OnEventData(AIngine::Events::EventData & e)
-	{
 	}
 }

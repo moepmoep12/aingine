@@ -10,8 +10,9 @@ namespace Forklifts {
 
 	// Constructor
 	Forklifts::Forklifts()
-	{		// Configure the physics world with a gravity of 10 downwards
-		m_gravity = glm::vec2(0, 10);
+	{		
+		// Configure the physics world with no gravity 
+		m_gravity = glm::vec2(0, 0);
 
 		// Set the bounds of the world to be 10 in width and 10 in height
 		m_bounds = glm::vec4(0.0, 10.0, 0.0, 10.0);
