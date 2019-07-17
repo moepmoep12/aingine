@@ -41,7 +41,7 @@ namespace AIngine::Structures {
 
 	private:
 		GameObject* m_Root;
-		AIngine::Memory::Pool<GameObject> m_gameObjectPool = AIngine::Memory::Pool<GameObject>(1000);
+		AIngine::Memory::Pool<GameObject> m_gameObjectPool = AIngine::Memory::Pool<GameObject>(5000);
 
 		void Reset();
 
