@@ -52,15 +52,31 @@ namespace AIngine::Rendering {
 
 		std::string FileName;
 
-	//	inline glm::vec3 GetColor() const { return m_color; }
-	//	inline void SetColor(const glm::vec3& color) { m_color = color; }
-
-	//	inline GLfloat GetAlpha() const { return m_alpha; }
-	//	inline void SetAlpha(GLfloat alpha) { m_alpha = alpha; }
-
-	//private:
-	//	glm::vec3 m_color;
-	//	GLfloat m_alpha = 1.0f;
+		bool operator==(const Texture2D& other) const;
 	};
+}
+
+namespace std {
+
+	template <>
+	struct hash<AIngine::Rendering::Texture2D>
+	{
+		std::size_t operator()(const AIngine::Rendering::Texture2D& k) const
+		{
+			using std::size_t;
+			using std::hash;
+			using std::string;
+
+			// Compute individual hash values for first, second and third
+			// http://stackoverflow.com/a/1646913/126995
+			size_t res = 17;
+			res = res * 31 + hash<int>()(k.Width);
+			res = res * 31 + hash<int>()(k.Height);
+			res = res * 31 + hash<int>()(k.Image_Format);
+			res = res * 31 + hash<string>()(k.FileName);
+			return res;
+		}
+	};
+
 }
 

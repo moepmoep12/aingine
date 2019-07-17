@@ -134,4 +134,15 @@ namespace AIngine::Rendering {
 	{
 		glBindTexture(GL_TEXTURE_2D, this->ID);
 	}
+
+	bool Texture2D::operator==(const Texture2D & other) const
+	{
+		return other.FileName == FileName
+			&& other.Filter_Max == Filter_Max
+			&& other.Filter_Min == other.Filter_Min
+			&& other.Height == Height
+			&& other.Image_Format == Image_Format
+			&& other.Wrap_S == Wrap_S
+			&& other.Wrap_T == Wrap_T;
+	}
 }
