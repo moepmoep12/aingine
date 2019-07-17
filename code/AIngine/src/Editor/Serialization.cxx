@@ -183,6 +183,7 @@ namespace AIngine::Editor::Serialization {
 		const char* XCSAGENTSUPERVISOR_CONSTANTS_DOACTIONMUTATION = "constants_doActionMutation";
 		const char* XCSAGENTSUPERVISOR_CONSTANTS_DOACTIONSETSUBSUMPTION = "constants_doActionSetSubsumption";
 		const char* XCSAGENTSUPERVISOR_CONSTANTS_DOGASUBSUMPTION = "constants_doGASubsumption";
+		const char* XCSAGENTSUPERVISOR_CONSTANTS_COVERRANDOMRANGETRUNCATION = "constants_doCoveringRandomRangeTruncation";
 		const char* XCSAGENTSUPERVISOR_CONSTANTS_USEMAM = "constants_useMAM";
 
 		// Agent
@@ -655,6 +656,7 @@ namespace AIngine::Editor::Serialization {
 		supervisor->GetConstants().doActionMutation = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DOACTIONMUTATION];
 		supervisor->GetConstants().doActionSetSubsumption = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DOACTIONSETSUBSUMPTION];
 		supervisor->GetConstants().doGASubsumption = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DOGASUBSUMPTION];
+		supervisor->GetConstants().doCoveringRandomRangeTruncation = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_COVERRANDOMRANGETRUNCATION];
 		supervisor->GetConstants().useMAM = (*j)[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_USEMAM];
 
 		supervisor->ChangeRepresentation((xxr::XCSRRepr)(*j)[AttributeNames::XCSAGENTSUPERVISOR_REPR]);
@@ -1067,6 +1069,7 @@ namespace AIngine::Editor::Serialization {
 		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DOACTIONMUTATION] = supervisor.GetConstants().doActionMutation;
 		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DOACTIONSETSUBSUMPTION] = supervisor.GetConstants().doActionSetSubsumption;
 		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_DOGASUBSUMPTION] = supervisor.GetConstants().doGASubsumption;
+		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_COVERRANDOMRANGETRUNCATION] = supervisor.GetConstants().doCoveringRandomRangeTruncation;
 		j[AttributeNames::XCSAGENTSUPERVISOR_CONSTANTS_USEMAM] = supervisor.GetConstants().useMAM;
 
 		for (auto agent : supervisor.GetAgents())

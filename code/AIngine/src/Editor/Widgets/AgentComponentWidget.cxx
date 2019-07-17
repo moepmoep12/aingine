@@ -407,6 +407,7 @@ namespace AIngine::Editor::Widget::Component {
 						ImGui::EndTooltip();
 					}
 
+					ImGui::Checkbox("doCoveringRandomRangeTruncation", &constants.doCoveringRandomRangeTruncation);
 					ImGui::Checkbox("doActionMutation", &constants.doActionMutation);
 					ImGui::Checkbox("doActionSetSubsumption", &constants.doActionSetSubsumption);
 					ImGui::Checkbox("doGASubsumption", &constants.doGASubsumption);
@@ -445,6 +446,12 @@ namespace AIngine::Editor::Widget::Component {
 				dropTarget = nullptr;
 
 		}
+	}
+
+	void AgentSupervisorComponentWidget::ShowPopulation(AIngine::XCSAgentSupervisor& supervisor)
+	{
+		xxr::xcsr_impl::Experiment<double, int>* xcs = supervisor.m_xcsr.get();
+		//xcs->get
 	}
 
 
