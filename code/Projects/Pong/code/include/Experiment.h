@@ -15,16 +15,16 @@ namespace Pong {
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
 		virtual void OnGUI() override;
 
-		PhysicsComponent* LeftEdge;
-		PhysicsComponent* RightEdge;
-		PhysicsComponent* TopEdge;
-		PhysicsComponent* BottomEdge;
-		Player* PlayerOne;
-		Player* PlayerTwo;
-		PhysicsComponent* BallBody;
+		PhysicsComponent* LeftEdge = nullptr;
+		PhysicsComponent* RightEdge = nullptr;
+		PhysicsComponent* TopEdge = nullptr;
+		PhysicsComponent* BottomEdge = nullptr;
+		Player* PlayerOne = nullptr;
+		Player* PlayerTwo = nullptr;
+		PhysicsComponent* BallBody = nullptr;
 
-		int ScorePlayerOne;
-		int ScorePlayerTwo;
+		int ScorePlayerOne = 0;
+		int ScorePlayerTwo = 0;
 
 		AIngine::Structures::RectangleF ArenaRect;
 

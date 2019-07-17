@@ -22,7 +22,7 @@ namespace Pong {
 		ArenaRect = AIngine::Structures::RectangleF(GetOwner()->GetWorldPosition().x, GetOwner()->GetWorldPosition().y,
 			TopEdge->GetBodyInformation().width, RightEdge->GetBodyInformation().height);
 
-		//ScoreText = GetOwner()->GetChild("ScoreText")->GetComponent<AIngine::UI::UIText>();
+		ScoreText = AIngine::World::GetGameObject("ScoreText")->GetComponent<AIngine::UI::UIText>();
 
 		auto components = GetOwner()->GetChild("PlayerOne")->GetComponents();
 		for (auto& comp : components)
@@ -69,9 +69,9 @@ namespace Pong {
 
 	void Experiment::OnGUI()
 	{
-		//std::stringstream ss;
-		//ss << Pong::ScorePlayerOne << "  :  " << Pong::ScorePlayerTwo;
-		//ScoreText->Text = ss.str();
+		std::stringstream ss;
+		ss << ScorePlayerOne << "  :  " << ScorePlayerTwo;
+		ScoreText->Text = ss.str();
 
 		Graphics::BoxWorld(ArenaRect, glm::vec4(0, 0, 0, 1));
 	}

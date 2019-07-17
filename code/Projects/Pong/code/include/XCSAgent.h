@@ -12,6 +12,7 @@ namespace Pong {
 		virtual void OnEnd() override;
 		virtual void Update(float delta) override;
 		virtual void OnGUI() override;
+		virtual void OnWidget() override;
 
 		// Inherited via Player
 		virtual void OnScored(PlayerRole goalie) override;
@@ -26,7 +27,7 @@ namespace Pong {
 
 
 	private:
-		double ComputeBallCollisionPoint();
+		std::vector<glm::vec2> CalcIntersections();
 		bool DoesBallCollide();
 
 	private:
@@ -36,5 +37,9 @@ namespace Pong {
 		double distanceToCollisionPoint = 0;
 		bool scored = false;
 		PlayerRole goalie;
+		std::vector<std::pair<int, int>> scores;
+		bool testing = false;
+
+
 	};
 }
