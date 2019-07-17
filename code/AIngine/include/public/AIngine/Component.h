@@ -40,13 +40,28 @@ namespace AIngine {
 		virtual void OnUpdate(float deltatime) {}
 		virtual void OnImGuiRender() {}
 
-		virtual void OnOwnerTransformChanged(const glm::vec2 newPosition, const glm::vec2& newScale, const float& newRotation) {}
-		virtual void OnOwnerLocalPositionChanged(const glm::vec2& position) {}
-		virtual void OnOwnerLocalScaleChanged(const glm::vec2& scale) {}
-		virtual void OnOwnerLocalRotationChanged(const float& rot) {}
-		virtual void OnOwnerParentChanged(const GameObject& newParent) {}
+		template<class T>
+		inline T* GetComponent() {
+			return m_owner->GetComponent<T>();
+		}
 
-		inline GameObject* GetOwner() { return m_owner; }
+		inline const std::vector<Component*>& GetComponents()
+		{
+			return m_owner->GetComponents();
+		}
+
+		inline GameObject* const GetParent() {
+			return m_owner->GetParent();
+		}
+
+		inline GameObject* GetChild(const std::string& name) {
+			return m_owner->GetChild(name);
+		}
+
+
+		inline GameObject* GetOwner() {
+			return m_owner;
+		}
 
 		Component(const Component& other) = delete;
 		Component(Component&& other) = delete;
@@ -67,7 +82,14 @@ namespace AIngine {
 		/* To be called by GameObject AFTER constructing a Component*/
 		virtual void PostInit() {}
 
+		virtual void OnOwnerTransformChanged(const glm::vec2 newPosition, const glm::vec2& newScale, const float& newRotation) {}
+		virtual void OnOwnerLocalPositionChanged(const glm::vec2& position) {}
+		virtual void OnOwnerLocalScaleChanged(const glm::vec2& scale) {}
+		virtual void OnOwnerLocalRotationChanged(const float& rot) {}
+		virtual void OnOwnerParentChanged(const GameObject& newParent) {}
+
 		virtual Component* Copy(GameObject* const owner) const { return nullptr; }
+
 
 	private:
 		std::string m_name;
