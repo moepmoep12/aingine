@@ -53,7 +53,7 @@ namespace Pong {
 
 			ss << std::fixed << std::setprecision(1) << value * 100 << "%";
 			Graphics::Text(ss.str(), position);
-			position += glm::vec2(0, 42);
+			position += glm::vec2(0, 50);
 		}
 	}
 
@@ -62,6 +62,10 @@ namespace Pong {
 		if (ImGui::Checkbox("Measure Performance", &testing)) {
 			m_experiment->ScorePlayerOne = 0;
 			m_experiment->ScorePlayerTwo = 0;
+		}
+
+		for (int i = 0; i < observation.size(); i++) {
+			ImGui::InputDouble(std::to_string(i).c_str(), &observation[i]);
 		}
 	}
 
@@ -90,35 +94,47 @@ namespace Pong {
 		else index = 2;
 
 		collisionPointX = intersections[index].x;
-		collisionPointY = intersections[index].y;
+		collisionPointY = intersections[0].y;
 
-		if (ballVel.y == 0) collisionPointX = 0;
+		if (glm::length(ballVel) == 0) {
+			collisionPointX = ballPos.x;
+			collisionPointY = ballPos.y;
+		}
 
-		if (collisionPointX == relativePos.x)
+		if (rect.Contains(intersections[0])) {
+
 			distanceToCollisionPoint = std::abs(relativePos.y - collisionPointY);
-		else
+		}
+		else {
 			distanceToCollisionPoint = -1;
+		}
+
+		//if (ballVel.y == 0) collisionPointX = 0;
+
+		//if (collisionPointX == relativePos.x)
+		//	distanceToCollisionPoint = std::abs(relativePos.y - collisionPointY);
+		//else
+		//	distanceToCollisionPoint = -1;
 
 
 		std::vector<double> result = {
-			relativePos.y / rect.height, // agent height
-			glm::distance(relativePos, ballPos) / rect.width, // distance to ball
-			std::abs(relativePos.x - ballPos.x) / rect.width, // distance to ball X
-			std::abs(relativePos.y - ballPos.y) / rect.height, // distance to ball X
-			std::clamp(ballVel.x / 10.0, -1.0, 1.0), // ballVelocity X
-			std::clamp(ballVel.y / 10.0, -1.0, 1.0), // ballVelocity Y
-			ballPos.x / rect.width, //  ballPos Y
-			ballPos.y / rect.height, //  ballPos X
-			std::clamp(collisionPointX / rect.width, -1.05, 1.05), //  collisionpoint X
-			std::clamp(collisionPointY / rect.height, -1.05, 1.05), //  collisionpoint Y
-			std::clamp(distanceToCollisionPoint / rect.height, -1.05, 1.05), // distance to collisionpoint Y
-			other->GetOwner()->GetLocalPosition().y / rect.height, // other player height
-			(double)lastAction, // last action
-			(rect.GetMax().y - ballPos.y) / rect.height, // ball distance to bottom edge
-			(rect.y - ballPos.y) / rect.height, // ball distance to top edge
-			//glm::dot(glm::vec2(1,0), glm::normalize(m_experiment->BallBody->GetVelocity()))
+	/* 0 */ relativePos.y / rect.height, // agent height
+	/* 1 */ glm::distance(relativePos, ballPos) / rect.width, // distance to ball
+	/* 2 */ std::abs(relativePos.x - ballPos.x) / rect.width, // distance to ball X
+	/* 3 */ std::abs(relativePos.y - ballPos.y) / rect.height, // distance to ball Y
+	/* 4 */ std::clamp(ballVel.x / 10.0, -1.0, 1.0), // ballVelocity X
+	/* 5 */ std::clamp(ballVel.y / 10.0, -1.0, 1.0), // ballVelocity Y
+	/* 6 */ ballPos.x / rect.width, //  ballPos Y
+	/* 7 */ ballPos.y / rect.height, //  ballPos X
+		  //std::clamp(collisionPointX / rect.width, -1.05, 1.05), //  collisionpoint X
+	/* 8 */ std::clamp(collisionPointY / rect.height, -1.05, 1.05), //  collisionpoint Y
+	/* 9 */ distanceToCollisionPoint != -1 ? distanceToCollisionPoint / rect.height : -1, // distance to collisionpoint Y
+	/* 10 */ other->GetOwner()->GetLocalPosition().y / rect.height, // other player height
+	/* 11 */ (double)lastAction, // last action
+	/* 12 */ (rect.GetMax().y - ballPos.y) / rect.height, // ball distance to bottom edge
+	/* 13 */ (rect.y - ballPos.y) / rect.height, // ball distance to top edge
 		};
-
+		observation = result;
 		return result;
 	}
 
@@ -151,7 +167,7 @@ namespace Pong {
 		}
 
 		// collision out of reach
-		if (collisionPointX != GetOwner()->GetLocalPosition().x) {
+		if (collisionPointY < m_experiment->ArenaRect.y || collisionPointY > m_experiment->ArenaRect.GetMax().y) {
 			if (action == 0) AddReward(10);
 		}
 		else {
@@ -159,7 +175,7 @@ namespace Pong {
 			if (std::abs(distanceToCollisionPoint) < 0.3f) {
 				AddReward(10);
 				// add more reward if the agent doesn't move once in the right spot
-				if (action == 0) AddReward(10);
+				if (action == 0) AddReward(20);
 			}
 			else
 			{

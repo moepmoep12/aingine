@@ -39,7 +39,7 @@ namespace Pong {
 		PlayerRole goalie;
 		std::vector<std::pair<int, int>> scores;
 		bool testing = false;
-
+		std::vector<double> observation;
 
 	};
 }
