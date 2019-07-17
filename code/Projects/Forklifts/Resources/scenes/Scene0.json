@@ -30,15 +30,34 @@
 "Forklift0": {
 "a_active": true,
 "a_name": "Forklift0",
-"a_posX": 0.0,
-"a_posY": 0.0,
+"a_posX": -5.0,
+"a_posY": 2.5,
 "a_rotation": 0.0,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
 "b_components": {
 "script": [
 3
-]
+],
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 0.20000000298023224,
+"sizeY": 0.20000000298023224,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "textures\\forklift.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
 }
 }
 },
