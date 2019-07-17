@@ -37,7 +37,7 @@ namespace CrappyBird {
 		constants.n = 300;
 		constants.epsilonZero = 10;
 		static std::unordered_set<int> options = std::unordered_set<int>{ 0, 1 };
-		m_xcsr = new xxr::XCSR<>(xxr::CSR, options, constants);
+		m_xcsr = new xxr::XCSR<>(options, constants, xxr::CSR);
 	}
 
 	// End is called when gameplay ends for this script

@@ -14,7 +14,7 @@ namespace CrappyBird {
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
 		virtual void OnGUI() override;
 
-		xxr::XCSR<>* xcsr;
+		//xxr::XCSR<>* xcsr;
 
 	private:
 		// the physical body of the rocket
