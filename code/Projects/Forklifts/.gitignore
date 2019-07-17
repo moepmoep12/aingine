@@ -1,0 +1,21 @@
+# Ignore vim files
+*.swp
+
+# CLion 
+/.idea/
+/cmake-build-*/
+/build_gl3_project/
+/out/
+
+#Cmake
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps

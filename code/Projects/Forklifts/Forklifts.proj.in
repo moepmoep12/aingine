@@ -1,0 +1,12 @@
+{
+"installPath": "@InstallPath@",
+"name": "Forklifts",
+"path": "@projectDir@",
+"scripts": [
+"Node",
+"Edge",
+"Graph",
+"Forklift",
+"Experiment"
+]
+}

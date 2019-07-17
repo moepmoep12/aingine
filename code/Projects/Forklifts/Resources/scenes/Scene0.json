@@ -1,0 +1,66 @@
+{
+"Root": {
+"a_active": true,
+"a_name": "Root",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null
+},
+"c_children": [
+{
+"Experiment": {
+"a_active": true,
+"a_name": "Experiment",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": [
+4
+]
+},
+"c_children": [
+{
+"Forklift0": {
+"a_active": true,
+"a_name": "Forklift0",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": [
+3
+]
+}
+}
+},
+{
+"Graph": {
+"a_active": true,
+"a_name": "Graph",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": [
+2
+]
+}
+}
+}
+]
+}
+}
+]
+}
+}
