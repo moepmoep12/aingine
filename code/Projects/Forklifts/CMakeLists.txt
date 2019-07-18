@@ -11,6 +11,7 @@ set(SRC
     code/src/Graph.cxx
     code/src/Forklift.cxx
     code/src/Experiment.cxx
+    code/src/ForkliftAgent.cxx
     code/src/${PROJECT_NAME}.cxx
     code/src/Scripting_generated.cxx
      )
@@ -22,6 +23,7 @@ set(HEADER
     code/include/Forklift.h
     code/include/Experiment.h
     code/include/Tasks.h
+    code/include/ForkliftAgent.h
 	   code/include/${PROJECT_NAME}.h
     )
 

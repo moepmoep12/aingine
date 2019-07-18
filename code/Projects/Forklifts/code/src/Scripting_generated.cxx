@@ -5,6 +5,7 @@
 #include "Graph.h"
 #include "Forklift.h"
 #include "Experiment.h"
+#include "ForkliftAgent.h"
 #include <vector>
 #include <string>
 
@@ -14,6 +15,7 @@ std::vector<std::string> AIngine::ApplicationComponentNames = {
     "Graph",
     "Forklift",
     "Experiment",
+    "ForkliftAgent",
 };
 
 void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
@@ -36,6 +38,10 @@ void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
 
 	case 4:
 		obj->AddComponent<Forklifts::Experiment>()->ScriptIndex = 4;
+		break;
+
+	case 5:
+		obj->AddComponent<Forklifts::ForkliftAgent>()->ScriptIndex = 5;
 		break;
 
 	}
