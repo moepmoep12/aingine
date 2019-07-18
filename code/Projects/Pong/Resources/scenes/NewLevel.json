@@ -72,7 +72,7 @@
 "explore": true,
 "maxSteps": 0,
 "observationsSize": 0,
-"populationPath": "xcs\\001_UBR_n=2757_sucess.json",
+"populationPath": "",
 "possibleActions": [
 0,
 1,
@@ -494,7 +494,7 @@
 "filterMax": 9729,
 "filterMin": 9729,
 "imageFormat": 6408,
-"path": "AIngine\\textures\\Circle.png",
+"path": "textures\\ball.png",
 "wrapS": 10497,
 "wrapT": 10497
 }
@@ -508,7 +508,7 @@
 "a_name": "PlayerOne",
 "a_posX": 0.5,
 "a_posY": 2.5,
-"a_rotation": 0.0,
+"a_rotation": -1.5707963705062866,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
 "b_components": {
@@ -517,27 +517,27 @@
 "bodyType": 0,
 "density": 1.0,
 "friction": 0.0,
-"height": 1.0,
+"height": 0.25,
 "isTrigger": false,
 "restitution": 1.0,
 "shape": 1,
 "vertexcount": 4,
 "vertices": [
 {
-"x": -0.125,
-"y": -0.5
+"x": -0.5,
+"y": -0.125
 },
 {
-"x": 0.125,
-"y": -0.5
+"x": -0.5,
+"y": 0.125
 },
 {
-"x": 0.125,
-"y": 0.5
+"x": 0.5,
+"y": 0.125
 },
 {
-"x": -0.125,
-"y": 0.5
+"x": 0.5,
+"y": -0.125
 },
 {
 "x": 0.0,
@@ -556,7 +556,7 @@
 "y": 0.0
 }
 ],
-"width": 0.25
+"width": 1.0
 },
 "script": [
 5
@@ -569,13 +569,13 @@
 "colorR": 1.0,
 "parallaxX": 1.0,
 "parallaxY": 1.0,
-"sizeX": 0.25,
-"sizeY": 1.0,
+"sizeX": 1.0,
+"sizeY": 0.25,
 "texture": {
 "filterMax": 9729,
 "filterMin": 9729,
-"imageFormat": 6407,
-"path": "AIngine\\textures\\White.png",
+"imageFormat": 6408,
+"path": "textures\\glasspaddle2.png",
 "wrapS": 10497,
 "wrapT": 10497
 }
@@ -589,7 +589,7 @@
 "a_name": "PlayerTwo",
 "a_posX": 9.5,
 "a_posY": 2.5,
-"a_rotation": 0.0,
+"a_rotation": 1.5707963705062866,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
 "b_components": {
@@ -602,27 +602,27 @@
 "bodyType": 0,
 "density": 1.0,
 "friction": 0.0,
-"height": 1.0,
+"height": 0.25,
 "isTrigger": false,
 "restitution": 1.0,
 "shape": 1,
 "vertexcount": 4,
 "vertices": [
 {
-"x": -0.125,
-"y": -0.5
+"x": -0.5,
+"y": -0.125
 },
 {
-"x": 0.125,
-"y": -0.5
+"x": -0.5,
+"y": 0.125
 },
 {
-"x": 0.125,
-"y": 0.5
+"x": 0.5,
+"y": 0.125
 },
 {
-"x": -0.125,
-"y": 0.5
+"x": 0.5,
+"y": -0.125
 },
 {
 "x": 0.0,
@@ -641,7 +641,7 @@
 "y": 0.0
 }
 ],
-"width": 0.25
+"width": 1.0
 },
 "script": [
 6
@@ -654,13 +654,13 @@
 "colorR": 1.0,
 "parallaxX": 1.0,
 "parallaxY": 1.0,
-"sizeX": 0.25,
-"sizeY": 1.0,
+"sizeX": 1.0,
+"sizeY": 0.25,
 "texture": {
 "filterMax": 9729,
 "filterMin": 9729,
-"imageFormat": 6407,
-"path": "AIngine\\textures\\White.png",
+"imageFormat": 6408,
+"path": "textures\\paddle.png",
 "wrapS": 10497,
 "wrapT": 10497
 }

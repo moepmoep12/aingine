@@ -14,6 +14,7 @@ set(SRC
     code/src/RandomAgent.cxx
     code/src/XCSAgent.cxx
     code/src/Experiment.cxx
+    code/src/MainMenu.cxx
     code/src/${PROJECT_NAME}.cxx
     code/src/Scripting_generated.cxx
      )
@@ -27,6 +28,7 @@ set(HEADER
     code/include/RandomAgent.h
     code/include/XCSAgent.h
     code/include/Experiment.h
+    code/include/MainMenu.h
 	   code/include/${PROJECT_NAME}.h
     )
 
