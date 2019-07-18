@@ -1,18 +1,18 @@
 [
-{
+ {
 		"Areal": "",
-		"SFanr": "0001281665",
+		"SFanr": "0001136016",
 		"Fastat": 80,
 		"ArealVon": "S2D2",
 		"ArealNach": "S2D2",
-		"KnotenVon": "00371",
-		"KnotenNach": "00371",
-		"PlatzVon": "MD08-B",
-		"PlatzNach": "MD08-B",
+		"KnotenVon": "00387",
+		"KnotenNach": "00113",
+		"PlatzVon": "P3",
+		"PlatzNach": "RAMPE3",
 		"Stogr": "00",
-		"AusfResou": "ROUZU-01",
-		"TimestampVon": "2019-01-31T18:49:02Z",
-		"TimestampNach": "2019-01-31T18:49:12Z"
+		"AusfResou": "LKW-BOT-01",
+		"TimestampVon": "2018-10-12T20:49:13Z",
+		"TimestampNach": "2018-10-12T20:52:39Z"
 	}, {
 		"Areal": "",
 		"SFanr": "0001281650",
@@ -29,32 +29,32 @@
 		"TimestampNach": "2019-01-31T18:49:17Z"
 	}, {
 		"Areal": "",
-		"SFanr": "0001281642",
+		"SFanr": "0001136094",
 		"Fastat": 80,
 		"ArealVon": "S2D2",
 		"ArealNach": "S2D2",
-		"KnotenVon": "00376",
-		"KnotenNach": "00376",
-		"PlatzVon": "MD10-B",
-		"PlatzNach": "MD10-B",
+		"KnotenVon": "00061",
+		"KnotenNach": "00098",
+		"PlatzVon": "200=001=113-03-16",
+		"PlatzNach": "ÜBERGABE7",
 		"Stogr": "00",
-		"AusfResou": "ROUZU-01",
-		"TimestampVon": "2019-01-31T18:49:19Z",
-		"TimestampNach": "2019-01-31T18:49:20Z"
+		"AusfResou": "HRLST-BOT-02",
+		"TimestampVon": "2018-10-12T20:52:45Z",
+		"TimestampNach": "2018-10-12T20:55:13Z"
 	}, {
 		"Areal": "",
-		"SFanr": "0001281649",
+		"SFanr": "0001136083",
 		"Fastat": 80,
 		"ArealVon": "S2D2",
 		"ArealNach": "S2D2",
-		"KnotenVon": "00377",
-		"KnotenNach": "00377",
-		"PlatzVon": "MD10-A",
-		"PlatzNach": "MD10-A",
+		"KnotenVon": "00098",
+		"KnotenNach": "00059",
+		"PlatzVon": "ÜBERGABE7",
+		"PlatzNach": "200=001=108-04-20",
 		"Stogr": "00",
-		"AusfResou": "ROUZU-01",
-		"TimestampVon": "2019-01-31T18:49:21Z",
-		"TimestampNach": "2019-01-31T18:49:22Z"
+		"AusfResou": "HRLST-BOT-01",
+		"TimestampVon": "2018-10-12T20:55:12Z",
+		"TimestampNach": "2018-10-12T20:58:31Z"
 	}, {
 		"Areal": "",
 		"SFanr": "0001281670",
@@ -71,18 +71,18 @@
 		"TimestampNach": "2019-01-31T18:49:24Z"
 	}, {
 		"Areal": "",
-		"SFanr": "0001281654",
+		"SFanr": "0001136018",
 		"Fastat": 80,
 		"ArealVon": "S2D2",
 		"ArealNach": "S2D2",
-		"KnotenVon": "00377",
-		"KnotenNach": "00380",
-		"PlatzVon": "MD10-A",
-		"PlatzNach": "MD11-A",
+		"KnotenVon": "00387",
+		"KnotenNach": "00119",
+		"PlatzVon": "P3",
+		"PlatzNach": "RAMPE1",
 		"Stogr": "00",
-		"AusfResou": "ROUZU-01",
-		"TimestampVon": "2019-01-31T18:49:24Z",
-		"TimestampNach": "2019-01-31T18:49:26Z"
+		"AusfResou": "LKW-BOT-01",
+		"TimestampVon": "2018-10-12T20:55:12Z",
+		"TimestampNach": "2018-10-12T20:58:37Z"
 	}, {
 		"Areal": "",
 		"SFanr": "0001281679",
@@ -99,18 +99,18 @@
 		"TimestampNach": "2019-01-31T18:49:28Z"
 	}, {
 		"Areal": "",
-		"SFanr": "0001281669",
+		"SFanr": "0001136084",
 		"Fastat": 80,
 		"ArealVon": "S2D2",
 		"ArealNach": "S2D2",
-		"KnotenVon": "00380",
-		"KnotenNach": "00380",
-		"PlatzVon": "MD11-A",
-		"PlatzNach": "MD11-A",
+		"KnotenVon": "00098",
+		"KnotenNach": "00061",
+		"PlatzVon": "ÜBERGABE7",
+		"PlatzNach": "200=001=113-03-15",
 		"Stogr": "00",
-		"AusfResou": "ROUZU-01",
-		"TimestampVon": "2019-01-31T18:49:32Z",
-		"TimestampNach": "2019-01-31T18:49:35Z"
+		"AusfResou": "HRLST-BOT-02",
+		"TimestampVon": "2018-10-12T20:58:42Z",
+		"TimestampNach": "2018-10-12T21:01:13Z"
 	}, {
 		"Areal": "",
 		"SFanr": "0001281672",
@@ -183,18 +183,18 @@
 		"TimestampNach": "2019-01-31T18:49:57Z"
 	}, {
 		"Areal": "",
-		"SFanr": "0001281655",
+		"SFanr": "0001136085",
 		"Fastat": 80,
 		"ArealVon": "S2D2",
 		"ArealNach": "S2D2",
-		"KnotenVon": "00372",
-		"KnotenNach": "00372",
-		"PlatzVon": "MD07-A",
-		"PlatzNach": "MD07-A",
+		"KnotenVon": "00098",
+		"KnotenNach": "00061",
+		"PlatzVon": "ÜBERGABE7",
+		"PlatzNach": "200=001=113-03-15",
 		"Stogr": "00",
-		"AusfResou": "ROUZU-01",
-		"TimestampVon": "2019-01-31T18:49:52Z",
-		"TimestampNach": "2019-01-31T18:49:53Z"
+		"AusfResou": "HRLST-BOT-01",
+		"TimestampVon": "2018-10-12T21:01:13Z",
+		"TimestampNach": "2018-10-12T21:04:42Z"
 	}, {
 		"Areal": "",
 		"SFanr": "0001281646",
@@ -225,18 +225,18 @@
 		"TimestampNach": "2019-02-01T14:37:52Z"
 	}, {
 		"Areal": "",
-		"SFanr": "0001281710",
+		"SFanr": "0001136125",
 		"Fastat": 80,
 		"ArealVon": "S2D2",
 		"ArealNach": "S2D2",
-		"KnotenVon": "00370",
-		"KnotenNach": "00377",
-		"PlatzVon": "MD08-A",
-		"PlatzNach": "MD10-A",
+		"KnotenVon": "00385",
+		"KnotenNach": "00119",
+		"PlatzVon": "P1",
+		"PlatzNach": "RAMPE1",
 		"Stogr": "00",
-		"AusfResou": "ROUZU-01",
-		"TimestampVon": "2019-02-01T14:56:25Z",
-		"TimestampNach": "2019-02-01T14:57:26Z"
+		"AusfResou": "LKW-BOT-01",
+		"TimestampVon": "2018-10-12T21:31:13Z",
+		"TimestampNach": "2018-10-12T21:34:53Z"
 	},
 {
 		"Areal": "",

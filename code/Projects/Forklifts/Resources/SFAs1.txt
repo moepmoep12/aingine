@@ -223,7 +223,7 @@
 		"AusfResou": "LIN1T-BOT-01",
 		"TimestampVon": "2018-10-01T00:19:15Z",
 		"TimestampNach": "2018-10-01T00:22:05Z"
-[	}, {
+	}, {
 		"Areal": "",
 		"SFanr": "0001121669",
 		"Fastat": 80,
@@ -280,4 +280,4 @@
 		"TimestampVon": "2018-10-01T00:22:14Z",
 		"TimestampNach": "2018-10-01T00:25:31Z"
 	}
-	]
+]
