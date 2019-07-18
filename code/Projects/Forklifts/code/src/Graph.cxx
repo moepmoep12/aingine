@@ -27,6 +27,8 @@ namespace Forklifts {
 		LoadGraph();
 	}
 
+	static bool firstFrame = true;
+
 	// End is called when gameplay ends for this script
 	void Graph::OnEnd()
 	{
@@ -34,11 +36,17 @@ namespace Forklifts {
 		m_graph = nullptr;
 		NodeMap.clear();
 		EdgeMap.clear();
+		firstFrame = true;
 	}
+
 
 	// Update is called once per frame
 	void Graph::Update(float delta)
 	{
+		if (firstFrame) {
+			GraphLoadedEvent();
+			firstFrame = false;
+		}
 	}
 
 	// Callback for events
@@ -82,15 +90,15 @@ namespace Forklifts {
 			node->SetData(data);
 			m_graph->AddNode(node);
 
-			if (data.KoordX < min.x)
-				min.x = data.KoordX;
-			if (data.KoordX > max.x)
-				max.x = data.KoordX;
+			if (data.Koords.x < min.x)
+				min.x = data.Koords.x;
+			if (data.Koords.x > max.x)
+				max.x = data.Koords.x;
 
-			if (data.KoordY < min.y)
-				min.y = data.KoordY;
-			if (data.KoordY > max.y)
-				max.y = data.KoordY;
+			if (data.Koords.y < min.y)
+				min.y = data.Koords.x;
+			if (data.Koords.y > max.y)
+				max.y = data.Koords.y;
 		}
 
 
@@ -116,7 +124,7 @@ namespace Forklifts {
 
 			if (!toNode || !fromNode) continue;
 
-			cost = glm::distance(glm::vec2(toNode->Data().KoordX, toNode->Data().KoordY), glm::vec2(fromNode->Data().KoordX, fromNode->Data().KoordY));
+			cost = glm::distance(toNode->Data().Koords, fromNode->Data().Koords);
 
 			m_graph->AddEdgeDirectional(fromNode, toNode, new IEdge<EdgeData>(data, cost));
 
@@ -129,21 +137,21 @@ namespace Forklifts {
 		for (auto& node : m_graph->nodes)
 			SpawnNode(*node);
 
-		GraphLoadedEvent();
 	}
 
 	void Graph::SpawnNode(GraphNode& node)
 	{
-		glm::vec2 pos(node.Data().KoordX, node.Data().KoordY);
+		glm::vec2 pos(node.Data().Koords);
 		pos *= scale;
 
 		GameObject* spawned = AIngine::World::SpawnObject(node.Data().Name, this->m_owner, pos);
 		Sprite* sprite = spawned->AddComponent<Sprite>();
 		sprite->SetTexture(Texture2D(AIngine::Assets::AssetRegistry::Load<BitmapAsset>("AIngine/textures/Circle.png")->GetBitmap()));
-		sprite->SetLocalWorldSize(glm::vec2(0.075, 0.075));
+		sprite->SetLocalWorldSize(glm::vec2(0.15, 0.15));
+		sprite->SetColor(glm::vec4(0, 0.176, 1.0, 1.0));
 		PhysicsComponent* physComp = spawned->AddComponent<PhysicsComponent>();
 		AIngine::Physics::PhysicsProperties properties;
-		physComp->CreateCircleBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, 0.075 / 2.0, true, true);
+		physComp->CreateCircleBody(properties, AIngine::Physics::PhysicsBodyType::e_Static, 0.15 / 2.0, true, true);
 
 		Node* n = spawned->AddComponent<Node>();
 		n->node = &node;
@@ -155,10 +163,10 @@ namespace Forklifts {
 	{
 		static const float edgeHeight = 0.05f;
 
-		glm::vec2 posFrom(from.Data().KoordX, from.Data().KoordY);
+		glm::vec2 posFrom(from.Data().Koords);
 		posFrom *= scale;
 
-		glm::vec2 posTo(to.Data().KoordX, to.Data().KoordY);
+		glm::vec2 posTo(to.Data().Koords);
 		posTo *= scale;
 
 		float distance = glm::distance(posFrom, posTo);
@@ -172,8 +180,11 @@ namespace Forklifts {
 		Sprite* sprite = spawned->AddComponent<Sprite>();
 		sprite->SetTexture(Texture2D(AIngine::Assets::AssetRegistry::Load<BitmapAsset>("AIngine/textures/White.png")->GetBitmap()));
 		sprite->SetLocalWorldSize(glm::vec2(distance, edgeHeight));
-		sprite->SetColor(glm::vec4(0.24, 0.7, 1, 1));
-		spawned->SetRotation(glm::acos(glm::dot(glm::normalize(posTo - posFrom), glm::vec2(1, 0))));
+		sprite->SetColor(glm::vec4(0.955, 1.0, 0.24, 1));
+		glm::vec2 v1 = glm::normalize(posTo - posFrom);
+		glm::vec2 v2 = glm::vec2(1, 0);
+		float rot = glm::atan(v1.y, v1.x) - glm::atan(v2.y, v2.x);
+		spawned->SetRotation(rot);
 
 		Edge* e = spawned->AddComponent<Edge>();
 		e->edge = from.GetEdge(&to);

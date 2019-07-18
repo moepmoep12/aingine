@@ -22,7 +22,7 @@ namespace Forklifts {
 	template<class T, class E>
 	class IGraphNode : public INode<T> {
 	public:
-		inline void AddEdge(INode<T>* neighbor, IEdge<E>* edge) {
+		inline void AddEdge(IGraphNode<T, E>* neighbor, IEdge<E>* edge) {
 			if (neighbor == this) return;
 			if (!neighbor) return;
 
@@ -30,7 +30,7 @@ namespace Forklifts {
 				m_neighbors[neighbor] = edge;
 		}
 
-		inline IEdge<E>* AddEdge(INode<T>* neighbor, E& edgeData, float cost) {
+		inline IEdge<E>* AddEdge(IGraphNode<T, E>* neighbor, E& edgeData, float cost) {
 			if (neighbor == this) return nullptr;
 			if (!neighbor) return nullptr;
 
@@ -39,7 +39,7 @@ namespace Forklifts {
 			return edge;
 		}
 
-		inline void ChangeWeight(INode<T>* neigbor, float cost) {
+		inline void ChangeWeight(IGraphNode<T, E>* neigbor, float cost) {
 			if (neighbor == this) return;
 			if (!neighbor) return;
 
@@ -47,7 +47,7 @@ namespace Forklifts {
 				m_neighbors[neighbor].Cost = cost;
 		}
 
-		inline IEdge<E>* GetEdge(INode<T>* neighbor) {
+		inline IEdge<E>* GetEdge(IGraphNode<T, E>* neighbor) {
 			if (neighbor == this) return nullptr;
 			if (!neighbor) return nullptr;
 
@@ -74,7 +74,7 @@ namespace Forklifts {
 		}
 
 
-		std::map<INode<T>*, IEdge<E>*> m_neighbors;
+		std::map<IGraphNode<T, E>*, IEdge<E>*> m_neighbors;
 
 	};
 
@@ -83,33 +83,21 @@ namespace Forklifts {
 		std::string HasPlaces;
 		std::string Name;
 		std::string Bereich;
-		float KoordX;
-		float KoordY;
+		glm::vec2 Koords;
 	};
 
-	inline void to_json(nlohmann::json& j, const NodeData& data)
-	{
-		j = nlohmann::json{
-			{"Areal", data.Areal},
-			{"HasPlaces",data.HasPlaces},
-			{"Knoten", data.Name},
-			{"Bereich", data.Bereich},
-			{"KoordX", data.KoordX},
-			{"KoordY",data.KoordY}
-		};
-	}
 
 	inline void from_json(const nlohmann::json& j, NodeData& data) {
 		j.at("Areal").get_to(data.Areal);
 		j.at("HasPlaces").get_to(data.HasPlaces);
 		j.at("Knoten").get_to(data.Name);
 		j.at("Bereich").get_to(data.Bereich);
-		j.at("KoordX").get_to(data.KoordX);
-		j.at("KoordY").get_to(data.KoordY);
+		j.at("KoordX").get_to(data.Koords.x);
+		j.at("KoordY").get_to(data.Koords.y);
 	}
 
 	class Node : public IGraphNode<NodeData, int>, public Script {
 	public:
-		const IGraphNode<NodeData, EdgeData>* node;
+		IGraphNode<NodeData, EdgeData>* node;
 	};
 }
