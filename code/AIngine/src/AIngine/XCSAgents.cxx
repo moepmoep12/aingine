@@ -52,4 +52,23 @@ namespace AIngine {
 			break;
 		}
 	}
+
+	void XCSAgentSupervisor::SwitchCondensationMode(bool value)
+	{
+		if (value == m_isInCondensationMode) return;
+
+		if (value) {
+			m_preCondensationSnapshot.chi = GetConstants().chi;
+			m_preCondensationSnapshot.mu = GetConstants().mu;
+			m_preCondensationSnapshot.subsumptionTolerance = GetConstants().subsumptionTolerance;
+			m_xcsr->switchToCondensationMode();
+		}
+		else {
+			GetConstants().chi = m_preCondensationSnapshot.chi;
+			GetConstants().mu = m_preCondensationSnapshot.mu;
+			GetConstants().subsumptionTolerance = m_preCondensationSnapshot.subsumptionTolerance;
+		}
+
+		m_isInCondensationMode = value;
+	}
 }

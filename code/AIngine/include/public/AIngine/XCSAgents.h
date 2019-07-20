@@ -20,6 +20,9 @@ namespace AIngine {
 
 		std::string PopulationPath;
 
+		void SwitchCondensationMode(bool value);
+		inline bool IsInCondensationMode() const { return m_isInCondensationMode; }
+
 	public:
 		std::unique_ptr<xxr::xcsr_impl::Experiment<double, int>> m_xcsr;
 		std::unordered_set<int> PossibleActions = { 0,1 };
@@ -27,6 +30,13 @@ namespace AIngine {
 
 	private:
 		xxr::xcsr_impl::Repr Representation = xxr::xcsr_impl::Repr::CSR;
-		//xxr::XCSRConstants Constants;
+		bool m_isInCondensationMode = false;
+		struct PreCondensationSnapshot {
+			float chi;
+			float mu;
+			float subsumptionTolerance;
+		};
+
+		PreCondensationSnapshot m_preCondensationSnapshot;
 	};
 }
