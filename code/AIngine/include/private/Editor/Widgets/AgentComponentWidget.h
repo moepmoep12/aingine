@@ -17,7 +17,10 @@ namespace AIngine::Editor::Widget::Component {
 		AIngine::Editor::Editor::SelectionChangedEventHandler OnSelectionChangedHandler;
 
 		void OnSelectionChanged(const std::vector<AIngine::GameObject*>& selectedObjects);
-		void ShowPopulation(AIngine::XCSAgentSupervisor& supervisor);
+		void ShowPopulation(AIngine::XCSAgentSupervisor& supervisor, int amount);
+		void ShowPopulationCSR(AIngine::XCSAgentSupervisor& supervisor, int amount);
+		void ShowPopulationUBR(AIngine::XCSAgentSupervisor& supervisor, int amount);
+		void ShowPopulationOBR(AIngine::XCSAgentSupervisor& supervisor, int amount);
 	};
 
 	class AgentComponentWidget : public ComponentWidget {

@@ -40,6 +40,11 @@ namespace AIngine::Editor::Widget::Component {
 				ImGui::DragInt("Max Steps", &supervisor->MaxSteps);
 				ImGui::Checkbox("Exploration", &supervisor->Exploration);
 
+				bool isInCondensationmode = supervisor->IsInCondensationMode();
+				if (ImGui::Checkbox("Switch to Condensation Mode", &isInCondensationmode)) {
+					supervisor->SwitchCondensationMode(isInCondensationmode);
+				}
+
 				// Representation
 				static const xxr::XCSRRepr choosableRepresentations[] = { xxr::XCSRRepr::CSR, xxr::XCSRRepr::OBR, xxr::XCSRRepr::UBR };
 				static const char* representatationsNames[] = { "CSR", "OBR", "UBR" };
@@ -61,6 +66,16 @@ namespace AIngine::Editor::Widget::Component {
 				label.str(std::string());
 				label << "Population Size : " << supervisor->m_xcsr->populationSize();
 				ImGui::Text(label.str().c_str());
+
+				// Show Population
+				static bool show = false;
+				static int showAmount = 25;
+				if (ImGui::Button("ShowPopulation")) {
+					show = !show;
+				}
+				if (show) ShowPopulation(*supervisor, showAmount);
+				ImGui::SameLine();
+				ImGui::InputInt("Show Amount", &showAmount);
 
 				// Save Population
 				if (ImGui::Button("Save Population")) {
@@ -448,37 +463,138 @@ namespace AIngine::Editor::Widget::Component {
 		}
 	}
 
-	void AgentSupervisorComponentWidget::ShowPopulation(AIngine::XCSAgentSupervisor& supervisor)
+	void AgentSupervisorComponentWidget::ShowPopulation(AIngine::XCSAgentSupervisor& supervisor, int amount)
 	{
 		xxr::xcsr_impl::Experiment<double, int>* xcs = supervisor.m_xcsr.get();
-		//xcs->get
+
+		switch (supervisor.GetRepresentation()) {
+		case xxr::XCSRRepr::CSR:
+			ShowPopulationCSR(supervisor, amount);
+			return;
+
+		case xxr::XCSRRepr::UBR:
+			ShowPopulationUBR(supervisor, amount);
+			return;
+
+		case xxr::XCSRRepr::OBR:
+			ShowPopulationOBR(supervisor, amount);
+			return;
+		}
+	}
+
+	void AgentSupervisorComponentWidget::ShowPopulationCSR(AIngine::XCSAgentSupervisor & supervisor, int amount)
+	{
+		static bool show = true;
+		auto xcsrCS = dynamic_cast<xxr::xcsr_impl::csr::Experiment<double, int>*>(&supervisor.m_xcsr.get()->GetExperiment());
+		if (xcsrCS) {
+			auto population = xcsrCS->GetPopulation();
+
+			if (!ImGui::Begin("Population", &show, ImGuiWindowFlags_AlwaysAutoResize)) {
+				ImGui::End();
+				return;
+			}
+
+			std::vector < xxr::xcs_impl::ClassifierPtrSet<xxr::xcsr_impl::StoredClassifier<xxr::xcs_impl::Classifier< xxr::xcsr_impl::ConditionActionPair<xxr::xcsr_impl::Condition<xxr::xcsr_impl::csr::Symbol<double>>, int>>, xxr::xcsr_impl::Constants>>::ClassifierPtr> classifiers;
+			classifiers.reserve(population.size());
+			for (auto& cl : population) {
+				classifiers.push_back(cl);
+			}
+
+			std::sort(classifiers.begin(), classifiers.end(), [](auto x, auto y) {
+				return x->fitness > y->fitness;
+			});
+
+			int i = 0;
+			for (auto& cl : classifiers) {
+				i++;
+				if (i > amount) break;
+				std::stringstream label;
+				label << "Numerosity: " << cl->numerosity << " | Fitness: " << cl->fitness << " | Accuracy: " << cl->accuracy() << " | Error: " << cl->epsilon << "\n";
+				label << "Exp: " << cl->experience << " | Prediction: " << cl->prediction;
+				ImGui::Text(label.str().c_str());
+				ImGui::Separator();
+			}
+
+			ImGui::End();
+		}
+	}
+
+	void AgentSupervisorComponentWidget::ShowPopulationUBR(AIngine::XCSAgentSupervisor & supervisor, int amount)
+	{
+		static bool show = true;
+		auto xcsrCS = dynamic_cast<xxr::xcsr_impl::ubr::Experiment<double, int>*>(&supervisor.m_xcsr.get()->GetExperiment());
+		if (xcsrCS) {
+			auto population = xcsrCS->GetPopulation();
+
+			if (!ImGui::Begin("Population", &show, ImGuiWindowFlags_AlwaysAutoResize)) {
+				ImGui::End();
+				return;
+			}
+
+			std::vector < xxr::xcs_impl::ClassifierPtrSet<xxr::xcsr_impl::StoredClassifier<xxr::xcs_impl::Classifier< xxr::xcsr_impl::ConditionActionPair<xxr::xcsr_impl::Condition<xxr::xcsr_impl::ubr::Symbol<double>>, int>>, xxr::xcsr_impl::Constants>>::ClassifierPtr> classifiers;
+			classifiers.reserve(population.size());
+			for (auto& cl : population) {
+				classifiers.push_back(cl);
+			}
+
+			std::sort(classifiers.begin(), classifiers.end(), [](auto x, auto y) {
+				return x->fitness > y->fitness;
+			});
+
+			int i = 0;
+			for (auto& cl : classifiers) {
+				i++;
+				if (i > amount) break;
+				std::stringstream label;
+				label << "Numerosity: " << cl->numerosity << " | Fitness: " << cl->fitness << " | Accuracy: " << cl->accuracy() << " | Error: " << cl->epsilon << "\n";
+				label << "Exp: " << cl->experience << " | Prediction: " << cl->prediction;
+				ImGui::Text(label.str().c_str());
+				ImGui::Separator();
+			}
+
+			ImGui::End();
+		}
+	}
+
+	void AgentSupervisorComponentWidget::ShowPopulationOBR(AIngine::XCSAgentSupervisor & supervisor, int amount)
+	{
+		static bool show = true;
+		auto xcsrCS = dynamic_cast<xxr::xcsr_impl::obr::Experiment<double, int>*>(&supervisor.m_xcsr.get()->GetExperiment());
+		if (xcsrCS) {
+			auto population = xcsrCS->GetPopulation();
+
+			if (!ImGui::Begin("Population", &show, ImGuiWindowFlags_AlwaysAutoResize)) {
+				ImGui::End();
+				return;
+			}
+
+			std::vector < xxr::xcs_impl::ClassifierPtrSet<xxr::xcsr_impl::StoredClassifier<xxr::xcs_impl::Classifier< xxr::xcsr_impl::ConditionActionPair<xxr::xcsr_impl::Condition<xxr::xcsr_impl::obr::Symbol<double>>, int>>, xxr::xcsr_impl::Constants>>::ClassifierPtr> classifiers;
+			classifiers.reserve(population.size());
+			for (auto& cl : population) {
+				classifiers.push_back(cl);
+			}
+
+			std::sort(classifiers.begin(), classifiers.end(), [](auto x, auto y) {
+				return x->fitness > y->fitness;
+			});
+
+			int i = 0;
+			for (auto& cl : classifiers) {
+				i++;
+				if (i > amount) break;
+				std::stringstream label;
+				label << "Numerosity: " << cl->numerosity << " | Fitness: " << cl->fitness << " | Accuracy: " << cl->accuracy() << " | Error: " << cl->epsilon << "\n";
+				label << "Exp: " << cl->experience << " | Prediction: " << cl->prediction;
+				ImGui::Text(label.str().c_str());
+				ImGui::Separator();
+			}
+
+			ImGui::End();
+		}
 	}
 
 
 	void AgentComponentWidget::OnImGuiRender()
 	{
-		//if (m_activeGameObjects.size() == 1) {
-		//	AIngine::GameObject* obj = m_activeGameObjects[0];
-		//	using Agent = AIngine::Agent;
-		//	Agent* agent = nullptr;
-		//	for (auto& comp : obj->GetComponents()) {
-		//		if (dynamic_cast<Agent*>(comp))
-		//			agent = dynamic_cast<Agent*>(comp);
-		//	}
-		//	if (agent)
-		//	{
-		//		//DisplayTitle(agent, "Agent");
-		//		ImGui::Selectable("Agent");
-
-		//		dragAgent = agent;
-		//		ImGuiDragDropFlags target_flags = 0;
-		//		target_flags |= ImGuiDragDropFlags_SourceNoHoldToOpenOthers | ImGuiDragDropFlags_SourceAllowNullID;
-		//		if (ImGui::BeginDragDropSource(target_flags)) {
-		//			ImGui::SetDragDropPayload("DragAgent", dragAgent, sizeof(AIngine::Agent));
-		//			ImGui::EndDragDropSource();
-		//		}
-
-		//	}
-		//}
 	}
 }
