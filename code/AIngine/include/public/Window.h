@@ -71,6 +71,7 @@ namespace AIngine {
 		glm::vec2 GetMonitorResolution() const;
 		float GetAspectRatio() const;
 		HWND GetWin32Window() const;
+		void SetIcon(int width, int height, unsigned char* data);
 		void SetWindowTitle(const char* title);
 		void AppendWindowTitle(const char* append);
 		void SetWindowSize(int w, int h);

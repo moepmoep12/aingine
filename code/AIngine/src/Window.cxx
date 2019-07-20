@@ -124,6 +124,17 @@ HWND AIngine::Window::GetWin32Window() const
 	return glfwGetWin32Window(m_window);
 }
 
+void AIngine::Window::SetIcon(int width, int height, unsigned char * data)
+{
+	GLFWimage img[1];
+	img[0].height = height;
+	img[0].width = width;
+	img[0].pixels = data;
+	glfwSetWindowIcon(m_window, 1, img);
+}
+
+
+
 void AIngine::Window::SetWindowTitle(const char * title)
 {
 	glfwSetWindowTitle(m_window, title);

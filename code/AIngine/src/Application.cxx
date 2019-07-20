@@ -68,6 +68,10 @@ namespace AIngine {
 				);
 		}
 
+		// load icon
+		AIngine::Assets::BitmapAsset* icon = AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>("AIngine/textures/icon.png");
+		m_window->SetIcon(icon->GetBitmap().GetWidth(), icon->GetBitmap().GetHeight(), icon->GetBitmap().GetData());
+
 		// create sprite renderer
 		m_spriteRenderer = new AIngine::Rendering::SpriteRenderer();
 
