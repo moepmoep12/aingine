@@ -4,3 +4,5 @@ HILLBLU_button_background.png : https://commons.wikimedia.org/wiki/File:HILLBLU_
 buttons_PNG184.png : http://pngimg.com/download/31678
 buttons_PNG183.png : http://pngimg.com/download/31677
 checkbox 4x : https://icons8.de/icons/set/checkbox
+icon.png : @author = xnimrodx
+expang.png : @author = Freepik

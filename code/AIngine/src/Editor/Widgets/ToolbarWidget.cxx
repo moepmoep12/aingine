@@ -39,6 +39,11 @@ namespace AIngine::Editor::Widget {
 		path = "AIngine/textures/Editor/save.png";
 		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
 		m_Icons["save"] = AIngine::Rendering::Texture2D(*bitmap);
+
+		// fullScreenIcon
+		path = "AIngine/textures/Editor/expand.png";
+		bitmap = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::BitmapAsset>(path)->GetBitmap();
+		m_Icons["expand"] = AIngine::Rendering::Texture2D(*bitmap);
 	}
 
 	ToolbarWidget::~ToolbarWidget()
@@ -109,6 +114,11 @@ namespace AIngine::Editor::Widget {
 			}
 		}
 
+		// Fullscreen
+		if (ImGui::ImageButton((ImTextureID)m_Icons["expand"].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
+		{
+			AIngine::Editor::Editor::SetFullScreenPlayMode(true);
+		}
 
 		// create new scene
 		if (ImGui::ImageButton((ImTextureID)m_Icons["new"].ID, buttonSize, uv0, uv1, framePadding, backgroundColor, tintColor))
