@@ -204,8 +204,6 @@ namespace AIngine::Editor::Serialization {
 		file.close();
 	}
 
-	static std::vector<Script*> s_agentScripts;
-
 
 	void Serializer::DeserializeSceneGraph(const std::string & path)
 	{

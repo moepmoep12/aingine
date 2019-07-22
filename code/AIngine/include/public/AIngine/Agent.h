@@ -74,7 +74,7 @@ namespace AIngine {
 
 		void FinishStep() { m_stepReward = 0; }
 
-		void FinishEpisode() { m_cumulativeReward = 0; StepCount = 0; m_stepReward = 0; }
+		void FinishEpisode() { m_cumulativeReward = 0; StepCount = 0; m_stepReward = 0; Reset(); }
 
 		/* The number of steps taken in this episode */
 		int StepCount = 0;

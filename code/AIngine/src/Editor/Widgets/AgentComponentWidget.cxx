@@ -32,7 +32,7 @@ namespace AIngine::Editor::Widget::Component {
 				std::stringstream label;
 
 				// TITLE
-				DisplayTitle(supervisor, "AgentSupervisor");
+				if(!DisplayTitle(supervisor, "AgentSupervisor")) return;
 
 				ImGui::NewLine();
 
