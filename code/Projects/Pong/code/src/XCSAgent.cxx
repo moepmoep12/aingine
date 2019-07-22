@@ -107,7 +107,7 @@ namespace Pong {
 		if (rect.Contains(intersections[0]) && ballVel.x > 0) {
 			collisionPointX = intersections[0].x;
 			collisionPointY = intersections[0].y;
-			distanceToCollisionPoint = std::abs(relativePos.y - collisionPointY);
+			distanceToCollisionPoint = relativePos.y - collisionPointY;
 		}
 		else {
 			collisionPointY = rect.y - 1;
@@ -124,7 +124,7 @@ namespace Pong {
 			/* 7 */ ballPos.y / rect.height, //  ballPos Y
 				  //std::clamp(collisionPointX / rect.width, -1.05, 1.05), //  collisionpoint X
 				  ///* 8 */ std::clamp(collisionPointY / rect.height, -1.05, 1.05), //  collisionpoint Y
-				  ///* 9 */ distanceToCollisionPoint != -1 ? distanceToCollisionPoint / rect.height : -1, // distance to collisionpoint Y
+				  /* 9 */ distanceToCollisionPoint != -1 ? distanceToCollisionPoint / rect.height : -1, // distance to collisionpoint Y
 				  ///* 10 */ other->GetOwner()->GetLocalPosition().y / rect.height, // other player height
 				  /* 11 */ (double)lastAction, // last action
 				  /* 12 */ (rect.GetMax().y - ballPos.y) / rect.height, // ball distance to bottom edge
@@ -156,7 +156,7 @@ namespace Pong {
 			return true;
 		}
 
-		return false;
+		return DoesBallCollide();
 	}
 
 	void XCSAgent::ExecuteAction(int action)
