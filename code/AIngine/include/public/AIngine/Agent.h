@@ -38,9 +38,9 @@ namespace AIngine {
 
 	protected:
 		std::vector<Agent*> m_agents;
+		int m_currentStep = 0;
 
-	private:
-		int m_stepCount = 0;
+
 	};
 
 	class Agent {
@@ -60,9 +60,6 @@ namespace AIngine {
 		/* Executes the given action */
 		virtual void ExecuteAction(int action) = 0;
 
-		/* Resets this agent.
-		*  Occurs when the problem was either solved, failed or the maxStepCount was exceeded */
-		virtual void Reset() = 0;
 
 		virtual void OnMaxStepsReached() = 0;
 
@@ -77,6 +74,8 @@ namespace AIngine {
 
 		void FinishStep() { m_stepReward = 0; }
 
+		void FinishEpisode() { m_cumulativeReward = 0; StepCount = 0; m_stepReward = 0; }
+
 		/* The number of steps taken in this episode */
 		int StepCount = 0;
 
@@ -84,8 +83,13 @@ namespace AIngine {
 
 		std::string SupervisorName;
 
+		/* Resets this agent.
+		*  Occurs when the problem was either solved, failed or the maxStepCount was exceeded */
+	protected:
+		virtual void Reset() = 0;
+
 	private:
-		float m_cumulativeReward;
+		float m_cumulativeReward = 0;
 		float m_stepReward = 0;
 
 	};

@@ -4,6 +4,7 @@
 #include "Util/FileSystem.h"
 
 #include <iostream>
+#include <unordered_map>
 
 namespace AIngine::Editor::Widget::Component {
 
@@ -29,26 +30,100 @@ namespace AIngine::Editor::Widget::Component {
 				}
 
 				std::stringstream label;
+
 				// TITLE
 				DisplayTitle(supervisor, "AgentSupervisor");
 
 				ImGui::NewLine();
 
-				// General Settings
+				/// General Settings
+				// Observation Size
 				ImGui::DragInt("Observations Size", &supervisor->ObservationsSize);
+				if (ImGui::IsItemHovered()) {
+					ImGui::BeginTooltip();
+					ImGui::Text("How many features the agent observes \n"
+						"(Will be set automatically)");
+					ImGui::EndTooltip();
+				}
+				// StepRate
 				ImGui::DragInt("Step Rate", &supervisor->StepRate);
+				if (ImGui::IsItemHovered()) {
+					ImGui::BeginTooltip();
+					ImGui::Text("The frequency at which the agent \n"
+						"will observe & act");
+					ImGui::EndTooltip();
+				}
+				//MaxSteps
 				ImGui::DragInt("Max Steps", &supervisor->MaxSteps);
+				//Exploration
 				ImGui::Checkbox("Exploration", &supervisor->Exploration);
+				if (ImGui::IsItemHovered()) {
+					ImGui::BeginTooltip();
+					ImGui::Text("In Exploration actions are chosen randomly according \n"
+						"to the probability, else greedy ");
+					ImGui::EndTooltip();
+				}
 
+				// CondensationMode
 				bool isInCondensationmode = supervisor->IsInCondensationMode();
-				if (ImGui::Checkbox("Switch to Condensation Mode", &isInCondensationmode)) {
+				if (ImGui::Checkbox("Condensation Mode", &isInCondensationmode)) {
 					supervisor->SwitchCondensationMode(isInCondensationmode);
 				}
+				if (ImGui::IsItemHovered()) {
+					ImGui::BeginTooltip();
+					ImGui::Text("In Condensation Mode Crossover (chi), \n"
+						"Mutation (mu) & GA Subsumption is turned off");
+					ImGui::EndTooltip();
+				}
+
+				// Recording
+				static std::map<SuperVisor*, bool> recordMap;
+				bool recording = false;
+				label.str(std::string());
+				if (recordMap.find(supervisor) == recordMap.end()) {
+					recordMap[supervisor] = false;
+				}
+				else {
+					recording = recordMap[supervisor];
+				}
+				std::string btnText = !recording ? "Start Recording##" : "Stop Recording##";
+				label << btnText << static_cast<const void*>(supervisor);
+				if (ImGui::Button(label.str().c_str()))
+				{
+					supervisor->SetRecording(!recording);
+					recordMap[supervisor] = !recording;
+				}
+				ImGui::SameLine();
+				label.str(std::string());
+				label << "Record Frequency##" << static_cast<const void*>(supervisor);
+				int recordFrequency = supervisor->GetRecordInterval();
+				if (ImGui::InputInt(label.str().c_str(), &recordFrequency)) {
+					supervisor->SetRecordInterval(recordFrequency);
+				}
+
+				// Show SnapShots
+				label.str(std::string());
+				static std::map<SuperVisor*, bool> showMap;
+				bool showing = false;
+				if (showMap.find(supervisor) == showMap.end()) {
+					showMap[supervisor] = false;
+				}
+				else {
+					showing = showMap[supervisor];
+				}
+				btnText = !showing ? "Show Snapshots##" : "Hide Snapshots##";
+				label << btnText << static_cast<const void*>(supervisor);
+				if (ImGui::Button(label.str().c_str()))
+				{
+					showMap[supervisor] = !showing;
+				}
+				if (showMap[supervisor]) DrawPopulationSnapShots(*supervisor);
 
 				// Representation
 				static const xxr::XCSRRepr choosableRepresentations[] = { xxr::XCSRRepr::CSR, xxr::XCSRRepr::OBR, xxr::XCSRRepr::UBR };
 				static const char* representatationsNames[] = { "CSR", "OBR", "UBR" };
 				int currentRepr = (int)supervisor->GetRepresentation();
+				label.str(std::string());
 				label << "Representatation##" << static_cast<const void*>(supervisor);
 				if (ImGui::BeginCombo(label.str().c_str(), representatationsNames[currentRepr])) {
 					for (int i = 0; i < IM_ARRAYSIZE(representatationsNames); i++) {
@@ -592,6 +667,47 @@ namespace AIngine::Editor::Widget::Component {
 			ImGui::End();
 		}
 	}
+
+	void AgentSupervisorComponentWidget::DrawPopulationSnapShots(AIngine::XCSAgentSupervisor & supervisor)
+	{
+		static bool open = true;
+		if (!ImGui::Begin("Snapshots", &open, ImGuiWindowFlags_NoDocking)) {
+			ImGui::End();
+			return;
+		}
+		const int stride = sizeof(AIngine::XCSAgentSupervisor::PopulationSnapshot);
+		const int count = supervisor.GetSnapShots().size();
+
+		if (supervisor.GetSnapShots().size() > 0) {
+
+			//ImGui::PlotLines("Numerosity Sum", &supervisor.GetSnapShots()[0].NumerositySum, count, 0, NULL, 0.0f, 2 * supervisor.GetConstants().n, ImVec2(0, 150), stride);
+			//ImGui::PlotLines("Macroclassifiers", &supervisor.GetSnapShots()[0].MacroClassifierCount, count, 0, NULL, 0.0f, supervisor.GetConstants().n, ImVec2(0, 150), stride);
+			ImGui::PlotLines("Fitness", &supervisor.GetSnapShots()[0].AverageFitness, count, 0, NULL, 0.0f, supervisor.GetMaxFitness(), ImVec2(0, 150), stride);
+			ImGui::PlotLines("Accuracy", &supervisor.GetSnapShots()[0].AverageAccuracy, count, 0, NULL, 0.0f, 1.0f, ImVec2(0, 150), stride);
+			ImGui::PlotLines("Epsilon", &supervisor.GetSnapShots()[0].AverageEpsilon, count, 0, NULL, 0.0f, supervisor.GetMaxEpsilon(), ImVec2(0, 150), stride);
+			ImGui::PlotLines("Prediction", &supervisor.GetSnapShots()[0].AveragePrediction, count, 0, NULL, 0.0f, supervisor.GetMaxPrediction(), ImVec2(0, 150), stride);
+			ImGui::PlotLines("ActionSet Size", &supervisor.GetSnapShots()[0].ActionSetSize, count, 0, NULL, 0.0f, supervisor.GetMaxActionSetSize(), ImVec2(0, 150), stride);
+		}
+
+		ImGui::End();
+
+
+		if (!ImGui::Begin("Episodes", &open, ImGuiWindowFlags_NoDocking)) {
+			ImGui::End();
+			return;
+		}
+
+		const int episodeStride = sizeof(AIngine::XCSAgentSupervisor::EpisodeSnapshot);
+
+		if (supervisor.GetEpisodeSnapshots().size() > 0) {
+			ImGui::PlotLines("Reward", &supervisor.GetEpisodeSnapshots()[0].RewardSum, supervisor.GetEpisodeSnapshots().size(), 0, NULL, 0.0f, supervisor.GetMaxReward(), ImVec2(0, 150), episodeStride);
+			ImGui::PlotLines("EpisodeLength", &supervisor.GetEpisodeSnapshots()[0].DurationInTicks, supervisor.GetEpisodeSnapshots().size(), 0, NULL, 0.0f, supervisor.GetMaxDuration(), ImVec2(0, 150), episodeStride);
+		}
+
+		ImGui::End();
+
+	}
+
 
 
 	void AgentComponentWidget::OnImGuiRender()

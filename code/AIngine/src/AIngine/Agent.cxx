@@ -7,16 +7,14 @@ namespace AIngine {
 	{
 		if (!AIngine::Application::IsRunning()) return;
 
-		m_stepCount++;
-		if (m_stepCount >= StepRate) {
-			m_stepCount = 0;
+		m_currentStep++;
+		if (m_currentStep >= StepRate) {
+			m_currentStep = 0;
 			for (auto& agent : m_agents) {
 				bool isEnd = false;
-				if (MaxSteps > 0 && m_stepCount > MaxSteps)
+				if (MaxSteps > 0 && m_currentStep > MaxSteps)
 				{
-					agent->StepCount = 0;
 					agent->OnMaxStepsReached();
-					agent->Reset();
 					isEnd = true;
 				}
 				else {
@@ -28,14 +26,15 @@ namespace AIngine {
 					int action = ChooseAction(observation);
 					agent->ExecuteAction(action);
 				}
-				if (agent->IsEndOfProblem())
-				{
-					agent->StepCount = 0;
-					agent->Reset();
-					isEnd = true;
-				}
+
+				if (agent->IsEndOfProblem()) isEnd = true;
+
 				ProvideReward(agent, isEnd);
-				agent->FinishStep();
+
+				if (isEnd)
+					agent->FinishEpisode();
+				else
+					agent->FinishStep();
 			}
 		}
 	}

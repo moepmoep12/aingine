@@ -21,6 +21,7 @@ namespace AIngine::Editor::Widget::Component {
 		void ShowPopulationCSR(AIngine::XCSAgentSupervisor& supervisor, int amount);
 		void ShowPopulationUBR(AIngine::XCSAgentSupervisor& supervisor, int amount);
 		void ShowPopulationOBR(AIngine::XCSAgentSupervisor& supervisor, int amount);
+		void DrawPopulationSnapShots(AIngine::XCSAgentSupervisor& supervisor);
 	};
 
 	class AgentComponentWidget : public ComponentWidget {
