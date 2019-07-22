@@ -7228,6 +7228,48 @@
 }
 }
 }
+},
+{
+"ScoreText": {
+"a_active": true,
+"a_name": "ScoreText",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Days.ttf",
+"fontsize": 100,
+"horizontalAlign": 0,
+"isdisabled": false,
+"rectangle": {
+"height": 100,
+"width": 500,
+"x": 20,
+"y": 51
+},
+"text": "Score : 0",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 0
+}
+}
+}
 }
 ]
 }

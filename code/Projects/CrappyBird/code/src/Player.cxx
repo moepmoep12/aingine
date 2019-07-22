@@ -38,6 +38,7 @@ namespace CrappyBird {
 	// Start is called when gameplay starts for this script
 	void Player::OnStart()
 	{
+		m_scoreText = AIngine::World::GetGameObject("ScoreText")->GetComponent<AIngine::UI::UIText>();
 		m_emitter = GetOwner()->GetComponent<ParticleEmitter>();
 		m_collisionEmitter = GetOwner()->GetChildren()[0]->GetComponent<ParticleEmitter>();
 		m_physBody = GetOwner()->GetComponent<AIngine::Physics::PhysicsComponent>();
@@ -175,8 +176,9 @@ namespace CrappyBird {
 	{
 		// display the score
 		std::stringstream ss;
-		ss << "Score: " << (int)m_distanceTraveled;
-		Graphics::Text(ss.str(), glm::vec2(10, 35), glm::vec2(2));
+		ss << "Score : " << (int)m_distanceTraveled;
+		m_scoreText->Text = ss.str();
+		//Graphics::Text(ss.str(), glm::vec2(10, 35), glm::vec2(2));
 	}
 
 	void Player::PostInit()

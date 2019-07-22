@@ -88,6 +88,8 @@ namespace CrappyBird {
 
 		float m_delta = 0;
 
+		AIngine::UI::UIText* m_scoreText;
+
 		// the particle emitter which emitts fire
 		ParticleEmitter* m_emitter;
 		ParticleEmitter* m_collisionEmitter;
