@@ -11,7 +11,7 @@ namespace AIngine::Rendering {
 namespace AIngine::Editor::Widget {
 
 	template<class T>
-	void DisplayTitle(T* obj, const char* title) {
+	bool DisplayTitle(T* obj, const char* title) {
 		float textWidth = ImGui::CalcTextSize(title).x;
 		ImGui::SetCursorPosX((ImGui::GetWindowWidth() - textWidth) * 0.5f);
 		ImGui::TextColored(ImVec4(1, 1, 0, 1), title);
@@ -24,10 +24,11 @@ namespace AIngine::Editor::Widget {
 			if (ImGui::Selectable((std::string("Delete").append("##").append(typeid(T).name())).c_str())) {
 				obj->GetOwner()->RemoveComponent(obj);
 				ImGui::EndPopup();
-				return;
+				return false;
 			}
 			ImGui::EndPopup();
 		}
+		return true;
 	}
 
 

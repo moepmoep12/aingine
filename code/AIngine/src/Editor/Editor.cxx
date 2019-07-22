@@ -32,7 +32,7 @@ namespace AIngine::Editor {
 	Editor* Editor::Editor::s_instance = nullptr;
 	AIngine::Events::Event<void> Editor::PauseGameEvent;
 	AIngine::Events::Event<void> Editor::ResumeGameEvent;
-	AIngine::Events::Event<void,const std::vector<GameObject*>&> Editor::OnSelectionChangedEvent;
+	AIngine::Events::Event<void, const std::vector<GameObject*>&> Editor::OnSelectionChangedEvent;
 	static glm::vec2 lastMousePos;
 
 
@@ -152,6 +152,7 @@ namespace AIngine::Editor {
 		if (e.GetMouseButton() == MouseButton::BUTTON_MIDDLE) {
 			if (m_hasViewportFocus) {
 				lastMousePos = glm::vec2(Input::GetMouseX(), Input::GetMouseY());
+				m_app.m_window->SetMouseCursor(AIngine::Window::MouseCursor::Hand);
 				m_isDraggingCamera = true;
 			}
 		}
@@ -160,6 +161,8 @@ namespace AIngine::Editor {
 
 	bool Editor::OnMouseButtonReleased(AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData & e)
 	{
+		if (m_isDraggingCamera)
+			m_app.m_window->SetMouseCursor(AIngine::Window::MouseCursor::Normal);
 		m_isDraggingCamera = false;
 		return false;
 	}

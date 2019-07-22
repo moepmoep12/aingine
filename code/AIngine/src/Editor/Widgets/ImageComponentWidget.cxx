@@ -18,7 +18,8 @@ namespace AIngine::Editor::Widget::Component {
 			Image* img = obj->GetComponent<Image>();
 			if (img) {
 
-				DisplayTitle(img, "Image");
+				if (!DisplayTitle(img, "Image"))
+					return;
 
 				ImGui::NewLine();
 

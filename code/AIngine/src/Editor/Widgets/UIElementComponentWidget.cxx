@@ -12,6 +12,7 @@ namespace AIngine::Editor::Widget::Component {
 
 	bool AnchorCombo(AIngine::UI::UIElement * element)
 	{
+		if (!element) return false;
 		bool changed = false;
 
 		static const AIngine::UI::Anchor choosableAnchors[] = { AIngine::UI::Anchor::Center,AIngine::UI::Anchor::TopLeft, AIngine::UI::Anchor::TopRight, AIngine::UI::Anchor::BottomRight,
