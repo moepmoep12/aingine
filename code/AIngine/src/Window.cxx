@@ -173,6 +173,46 @@ void AIngine::Window::SetWindowPosition(const glm::vec2 & pos)
 	m_windowData.OnWindowMovedEvent(pos.x, pos.y);
 }
 
+void AIngine::Window::SetMouseVisible(bool visible) const
+{
+	if (!visible)
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	else
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+void AIngine::Window::SetMouseCursor(MouseCursor mode) const
+{
+	int value = 0;
+	switch (mode) {
+	case MouseCursor::Arrow:
+		value = GLFW_ARROW_CURSOR;
+		break;
+	case MouseCursor::Crosshair:
+		value = GLFW_CROSSHAIR_CURSOR;
+		break;
+	case MouseCursor::Hand:
+		value = GLFW_HAND_CURSOR;
+		break;
+	case MouseCursor::Normal:
+		value = GLFW_CURSOR_NORMAL;
+		break;
+	case MouseCursor::ResizeHorizontal:
+		value = GLFW_HRESIZE_CURSOR;
+		break;
+	case MouseCursor::ResizeVertical:
+		value = GLFW_VRESIZE_CURSOR;
+		break;
+	case MouseCursor::Text:
+		value = GLFW_IBEAM_CURSOR;
+		break;
+	default:
+		value = GLFW_CURSOR_NORMAL;
+	}
+
+	glfwSetInputMode(m_window, GLFW_CURSOR, value);
+}
+
 void AIngine::Window::SetFullScreen(bool fullscreen)
 {
 	if (IsFullScreen() == fullscreen)

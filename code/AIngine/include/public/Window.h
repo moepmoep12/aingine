@@ -48,6 +48,17 @@ namespace AIngine {
 	class Window final
 	{
 	public:
+
+		enum class MouseCursor {
+			Normal = 0,
+			Arrow,
+			Text,
+			Crosshair,
+			Hand,
+			ResizeHorizontal,
+			ResizeVertical
+		};
+
 		Window(const WindowConfig& config);
 		~Window();
 
@@ -78,6 +89,8 @@ namespace AIngine {
 		void SetWindowSizeLimits(int wMin, int wMax, int hMin, int hMax);
 		void SetWindowResize(bool enabled);
 		void SetWindowPosition(const glm::vec2& pos);
+		void SetMouseVisible(bool visible) const;
+		void SetMouseCursor(MouseCursor mode) const;
 		void SetFullScreen(bool fullscreen);
 		void Close();
 		inline WindowData& GetWindowData() { return m_windowData; }
