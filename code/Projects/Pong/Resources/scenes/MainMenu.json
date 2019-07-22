@@ -25,7 +25,7 @@
 "active": true,
 "rectangle": {
 "height": 2,
-"width": 5,
+"width": 10,
 "x": 0,
 "y": 0
 }
@@ -78,6 +78,15 @@
 },
 "script": null,
 "soundComponent": {
+"Summer Groove": {
+"delay": 0.0,
+"looped": true,
+"pan": 0.5,
+"path": "sounds\\Summer Groove.wav",
+"ptich": 1.0,
+"volumeLeft": 0.25,
+"volumeRight": 0.25
+},
 "active": true,
 "zapsplat_multimedia_click_003_19369": {
 "delay": 0.0,
@@ -205,13 +214,13 @@
 "z": 0.20000000298023224
 },
 "fontpath": "fonts\\Rabbid-Highway-Sign-Bold-Caps.ttf",
-"fontsize": 300,
+"fontsize": 400,
 "horizontalAlign": 0,
 "isdisabled": false,
 "rectangle": {
 "height": 2,
 "width": 5,
-"x": -338,
+"x": -451,
 "y": 31
 },
 "text": "PONG",
@@ -254,7 +263,7 @@
 "height": 2,
 "width": 5,
 "x": 675,
-"y": 300
+"y": 400
 },
 "text": "Difficulty",
 "tintColor": {
@@ -303,7 +312,7 @@
 "height": 75,
 "width": 300,
 "x": 800,
-"y": 400
+"y": 500
 },
 "text": "",
 "textColor": {
@@ -353,7 +362,7 @@
 "height": 75,
 "width": 300,
 "x": 800,
-"y": 400
+"y": 500
 },
 "text": "Easy peasy",
 "tintColor": {
@@ -403,7 +412,7 @@
 "height": 75,
 "width": 300,
 "x": 800,
-"y": 525
+"y": 625
 },
 "text": "",
 "textColor": {
@@ -453,7 +462,7 @@
 "height": 75,
 "width": 300,
 "x": 800,
-"y": 525
+"y": 625
 },
 "text": "Challenge",
 "tintColor": {
@@ -503,7 +512,7 @@
 "height": 75,
 "width": 300,
 "x": 800,
-"y": 650
+"y": 750
 },
 "text": "",
 "textColor": {
@@ -553,7 +562,7 @@
 "height": 75,
 "width": 300,
 "x": 800,
-"y": 650
+"y": 750
 },
 "text": "i want it unfair",
 "tintColor": {
@@ -603,7 +612,7 @@
 "height": 75,
 "width": 300,
 "x": 800,
-"y": 775
+"y": 875
 },
 "text": "",
 "textColor": {
@@ -653,7 +662,7 @@
 "height": 75,
 "width": 300,
 "x": 800,
-"y": 775
+"y": 875
 },
 "text": "Terminator",
 "tintColor": {

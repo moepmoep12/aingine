@@ -18,7 +18,7 @@ namespace Pong {
 	{
 		m_emitter = GetComponent<ParticleEmitter>();
 		m_physBody = GetComponent<PhysicsComponent>();
-		//m_sound =  GetComponent<SoundComponent>();
+		m_sound =  GetComponent<SoundComponent>();
 
 		OnSpawnParticlesHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(std::bind(&Ball::OnSpawnParticles, this,
 			std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
@@ -94,6 +94,6 @@ namespace Pong {
 	void Ball::OnCollision(AIngine::Physics::Contact contact)
 	{
 		m_emitter->Update(Pong::Get().GetDeltaTime(), spawnCount);
-		//m_sound->Play(AIngine::Util::Random::RandomInt(0, m_sound->GetSounds().size() - 1));
+		m_sound->Play(AIngine::Util::Random::RandomInt(0, m_sound->GetSounds().size() - 1));
 	}
 }

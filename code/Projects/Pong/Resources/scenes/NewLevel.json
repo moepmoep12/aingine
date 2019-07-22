@@ -22,6 +22,18 @@
 "a_scaleY": 1.0,
 "b_components": {
 "script": null,
+"soundComponent": {
+"Summer Groove": {
+"delay": 0.0,
+"looped": true,
+"pan": 0.5,
+"path": "sounds\\Summer Groove.wav",
+"ptich": 1.0,
+"volumeLeft": 0.25,
+"volumeRight": 0.25
+},
+"active": true
+},
 "sprite": {
 "active": true,
 "alpha": 1.0,
@@ -93,7 +105,7 @@
 "constants_minValue": -1.0049999952316284,
 "constants_mu": 0.03999999910593033,
 "constants_mutationMaxChange": 0.20000000298023224,
-"constants_n": 500,
+"constants_n": 2500,
 "constants_nu": 5.0,
 "constants_subsumptionTolerance": 0.014999999664723873,
 "constants_tau": 0.0,
@@ -196,7 +208,19 @@
 "b_components": {
 "script": [
 7
-]
+],
+"soundComponent": {
+"active": true,
+"completetask_0 (online-audio-converter.com)": {
+"delay": 0.0,
+"looped": false,
+"pan": 0.5,
+"path": "sounds\\completetask_0 (online-audio-converter.com).wav",
+"ptich": 1.0,
+"volumeLeft": 0.10000000149011612,
+"volumeRight": 0.10000000149011612
+}
+}
 },
 "c_children": [
 {
@@ -525,6 +549,18 @@
 "script": [
 1
 ],
+"soundComponent": {
+"active": true,
+"zapsplat_sport_bowls_lawn_ball_strike_another_002_33919 (online-audio-converter.com)": {
+"delay": 0.0,
+"looped": false,
+"pan": 0.5,
+"path": "sounds\\zapsplat_sport_bowls_lawn_ball_strike_another_002_33919 (online-audio-converter.com).wav",
+"ptich": 1.25,
+"volumeLeft": 1.0,
+"volumeRight": 1.0
+}
+},
 "sprite": {
 "active": true,
 "alpha": 1.0,
@@ -573,16 +609,16 @@
 "y": -0.5
 },
 {
-"x": 0.125,
-"y": -0.5
-},
-{
-"x": 0.125,
-"y": 0.5
-},
-{
 "x": -0.125,
 "y": 0.5
+},
+{
+"x": 0.125,
+"y": 0.5
+},
+{
+"x": 0.125,
+"y": -0.5
 },
 {
 "x": 0.0,
@@ -604,7 +640,7 @@
 "width": 0.25
 },
 "script": [
-5
+2
 ],
 "sprite": {
 "active": true,
@@ -658,16 +694,16 @@
 "y": -0.5
 },
 {
-"x": 0.125,
-"y": -0.5
-},
-{
-"x": 0.125,
-"y": 0.5
-},
-{
 "x": -0.125,
 "y": 0.5
+},
+{
+"x": 0.125,
+"y": 0.5
+},
+{
+"x": 0.125,
+"y": -0.5
 },
 {
 "x": 0.0,

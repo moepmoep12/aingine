@@ -11,6 +11,8 @@ namespace Pong {
 	// Start is called when gameplay starts for this script
 	void Experiment::OnStart()
 	{
+		m_sound = GetComponent<SoundComponent>();
+
 		LeftEdge = GetOwner()->GetChild("Edges")->GetChild("LeftEdge")->GetComponent<PhysicsComponent>();
 		RightEdge = GetOwner()->GetChild("Edges")->GetChild("RightEdge")->GetComponent<PhysicsComponent>();
 		TopEdge = GetOwner()->GetChild("Edges")->GetChild("TopEdge")->GetComponent<PhysicsComponent>();
@@ -81,7 +83,8 @@ namespace Pong {
 		ScorePlayerTwo++;
 		PlayerTwo->OnScored(PlayerRole::Two);
 		PlayerOne->OnScored(PlayerRole::Two);
-		PlayerOne->ReceiveBall();
+		PlayerTwo->ReceiveBall();
+		//m_sound->Play(0);
 	}
 
 	void Experiment::OnCollisionRight(AIngine::Physics::Contact contact)
@@ -90,5 +93,9 @@ namespace Pong {
 		PlayerTwo->OnScored(PlayerRole::One);
 		PlayerOne->OnScored(PlayerRole::One);
 		PlayerOne->ReceiveBall();
+#ifndef EDITOR
+		m_sound->Play(0);
+#endif 
+
 	}
 }

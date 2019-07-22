@@ -16,7 +16,8 @@ namespace Pong {
 		SetName(typeid(*this).name());
 		TranslationRate = 15;
 		m_populationDifficulties[0] = 500;
-		m_populationDifficulties[1] = 2000;
+		m_populationDifficulties[1] = 1500;
+		m_populationDifficulties[2] = 2500;
 	}
 
 	// Start is called when gameplay starts for this script
@@ -24,15 +25,16 @@ namespace Pong {
 	{
 		Player::OnStart();
 
-#ifndef EDITOR
-		AIngine::XCSAgentSupervisor* supervisor = AIngine::World::GetGameObject("AgentSupervisor")->GetComponent<AIngine::XCSAgentSupervisor>();
 
-		supervisor->GetConstants().n = m_populationDifficulties[Pong::Difficulty];
-		std::stringstream ss;
-		ss << AIngine::Util::Project::GetResourceDirectory() << "xcs\\difficulty" << Pong::Difficulty << ".json";
-		supervisor->m_xcsr->loadPopulationCSV(std::filesystem::absolute(ss.str()).string(), true);
-		supervisor->SwitchCondensationMode(true);
-#endif
+		AIngine::XCSAgentSupervisor* supervisor = AIngine::World::GetGameObject("AgentSupervisor")->GetComponent<AIngine::XCSAgentSupervisor>();
+//#ifndef EDITOR
+		//supervisor->GetConstants().n = m_populationDifficulties[Pong::Difficulty];
+		//std::stringstream ss;
+		//ss << AIngine::Util::Project::GetResourceDirectory() << "xcs\\difficulty" << Pong::Difficulty << ".json";
+		//supervisor->m_xcsr->loadPopulationCSV(std::filesystem::absolute(ss.str()).string(), true);
+		//supervisor->SwitchCondensationMode(true);
+		//supervisor->Exploration = false;
+//#endif
 	}
 	
 	// End is called when gameplay ends for this script
@@ -124,7 +126,7 @@ namespace Pong {
 			/* 7 */ ballPos.y / rect.height, //  ballPos Y
 				  //std::clamp(collisionPointX / rect.width, -1.05, 1.05), //  collisionpoint X
 				  ///* 8 */ std::clamp(collisionPointY / rect.height, -1.05, 1.05), //  collisionpoint Y
-				  /* 9 */ distanceToCollisionPoint != -1 ? distanceToCollisionPoint / rect.height : -1, // distance to collisionpoint Y
+				  ///* 9 */ distanceToCollisionPoint != -1 ? distanceToCollisionPoint / rect.height : -1, // distance to collisionpoint Y
 				  ///* 10 */ other->GetOwner()->GetLocalPosition().y / rect.height, // other player height
 				  /* 11 */ (double)lastAction, // last action
 				  /* 12 */ (rect.GetMax().y - ballPos.y) / rect.height, // ball distance to bottom edge
@@ -168,8 +170,8 @@ namespace Pong {
 		// Provide Reward
 
 		if (DoesBallCollide()) {
+			m_experiment->ScorePlayerTwo++;
 			AddReward(1000);
-			//m_experiment->ScorePlayerTwo++;
 			return;
 		}
 

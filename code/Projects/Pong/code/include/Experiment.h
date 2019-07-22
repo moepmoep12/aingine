@@ -15,6 +15,7 @@ namespace Pong {
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
 		virtual void OnGUI() override;
 
+		SoundComponent* m_sound;
 		PhysicsComponent* LeftEdge = nullptr;
 		PhysicsComponent* RightEdge = nullptr;
 		PhysicsComponent* TopEdge = nullptr;

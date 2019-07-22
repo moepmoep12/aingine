@@ -36,6 +36,7 @@ namespace Pong {
 		m_startButton->OnClickedEvent += std::bind(&MainMenu::OnStartClicked, this);
 
 		m_sound = GetChild("BackGround")->GetComponent<SoundComponent>();
+		m_sound->Play(0);
 
 		m_playerOne = GetChild("BackGround")->GetChild("PaddleOne")->GetComponent<Image>();
 
@@ -50,6 +51,8 @@ namespace Pong {
 		m_terminatorButton->OnClickedEvent -= OnDifficultyClickedHandler;
 		m_startButton->OnClickedEvent = AIngine::Events::Event<void>();
 		m_DifficultyButtons.clear();
+
+		m_sound->Stop(0);
 	}
 
 	// Update is called once per frame
@@ -66,7 +69,7 @@ namespace Pong {
 
 	void MainMenu::OnDifficultyButtonClicked()
 	{
-		m_sound->Play(0);
+		m_sound->Play(1);
 
 		m_currentDuration = 0;
 

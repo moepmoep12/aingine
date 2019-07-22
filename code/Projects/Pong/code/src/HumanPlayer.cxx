@@ -23,6 +23,7 @@ namespace Pong {
 		AIngine::Input::SetMousePos({ screenPos.x, screenPos.y });
 #ifndef EDITOR
 		Pong::Get().GetWindow().SetMouseVisible(false);
+		AIngine::World::GetGameObject("BackGround")->GetComponent<SoundComponent>()->Play(0);
 #endif
 	}
 
@@ -31,6 +32,9 @@ namespace Pong {
 	{
 		Player::OnEnd();
 		Pong::Get().GetWindow().SetMouseVisible(true);
+#ifndef EDITOR
+		AIngine::World::GetGameObject("BackGround")->GetComponent<SoundComponent>()->Stop(0);
+#endif
 	}
 
 	// Update is called once per frame
