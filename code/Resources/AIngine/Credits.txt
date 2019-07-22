@@ -6,3 +6,5 @@ buttons_PNG183.png : http://pngimg.com/download/31677
 checkbox 4x : https://icons8.de/icons/set/checkbox
 icon.png : @author = xnimrodx
 expang.png : @author = Freepik
+blue,orange & green _button : https://opengameart.org/content/buttons-with-hover
+buttonSounds from https://www.zapsplat.com
