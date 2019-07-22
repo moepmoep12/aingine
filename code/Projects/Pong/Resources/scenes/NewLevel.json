@@ -12,6 +12,39 @@
 },
 "c_children": [
 {
+"BackGround": {
+"a_active": true,
+"a_name": "BackGround",
+"a_posX": 5.0,
+"a_posY": 2.8125,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 10.0,
+"sizeY": 5.625,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "textures\\Parchment.jpg",
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+}
+},
+{
 "GameManager": {
 "a_active": true,
 "a_name": "GameManager",
@@ -44,25 +77,25 @@
 0
 ],
 "constants_alpha": 0.1,
-"constants_beta": 0.10000000149011612,
-"constants_chi": 0.8,
-"constants_coveringMaxSpread": 1.0,
+"constants_beta": 0.15000000596046448,
+"constants_chi": 0.800000011920929,
+"constants_coveringMaxSpread": 2.0,
 "constants_delta": 0.1,
 "constants_doActionMutation": true,
 "constants_doActionSetSubsumption": true,
 "constants_doCoveringRandomRangeTruncation": true,
 "constants_doGASubsumption": true,
-"constants_dontCareProb": 0.4000000059604645,
+"constants_dontCareProb": 0.33000001311302185,
 "constants_epsilonZero": 10.0,
 "constants_exploreProb": 0.5,
-"constants_gamma": 0.6000000238418579,
-"constants_maxValue": 1.100000023841858,
-"constants_minValue": -1.100000023841858,
-"constants_mu": 0.04,
-"constants_mutationMaxChange": 0.1,
-"constants_n": 2500,
+"constants_gamma": 0.699999988079071,
+"constants_maxValue": 1.0049999952316284,
+"constants_minValue": -1.0049999952316284,
+"constants_mu": 0.03999999910593033,
+"constants_mutationMaxChange": 0.20000000298023224,
+"constants_n": 500,
 "constants_nu": 5.0,
-"constants_subsumptionTolerance": 0.0,
+"constants_subsumptionTolerance": 0.014999999664723873,
 "constants_tau": 0.0,
 "constants_thetaDel": 20,
 "constants_thetaGA": 50,
@@ -126,17 +159,17 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"fontpath": "AIngine\\fonts\\arial.ttf",
-"fontsize": 100,
+"fontpath": "fonts\\Rabbid-Highway-Sign-Bold-Caps.ttf",
+"fontsize": 150,
 "horizontalAlign": 0,
 "isdisabled": false,
 "rectangle": {
 "height": 2,
 "width": 5,
-"x": 0,
+"x": -285,
 "y": 100
 },
-"text": "46  :  237",
+"text": "197  :  33",
 "tintColor": {
 "w": 1.0,
 "x": 1.0,
@@ -426,12 +459,24 @@
 "Ball": {
 "a_active": true,
 "a_name": "Ball",
-"a_posX": 5.0,
-"a_posY": 2.5,
-"a_rotation": 3.229937283322215e-05,
+"a_posX": 5.691015720367432,
+"a_posY": 4.995377063751221,
+"a_rotation": -0.004564050585031509,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
 "b_components": {
+"particleemitter": {
+"active": true,
+"amount": 10000,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "textures\\ball.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+},
 "physics": {
 "active": true,
 "bodyType": 1,
@@ -444,8 +489,8 @@
 "vertexcount": 1,
 "vertices": [
 {
-"x": 5.0,
-"y": 2.5
+"x": 5.691015720367432,
+"y": 4.995377063751221
 },
 {
 "x": 0.0,
@@ -483,9 +528,9 @@
 "sprite": {
 "active": true,
 "alpha": 1.0,
-"colorB": 1.0,
-"colorG": 1.0,
-"colorR": 1.0,
+"colorB": 0.45587781071662903,
+"colorG": 0.45588237047195435,
+"colorR": 0.4558820128440857,
 "parallaxX": 1.0,
 "parallaxY": 1.0,
 "sizeX": 0.25,
@@ -507,8 +552,8 @@
 "a_active": true,
 "a_name": "PlayerOne",
 "a_posX": 0.5,
-"a_posY": 2.5,
-"a_rotation": -1.5707963705062866,
+"a_posY": 4.502389430999756,
+"a_rotation": 0.0,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
 "b_components": {
@@ -517,27 +562,27 @@
 "bodyType": 0,
 "density": 1.0,
 "friction": 0.0,
-"height": 0.25,
+"height": 1.0,
 "isTrigger": false,
 "restitution": 1.0,
 "shape": 1,
 "vertexcount": 4,
 "vertices": [
 {
-"x": -0.5,
-"y": -0.125
+"x": -0.125,
+"y": -0.5
 },
 {
-"x": -0.5,
-"y": 0.125
+"x": 0.125,
+"y": -0.5
 },
 {
-"x": 0.5,
-"y": 0.125
+"x": 0.125,
+"y": 0.5
 },
 {
-"x": 0.5,
-"y": -0.125
+"x": -0.125,
+"y": 0.5
 },
 {
 "x": 0.0,
@@ -556,7 +601,7 @@
 "y": 0.0
 }
 ],
-"width": 1.0
+"width": 0.25
 },
 "script": [
 5
@@ -569,8 +614,8 @@
 "colorR": 1.0,
 "parallaxX": 1.0,
 "parallaxY": 1.0,
-"sizeX": 1.0,
-"sizeY": 0.25,
+"sizeX": 0.25,
+"sizeY": 1.0,
 "texture": {
 "filterMax": 9729,
 "filterMin": 9729,
@@ -588,8 +633,8 @@
 "a_active": true,
 "a_name": "PlayerTwo",
 "a_posX": 9.5,
-"a_posY": 2.5,
-"a_rotation": 1.5707963705062866,
+"a_posY": 1.25,
+"a_rotation": 0.0,
 "a_scaleX": 1.0,
 "a_scaleY": 1.0,
 "b_components": {
@@ -602,27 +647,27 @@
 "bodyType": 0,
 "density": 1.0,
 "friction": 0.0,
-"height": 0.25,
+"height": 1.0,
 "isTrigger": false,
 "restitution": 1.0,
 "shape": 1,
 "vertexcount": 4,
 "vertices": [
 {
-"x": -0.5,
-"y": -0.125
+"x": -0.125,
+"y": -0.5
 },
 {
-"x": -0.5,
-"y": 0.125
+"x": 0.125,
+"y": -0.5
 },
 {
-"x": 0.5,
-"y": 0.125
+"x": 0.125,
+"y": 0.5
 },
 {
-"x": 0.5,
-"y": -0.125
+"x": -0.125,
+"y": 0.5
 },
 {
 "x": 0.0,
@@ -641,7 +686,7 @@
 "y": 0.0
 }
 ],
-"width": 1.0
+"width": 0.25
 },
 "script": [
 6
@@ -654,8 +699,8 @@
 "colorR": 1.0,
 "parallaxX": 1.0,
 "parallaxY": 1.0,
-"sizeX": 1.0,
-"sizeY": 0.25,
+"sizeX": 0.25,
+"sizeY": 1.0,
 "texture": {
 "filterMax": 9729,
 "filterMin": 9729,

@@ -12,6 +12,6 @@ namespace Pong {
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
 		virtual void OnWidget() override;
 
-		static glm::vec2 ForceOnBall;
+		//static glm::vec2 ForceOnBall;
 	};
 }

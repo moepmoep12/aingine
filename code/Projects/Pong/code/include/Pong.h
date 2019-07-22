@@ -17,5 +17,9 @@ namespace Pong {
 		virtual void OnAppShutDown() override;
 		virtual void OnAppUpdate() override;
 		virtual void OnAppEvent(AIngine::Events::EventData& e) override;
+
+		static int Difficulty;
+
+		static std::map<int, float> PlayerSizes;
 	};
 }

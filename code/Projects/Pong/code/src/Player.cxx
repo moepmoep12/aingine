@@ -3,8 +3,10 @@
 #include "Rendering/Camera.h"
 #include "GameManager.h"
 #include "Experiment.h"
-#include <imgui.h>
+#include "AIngine/Constants.h"
 
+#include <imgui.h>
+#include <glm/gtc/matrix_transform.hpp>
 namespace Pong {
 
 	// Constructor
@@ -54,7 +56,11 @@ namespace Pong {
 		float xPos = GetOwner()->GetWorldPosition().x + direction * playerSize.x * 0.6 + direction * m_experiment->BallBody->GetBodyInformation().radius;
 		float minHeight = GetOwner()->GetWorldPosition().y - playerSize.y * 0.5f + +m_experiment->BallBody->GetBodyInformation().radius;
 		float maxHeight = GetOwner()->GetWorldPosition().y + playerSize.y * 0.5f - +m_experiment->BallBody->GetBodyInformation().radius;
-		float height = AIngine::Util::Random::RandomFloat(minHeight, maxHeight);
+		float height;
+		if (minHeight >= maxHeight)
+			height = minHeight;
+		else
+			height = AIngine::Util::Random::RandomFloat(minHeight, maxHeight);
 		m_ballOffset = glm::vec2(xPos, height) - GetOwner()->GetWorldPosition();
 		m_HasBall = true;
 	}
@@ -62,9 +68,16 @@ namespace Pong {
 	void Player::StartBall()
 	{
 		m_HasBall = false;
-		glm::vec2 force = GameManager::ForceOnBall;
-		force.y = AIngine::Util::Random::RandomFloat(-1, 1);
-		if (force.y == 0) force.y = 0.5;
+		glm::vec2 force;
+		float angle = AIngine::Util::Random::RandomInt(45, 135) * AIngine::D2R;
+		glm::mat4 mat(1);
+		float direction = Role == PlayerRole::One ? 1 : -1;
+		mat = glm::rotate(mat, angle, glm::vec3(0, 0, direction));
+		glm::vec4 dir(0, 1, 0, 0);
+		dir = dir * mat;
+		force.x = dir.x;
+		force.y = dir.y;
+		force = glm::normalize(force);
 		m_experiment->BallBody->ApplyLinearImpulseToCenter(force);
 	}
 

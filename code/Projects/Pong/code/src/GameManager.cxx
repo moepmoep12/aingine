@@ -5,7 +5,7 @@
 
 namespace Pong {
 
-	glm::vec2 GameManager::ForceOnBall(0.7, 0.5);
+	//glm::vec2 GameManager::ForceOnBall(0.7, 0.5);
 
 	// Constructor
 	GameManager::GameManager()
@@ -43,9 +43,5 @@ namespace Pong {
 		if (ImGui::DragFloat("GameSpeed", &gamespeed, 0.1, 0.5f, 10.0f)) {
 			Pong::Get().AppSpeedMulitplier = gamespeed;
 		}
-
-		float* force[] = { &ForceOnBall.x, &ForceOnBall.y };
-		ImGui::DragFloat2("ForceOnBall", *force);
-
 	}
 }

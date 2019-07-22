@@ -1,6 +1,12 @@
 #include "XCSAgent.h"
 #include "Experiment.h"
 #include "imgui.h"
+#include "AIngine/XCSAgents.h"
+#include "AIngine/Util/Project.h"
+
+#include <cmath>
+#include <filesystem>
+
 namespace Pong {
 
 	// Constructor
@@ -9,14 +15,26 @@ namespace Pong {
 		// In order for the editor to display the scripts name correctly
 		SetName(typeid(*this).name());
 		TranslationRate = 15;
+		m_populationDifficulties[0] = 500;
+		m_populationDifficulties[1] = 2000;
 	}
 
 	// Start is called when gameplay starts for this script
 	void XCSAgent::OnStart()
 	{
 		Player::OnStart();
-	}
 
+#ifndef EDITOR
+		AIngine::XCSAgentSupervisor* supervisor = AIngine::World::GetGameObject("AgentSupervisor")->GetComponent<AIngine::XCSAgentSupervisor>();
+
+		supervisor->GetConstants().n = m_populationDifficulties[Pong::Difficulty];
+		std::stringstream ss;
+		ss << AIngine::Util::Project::GetResourceDirectory() << "xcs\\difficulty" << Pong::Difficulty << ".json";
+		supervisor->m_xcsr->loadPopulationCSV(std::filesystem::absolute(ss.str()).string(), true);
+		supervisor->SwitchCondensationMode(true);
+#endif
+	}
+	
 	// End is called when gameplay ends for this script
 	void XCSAgent::OnEnd()
 	{
@@ -42,7 +60,7 @@ namespace Pong {
 
 	void XCSAgent::OnGUI()
 	{
-		glm::vec4 color = collisionPointX == GetOwner()->GetLocalPosition().x  && std::abs(distanceToCollisionPoint) < 0.3f ? glm::vec4(0, 1, 0, 1) : glm::vec4(0, 0, 0, 1);
+		glm::vec4 color = (collisionPointY >= m_experiment->ArenaRect.y && collisionPointY <= m_experiment->ArenaRect.GetMax().y) && std::abs(distanceToCollisionPoint) < 0.5f ? glm::vec4(0, 1, 0, 1) : glm::vec4(0, 0, 0, 1);
 		Graphics::Point(glm::vec2(collisionPointX, collisionPointY), 18, color);
 
 		glm::vec2 position(10, 100);
@@ -85,63 +103,60 @@ namespace Pong {
 		glm::vec2 ballPos = m_experiment->BallBody->GetOwner()->GetLocalPosition();
 		glm::vec2 ballVel = m_experiment->BallBody->GetVelocity();
 		std::vector<glm::vec2> intersections = CalcIntersections();
-		int index = 0;
 
-		if (rect.Contains(intersections[0]))
-			index = 0;
-		else if (ballVel.y < 0 && rect.Contains(intersections[1]))
-			index = 1;
-		else index = 2;
-
-		collisionPointX = intersections[index].x;
-		collisionPointY = intersections[0].y;
-
-		if (glm::length(ballVel) == 0) {
-			collisionPointX = ballPos.x;
-			collisionPointY = ballPos.y;
-		}
-
-		if (rect.Contains(intersections[0])) {
-
+		if (rect.Contains(intersections[0]) && ballVel.x > 0) {
+			collisionPointX = intersections[0].x;
+			collisionPointY = intersections[0].y;
 			distanceToCollisionPoint = std::abs(relativePos.y - collisionPointY);
 		}
 		else {
+			collisionPointY = rect.y - 1;
 			distanceToCollisionPoint = -1;
 		}
 
-		//if (ballVel.y == 0) collisionPointX = 0;
-
-		//if (collisionPointX == relativePos.x)
-		//	distanceToCollisionPoint = std::abs(relativePos.y - collisionPointY);
-		//else
-		//	distanceToCollisionPoint = -1;
-
-
 		std::vector<double> result = {
-	/* 0 */ relativePos.y / rect.height, // agent height
-	/* 1 */ glm::distance(relativePos, ballPos) / rect.width, // distance to ball
-	/* 2 */ std::abs(relativePos.x - ballPos.x) / rect.width, // distance to ball X
-	/* 3 */ std::abs(relativePos.y - ballPos.y) / rect.height, // distance to ball Y
-	/* 4 */ std::clamp(ballVel.x / 10.0, -1.0, 1.0), // ballVelocity X
-	/* 5 */ std::clamp(ballVel.y / 10.0, -1.0, 1.0), // ballVelocity Y
-	/* 6 */ ballPos.x / rect.width, //  ballPos Y
-	/* 7 */ ballPos.y / rect.height, //  ballPos X
-		  //std::clamp(collisionPointX / rect.width, -1.05, 1.05), //  collisionpoint X
-	/* 8 */ std::clamp(collisionPointY / rect.height, -1.05, 1.05), //  collisionpoint Y
-	/* 9 */ distanceToCollisionPoint != -1 ? distanceToCollisionPoint / rect.height : -1, // distance to collisionpoint Y
-	/* 10 */ other->GetOwner()->GetLocalPosition().y / rect.height, // other player height
-	/* 11 */ (double)lastAction, // last action
-	/* 12 */ (rect.GetMax().y - ballPos.y) / rect.height, // ball distance to bottom edge
-	/* 13 */ (rect.y - ballPos.y) / rect.height, // ball distance to top edge
+			/* 0 */ relativePos.y / rect.height, // agent height
+			/* 2 */ std::abs(relativePos.x - ballPos.x) / rect.width, // distance to ball X
+			/* 3 */	(relativePos.y - ballPos.y) / rect.height, // distance to ball Y
+			/* 4 */ std::clamp(ballVel.x / 10.0, -1.0, 1.0), // ballVelocity X
+			/* 5 */ std::clamp(ballVel.y / 10.0, -1.0, 1.0), // ballVelocity Y
+			/* 6 */ ballPos.x / rect.width, //  ballPos X
+			/* 7 */ ballPos.y / rect.height, //  ballPos Y
+				  //std::clamp(collisionPointX / rect.width, -1.05, 1.05), //  collisionpoint X
+				  ///* 8 */ std::clamp(collisionPointY / rect.height, -1.05, 1.05), //  collisionpoint Y
+				  ///* 9 */ distanceToCollisionPoint != -1 ? distanceToCollisionPoint / rect.height : -1, // distance to collisionpoint Y
+				  ///* 10 */ other->GetOwner()->GetLocalPosition().y / rect.height, // other player height
+				  /* 11 */ (double)lastAction, // last action
+				  /* 12 */ (rect.GetMax().y - ballPos.y) / rect.height, // ball distance to bottom edge
+				  /* 13 */ (rect.y - ballPos.y) / rect.height, // ball distance to top edge
 		};
+
+		for (auto& point : intersections) {
+			if (isnan(point.x) || isnan(point.y)) {
+				result.push_back(-1);
+				result.push_back(-1);
+			}
+			else {
+				result.push_back(std::clamp(point.x / rect.width, -1.0f, 1.0f));
+				result.push_back(std::clamp(point.y / rect.height, -1.0f, 1.0f));
+			}
+		}
+
 		observation = result;
 		return result;
 	}
 
 	bool XCSAgent::IsEndOfProblem()
 	{
-		bool result = DoesBallCollide() || scored;
-		return result;
+		if (scored) {
+			scored = false;
+			if (goalie == Role) {
+				AddReward(1000);
+			}
+			return true;
+		}
+
+		return false;
 	}
 
 	void XCSAgent::ExecuteAction(int action)
@@ -154,17 +169,10 @@ namespace Pong {
 
 		if (DoesBallCollide()) {
 			AddReward(1000);
-			m_experiment->ScorePlayerTwo++;
+			//m_experiment->ScorePlayerTwo++;
 			return;
 		}
-		if (scored) {
-			scored = false;
-			if (goalie == Role)
-				AddReward(1000);
-			else
-				AddReward(0);
-			return;
-		}
+
 
 		// collision out of reach
 		if (collisionPointY < m_experiment->ArenaRect.y || collisionPointY > m_experiment->ArenaRect.GetMax().y) {
@@ -172,10 +180,10 @@ namespace Pong {
 		}
 		else {
 			// we're already in the right spot
-			if (std::abs(distanceToCollisionPoint) < 0.3f) {
-				AddReward(10);
+			if (std::abs(distanceToCollisionPoint) < 0.5f) {
+				AddReward(20);
 				// add more reward if the agent doesn't move once in the right spot
-				if (action == 0) AddReward(20);
+				if (action == 0) AddReward(50);
 			}
 			else
 			{
@@ -205,6 +213,8 @@ namespace Pong {
 		glm::vec2 ballPos = m_experiment->BallBody->GetOwner()->GetLocalPosition();
 		glm::vec2 ballVel = m_experiment->BallBody->GetVelocity();
 		double axis = GetOwner()->GetLocalPosition().x;
+		Player* other = Role == PlayerRole::One ? m_experiment->PlayerTwo : m_experiment->PlayerOne;
+		double axisOther = other->GetOwner()->GetLocalPosition().x;
 
 		std::vector<glm::vec2> intersections;
 
@@ -213,6 +223,8 @@ namespace Pong {
 
 		// player Axis
 		intersections.push_back(glm::vec2(axis, m* axis + b));
+		// other player
+		intersections.push_back(glm::vec2(axisOther, m* axisOther + b));
 		// top axis
 		intersections.push_back(glm::vec2((rect.y - b) / m, rect.y));
 		// bottom axis

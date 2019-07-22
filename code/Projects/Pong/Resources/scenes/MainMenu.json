@@ -1,0 +1,778 @@
+{
+"Root": {
+"a_active": true,
+"a_name": "Root",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null
+},
+"c_children": [
+{
+"Canvas": {
+"a_active": true,
+"a_name": "Canvas",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"canvas": {
+"active": true,
+"rectangle": {
+"height": 2,
+"width": 5,
+"x": 0,
+"y": 0
+}
+},
+"script": [
+8
+]
+},
+"c_children": [
+{
+"BackGround": {
+"a_active": true,
+"a_name": "BackGround",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"image": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 1080,
+"width": 1920,
+"x": 0,
+"y": 0
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "textures\\Parchment.jpg",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+}
+},
+"script": null,
+"soundComponent": {
+"active": true,
+"zapsplat_multimedia_click_003_19369": {
+"delay": 0.0,
+"looped": false,
+"pan": 0.5,
+"path": "AIngine\\sounds\\zapsplat_multimedia_click_003_19369.wav",
+"ptich": 1.0,
+"volumeLeft": 1.0,
+"volumeRight": 1.0
+}
+}
+},
+"c_children": [
+{
+"PaddleOne": {
+"a_active": true,
+"a_name": "PaddleOne",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"image": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 200,
+"width": 50,
+"x": 50,
+"y": 700
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "textures\\glasspaddle2.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+}
+},
+"script": null
+}
+}
+},
+{
+"PaddleTwo": {
+"a_active": true,
+"a_name": "PaddleTwo",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"image": {
+"active": true,
+"anchor": 2,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 200,
+"width": 50,
+"x": -100,
+"y": 300
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "textures\\paddle.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+}
+},
+"script": null
+}
+}
+}
+]
+}
+},
+{
+"Title": {
+"a_active": true,
+"a_name": "Title",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"text": {
+"active": true,
+"anchor": 5,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Rabbid-Highway-Sign-Bold-Caps.ttf",
+"fontsize": 300,
+"horizontalAlign": 0,
+"isdisabled": false,
+"rectangle": {
+"height": 2,
+"width": 5,
+"x": -338,
+"y": 31
+},
+"text": "PONG",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 0
+}
+}
+}
+},
+{
+"Difficulty": {
+"a_active": true,
+"a_name": "Difficulty",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Rabbid-Highway-Sign-Bold-Caps.ttf",
+"fontsize": 100,
+"horizontalAlign": 0,
+"isdisabled": false,
+"rectangle": {
+"height": 2,
+"width": 5,
+"x": 675,
+"y": 300
+},
+"text": "Difficulty",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 0
+}
+},
+"c_children": [
+{
+"Easy": {
+"a_active": true,
+"a_name": "Easy",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"button": {
+"active": true,
+"anchor": 1,
+"colorClicked": {
+"w": 1.0,
+"x": 0.6911761164665222,
+"y": 0.6911764740943909,
+"z": 0.6911695599555969
+},
+"colorHovered": {
+"w": 1.0,
+"x": 0.8999999761581421,
+"y": 0.8999999761581421,
+"z": 0.8999999761581421
+},
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 75,
+"width": 300,
+"x": 800,
+"y": 400
+},
+"text": "",
+"textColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 0.9999899864196777,
+"z": 0.9999899864196777
+},
+"textOffset": {
+"x": 0.0,
+"y": 0.0
+},
+"textScale": {
+"x": 1.0,
+"y": 1.0
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\blue_button.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 0.9999899864196777,
+"z": 0.9999899864196777
+}
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Rabbid-Highway-Sign-Bold-Caps.ttf",
+"fontsize": 50,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 75,
+"width": 300,
+"x": 800,
+"y": 400
+},
+"text": "Easy peasy",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 1
+}
+}
+}
+},
+{
+"Challenge": {
+"a_active": true,
+"a_name": "Challenge",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"button": {
+"active": true,
+"anchor": 1,
+"colorClicked": {
+"w": 1.0,
+"x": 0.6911761164665222,
+"y": 0.6911764740943909,
+"z": 0.6911695599555969
+},
+"colorHovered": {
+"w": 1.0,
+"x": 0.6000000238418579,
+"y": 0.6000000238418579,
+"z": 0.6000000238418579
+},
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 75,
+"width": 300,
+"x": 800,
+"y": 525
+},
+"text": "",
+"textColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 0.9999899864196777,
+"z": 0.9999899864196777
+},
+"textOffset": {
+"x": 0.0,
+"y": 0.0
+},
+"textScale": {
+"x": 1.0,
+"y": 1.0
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\blue_button.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 0.5,
+"y": 0.5,
+"z": 0.5
+}
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Rabbid-Highway-Sign-Bold-Caps.ttf",
+"fontsize": 50,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 75,
+"width": 300,
+"x": 800,
+"y": 525
+},
+"text": "Challenge",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 1
+}
+}
+}
+},
+{
+"Unfair": {
+"a_active": true,
+"a_name": "Unfair",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"button": {
+"active": true,
+"anchor": 1,
+"colorClicked": {
+"w": 1.0,
+"x": 0.6911761164665222,
+"y": 0.6911764740943909,
+"z": 0.6911695599555969
+},
+"colorHovered": {
+"w": 1.0,
+"x": 0.9019607901573181,
+"y": 0.9019607901573181,
+"z": 0.9019607901573181
+},
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 75,
+"width": 300,
+"x": 800,
+"y": 650
+},
+"text": "",
+"textColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 0.9999899864196777,
+"z": 0.9999899864196777
+},
+"textOffset": {
+"x": 0.0,
+"y": 0.0
+},
+"textScale": {
+"x": 1.0,
+"y": 1.0
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\blue_button.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 0.9999899864196777,
+"z": 0.9999899864196777
+}
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Rabbid-Highway-Sign-Bold-Caps.ttf",
+"fontsize": 30,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 75,
+"width": 300,
+"x": 800,
+"y": 650
+},
+"text": "i want it unfair",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 1
+}
+}
+}
+},
+{
+"Terminator": {
+"a_active": true,
+"a_name": "Terminator",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"button": {
+"active": true,
+"anchor": 1,
+"colorClicked": {
+"w": 1.0,
+"x": 0.6911761164665222,
+"y": 0.6911764740943909,
+"z": 0.6911695599555969
+},
+"colorHovered": {
+"w": 1.0,
+"x": 0.9019607901573181,
+"y": 0.9019607901573181,
+"z": 0.9019607901573181
+},
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 75,
+"width": 300,
+"x": 800,
+"y": 775
+},
+"text": "",
+"textColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 0.9999899864196777,
+"z": 0.9999899864196777
+},
+"textOffset": {
+"x": 0.0,
+"y": 0.0
+},
+"textScale": {
+"x": 1.0,
+"y": 1.0
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\blue_button.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 0.9999899864196777,
+"z": 0.9999899864196777
+}
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Rabbid-Highway-Sign-Bold-Caps.ttf",
+"fontsize": 50,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 75,
+"width": 300,
+"x": 800,
+"y": 775
+},
+"text": "Terminator",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 1
+}
+}
+}
+}
+]
+}
+},
+{
+"StartButton": {
+"a_active": true,
+"a_name": "StartButton",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"button": {
+"active": true,
+"anchor": 3,
+"colorClicked": {
+"w": 1.0,
+"x": 0.5443856716156006,
+"y": 0.8382352590560913,
+"z": 0.06574393808841705
+},
+"colorHovered": {
+"w": 1.0,
+"x": 0.5961892008781433,
+"y": 0.9313725233078003,
+"z": 0.05022107809782028
+},
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 100,
+"width": 300,
+"x": -350,
+"y": -150
+},
+"text": "",
+"textColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 0.9999899864196777,
+"z": 0.9999899864196777
+},
+"textOffset": {
+"x": 0.0,
+"y": 0.0
+},
+"textScale": {
+"x": 1.0,
+"y": 1.0
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\green_button.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 0.6190453767776489,
+"y": 1.0,
+"z": 0.0
+}
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 3,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Rabbid-Highway-Sign-Bold-Caps.ttf",
+"fontsize": 80,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 100,
+"width": 300,
+"x": -350,
+"y": -150
+},
+"text": "Start",
+"tintColor": {
+"w": 1.0,
+"x": 9.999999974752427e-07,
+"y": 9.999899930335232e-07,
+"z": 9.999899930335232e-07
+},
+"verticalAlign": 1
+}
+}
+}
+}
+]
+}
+}
+]
+}
+}

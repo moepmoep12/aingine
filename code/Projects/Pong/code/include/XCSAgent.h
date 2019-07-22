@@ -40,6 +40,7 @@ namespace Pong {
 		std::vector<std::pair<int, int>> scores;
 		bool testing = false;
 		std::vector<double> observation;
+		std::map<int, int> m_populationDifficulties;
 
 	};
 }

@@ -7,6 +7,10 @@ AIngine::Application* AIngine::CreateApplication() {
 }
 
 namespace Pong {
+
+	int Pong::Difficulty = 1;
+	std::map<int, float> Pong::PlayerSizes;
+
 	// Constructor
 	Pong::Pong()
 	{		// Configure the physics world with a gravity of 10 downwards
@@ -21,6 +25,11 @@ namespace Pong {
 		// Set the window size to be the whole screen
 		const glm::vec2 monitorResolution = m_window->GetMonitorResolution();
 		m_window->SetWindowSize(monitorResolution.x, monitorResolution.y);
+
+		PlayerSizes[0] = 300.0 / 200.0;
+		PlayerSizes[1] = 200.0 / 200.0;
+		PlayerSizes[2] = 175.0 / 200.0;
+		PlayerSizes[3] = 125.0 / 200.0;
 	}
 
 	// StartUp is called after the scene and engine subsystems have been initialized
