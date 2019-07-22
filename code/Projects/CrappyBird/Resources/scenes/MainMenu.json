@@ -301,7 +301,7 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"fontpath": "AIngine\\fonts\\arial.ttf",
+"fontpath": "fonts\\Days.ttf",
 "fontsize": 100,
 "horizontalAlign": 1,
 "isdisabled": false,
@@ -374,8 +374,8 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"fontpath": "AIngine\\fonts\\arial.ttf",
-"fontsize": 90,
+"fontpath": "fonts\\Days.ttf",
+"fontsize": 80,
 "horizontalAlign": 1,
 "isdisabled": false,
 "rectangle": {
@@ -439,14 +439,14 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"fontpath": "AIngine\\fonts\\arial.ttf",
+"fontpath": "fonts\\Days.ttf",
 "fontsize": 30,
 "horizontalAlign": 0,
 "isdisabled": false,
 "rectangle": {
 "height": 50,
-"width": 211,
-"x": 43,
+"width": 438,
+"x": 71,
 "y": 130
 },
 "text": "Rotating Obstacles?",
@@ -505,14 +505,14 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"fontpath": "AIngine\\fonts\\arial.ttf",
-"fontsize": 30,
+"fontpath": "fonts\\Days.ttf",
+"fontsize": 25,
 "horizontalAlign": 0,
 "isdisabled": false,
 "rectangle": {
 "height": 50,
-"width": 257,
-"x": 43,
+"width": 436,
+"x": 71,
 "y": 200
 },
 "text": "Game Over on collision?",
@@ -595,22 +595,22 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"fontpath": "AIngine\\fonts\\arial.ttf",
-"fontsize": 33,
+"fontpath": "fonts\\Days.ttf",
+"fontsize": 35,
 "horizontalAlign": 1,
 "isdisabled": false,
 "rectangle": {
-"height": 30,
+"height": 52,
 "width": 380,
 "x": 10,
-"y": 295
+"y": 273
 },
 "text": "Speed",
 "tintColor": {
 "w": 1.0,
-"x": 1.0,
-"y": 1.0,
-"z": 1.0
+"x": 9.999999974752427e-07,
+"y": 6.078431624700897e-07,
+"z": 6.078431624700897e-07
 },
 "verticalAlign": 0
 }
@@ -685,22 +685,22 @@
 "y": 0.20000000298023224,
 "z": 0.20000000298023224
 },
-"fontpath": "AIngine\\fonts\\arial.ttf",
+"fontpath": "fonts\\Days.ttf",
 "fontsize": 33,
 "horizontalAlign": 1,
 "isdisabled": false,
 "rectangle": {
-"height": 30,
+"height": 52,
 "width": 380,
 "x": 10,
-"y": 396
+"y": 374
 },
 "text": "Impulse",
 "tintColor": {
 "w": 1.0,
-"x": 1.0,
-"y": 1.0,
-"z": 1.0
+"x": 9.999999974752427e-07,
+"y": 9.754902521308395e-07,
+"z": 9.754902521308395e-07
 },
 "verticalAlign": 0
 }
@@ -836,15 +836,15 @@
 "anchor": 0,
 "colorClicked": {
 "w": 1.0,
-"x": 0.800000011920929,
-"y": 0.7799999713897705,
-"z": 0.0
+"x": 0.5126872062683105,
+"y": 0.8235294222831726,
+"z": 0.06862743198871613
 },
 "colorHovered": {
 "w": 1.0,
-"x": 0.8349999785423279,
-"y": 0.9020000100135803,
-"z": 0.10100000351667404
+"x": 0.5737029910087585,
+"y": 0.9460784196853638,
+"z": 0.041738737374544144
 },
 "disabledColor": {
 "w": 1.0,
@@ -855,11 +855,11 @@
 "isdisabled": false,
 "rectangle": {
 "height": 166,
-"width": 1120,
-"x": -560,
+"width": 700,
+"x": -350,
 "y": 362
 },
-"text": "START",
+"text": "",
 "textColor": {
 "w": 1.0,
 "x": 0.0,
@@ -878,18 +878,46 @@
 "filterMax": 9729,
 "filterMin": 9729,
 "imageFormat": 6408,
-"path": "AIngine\\textures\\HILLBLU_button_background.png",
+"path": "AIngine\\textures\\green_button.png",
 "wrapS": 10497,
 "wrapT": 10497
 },
 "tintColor": {
 "w": 1.0,
-"x": 1.0,
+"x": 0.5900616645812988,
 "y": 1.0,
 "z": 0.0
 }
 },
-"script": null
+"script": null,
+"text": {
+"active": true,
+"anchor": 0,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Days.ttf",
+"fontsize": 100,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 166,
+"width": 700,
+"x": -350,
+"y": 362
+},
+"text": "START",
+"tintColor": {
+"w": 1.0,
+"x": 9.999899930335232e-07,
+"y": 9.999968142437865e-07,
+"z": 9.999999974752427e-07
+},
+"verticalAlign": 1
+}
 }
 }
 },

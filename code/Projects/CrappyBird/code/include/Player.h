@@ -2,6 +2,7 @@
 #include "AIngine/Core.h"
 #include "Effects.h"
 #include "AIngine/UI/Button.h"
+#include "AIngine/UI/Text.h"
 
 namespace CrappyBird {
 	class Player : public AIngine::Script {
@@ -93,9 +94,9 @@ namespace CrappyBird {
 
 		const glm::vec2 m_spawnPosition = glm::vec2(1, 2.5);
 
-		FontAsset* gameOverFont = nullptr;
-
 		AIngine::UI::Button* retryButton = nullptr;
+		AIngine::UI::UIText* retryText = nullptr;
+		AIngine::UI::UIText* gameOverText = nullptr;
 		AIngine::UI::Button::OnClickedEventHandler OnRetryClickedHandler;
 
 		// EventHandler for the callbacks. Need to be kept in order to unsubscribe from events

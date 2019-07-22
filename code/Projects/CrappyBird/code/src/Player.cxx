@@ -17,7 +17,6 @@ namespace CrappyBird {
 		// In order for the editor to display the scripts name correctly
 		SetName(typeid(*this).name());
 		m_originalGameSpeed = CrappyBird::s_GameSpeed;
-		gameOverFont = Assets::Load<FontAsset>(AIngine::Assets::GetFontPath("AIngine/fonts/JOURNAL.ttf", 200));
 	}
 
 	glm::vec2 Player::GetSize()
@@ -70,6 +69,8 @@ namespace CrappyBird {
 		retryButton = AIngine::World::GetGameObject("RetryButton")->GetComponent<AIngine::UI::Button>();
 		OnRetryClickedHandler = AIngine::UI::Button::OnClickedEventHandler(std::bind(&Player::ResetGame, this));
 		retryButton->OnClickedEvent += OnRetryClickedHandler;
+		retryText = retryButton->GetComponent<AIngine::UI::UIText>();
+		gameOverText = AIngine::World::GetGameObject("GameOverText")->GetComponent<AIngine::UI::UIText>();
 	}
 
 	// End is called when gameplay ends for this script
@@ -241,7 +242,7 @@ namespace CrappyBird {
 		static std::default_random_engine generator;
 		static std::normal_distribution<double> lifeTimeDistribution(1.0, 0.3);
 		static std::normal_distribution<double> velocityDistribution(1.0, 0.5);
-		static const glm::vec2 particleSize(0.012);
+		static const glm::vec2 particleSize(0.025);
 		// orange
 		static const glm::vec4 startColor(1.0, 0.66, 0.1, 1.0);
 
@@ -294,19 +295,23 @@ namespace CrappyBird {
 		IsGameOver = true;
 		m_physBody->SetEnabled(false);
 		retryButton->GetOwner()->SetActive(true);
+		gameOverText->GetOwner()->SetActive(true);
 
 		static const std::vector<std::string> buttonTexts = { "Retry!", "One more time...", "This is unfair", "Ugh...", "Gimme cheats", "Again!" };
 
-		const std::string chosenText = buttonTexts[AIngine::Util::Random::RandomInt(0, buttonTexts.size())];
-		retryButton->Text = chosenText;
+		const std::string chosenText = buttonTexts[AIngine::Util::Random::RandomInt(0, buttonTexts.size() - 1)];
+		retryText->Text = chosenText;
+		float xsize = Graphics::GetTextSize(chosenText, glm::vec2(1), &retryText->GetFont()).x;
+		float scale = ((float)retryButton->GetRectangleNative().width * 0.9f) / xsize;
+		retryText->ChangeFontSize(std::roundl(scale * retryText->GetFontSize()));
 
-		static const float padding = retryButton->GetRectangle().width * 0.2f;
-		glm::vec2 textSize = Graphics::GetTextSize(chosenText);
+		//static const float padding = retryButton->GetRectangle().width * 0.2f;
+		//glm::vec2 textSize = Graphics::GetTextSize(chosenText);
 
-		float xScale = (retryButton->GetRectangle().width - padding) / textSize.x;
-		static const float yScale = 0.75;
-		float xsize = Graphics::GetTextSize(chosenText, glm::vec2(xScale, yScale)).x;
-		retryButton->TextScale = glm::vec2(xScale, yScale);
+		//float xScale = (retryButton->GetRectangle().width - padding) / textSize.x;
+		//static const float yScale = 0.75;
+		//float xsize = Graphics::GetTextSize(chosenText, glm::vec2(xScale, yScale)).x;
+		//retryButton->TextScale = glm::vec2(xScale, yScale);
 
 		//for (auto& effect : m_activeEffects)
 		//	effect->End();
@@ -316,29 +321,29 @@ namespace CrappyBird {
 
 	void Player::UpdateGameOverScreen(float delta)
 	{
-		const AIngine::Rendering::Viewport& viewport = AIngine::Application::Get().GetViewport();
-		//static const glm::vec2 scale = glm::vec2(3);
-		static glm::vec2 textsize = AIngine::Graphics::GetTextSize("Game Over", glm::vec2(1), &gameOverFont->GetFont());
-		float desiredSize = viewport.GetViewportWidth() * 0.75;
+		//const AIngine::Rendering::Viewport& viewport = AIngine::Application::Get().GetViewport();
+		////static const glm::vec2 scale = glm::vec2(3);
+		//static glm::vec2 textsize = AIngine::Graphics::GetTextSize("Game Over", glm::vec2(1), &gameOverFont->GetFont());
+		//float desiredSize = viewport.GetViewportWidth() * 0.75;
 
-		float scale = desiredSize / textsize.x;
-		glm::vec2 actualTextSize = AIngine::Graphics::GetTextSize("Game Over", glm::vec2(scale), &gameOverFont->GetFont());
+		//float scale = desiredSize / textsize.x;
+		//glm::vec2 actualTextSize = AIngine::Graphics::GetTextSize("Game Over", glm::vec2(scale), &gameOverFont->GetFont());
 
-		glm::vec2 center = viewport.GetCenter();
-		glm::vec2 pos = center;
-		pos.x -= actualTextSize.x * 0.5f;
-		pos.y -= actualTextSize.y * 0.5f;
-		//glm::vec2 buttonPos = center;
-		//buttonPos.y += actualTextSize.y * 0.75;
-		//buttonPos.x -= retryButton->GetRectangle().width * 0.5;
-		//retryButton->SetPosition(buttonPos);
-		AIngine::Graphics::Text("Game Over", pos, glm::vec2(scale), glm::vec3(1, 0, 0), 1, &gameOverFont->GetFont());
+		//glm::vec2 center = viewport.GetCenter();
+		//glm::vec2 pos = center;
+		//pos.x -= actualTextSize.x * 0.5f;
+		//pos.y -= actualTextSize.y * 0.5f;
+		////glm::vec2 buttonPos = center;
+		////buttonPos.y += actualTextSize.y * 0.75;
+		////buttonPos.x -= retryButton->GetRectangle().width * 0.5;
+		////retryButton->SetPosition(buttonPos);
+		//AIngine::Graphics::Text("Game Over", pos, glm::vec2(scale), glm::vec3(1, 0, 0), 1, &gameOverFont->GetFont());
 	}
 
 	void Player::ResetGame()
 	{
 		retryButton->GetOwner()->SetActive(false);
-
+		gameOverText->GetOwner()->SetActive(false);
 		m_distanceTraveled = 0;
 		IsGameOver = false;
 		m_physBody->SetEnabled(true);

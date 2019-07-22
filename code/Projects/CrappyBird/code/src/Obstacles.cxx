@@ -260,8 +260,7 @@ namespace CrappyBird {
 	{
 		if (s_CurrentMap.empty()) return;
 		for (int i = 0; i < s_CurrentMap.size(); i++) {
-			for (int j = 0; j < s_CurrentMap[0].size(); j++) {
-				assert(!s_CurrentMap[0].empty());
+			for (int j = 0; j < s_CurrentMap[i].size(); j++) {
 				s_CurrentMap[i][j].isClosed = false;
 				s_CurrentMap[i][j].isPlayerPath = false;
 			}

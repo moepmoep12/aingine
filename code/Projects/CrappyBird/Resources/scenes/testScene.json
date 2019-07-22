@@ -7088,6 +7088,48 @@
 },
 "c_children": [
 {
+"GameOverText": {
+"a_active": false,
+"a_name": "GameOverText",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"text": {
+"active": true,
+"anchor": 0,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Hapshash.ttf",
+"fontsize": 300,
+"horizontalAlign": 0,
+"isdisabled": false,
+"rectangle": {
+"height": 2,
+"width": 5,
+"x": -842,
+"y": -106
+},
+"text": "Game Over",
+"tintColor": {
+"w": 1.0,
+"x": 0.6911764740943909,
+"y": 0.115196093916893,
+"z": 0.115196093916893
+},
+"verticalAlign": 0
+}
+}
+}
+},
+{
 "RetryButton": {
 "a_active": false,
 "a_name": "RetryButton",
@@ -7102,15 +7144,15 @@
 "anchor": 1,
 "colorClicked": {
 "w": 1.0,
-"x": 0.9700000286102295,
-"y": 1.0,
-"z": 0.4000000059604645
+"x": 0.8382348418235779,
+"y": 0.8382352590560913,
+"z": 0.838226854801178
 },
 "colorHovered": {
 "w": 1.0,
-"x": 0.3799999952316284,
-"y": 0.6589999794960022,
-"z": 0.8389999866485596
+"x": 0.9031862616539001,
+"y": 0.911331295967102,
+"z": 0.9166666865348816
 },
 "disabledColor": {
 "w": 1.0,
@@ -7120,12 +7162,12 @@
 },
 "isdisabled": false,
 "rectangle": {
-"height": 100,
-"width": 300,
-"x": 860,
+"height": 120,
+"width": 400,
+"x": 760,
 "y": 850
 },
-"text": "Retry?",
+"text": "",
 "textColor": {
 "w": 1.0,
 "x": 9.999999974752427e-07,
@@ -7144,7 +7186,7 @@
 "filterMax": 9729,
 "filterMin": 9729,
 "imageFormat": 6408,
-"path": "AIngine\\textures\\buttons_PNG105.png",
+"path": "AIngine\\textures\\orange_button.png",
 "wrapS": 10497,
 "wrapT": 10497
 },
@@ -7155,7 +7197,35 @@
 "z": 1.0
 }
 },
-"script": null
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Days.ttf",
+"fontsize": 80,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 120,
+"width": 400,
+"x": 760,
+"y": 850
+},
+"text": "Retry?",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 1
+}
 }
 }
 }
