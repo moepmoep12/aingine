@@ -14,6 +14,7 @@ namespace Forklifts {
 	void ForkliftAgent::OnStart()
 	{
 		Forklift::OnStart();
+		m_experiment = GetParent()->GetComponent<Experiment>();
 	}
 
 	// End is called when gameplay ends for this script
@@ -100,5 +101,18 @@ namespace Forklifts {
 	{
 		_nextNode = *path.begin()._Ptr;
 		path.erase(path.begin());
+	}
+
+
+	void ForkliftAgent::OnCollisionBegin(AIngine::Physics::Contact contact)
+	{
+		if (contact.Other) {
+			for(auto& comp : contact.Other->GetComponents())
+				if (dynamic_cast<Forklift*>(comp))
+				{
+					m_experiment->AmountCollisions++;
+					break;
+				}
+		}
 	}
 }

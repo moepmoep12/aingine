@@ -13,8 +13,12 @@ namespace Forklifts {
 		virtual void OnEnd() override;
 		virtual void Update(float delta) override;
 		virtual void OnEventData(AIngine::Events::EventData& e) override;
+		virtual void OnGUI() override;
 
 		const int forkLiftCount = 4;
+
+		int AmountCollisions = 0;
+
 	private:
 		void Init();
 		void OnForkliftTaskFinished(Forklift* forklift);

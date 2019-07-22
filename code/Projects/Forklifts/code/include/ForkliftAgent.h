@@ -2,6 +2,7 @@
 #include "AIngine/Core.h"
 #include "Forklift.h"
 #include "AIngine/Agent.h"
+#include "Experiment.h"
 
 namespace Forklifts {
 	class ForkliftAgent : public Forklift, public AIngine::Agent {
@@ -28,6 +29,10 @@ namespace Forklifts {
 		virtual void ProcessTask()  override;
 
 	private:
+		virtual void OnCollisionBegin(AIngine::Physics::Contact contact) override;
+
+	private:
 		bool bTaskFinished = false;
+		Experiment* m_experiment;
 	};
 }

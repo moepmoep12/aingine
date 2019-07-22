@@ -21,6 +21,8 @@ namespace Forklifts {
 		OnGraphLoadedEventHandler = AIngine::Events::EventHandler<void>(std::bind(&Experiment::Init, this));
 		m_graph->GraphLoadedEvent += OnGraphLoadedEventHandler;
 		TaskFinishedHandler = Forklift::OnTaskFinishedEventHandler(std::bind(&Experiment::OnForkliftTaskFinished, this, std::placeholders::_1));
+
+		AmountCollisions = 0;
 	}
 
 	// End is called when gameplay ends for this script
@@ -41,6 +43,13 @@ namespace Forklifts {
 	// Callback for events
 	void Experiment::OnEventData(AIngine::Events::EventData & e)
 	{
+	}
+
+	void Experiment::OnGUI()
+	{
+		std::stringstream text;
+		text << "Collisions : " << AmountCollisions;
+		AIngine::Graphics::Text(text.str(), glm::vec2(10, 100));
 	}
 
 	void Experiment::Init()

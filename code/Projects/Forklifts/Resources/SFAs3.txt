@@ -1,19 +1,5 @@
 [
-{
-		"Areal": "",
-		"SFanr": "0001130117",
-		"Fastat": 80,
-		"ArealVon": "S2D2",
-		"ArealNach": "S2D2",
-		"KnotenVon": "00387",
-		"KnotenNach": "00124",
-		"PlatzVon": "P3",
-		"PlatzNach": "RAMPE5",
-		"Stogr": "00",
-		"AusfResou": "LKW-BOT-01",
-		"TimestampVon": "2018-10-07T15:34:38Z",
-		"TimestampNach": "2018-10-07T15:41:15Z"
-	}, {
+ {
 		"Areal": "",
 		"SFanr": "0001130402",
 		"Fastat": 80,
