@@ -23,23 +23,25 @@ namespace AIngine {
 
 		spdlog::set_pattern("%^[%T] %n: %v%$");
 
+#ifdef EDITOR
 		auto logSink = (spdlog::sink_ptr) std::make_shared<AIngine::Editor::Widget::LogWidgetSink_st>();
-
+#endif
 		s_coreLogger = spdlog::stdout_color_mt("Core");
 		s_coreLogger->set_level(spdlog::level::trace);
 
 		s_clientLogger = spdlog::stdout_color_mt("App");
 		s_clientLogger->set_level(spdlog::level::trace);
 
+#ifdef EDITOR
 		s_coreLogger->sinks().push_back(logSink);
 		s_clientLogger->sinks().push_back(logSink);
+#endif
 
 
-#ifdef LOG_TO_FILE
 		auto sink = (spdlog::sink_ptr) std::make_shared < spdlog::sinks::basic_file_sink_mt>("Editor/log.txt", true);
 		s_coreLogger->sinks().push_back(sink);
 		s_clientLogger->sinks().push_back(sink);
-#endif
+
 	}
 
 
