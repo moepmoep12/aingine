@@ -287,7 +287,7 @@ namespace AIngine::Editor::Serialization {
 						// restore XCSAgentSupervisor
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::COMPONENT_XCSAGENTSUPERVISOR)) {
 							AIngine::XCSAgentSupervisor* supervisor = RestoreXCSAgentSupervisor(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::COMPONENT_XCSAGENTSUPERVISOR], restoredObject);
-							agentSuperVisors[supervisor->GetOwner()->GetName()] = supervisor;
+							if (supervisor) agentSuperVisors[supervisor->GetOwner()->GetName()] = supervisor;
 						}
 
 
@@ -297,7 +297,7 @@ namespace AIngine::Editor::Serialization {
 						// restore agent
 						if (child[name][AttributeNames::GAMEOBJECT_COMPONENTS].contains(AttributeNames::AGENT)) {
 							AIngine::Agent* agent = RestoreAgent(&child[name][AttributeNames::GAMEOBJECT_COMPONENTS][AttributeNames::AGENT], restoredObject);
-							agents[agent->SupervisorName] = agent;
+							if (agent) agents[agent->SupervisorName] = agent;
 						}
 					}
 
