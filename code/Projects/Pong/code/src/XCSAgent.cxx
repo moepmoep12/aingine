@@ -27,14 +27,14 @@ namespace Pong {
 
 
 		AIngine::XCSAgentSupervisor* supervisor = AIngine::World::GetGameObject("AgentSupervisor")->GetComponent<AIngine::XCSAgentSupervisor>();
-//#ifndef EDITOR
-		//supervisor->GetConstants().n = m_populationDifficulties[Pong::Difficulty];
-		//std::stringstream ss;
-		//ss << AIngine::Util::Project::GetResourceDirectory() << "xcs\\difficulty" << Pong::Difficulty << ".json";
-		//supervisor->m_xcsr->loadPopulationCSV(std::filesystem::absolute(ss.str()).string(), true);
-		//supervisor->SwitchCondensationMode(true);
-		//supervisor->Exploration = false;
-//#endif
+#ifndef EDITOR
+		supervisor->GetConstants().n = m_populationDifficulties[Pong::Difficulty];
+		std::stringstream ss;
+		ss << AIngine::Util::Project::GetResourceDirectory() << "xcs\\difficulty" << Pong::Difficulty << ".json";
+		supervisor->m_xcsr->loadPopulationCSV(std::filesystem::absolute(ss.str()).string(), true);
+		supervisor->SwitchCondensationMode(true);
+		supervisor->Exploration = false;
+#endif
 	}
 	
 	// End is called when gameplay ends for this script
@@ -62,7 +62,8 @@ namespace Pong {
 
 	void XCSAgent::OnGUI()
 	{
-		glm::vec4 color = (collisionPointY >= m_experiment->ArenaRect.y && collisionPointY <= m_experiment->ArenaRect.GetMax().y) && std::abs(distanceToCollisionPoint) < 0.5f ? glm::vec4(0, 1, 0, 1) : glm::vec4(0, 0, 0, 1);
+		glm::vec4 color = (collisionPointY >= m_experiment->ArenaRect.y && collisionPointY <= m_experiment->ArenaRect.GetMax().y) 
+			&& std::abs(distanceToCollisionPoint) < 0.5f ? glm::vec4(0, 1, 0, 1) : glm::vec4(0, 0, 0, 1);
 		Graphics::Point(glm::vec2(collisionPointX, collisionPointY), 18, color);
 
 		glm::vec2 position(10, 100);
