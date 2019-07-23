@@ -46,12 +46,12 @@ namespace CrappyBird {
 		m_physBody->SetFixedRotation(true);
 
 		// create EventHandlers
-		OnCollisionEventHandler = AIngine::Events::EventHandler<void, AIngine::Physics::Contact>(std::bind(&Player::OnCollision, this, std::placeholders::_1));
-		OnSpawnFireParticlesHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(std::bind(&Player::OnSpawnFireParticles, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-		OnSpawnCollisionParticlesHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(std::bind(&Player::OnSpawnCollisionParticle, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-		OnUpdateParticleHandler = AIngine::ParticleEmitter::UpdateParticleHandler(std::bind(&Player::OnUpdateParticle, this, std::placeholders::_1, std::placeholders::_2));
-		OnUpdateCollisionParticleHandler = AIngine::ParticleEmitter::UpdateParticleHandler(std::bind(&Player::OnUpdateCollisionParticle, this, std::placeholders::_1, std::placeholders::_2));
-		OnGameOverHandler = OnGameOverEventHandler(std::bind(&Player::OnGameOver, this));
+		OnCollisionEventHandler = AIngine::Events::EventHandler<void, AIngine::Physics::Contact>(BIND_FN_1(Player::OnCollision));
+		OnSpawnFireParticlesHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(BIND_FN_3(Player::OnSpawnFireParticles));
+		OnSpawnCollisionParticlesHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(BIND_FN_3(Player::OnSpawnCollisionParticle));
+		OnUpdateParticleHandler = AIngine::ParticleEmitter::UpdateParticleHandler(BIND_FN_2(Player::OnUpdateParticle));
+		OnUpdateCollisionParticleHandler = AIngine::ParticleEmitter::UpdateParticleHandler(BIND_FN_2(Player::OnUpdateCollisionParticle));
+		OnGameOverHandler = OnGameOverEventHandler(BIND_FN_0(Player::OnGameOver));
 
 		// register callbacks
 		m_physBody->OnCollisionBegin += OnCollisionEventHandler;
@@ -68,7 +68,7 @@ namespace CrappyBird {
 		}
 
 		retryButton = AIngine::World::GetGameObject("RetryButton")->GetComponent<AIngine::UI::Button>();
-		OnRetryClickedHandler = AIngine::UI::Button::OnClickedEventHandler(std::bind(&Player::ResetGame, this));
+		OnRetryClickedHandler = AIngine::UI::Button::OnClickedEventHandler(BIND_FN_0(Player::ResetGame));
 		retryButton->OnClickedEvent += OnRetryClickedHandler;
 		retryText = retryButton->GetComponent<AIngine::UI::UIText>();
 		gameOverText = AIngine::World::GetGameObject("GameOverText")->GetComponent<AIngine::UI::UIText>();
@@ -251,7 +251,7 @@ namespace CrappyBird {
 		glm::vec2 origin = m_physBody->GetContact()->ContactPoints[0].WorldPoint - GetOwner()->GetWorldPosition();
 		/*	DEBUG_INFO("{0}  {1}", origin.x, origin.y);*/
 		glm::vec2 normal = m_physBody->GetContact()->Normal;
-		normal *= -1;
+		//normal *= -1;
 		const glm::vec2 perpendicular(-normal.y, normal.x);
 		float rotationStep = M_PI / count;
 		for (int i = 0; i < count; i++) {

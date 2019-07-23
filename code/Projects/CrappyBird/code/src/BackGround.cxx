@@ -18,8 +18,8 @@ namespace CrappyBird {
 		soundComp->Play(CrappyBird::s_levelIndex);
 		m_player = CrappyBird::s_AgentLearning ? AIngine::World::GetGameObject("AgentRocket")->GetComponent<AgentXCSR>(): AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>();
 
-		OnGameOverHandler = Player::OnGameOverEventHandler(std::bind(&BackGround::OnGameOver, this));
-		OnRestartGameHandler = Player::OnRestartGameEventHandler(std::bind(&BackGround::OnRestartGame, this));
+		OnGameOverHandler = Player::OnGameOverEventHandler(BIND_FN_0(BackGround::OnGameOver));
+		OnRestartGameHandler = Player::OnRestartGameEventHandler(BIND_FN_0(BackGround::OnRestartGame));
 
 		m_player->OnGameOverEvent += OnGameOverHandler;
 		m_player->OnRestartGame += OnRestartGameHandler;

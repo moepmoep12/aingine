@@ -1257,6 +1257,246 @@
 }
 }
 }
+},
+{
+"PickUp8": {
+"a_active": false,
+"a_name": "PickUp8",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"physics": {
+"active": true,
+"bodyType": 0,
+"density": 1.0,
+"friction": 0.20000000298023224,
+"isTrigger": true,
+"radius": 0.20000000298023224,
+"restitution": 0.0,
+"shape": 0,
+"vertexcount": 1,
+"vertices": [
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+}
+]
+},
+"script": [
+4
+],
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 0.4000000059604645,
+"sizeY": 0.4000000059604645,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\Circle.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+}
+},
+{
+"PickUp9": {
+"a_active": false,
+"a_name": "PickUp9",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"physics": {
+"active": true,
+"bodyType": 0,
+"density": 1.0,
+"friction": 0.20000000298023224,
+"isTrigger": true,
+"radius": 0.20000000298023224,
+"restitution": 0.0,
+"shape": 0,
+"vertexcount": 1,
+"vertices": [
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+}
+]
+},
+"script": [
+4
+],
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 0.4000000059604645,
+"sizeY": 0.4000000059604645,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\Circle.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+}
+},
+{
+"PickUp10": {
+"a_active": false,
+"a_name": "PickUp10",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"physics": {
+"active": true,
+"bodyType": 0,
+"density": 1.0,
+"friction": 0.20000000298023224,
+"isTrigger": true,
+"radius": 0.20000000298023224,
+"restitution": 0.0,
+"shape": 0,
+"vertexcount": 1,
+"vertices": [
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+}
+]
+},
+"script": [
+4
+],
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 0.4000000059604645,
+"sizeY": 0.4000000059604645,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\Circle.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+}
 }
 ]
 }

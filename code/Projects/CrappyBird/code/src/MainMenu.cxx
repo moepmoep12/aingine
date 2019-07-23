@@ -21,27 +21,27 @@ namespace CrappyBird {
 	void MainMenu::OnStart()
 	{
 		StartButton = AIngine::World::GetGameObject("StartButton")->GetComponent<AIngine::UI::Button>();
-		OnStartClickedHandler = AIngine::UI::Button::OnClickedEventHandler(std::bind(&MainMenu::OnStartClicked, this));
+		OnStartClickedHandler = AIngine::UI::Button::OnClickedEventHandler(BIND_FN_0(MainMenu::OnStartClicked));
 		StartButton->OnClickedEvent += OnStartClickedHandler;
 
 		SpeedSlider = AIngine::World::GetGameObject("SpeedSlider")->GetComponent<AIngine::UI::Slider>();
-		SpeedSlider->OnValueChangedEvent += std::bind(&MainMenu::OnSpeedChanged, this, std::placeholders::_1);
+		SpeedSlider->OnValueChangedEvent += BIND_FN_1(MainMenu::OnSpeedChanged);
 		SpeedSlider->Value =((CrappyBird::s_GameSpeed - CrappyBird::s_originalGameSpeed) - SpeedSlider->Min) / (SpeedSlider->Max - SpeedSlider->Min);
 
 		ImpulseSlider = AIngine::World::GetGameObject("ImpulseSlider")->GetComponent<AIngine::UI::Slider>();
-		ImpulseSlider->OnValueChangedEvent += std::bind(&MainMenu::OnImpulseChanged, this, std::placeholders::_1);
+		ImpulseSlider->OnValueChangedEvent += BIND_FN_1(MainMenu::OnImpulseChanged);
 		ImpulseSlider->Value = ((CrappyBird::s_Impulse - CrappyBird::s_standardImpulse) - ImpulseSlider->Min) / (ImpulseSlider->Max - ImpulseSlider->Min);
 
 		RotationCheckBox = AIngine::World::GetGameObject("CheckBoxRotation")->GetComponent<AIngine::UI::CheckBox>();
-		RotationCheckBox->OnStateChangedEvent += std::bind(&MainMenu::OnObstacleRotationValueChanged, this, std::placeholders::_1);
+		RotationCheckBox->OnStateChangedEvent +=BIND_FN_1(MainMenu::OnObstacleRotationValueChanged);
 		RotationCheckBox->SetState(CrappyBird::s_bObstacleRotation);
 
 		CollisionCheckBox = AIngine::World::GetGameObject("CheckBoxCollision")->GetComponent<AIngine::UI::CheckBox>();
-		CollisionCheckBox->OnStateChangedEvent += std::bind(&MainMenu::OnGameOverCheckBoxValueChanged, this, std::placeholders::_1);
+		CollisionCheckBox->OnStateChangedEvent +=BIND_FN_1(MainMenu::OnGameOverCheckBoxValueChanged);
 		CollisionCheckBox->SetState(CrappyBird::s_DieOnCollision);
 
 		AgentCheckBox = AIngine::World::GetGameObject("CheckBoxAgent")->GetComponent<AIngine::UI::CheckBox>();
-		AgentCheckBox->OnStateChangedEvent += std::bind(&MainMenu::OnAgentCheckBoxValueChanged, this, std::placeholders::_1);
+		AgentCheckBox->OnStateChangedEvent += BIND_FN_1(MainMenu::OnAgentCheckBoxValueChanged);
 		AgentCheckBox->SetState(CrappyBird::s_AgentLearning);
 
 		Obstacles[0] = AIngine::World::GetGameObject("Obstacle1");
@@ -51,7 +51,7 @@ namespace CrappyBird {
 			std::stringstream ss;
 			ss << "Level" << i + 1 << "Button";
 			LevelButtons[i] = AIngine::World::GetGameObject(ss.str())->GetComponent<AIngine::UI::Button>();
-			LevelButtons[i]->OnClickedEvent += std::bind(&MainMenu::OnLevelButtonClicked, this);
+			LevelButtons[i]->OnClickedEvent += BIND_FN_0(MainMenu::OnLevelButtonClicked);
 		}
 
 		//play music

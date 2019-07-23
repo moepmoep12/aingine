@@ -18,8 +18,8 @@ namespace CrappyBird {
 	void PlayerMainMenu::OnStart()
 	{
 		m_emitter = GetOwner()->GetComponent<ParticleEmitter>();
-		OnSpawnParticleHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(std::bind(&PlayerMainMenu::OnSpawnParticles, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-		OnUpdateParticleHandler = AIngine::ParticleEmitter::UpdateParticleHandler(std::bind(&PlayerMainMenu::OnUpdateParticle, this, std::placeholders::_1));
+		OnSpawnParticleHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(BIND_FN_3(PlayerMainMenu::OnSpawnParticles));
+		OnUpdateParticleHandler = AIngine::ParticleEmitter::UpdateParticleHandler(BIND_FN_1(PlayerMainMenu::OnUpdateParticle));
 
 		// register callbacks
 		m_emitter->SpawnParticlesEvent += OnSpawnParticleHandler;

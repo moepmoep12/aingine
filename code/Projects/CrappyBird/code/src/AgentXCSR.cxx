@@ -26,8 +26,8 @@ namespace CrappyBird {
 		m_physBody->SetFixedRotation(true);
 		m_physBody->SetEnabled(true);
 
-		OnCollisionEventHandler = AIngine::Events::EventHandler<void, AIngine::Physics::Contact>(std::bind(&AgentXCSR::OnCollision, this, std::placeholders::_1));
-		OnGameOverHandler = OnGameOverEventHandler(std::bind(&AgentXCSR::OnGameOver, this));
+		OnCollisionEventHandler = AIngine::Events::EventHandler<void, AIngine::Physics::Contact>(BIND_FN_1(AgentXCSR::OnCollision));
+		OnGameOverHandler = OnGameOverEventHandler(BIND_FN_0(AgentXCSR::OnGameOver));
 
 		// register callbacks
 		m_physBody->OnCollisionBegin += OnCollisionEventHandler;
