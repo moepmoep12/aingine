@@ -16,22 +16,44 @@ namespace AIngine::Physics {
 
 	void PhysicsComponent::OnUpdate(float deltatime)
 	{
-		if (m_body && m_body->GetType() != b2_staticBody) {
-			b2Vec2 pos = m_body->GetPosition();
-			float rot = std::fmodf(m_body->GetAngle(), 2 * M_PI);
+		if (m_body) {
+			if (m_wantsDeactivation) {
+				if (!m_body->GetWorld()->IsLocked()) {
+					Component::SetEnabled(false);
+					m_body->SetActive(false);
+					m_wantsDeactivation = false;
+					return;
+				}
+			}
+			if (m_wantsActivation) {
+				if (!m_body->GetWorld()->IsLocked()) {
+					Component::SetEnabled(true);
+					m_body->SetActive(true);
+					m_wantsActivation = false;
+					return;
+				}
+			}
+			if (m_body->GetType() != b2_staticBody) {
+				b2Vec2 pos = m_body->GetPosition();
+				float rot = std::fmodf(m_body->GetAngle(), 2 * M_PI);
 
-			m_owner->SetWorldPosition(glm::vec2(pos.x, pos.y), false);
-			m_owner->SetWorldRotation(rot, false);
+				m_owner->SetWorldPosition(glm::vec2(pos.x, pos.y), false);
+				m_owner->SetWorldRotation(rot, false);
+			}
 		}
 	}
 
 	void PhysicsComponent::SetEnabled(bool active)
 	{
-		Component::SetEnabled(active);
 
 		if (m_body) {
-			if (!m_body->GetWorld()->IsLocked())
+			if (!m_body->GetWorld()->IsLocked()) {
 				m_body->SetActive(active);
+				Component::SetEnabled(active);
+			}
+			else
+				if (!active)	m_wantsDeactivation = true;
+				else m_wantsActivation = true;
 			//m_body->SetAwake(active);
 			m_bIsTouching = false;
 		}

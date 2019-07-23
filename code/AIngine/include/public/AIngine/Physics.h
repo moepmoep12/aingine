@@ -131,6 +131,8 @@ namespace AIngine::Physics {
 	private:
 		friend class ContactListener;
 		bool m_bIsTouching = false;
+		bool m_wantsDeactivation = false;
+		bool m_wantsActivation = false;
 		Contact m_contact;
 		b2Body* m_body = nullptr;
 		PhysicsProperties m_properties;
