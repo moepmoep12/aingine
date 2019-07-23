@@ -62,10 +62,10 @@ namespace AIngine::Editor {
 	{
 		AIngine::Events::EventDispatcher dispatcher(e);
 
-		dispatcher.Dispatch<AIngine::Events::KeyPressedEvent::KeyPressedEventData>(BIND_EVENT_TO_FN(Editor::OnKeyPressed));
-		dispatcher.Dispatch<AIngine::Events::MouseScrolledEvent::MouseScrolledEventData>(BIND_EVENT_TO_FN(Editor::OnMouseScrolled));
-		dispatcher.Dispatch<AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData>(BIND_EVENT_TO_FN(Editor::OnMouseButtonPressed));
-		dispatcher.Dispatch<AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData>(BIND_EVENT_TO_FN(Editor::OnMouseButtonReleased));
+		dispatcher.Dispatch<AIngine::Events::KeyPressedEvent::KeyPressedEventData>(BIND_FN_1(Editor::OnKeyPressed));
+		dispatcher.Dispatch<AIngine::Events::MouseScrolledEvent::MouseScrolledEventData>(BIND_FN_1(Editor::OnMouseScrolled));
+		dispatcher.Dispatch<AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData>(BIND_FN_1(Editor::OnMouseButtonPressed));
+		dispatcher.Dispatch<AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData>(BIND_FN_1(Editor::OnMouseButtonReleased));
 
 		auto it = m_widgets.begin();
 		while (it != m_widgets.end()) {

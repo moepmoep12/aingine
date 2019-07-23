@@ -11,7 +11,7 @@
 
 namespace AIngine::UI {
 
-#define BIND_EVENT_TO_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#define BIND_FN_1(fn) std::bind(&fn, this, std::placeholders::_1)
 
 	ImGuiLayer::ImGuiLayer() : Layer("ImGui Layer")
 	{

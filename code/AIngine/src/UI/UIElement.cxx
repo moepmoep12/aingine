@@ -25,8 +25,8 @@ namespace AIngine::UI {
 	{
 		AIngine::Events::EventDispatcher dispatcher(e);
 
-		dispatcher.Dispatch<AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData>(BIND_EVENT_TO_FN(UIElement::OnMouseButtonPressed));
-		dispatcher.Dispatch<AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData>(BIND_EVENT_TO_FN(UIElement::OnMouseButtonReleased));
+		dispatcher.Dispatch<AIngine::Events::MouseButtonPressedEvent::MouseButtonPressedEventData>(BIND_FN_1(UIElement::OnMouseButtonPressed));
+		dispatcher.Dispatch<AIngine::Events::MouseButtonReleasedEvent::MouseButtonReleasedEventData>(BIND_FN_1(UIElement::OnMouseButtonReleased));
 	}
 
 	bool AIngine::UI::UIElement::IsHovered() const
