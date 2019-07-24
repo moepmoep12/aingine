@@ -1,7 +1,7 @@
 #pragma once
 #include "AIngine/Core.h"
 #include "Player.h"
-
+#include "AIngine/XCSAgents.h"
 #include "UI/Text.h"
 
 namespace Pong {
@@ -29,8 +29,15 @@ namespace Pong {
 
 		AIngine::Structures::RectangleF ArenaRect;
 
+		bool m_training = true;
+
 	private:
 		AIngine::UI::UIText* ScoreText;
+		AIngine::UI::UIText* TrainingText;
+		int m_currentTrainingTicks = 0;
+		AIngine::XCSAgentSupervisor* supervisor;
+		std::unordered_map<int, int> m_TrainingTicksPerDifficulty;
+
 
 	private:
 		void OnCollisionLeft(AIngine::Physics::Contact contact);

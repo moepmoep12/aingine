@@ -135,7 +135,7 @@ namespace Pong {
 
 		float del = 0;
 		float currentHeight = GetOwner()->GetWorldPosition().y;
-		del = TranslationRate * direction * Pong::Get().GetDeltaTime();
+		del = TranslationRate * direction * Pong::Get().GetDeltaTimeScaled();
 
 		if (currentHeight + del > maxY) {
 			del = maxY - currentHeight;

@@ -8,6 +8,7 @@ namespace Pong {
 	{
 		// In order for the editor to display the scripts name correctly
 		SetName(typeid(*this).name());
+		Role = PlayerRole::One;
 	}
 
 	// Start is called when gameplay starts for this script
@@ -21,9 +22,9 @@ namespace Pong {
 		glm::vec2 screenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(GetOwner()->GetWorldPosition());
 
 		AIngine::Input::SetMousePos({ screenPos.x, screenPos.y });
-#ifndef EDITOR
+
 		AIngine::World::GetGameObject("BackGround")->GetComponent<SoundComponent>()->Play(0);
-#endif
+
 	}
 
 	// End is called when gameplay ends for this script
@@ -40,6 +41,7 @@ namespace Pong {
 	void HumanPlayer::Update(float delta)
 	{
 		Player::Update(delta);
+
 #ifndef EDITOR
 		Pong::Get().GetWindow().SetMouseVisible(false);
 #endif

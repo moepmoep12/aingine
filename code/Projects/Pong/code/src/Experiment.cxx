@@ -1,4 +1,6 @@
 #include "Experiment.h"
+#include "HumanPlayer.h"
+#include "Pong.h"
 namespace Pong {
 
 	// Constructor
@@ -6,6 +8,11 @@ namespace Pong {
 	{
 		// In order for the editor to display the scripts name correctly
 		SetName(typeid(*this).name());
+
+		m_TrainingTicksPerDifficulty[0] = 2000;
+		m_TrainingTicksPerDifficulty[1] = 3000;
+		m_TrainingTicksPerDifficulty[2] = 4000;
+		m_TrainingTicksPerDifficulty[3] = 5000;
 	}
 
 	// Start is called when gameplay starts for this script
@@ -25,6 +32,7 @@ namespace Pong {
 			TopEdge->GetBodyInformation().width, RightEdge->GetBodyInformation().height);
 
 		ScoreText = AIngine::World::GetGameObject("ScoreText")->GetComponent<AIngine::UI::UIText>();
+		TrainingText = AIngine::World::GetGameObject("TrainingText")->GetComponent<AIngine::UI::UIText>();
 
 		auto components = GetOwner()->GetChild("PlayerOne")->GetComponents();
 		for (auto& comp : components)
@@ -43,10 +51,9 @@ namespace Pong {
 			}
 
 		BallBody = GetOwner()->GetChild("Ball")->GetComponent<PhysicsComponent>();
-
-
-
 		PlayerOne->ReceiveBall();
+		supervisor = AIngine::World::GetGameObject("AgentSupervisor")->GetComponent<AIngine::XCSAgentSupervisor>();
+
 	}
 
 	// End is called when gameplay ends for this script
@@ -62,6 +69,33 @@ namespace Pong {
 	// Update is called once per frame
 	void Experiment::Update(float delta)
 	{
+		if (m_training) {
+			m_currentTrainingTicks++;
+			if (m_currentTrainingTicks >= m_TrainingTicksPerDifficulty[Pong::Difficulty]) {
+				m_training = false;
+				// replace the random agent with the human player
+				PlayerOne->GetOwner()->SetActive(false);
+
+				PlayerOne = AIngine::World::GetGameObject("PlayerOneHuman")->GetComponent<HumanPlayer>();
+				PlayerOne->GetComponent<PhysicsComponent>()->SetEnabled(true);
+				PlayerOne->GetOwner()->SetActive(true);
+				PlayerOne->ReceiveBall();
+				ScoreText->GetOwner()->SetActive(true);
+				TrainingText->GetOwner()->SetActive(false);
+
+
+				ScorePlayerOne = 0;
+				ScorePlayerTwo = 0;
+
+				
+			}
+			else {
+				if (m_currentTrainingTicks >= m_TrainingTicksPerDifficulty[Pong::Difficulty] * 0.5)
+					if (supervisor->Exploration) {
+						supervisor->Exploration = false;
+					}
+			}
+		}
 	}
 
 	// Callback for events
@@ -72,9 +106,15 @@ namespace Pong {
 	void Experiment::OnGUI()
 	{
 		std::stringstream ss;
-		ss << ScorePlayerOne << "  :  " << ScorePlayerTwo;
-		ScoreText->Text = ss.str();
-
+		if (m_training)
+		{
+			ss << "Training " << (int)(100.0f * ((float)m_currentTrainingTicks / (float)m_TrainingTicksPerDifficulty[Pong::Difficulty])) << "%";
+			TrainingText->Text = ss.str();
+		}
+		else {
+			ss << ScorePlayerOne << "  :  " << ScorePlayerTwo;
+			ScoreText->Text = ss.str();
+		}
 		Graphics::BoxWorld(ArenaRect, glm::vec4(0, 0, 0, 1));
 	}
 
@@ -83,8 +123,10 @@ namespace Pong {
 		ScorePlayerTwo++;
 		PlayerTwo->OnScored(PlayerRole::Two);
 		PlayerOne->OnScored(PlayerRole::Two);
-		PlayerTwo->ReceiveBall();
-		//m_sound->Play(0);
+		if (m_training)
+			PlayerOne->ReceiveBall();
+		else
+			PlayerTwo->ReceiveBall();
 	}
 
 	void Experiment::OnCollisionRight(AIngine::Physics::Contact contact)
@@ -94,7 +136,8 @@ namespace Pong {
 		PlayerOne->OnScored(PlayerRole::One);
 		PlayerOne->ReceiveBall();
 #ifndef EDITOR
-		m_sound->Play(0);
+		if (!m_training)
+			m_sound->Play(0);
 #endif 
 
 	}
