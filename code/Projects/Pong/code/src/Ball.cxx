@@ -18,7 +18,7 @@ namespace Pong {
 	{
 		m_emitter = GetComponent<ParticleEmitter>();
 		m_physBody = GetComponent<PhysicsComponent>();
-		m_sound =  GetComponent<SoundComponent>();
+		m_sound = GetComponent<SoundComponent>();
 
 		OnSpawnParticlesHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(std::bind(&Ball::OnSpawnParticles, this,
 			std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
@@ -60,6 +60,7 @@ namespace Pong {
 		static std::normal_distribution<double> velocityDistribution(1.0, 0.5);
 
 		const AIngine::Physics::Contact* contact = GetComponent<PhysicsComponent>()->GetContact();
+		if (!contact) return;
 		glm::vec2 origin = contact->ContactPoints[0].WorldPoint - GetOwner()->GetWorldPosition();
 		glm::vec2 normal = contact->Normal;
 
@@ -93,6 +94,7 @@ namespace Pong {
 
 	void Ball::OnCollision(AIngine::Physics::Contact contact)
 	{
+		if (!contact.Other) return;
 		m_emitter->Update(Pong::Get().GetDeltaTime(), spawnCount);
 		m_sound->Play(AIngine::Util::Random::RandomInt(0, m_sound->GetSounds().size() - 1));
 	}

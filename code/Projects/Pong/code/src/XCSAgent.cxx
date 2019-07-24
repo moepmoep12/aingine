@@ -36,7 +36,7 @@ namespace Pong {
 		supervisor->Exploration = false;
 #endif
 	}
-	
+
 	// End is called when gameplay ends for this script
 	void XCSAgent::OnEnd()
 	{
@@ -62,8 +62,8 @@ namespace Pong {
 
 	void XCSAgent::OnGUI()
 	{
-#ifndef EDITOR
-		glm::vec4 color = (collisionPointY >= m_experiment->ArenaRect.y && collisionPointY <= m_experiment->ArenaRect.GetMax().y) 
+#ifdef EDITOR
+		glm::vec4 color = (collisionPointY >= m_experiment->ArenaRect.y && collisionPointY <= m_experiment->ArenaRect.GetMax().y)
 			&& std::abs(distanceToCollisionPoint) < 0.5f ? glm::vec4(0, 1, 0, 1) : glm::vec4(0, 0, 0, 1);
 		Graphics::Point(glm::vec2(collisionPointX, collisionPointY), 18, color);
 

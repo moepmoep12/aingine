@@ -12,8 +12,10 @@ namespace Pong {
 	{
 		// In order for the editor to display the scripts name correctly
 		SetName(typeid(*this).name());
+#ifdef EDITOR
 		Pong::FIXED_TIMESTEP = 1.0 / 120.0;
 		Pong::UseFixedTimeStep(true);
+#endif
 	}
 
 	// Start is called when gameplay starts for this script
