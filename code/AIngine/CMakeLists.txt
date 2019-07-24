@@ -278,8 +278,8 @@ target_compile_definitions(AIngineEditor PUBLIC -DEDITOR)
 #
 # --- Install
 #
-install(TARGETS AIngineEditor freetype EXPORT AIngineEditor DESTINATION "lib/AIngineEditor")
-install(TARGETS AIngine freetype EXPORT AIngine DESTINATION "lib/AIngine")
+install(TARGETS AIngineEditor freetype EXPORT AIngineEditor DESTINATION "lib/AIngineEditor" COMPONENT editor)
+install(TARGETS AIngine freetype EXPORT AIngine DESTINATION "lib/AIngine" COMPONENT aingine)
 install(EXPORT AIngineEditor DESTINATION "lib/AIngineEditor"
 									FILE aingineeditor-config.cmake)
 install(EXPORT AIngine DESTINATION "lib/AIngine"
@@ -308,43 +308,30 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/Resources/AIngine DESTINATION Resources)
 #
 set (CPACK_PACKAGE_NAME "AIngine")
 set (CPACK_PACKAGE_VENDOR "Andreas Schmidt")
-set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "AIngine - a 2D GameEngine with Editor")
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "AIngine - a 2D GameEngine")
 set (CPACK_PACKAGE_VERSION "1.0.0")
 set (CPACK_PACKAGE_VERSION_MAJOR "1")
 set (CPACK_PACKAGE_VERSION_MINOR "0")
 set (CPACK_PACKAGE_VERSION_PATCH "0")
 set (CPACK_PACKAGE_INSTALL_DIRECTORY "AIngine")
 
-# Define components and their display names
-#set (CPACK_COMPONENTS_ALL applications libraries headers)
-#set (CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "MyLib Applications")
-#set (CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "Libraries")
-#set (CPACK_COMPONENT_HEADERS_DISPLAY_NAME "C++ Headers")
+set (CPACK_COMPONENTS_ALL editor aingine launcher)
+set (CPACK_COMPONENT_EDITOR_DISPLAY_NAME "AIngine Editor")
+set (CPACK_COMPONENT_EDITOR_REQUIRED "TRUE")
+set (CPACK_COMPONENT_AINGINE_DISPLAY_NAME "AIngine Library")
+set (CPACK_COMPONENT_AINGINE_REQUIRED "TRUE")
+set (CPACK_COMPONENT_LAUNCHER_DISPLAY_NAME "AIngine project launcher")
+set (CPACK_COMPONENT_LAUNCHER_REQUIRED "TRUE")
 
-# Human readable component descriptions
-#set (CPACK_COMPONENT_APPLICATIONS_DESCRIPTION
-#  "An extremely useful application that makes use of MyLib")
-#set (CPACK_COMPONENT_LIBRARIES_DESCRIPTION
-#  "Static libraries used to build programs with MyLib")
-#set (CPACK_COMPONENT_HEADERS_DESCRIPTION
-#  "C/C++ header files for use with MyLib")
+set (CPACK_COMPONENT_EDITOR_DESCRIPTION
+		"The AIngine Editor")
+set (CPACK_COMPONENT_AINGINE_DESCRIPTION
+		"The static C++ Library")
 
-# Define dependencies between components
-#set (CPACK_COMPONENT_HEADERS_DEPENDS libraries)
+set (CPACK_COMPONENT_EDITOR_DEPENDS aingine)
+set (CPACK_COMPONENT_LAUNCHER_DEPENDS aingine)
 
-# Define groups
-#set(CPACK_COMPONENT_APPLICATIONS_GROUP "Runtime")
-#set(CPACK_COMPONENT_LIBRARIES_GROUP "Development")
-#set(CPACK_COMPONENT_HEADERS_GROUP "Development")
-
-#set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION
-#   "All of the tools you'll ever need to develop software")
-
-# Define NSIS installation types
-#set(CPACK_ALL_INSTALL_TYPES Full Developer)
-#set(CPACK_COMPONENT_LIBRARIES_INSTALL_TYPES Developer Full)
-#set(CPACK_COMPONENT_HEADERS_INSTALL_TYPES Developer Full)
-#set(CPACK_COMPONENT_APPLICATIONS_INSTALL_TYPES Full)
+ #set (CPACK_PACKAGE_ICON "${CMake_SOURCE_DIR}/Resources/AIngine/textures\\\\icon.bmp")
  
 # Must be after the last CPACK macros
 include(CPack)

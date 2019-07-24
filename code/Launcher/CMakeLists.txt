@@ -52,7 +52,7 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT L
 # Move to custom folder
 set_target_properties(Launcher PROPERTIES FOLDER AIngine)
 
-install(TARGETS Launcher DESTINATION "launcher")
+install(TARGETS Launcher DESTINATION "launcher" COMPONENT launcher)
 
 # imgui.ini
 install(FILES  ${CMAKE_SOURCE_DIR}/Resources/Launcher/imgui.ini DESTINATION "launcher")
