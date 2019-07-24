@@ -10,7 +10,11 @@
 
 namespace AIngine {
 
+	static std::vector<std::pair<AIngine::Physics::PhysicsComponent*, AIngine::Physics::Contact>> s_collisionsBegin;
+	static std::vector<std::pair<AIngine::Physics::PhysicsComponent*, AIngine::Physics::Contact>> s_collisionsEnd;
+
 	namespace Physics {
+
 		class ContactListener : public b2ContactListener {
 		public:
 			// Called when two fixtures begin to touch
@@ -55,14 +59,16 @@ namespace AIngine {
 				if (physCompA) {
 					physCompA->m_bIsTouching = true;
 					physCompA->m_contact = contac;
-					physCompA->OnCollisionBegin(contac);
+					//physCompA->OnCollisionBegin(contac);
+					s_collisionsBegin.push_back({ physCompA,contac });
 				}
 
 				if (physCompB) {
 					contac.Other = physCompA;
 					physCompB->m_bIsTouching = true;
 					physCompB->m_contact = contac;
-					physCompB->OnCollisionBegin(contac);
+					//physCompB->OnCollisionBegin(contac);
+					s_collisionsBegin.push_back({ physCompB,contac });
 				}
 			}
 
@@ -108,14 +114,16 @@ namespace AIngine {
 				if (physCompA) {
 					physCompA->m_bIsTouching = false;
 					physCompA->m_contact = contac;
-					physCompA->OnCollisionEnd(contac);
+					//physCompA->OnCollisionEnd(contac);
+					s_collisionsEnd.push_back({ physCompA,contac });
 				}
 
 				if (physCompB) {
 					contac.Other = physCompA;
 					physCompB->m_bIsTouching = false;
 					physCompB->m_contact = contac;
-					physCompB->OnCollisionEnd(contac);
+					//physCompB->OnCollisionEnd(contac);
+					s_collisionsEnd.push_back({ physCompB,contac });
 				}
 			}
 
@@ -202,7 +210,18 @@ namespace AIngine {
 	void World::OnUpdate(float delta)
 	{
 		if ((AIngine::Application::IsRunning()))
-			m_physicsWorld->Step(Application::FIXED_TIMESTEP *Application::Get().AppSpeedMulitplier, 8, 3);
+			m_physicsWorld->Step(Application::FIXED_TIMESTEP * Application::Get().AppSpeedMulitplier, 8, 3);
+
+		/* Events are fired AFTER the physics step
+		* because during simulation the physics world would be locked */
+
+		for (auto& pair : s_collisionsBegin)
+			if (pair.first) pair.first->OnCollisionBegin(pair.second);
+		s_collisionsBegin.clear();
+
+		for (auto& pair : s_collisionsEnd)
+			if (pair.first)pair.first->OnCollisionEnd(pair.second);
+		s_collisionsEnd.clear();
 
 		m_sceneGraph->OnUpdate(delta);
 	}
