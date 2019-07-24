@@ -3,6 +3,7 @@
 #include "Effects.h"
 #include "AIngine/UI/Button.h"
 #include "AIngine/UI/Text.h"
+#include "EffectDurationDisplay.h"
 
 namespace CrappyBird {
 	class Player : public AIngine::Script {
@@ -64,20 +65,23 @@ namespace CrappyBird {
 	protected:
 		/* Callbacks */
 		virtual void OnCollision(AIngine::Physics::Contact contact);
+		virtual void OnCollisionEnd(AIngine::Physics::Contact contact);
 		virtual void OnSpawnFireParticles(Particle* particles, int count, const glm::vec2& pos);
 		virtual void OnUpdateParticle(Particle& particle, float delta);
 		virtual void OnSpawnCollisionParticle(Particle* particles, int count, const glm::vec2& pos);
 		virtual void OnUpdateCollisionParticle(Particle& particle, float delta);
 		virtual void OnGameOver();
-		virtual void UpdateGameOverScreen(float delta);
 		
 		virtual void ResetGame();
 		virtual void PlayEngineSound();
+		void PositionEffectDisplays();
 
 		// all effects currently affecting the player
 		std::vector<std::unique_ptr<Effect>> m_activeEffects;
 
 		std::vector<glm::vec2> m_originalVertices;
+
+		std::vector<EffectDurationDisplay*> m_effectDisplays;
 
 		// the physical body of the rocket
 		AIngine::Physics::PhysicsComponent* m_physBody;
@@ -107,6 +111,7 @@ namespace CrappyBird {
 		AIngine::ParticleEmitter::UpdateParticleHandler OnUpdateParticleHandler;
 		AIngine::ParticleEmitter::UpdateParticleHandler OnUpdateCollisionParticleHandler;
 		AIngine::Events::EventHandler<void, AIngine::Physics::Contact> OnCollisionEventHandler;
+		AIngine::Events::EventHandler<void, AIngine::Physics::Contact> OnCollisionEndEventHandler;
 		OnGameOverEventHandler OnGameOverHandler;
 	};
 }

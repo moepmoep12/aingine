@@ -1,6 +1,6 @@
 #pragma once
 #include "AIngine/Core.h"
-
+#include "EffectDurationDisplay.h"
 namespace CrappyBird {
 
 	class Player;
@@ -17,6 +17,7 @@ namespace CrappyBird {
 		virtual bool Start(Player* player) { return true; }
 		virtual void Update(float delta) {}
 		virtual void End() {}
+		virtual void Undo() {}
 
 		float Age = 0;
 		float Duration;
@@ -24,6 +25,7 @@ namespace CrappyBird {
 		Texture2D Texture;
 		glm::vec4 Color = glm::vec4(1);
 		float Rotation;
+		EffectDurationDisplay* m_effectDisplay;
 
 	protected:
 		Player* m_player;
@@ -36,6 +38,7 @@ namespace CrappyBird {
 
 		virtual bool Start(Player* player) override;
 		virtual void End() override;
+		virtual void Undo() override;
 
 	private:
 		float SpeedDecrease = 1.0f;
@@ -47,6 +50,7 @@ namespace CrappyBird {
 
 		virtual bool Start(Player* player) override;
 		virtual void End() override;
+		virtual void Undo() override;
 
 	private:
 		float SpeedIncrease = 1.0f;
@@ -59,6 +63,7 @@ namespace CrappyBird {
 		virtual bool Start(Player* player) override;
 		virtual void Update(float delta) override;
 		virtual void End() override;
+		virtual void Undo() override;
 
 	private:
 		const float animDuration = 0.5f;

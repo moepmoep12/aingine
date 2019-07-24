@@ -10,6 +10,7 @@
 #include "MainMenu.h"
 #include "PlayerMainMenu.h"
 #include "AgentXCSR.h"
+#include "EffectDurationDisplay.h"
 #include <vector>
 #include <string>
 
@@ -24,6 +25,7 @@ std::vector<std::string> AIngine::ApplicationComponentNames = {
     "MainMenu",
     "PlayerMainMenu",
     "AgentXCSR",
+    "EffectDurationDisplay",
 };
 
 void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
@@ -66,6 +68,10 @@ void AIngine::OnAddComponent(AIngine::GameObject* obj, int index) {
 
 	case 9:
 		obj->AddComponent<CrappyBird::AgentXCSR>()->ScriptIndex = 9;
+		break;
+
+	case 10:
+		obj->AddComponent<CrappyBird::EffectDurationDisplay>()->ScriptIndex = 10;
 		break;
 
 	}

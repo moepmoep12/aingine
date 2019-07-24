@@ -20,7 +20,7 @@ namespace CrappyBird {
 		m_collisionEndHandler = AIngine::Physics::OnCollisionHandler(std::bind(&PickUp::OnCollisionEnd, this, std::placeholders::_1));
 		// register callback
 		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin += m_collisionBeginHandler;
-		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionEnd += m_collisionEndHandler;
+		//GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionEnd += m_collisionEndHandler;
 
 		m_player = AIngine::World::GetGameObject("PlayerRocket")->GetComponent<Player>();
 	}
@@ -29,7 +29,7 @@ namespace CrappyBird {
 	void PickUp::OnEnd()
 	{
 		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionBegin -= this->m_collisionBeginHandler;
-		GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionEnd -= this->m_collisionEndHandler;
+		//GetOwner()->GetComponent<PhysicsComponent>()->OnCollisionEnd -= this->m_collisionEndHandler;
 		GetOwner()->SetActive(false);
 	}
 
@@ -53,6 +53,8 @@ namespace CrappyBird {
 			if (m_Effect) {
 				m_player->AddEffect(std::move(m_Effect));
 				m_Effect = nullptr;
+				GetOwner()->SetLocalPosition(glm::vec2(-10, 0));
+				GetOwner()->GetComponent<PhysicsComponent>()->SetEnabled(false);
 				GetOwner()->SetActive(false);
 			}
 		}
@@ -61,7 +63,6 @@ namespace CrappyBird {
 	void PickUp::OnCollisionEnd(AIngine::Physics::Contact contact)
 	{
 		if (contact.Other->GetOwner()->GetComponent<Player>()) {
-			GetOwner()->GetComponent<PhysicsComponent>()->SetEnabled(false);
 		}
 	}
 

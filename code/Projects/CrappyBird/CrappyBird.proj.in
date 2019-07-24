@@ -12,6 +12,7 @@
 "Obstacle",
 "MainMenu",
 "PlayerMainMenu",
-"AgentXCSR"
+"AgentXCSR",
+"EffectDurationDisplay"
 ]
 }

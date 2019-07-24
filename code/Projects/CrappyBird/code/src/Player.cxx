@@ -2,6 +2,7 @@
 #include "CrappyBird.h"
 #include "Obstacle.h"
 #include "Rendering/Viewport.h"
+#include "UI/Image.h"
 
 #include <random>
 
@@ -31,8 +32,9 @@ namespace CrappyBird {
 
 	void Player::AddEffect(std::unique_ptr<Effect>  effect)
 	{
-		if (effect->Start(this))
+		if (effect->Start(this)) {
 			m_activeEffects.push_back(std::move(effect));
+		}
 	}
 
 	// Start is called when gameplay starts for this script
@@ -47,6 +49,7 @@ namespace CrappyBird {
 
 		// create EventHandlers
 		OnCollisionEventHandler = AIngine::Events::EventHandler<void, AIngine::Physics::Contact>(BIND_FN_1(Player::OnCollision));
+		OnCollisionEndEventHandler = AIngine::Events::EventHandler<void, AIngine::Physics::Contact>(BIND_FN_1(Player::OnCollisionEnd));
 		OnSpawnFireParticlesHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(BIND_FN_3(Player::OnSpawnFireParticles));
 		OnSpawnCollisionParticlesHandler = AIngine::ParticleEmitter::SpawnParticlesHandler(BIND_FN_3(Player::OnSpawnCollisionParticle));
 		OnUpdateParticleHandler = AIngine::ParticleEmitter::UpdateParticleHandler(BIND_FN_2(Player::OnUpdateParticle));
@@ -55,6 +58,7 @@ namespace CrappyBird {
 
 		// register callbacks
 		m_physBody->OnCollisionBegin += OnCollisionEventHandler;
+		m_physBody->OnCollisionEnd += OnCollisionEndEventHandler;
 		m_emitter->SpawnParticlesEvent += OnSpawnFireParticlesHandler;
 		m_emitter->UpdateParticleEvent += OnUpdateParticleHandler;
 		m_collisionEmitter->SpawnParticlesEvent += OnSpawnCollisionParticlesHandler;
@@ -72,6 +76,10 @@ namespace CrappyBird {
 		retryButton->OnClickedEvent += OnRetryClickedHandler;
 		retryText = retryButton->GetComponent<AIngine::UI::UIText>();
 		gameOverText = AIngine::World::GetGameObject("GameOverText")->GetComponent<AIngine::UI::UIText>();
+
+		m_effectDisplays.push_back(AIngine::World::GetGameObject("SpeedEffect")->GetComponent<EffectDurationDisplay>());
+		m_effectDisplays.push_back(AIngine::World::GetGameObject("SlowEffect")->GetComponent<EffectDurationDisplay>());
+		m_effectDisplays.push_back(AIngine::World::GetGameObject("ShrinkEffect")->GetComponent<EffectDurationDisplay>());
 	}
 
 	// End is called when gameplay ends for this script
@@ -82,6 +90,7 @@ namespace CrappyBird {
 
 		// unsubscribe from events
 		m_physBody->OnCollisionBegin -= OnCollisionEventHandler;
+		m_physBody->OnCollisionEnd -= OnCollisionEndEventHandler;
 		m_emitter->SpawnParticlesEvent -= OnSpawnFireParticlesHandler;
 		m_emitter->UpdateParticleEvent -= OnUpdateParticleHandler;
 		m_collisionEmitter->SpawnParticlesEvent -= OnSpawnCollisionParticlesHandler;
@@ -90,6 +99,7 @@ namespace CrappyBird {
 		retryButton->OnClickedEvent -= OnRetryClickedHandler;
 
 		m_activeEffects.clear();
+		m_effectDisplays.clear();
 	}
 
 	static float velMultiplier = 1.5f;
@@ -100,15 +110,13 @@ namespace CrappyBird {
 		m_delta = delta;
 
 		if (IsGameOver) {
-			UpdateGameOverScreen(delta);
 			return;
 		}
+
 		// Check if GameOver
 		if (GetOwner()->GetWorldPosition().x < 0) {
 			OnGameOverEvent();
 		}
-
-
 
 		if (AIngine::Input::IsMouseButtonPressed(AIngine::MouseButton::BUTTON_LEFT) || AIngine::Input::IsKeyPressed(AIngine::KeyCode::SPACE)) {
 			// accelerate
@@ -128,6 +136,8 @@ namespace CrappyBird {
 
 		// update score
 		m_distanceTraveled += CrappyBird::s_GameSpeed * delta;
+
+		PositionEffectDisplays();
 
 		// check if new screen has been entered and fire event
 		if (m_distanceTraveled >= CurrentScreenIndex * 10) {
@@ -178,7 +188,15 @@ namespace CrappyBird {
 		std::stringstream ss;
 		ss << "Score : " << (int)m_distanceTraveled;
 		m_scoreText->Text = ss.str();
-		//Graphics::Text(ss.str(), glm::vec2(10, 35), glm::vec2(2));
+
+		std::vector<Effect*> effects;
+		for (int i = 0; i < m_activeEffects.size(); i++) {
+			Effect* effect = m_activeEffects[i].get();
+			effects.push_back(effect);
+		}
+
+		std::sort(effects.begin(), effects.end(), [](const Effect* a, const Effect* b) -> bool {return(a->Duration - a->Age) < (b->Duration - b->Age); });
+
 	}
 
 	void Player::PostInit()
@@ -193,6 +211,12 @@ namespace CrappyBird {
 				OnGameOverEvent();
 			}
 		}
+	}
+
+	void Player::OnCollisionEnd(AIngine::Physics::Contact contact)
+	{
+		if (!IsGameOver)
+			m_physBody->SetEnabled(true);
 	}
 
 
@@ -306,40 +330,6 @@ namespace CrappyBird {
 		float xsize = Graphics::GetTextSize(chosenText, glm::vec2(1), &retryText->GetFont()).x;
 		float scale = ((float)retryButton->GetRectangleNative().width * 0.9f) / xsize;
 		retryText->ChangeFontSize(std::roundl(scale * retryText->GetFontSize()));
-
-		//static const float padding = retryButton->GetRectangle().width * 0.2f;
-		//glm::vec2 textSize = Graphics::GetTextSize(chosenText);
-
-		//float xScale = (retryButton->GetRectangle().width - padding) / textSize.x;
-		//static const float yScale = 0.75;
-		//float xsize = Graphics::GetTextSize(chosenText, glm::vec2(xScale, yScale)).x;
-		//retryButton->TextScale = glm::vec2(xScale, yScale);
-
-		//for (auto& effect : m_activeEffects)
-		//	effect->End();
-
-		//m_activeEffects.clear();
-	}
-
-	void Player::UpdateGameOverScreen(float delta)
-	{
-		//const AIngine::Rendering::Viewport& viewport = AIngine::Application::Get().GetViewport();
-		////static const glm::vec2 scale = glm::vec2(3);
-		//static glm::vec2 textsize = AIngine::Graphics::GetTextSize("Game Over", glm::vec2(1), &gameOverFont->GetFont());
-		//float desiredSize = viewport.GetViewportWidth() * 0.75;
-
-		//float scale = desiredSize / textsize.x;
-		//glm::vec2 actualTextSize = AIngine::Graphics::GetTextSize("Game Over", glm::vec2(scale), &gameOverFont->GetFont());
-
-		//glm::vec2 center = viewport.GetCenter();
-		//glm::vec2 pos = center;
-		//pos.x -= actualTextSize.x * 0.5f;
-		//pos.y -= actualTextSize.y * 0.5f;
-		////glm::vec2 buttonPos = center;
-		////buttonPos.y += actualTextSize.y * 0.75;
-		////buttonPos.x -= retryButton->GetRectangle().width * 0.5;
-		////retryButton->SetPosition(buttonPos);
-		//AIngine::Graphics::Text("Game Over", pos, glm::vec2(scale), glm::vec3(1, 0, 0), 1, &gameOverFont->GetFont());
 	}
 
 	void Player::ResetGame()
@@ -362,8 +352,16 @@ namespace CrappyBird {
 			child->SetActive(false);
 		}
 
-		OnRestartGame();
+		// end active Effects
+		auto& it = m_activeEffects.begin();
+		while (it != m_activeEffects.end()) {
+			std::unique_ptr<Effect>* effect = it._Ptr;
+			effect->get()->Undo();
+			it = m_activeEffects.erase(it);
+		}
 
+
+		OnRestartGame();
 	}
 
 	void Player::PlayEngineSound()
@@ -371,6 +369,24 @@ namespace CrappyBird {
 		AIngine::Sound* sound = GetOwner()->GetComponent<SoundComponent>()->GetSound(0);
 		if (!sound->IsPlaying())
 			GetOwner()->GetComponent<SoundComponent>()->Play(0);
+	}
+
+	void Player::PositionEffectDisplays()
+	{
+		std::vector<EffectDurationDisplay*> activeDisplays;
+		for (auto display : m_effectDisplays)
+			if (display->IsActive())
+				activeDisplays.push_back(display);
+
+		std::sort(activeDisplays.begin(), activeDisplays.end(), [](const EffectDurationDisplay* a, const EffectDurationDisplay* b)-> bool {return a->Remaining < b->Remaining; });
+
+		static const int height = 35;
+		int ypos = 0;
+
+		for (auto display : activeDisplays) {
+			display->SetYPos(ypos);
+			ypos += height;
+		}
 	}
 }
 

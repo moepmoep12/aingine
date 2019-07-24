@@ -615,7 +615,7 @@
 "a_scaleY": 1.0,
 "b_components": {
 "physics": {
-"active": false,
+"active": true,
 "bodyType": 1,
 "density": 1.0,
 "friction": 0.20000000298023224,
@@ -7509,6 +7509,388 @@
 "verticalAlign": 0
 }
 }
+}
+},
+{
+"Effects": {
+"a_active": true,
+"a_name": "Effects",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null
+},
+"c_children": [
+{
+"SpeedEffect": {
+"a_active": false,
+"a_name": "SpeedEffect",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"image": {
+"active": true,
+"anchor": 2,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 35,
+"width": 200,
+"x": -200,
+"y": 0
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "AIngine\\textures\\White.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 0.3499999940395355,
+"x": 0.5588235259056091,
+"y": 0.5588179230690002,
+"z": 0.5588179230690002
+}
+},
+"script": [
+10
+]
+},
+"c_children": [
+{
+"ImageText": {
+"a_active": true,
+"a_name": "ImageText",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"image": {
+"active": true,
+"anchor": 2,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 34,
+"width": 34,
+"x": -195,
+"y": 0
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "textures\\fast-forward.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+}
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 2,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Days.ttf",
+"fontsize": 30,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 35,
+"width": 200,
+"x": -165,
+"y": 0
+},
+"text": "00 : 00 ",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 1
+}
+}
+}
+}
+]
+}
+},
+{
+"SlowEffect": {
+"a_active": false,
+"a_name": "SlowEffect",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"image": {
+"active": true,
+"anchor": 2,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 35,
+"width": 200,
+"x": -200,
+"y": 35
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "AIngine\\textures\\White.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 0.3499999940395355,
+"x": 0.5588235259056091,
+"y": 0.5588179230690002,
+"z": 0.5588179230690002
+}
+},
+"script": [
+10
+]
+},
+"c_children": [
+{
+"ImageText": {
+"a_active": true,
+"a_name": "ImageText",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": -3.1415927410125732,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"image": {
+"active": true,
+"anchor": 2,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 34,
+"width": 34,
+"x": -195,
+"y": 35
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "textures\\fast-forward.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 0.0,
+"z": 1.0
+}
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 2,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Days.ttf",
+"fontsize": 30,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 35,
+"width": 200,
+"x": -165,
+"y": 35
+},
+"text": "00 : 00 ",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 1
+}
+}
+}
+}
+]
+}
+},
+{
+"ShrinkEffect": {
+"a_active": false,
+"a_name": "ShrinkEffect",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"image": {
+"active": true,
+"anchor": 2,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 35,
+"width": 200,
+"x": -200,
+"y": 69
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6407,
+"path": "AIngine\\textures\\White.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 0.3499999940395355,
+"x": 0.5588235259056091,
+"y": 0.5588179230690002,
+"z": 0.5588179230690002
+}
+},
+"script": [
+10
+]
+},
+"c_children": [
+{
+"ImageText": {
+"a_active": true,
+"a_name": "ImageText",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"image": {
+"active": true,
+"anchor": 2,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 34,
+"width": 34,
+"x": -195,
+"y": 70
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "textures\\reduce.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+}
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 2,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Days.ttf",
+"fontsize": 30,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 35,
+"width": 200,
+"x": -165,
+"y": 70
+},
+"text": "00 : 00 ",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 1
+}
+}
+}
+}
+]
+}
+}
+]
 }
 }
 ]

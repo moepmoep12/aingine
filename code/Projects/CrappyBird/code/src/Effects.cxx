@@ -1,7 +1,7 @@
 #include "Effects.h"
 #include "CrappyBird.h"
 #include "Player.h"
-
+#include <sstream>
 namespace CrappyBird {
 
 	// copy constructor
@@ -52,6 +52,7 @@ namespace CrappyBird {
 		Rotation = M_PI;
 		Color = glm::vec4(1, 0, 1, 1);
 		Duration = 5;
+		m_effectDisplay = AIngine::World::GetGameObject("SlowEffect")->GetComponent<EffectDurationDisplay>();
 	}
 
 	bool SlowEffect::Start(Player * player)
@@ -59,10 +60,12 @@ namespace CrappyBird {
 		SlowEffect* sloweffect = player->GetEffect<SlowEffect>();
 		if (!sloweffect) {
 			CrappyBird::s_GameSpeed -= SpeedDecrease;
+			m_effectDisplay->Activate(Duration);
 			return true;
 		}
 		else {
 			sloweffect->Duration += Duration;
+			m_effectDisplay->Remaining += Duration;
 			return false;
 		}
 	}
@@ -70,6 +73,12 @@ namespace CrappyBird {
 	void SlowEffect::End()
 	{
 		CrappyBird::s_GameSpeed += SpeedDecrease;
+		m_effectDisplay->GetOwner()->SetActive(false);
+	}
+
+	void SlowEffect::Undo()
+	{
+		End();
 	}
 
 	/*************************************** SPEED EFFECT ***********************************************************/
@@ -80,6 +89,7 @@ namespace CrappyBird {
 		Rotation = 0;
 		Color = glm::vec4(1);
 		Duration = 5;
+		m_effectDisplay = AIngine::World::GetGameObject("SpeedEffect")->GetComponent<EffectDurationDisplay>();
 	}
 
 
@@ -88,10 +98,12 @@ namespace CrappyBird {
 		SpeedEffect* speedeffect = player->GetEffect<SpeedEffect>();
 		if (!speedeffect) {
 			CrappyBird::s_GameSpeed += SpeedIncrease;
+			m_effectDisplay->Activate(Duration);
 			return true;
 		}
 		else {
 			speedeffect->Duration += Duration;
+			m_effectDisplay->Remaining += Duration;
 			return false;
 		}
 	}
@@ -99,9 +111,17 @@ namespace CrappyBird {
 	void SpeedEffect::End()
 	{
 		CrappyBird::s_GameSpeed -= SpeedIncrease;
+		m_effectDisplay->GetOwner()->SetActive(false);
+	}
+
+	void SpeedEffect::Undo()
+	{
+		End();
 	}
 
 	/*************************************** SHRINK EFFECT ***********************************************************/
+
+	static std::vector<glm::vec2> s_originalVertices;
 
 	ShrinkEffect::ShrinkEffect()
 	{
@@ -109,6 +129,7 @@ namespace CrappyBird {
 		Rotation = 0;
 		Color = glm::vec4(1);
 		Duration = 5;
+		m_effectDisplay = AIngine::World::GetGameObject("ShrinkEffect")->GetComponent<EffectDurationDisplay>();
 	}
 
 	bool ShrinkEffect::Start(Player * player)
@@ -117,23 +138,29 @@ namespace CrappyBird {
 		if (!effect) {
 			m_player = player;
 			PhysicsComponent* physcomp = m_player->GetOwner()->GetComponent<PhysicsComponent>();
-			static auto originalVertices = m_player->GetOriginalPhysVertices();
+			if (s_originalVertices.size() == 0)
+				s_originalVertices = m_player->GetOriginalPhysVertices();
 
 			for (int i = 0; i < physcomp->GetBodyInformation().verticesCount; i++) {
-				verticesScaleSpeed[i] = (destScale * originalVertices[i]) / animDuration;
+				verticesScaleSpeed[i] = (destScale * s_originalVertices[i]) / animDuration;
 			}
+
+			m_effectDisplay->Activate(Duration);
 
 			return true;
 		}
 
 		else {
 			effect->Duration += Duration;
+			m_effectDisplay->Remaining += Duration;
 			return false;
 		}
 	}
 
 	void ShrinkEffect::Update(float delta)
 	{
+		Effect::Update(delta);
+
 		if (Age < animDuration) {
 			m_player->GetOwner()->Scale(-scaleSpeed * delta);
 			PhysicsComponent* physcomp = m_player->GetOwner()->GetComponent<PhysicsComponent>();
@@ -164,5 +191,14 @@ namespace CrappyBird {
 	void ShrinkEffect::End()
 	{
 		m_player->GetOwner()->SetLocalScale(glm::vec2(1));
+		m_effectDisplay->GetOwner()->SetActive(false);
+	}
+
+	void ShrinkEffect::Undo()
+	{
+		m_effectDisplay->GetOwner()->SetActive(false);
+		m_player->GetOwner()->SetLocalScale(glm::vec2(1));
+		PhysicsComponent* physcomp = m_player->GetOwner()->GetComponent<PhysicsComponent>();
+		physcomp->AdjustPolyShape(&s_originalVertices[0], physcomp->GetBodyInformation().verticesCount);
 	}
 }
