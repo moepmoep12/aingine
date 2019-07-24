@@ -176,7 +176,7 @@ void AIngine::Window::SetWindowPosition(const glm::vec2 & pos)
 void AIngine::Window::SetMouseVisible(bool visible) const
 {
 	if (!visible)
-		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	else
 		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
