@@ -31,9 +31,9 @@ namespace Pong {
 		supervisor->GetConstants().n = m_populationDifficulties[Pong::Difficulty];
 		std::stringstream ss;
 		ss << AIngine::Util::Project::GetResourceDirectory() << "xcs\\difficulty" << Pong::Difficulty << ".json";
-		supervisor->m_xcsr->loadPopulationCSV(std::filesystem::absolute(ss.str()).string(), true);
-		supervisor->SwitchCondensationMode(true);
-		supervisor->Exploration = false;
+		supervisor->m_xcsr->loadPopulationCSV(std::filesystem::absolute(ss.str()).string(), false);
+		//supervisor->SwitchCondensationMode(true);
+		//supervisor->Exploration = false;
 #endif
 	}
 
@@ -44,9 +44,19 @@ namespace Pong {
 		scores.clear();
 	}
 
+	static int ticks = 0;
+
 	// Update is called once per frame
 	void XCSAgent::Update(float delta)
 	{
+		static AIngine::XCSAgentSupervisor* supervisor = AIngine::World::GetGameObject("AgentSupervisor")->GetComponent<AIngine::XCSAgentSupervisor>();
+		if (supervisor->Exploration) {
+			ticks++;
+			if (ticks >= 3600) {
+				supervisor->Exploration = false;
+			}
+		}
+
 		Player::Update(delta);
 		// Fire the ball immediately
 		if (m_HasBall) {
@@ -131,21 +141,25 @@ namespace Pong {
 				  ///* 8 */ std::clamp(collisionPointY / rect.height, -1.05, 1.05), //  collisionpoint Y
 				  ///* 9 */ distanceToCollisionPoint != -1 ? distanceToCollisionPoint / rect.height : -1, // distance to collisionpoint Y
 				  ///* 10 */ other->GetOwner()->GetLocalPosition().y / rect.height, // other player height
-				  /* 11 */ (double)lastAction, // last action
-				  /* 12 */ (rect.GetMax().y - ballPos.y) / rect.height, // ball distance to bottom edge
-				  /* 13 */ (rect.y - ballPos.y) / rect.height, // ball distance to top edge
+				  ///* 11 */ (double)lastAction, // last action
+				  ///* 12 */ (rect.GetMax().y - ballPos.y) / rect.height, // ball distance to bottom edge
+				  ///* 13 */ (rect.y - ballPos.y) / rect.height, // ball distance to top edge
 		};
 
-		for (auto& point : intersections) {
-			if (isnan(point.x) || isnan(point.y)) {
-				result.push_back(-1);
-				result.push_back(-1);
-			}
-			else {
-				result.push_back(std::clamp(point.x / rect.width, -1.0f, 1.0f));
-				result.push_back(std::clamp(point.y / rect.height, -1.0f, 1.0f));
-			}
+		glm::vec2 point = intersections[0];
+
+		//for (auto& point : intersections) {
+		if (isnan(point.x) || isnan(point.y)) {
+			result.push_back(-1);
+			result.push_back(-1);
+			result.push_back(-1);
 		}
+		else {
+			result.push_back(std::clamp(point.x / rect.width, -1.0f, 1.0f));
+			result.push_back(std::clamp(point.y / rect.height, -1.0f, 1.0f));
+			result.push_back(1);
+		}
+		//}
 
 		observation = result;
 		return result;
