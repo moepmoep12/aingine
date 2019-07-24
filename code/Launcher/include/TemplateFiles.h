@@ -129,7 +129,6 @@ namespace ProjectLauncher {
 			<< "find_package(glm REQUIRED)" << '\n'
 			<< "find_package(spdlog REQUIRED)" << '\n'
 			<< "find_package(nlohmann_json REQUIRED)" << '\n'
-			<< "find_package(cxxopts REQUIRED)" << '\n'
 			<< "find_package(OpenGL REQUIRED)" << '\n'
 			<< "if (EDITOR)" << '\n'
 			<< "	find_package(AIngineEditor REQUIRED)" << '\n'
