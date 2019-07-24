@@ -13,7 +13,7 @@ namespace Pong {
 	// Start is called when gameplay starts for this script
 	void HumanPlayer::OnStart()
 	{
-		glm::vec2 size = GetComponent<Sprite>()->GetLocalWorldSize() ;
+		glm::vec2 size = GetComponent<Sprite>()->GetLocalWorldSize();
 		size.y *= Pong::PlayerSizes[Pong::Difficulty];
 		GetComponent<Sprite>()->SetLocalWorldSize(size);
 		Player::OnStart();
@@ -22,7 +22,6 @@ namespace Pong {
 
 		AIngine::Input::SetMousePos({ screenPos.x, screenPos.y });
 #ifndef EDITOR
-		Pong::Get().GetWindow().SetMouseVisible(false);
 		AIngine::World::GetGameObject("BackGround")->GetComponent<SoundComponent>()->Play(0);
 #endif
 	}
@@ -41,6 +40,9 @@ namespace Pong {
 	void HumanPlayer::Update(float delta)
 	{
 		Player::Update(delta);
+#ifndef EDITOR
+		Pong::Get().GetWindow().SetMouseVisible(false);
+#endif
 	}
 
 	// Callback for events

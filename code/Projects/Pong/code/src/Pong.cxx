@@ -28,8 +28,8 @@ namespace Pong {
 
 		PlayerSizes[0] = 300.0 / 200.0;
 		PlayerSizes[1] = 200.0 / 200.0;
-		PlayerSizes[2] = 175.0 / 200.0;
-		PlayerSizes[3] = 125.0 / 200.0;
+		PlayerSizes[2] = 130.0 / 200.0;
+		PlayerSizes[3] = 75.0 / 200.0;
 	}
 
 	// StartUp is called after the scene and engine subsystems have been initialized

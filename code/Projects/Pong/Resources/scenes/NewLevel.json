@@ -105,7 +105,7 @@
 "constants_minValue": -1.0049999952316284,
 "constants_mu": 0.03999999910593033,
 "constants_mutationMaxChange": 0.20000000298023224,
-"constants_n": 1500,
+"constants_n": 2500,
 "constants_nu": 5.0,
 "constants_subsumptionTolerance": 0.014999999664723873,
 "constants_tau": 0.0,

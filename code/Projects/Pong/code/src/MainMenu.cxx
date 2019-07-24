@@ -40,6 +40,13 @@ namespace Pong {
 
 		m_playerOne = GetChild("BackGround")->GetChild("PaddleOne")->GetComponent<Image>();
 
+
+		m_DifficultyButtons[Pong::Difficulty]->TintColor = SelectedTintColor;
+		m_DifficultyButtons[Pong::Difficulty]->HoverColor = glm::vec4(0.6, 0.6, 0.6, 1);
+
+		float TargetSize = 200 * Pong::PlayerSizes[Pong::Difficulty];
+		m_sizeDiff = TargetSize - m_originalHeight;
+		m_playerOne->SetHeight(m_originalHeight + m_sizeDiff);
 	}
 
 	// End is called when gameplay ends for this script
@@ -101,6 +108,7 @@ namespace Pong {
 
 	void MainMenu::OnStartClicked()
 	{
+		m_sound->Play(1);
 		Pong::LoadScene(1);
 	}
 

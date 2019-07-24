@@ -15,8 +15,8 @@ namespace Pong {
 		// In order for the editor to display the scripts name correctly
 		SetName(typeid(*this).name());
 		TranslationRate = 15;
-		m_populationDifficulties[0] = 500;
-		m_populationDifficulties[1] = 1500;
+		m_populationDifficulties[0] = 2500;
+		m_populationDifficulties[1] = 2500;
 		m_populationDifficulties[2] = 2500;
 	}
 
@@ -62,6 +62,7 @@ namespace Pong {
 
 	void XCSAgent::OnGUI()
 	{
+#ifndef EDITOR
 		glm::vec4 color = (collisionPointY >= m_experiment->ArenaRect.y && collisionPointY <= m_experiment->ArenaRect.GetMax().y) 
 			&& std::abs(distanceToCollisionPoint) < 0.5f ? glm::vec4(0, 1, 0, 1) : glm::vec4(0, 0, 0, 1);
 		Graphics::Point(glm::vec2(collisionPointX, collisionPointY), 18, color);
@@ -76,6 +77,7 @@ namespace Pong {
 			Graphics::Text(ss.str(), position);
 			position += glm::vec2(0, 50);
 		}
+#endif
 	}
 
 	void XCSAgent::OnWidget()
@@ -171,7 +173,9 @@ namespace Pong {
 		// Provide Reward
 
 		if (DoesBallCollide()) {
+#ifdef EDITOR
 			m_experiment->ScorePlayerTwo++;
+#endif
 			AddReward(1000);
 			return;
 		}
@@ -203,7 +207,9 @@ namespace Pong {
 	void XCSAgent::Reset()
 	{
 		Player* other = Role == PlayerRole::One ? m_experiment->PlayerTwo : m_experiment->PlayerOne;
+#ifdef EDITOR
 		other->ReceiveBall();
+#endif
 	}
 
 	void XCSAgent::OnMaxStepsReached()
