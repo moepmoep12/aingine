@@ -32,12 +32,15 @@ namespace Pong {
 		std::vector<Button*> m_DifficultyButtons;
 
 		Image* m_playerOne;
+		Image* m_playerTwo;
 
 		SoundComponent* m_sound;
 
 		float m_currentDuration = 1;
 		float m_duration = 1;
 		float m_sizeDiff = 0;
+		float m_sizeDiffTwo = 0;
 		float m_originalHeight = 0;
+		float m_originalHeightTwo = 0;
 	};
 }

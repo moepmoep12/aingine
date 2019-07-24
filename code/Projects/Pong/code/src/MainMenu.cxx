@@ -39,6 +39,7 @@ namespace Pong {
 		m_sound->Play(0);
 
 		m_playerOne = GetChild("BackGround")->GetChild("PaddleOne")->GetComponent<Image>();
+		m_playerTwo = GetChild("BackGround")->GetChild("PaddleTwo")->GetComponent<Image>();
 
 
 		m_DifficultyButtons[Pong::Difficulty]->TintColor = SelectedTintColor;
@@ -47,6 +48,10 @@ namespace Pong {
 		float TargetSize = 200 * Pong::PlayerSizes[Pong::Difficulty];
 		m_sizeDiff = TargetSize - m_originalHeight;
 		m_playerOne->SetHeight(m_originalHeight + m_sizeDiff);
+
+		TargetSize = 200 * Pong::PlayerSizes[2 - Pong::Difficulty];
+		m_sizeDiffTwo = TargetSize - m_originalHeightTwo;
+		m_playerTwo->SetHeight(m_originalHeightTwo + m_sizeDiffTwo);
 	}
 
 	// End is called when gameplay ends for this script
@@ -101,9 +106,12 @@ namespace Pong {
 		m_DifficultyButtons[Pong::Difficulty]->HoverColor = glm::vec4(0.6, 0.6, 0.6, 1);
 
 		m_originalHeight = m_playerOne->GetRectangleNative().height;
+		m_originalHeightTwo = m_playerTwo->GetRectangleNative().height;
 		float TargetSize = 200 * Pong::PlayerSizes[Pong::Difficulty];
-
 		m_sizeDiff = TargetSize - m_originalHeight;
+
+		TargetSize = 200 * Pong::PlayerSizes[2 - Pong::Difficulty];
+		m_sizeDiffTwo = TargetSize - m_originalHeightTwo;
 	}
 
 	void MainMenu::OnStartClicked()
@@ -120,5 +128,6 @@ namespace Pong {
 		}
 		float t = AIngine::Math::SmoothStep(m_currentDuration / m_duration);
 		m_playerOne->SetHeight(m_originalHeight + t * m_sizeDiff);
+		m_playerTwo->SetHeight(m_originalHeightTwo + t * m_sizeDiffTwo);
 	}
 }

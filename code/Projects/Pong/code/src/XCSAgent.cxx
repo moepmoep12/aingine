@@ -23,6 +23,10 @@ namespace Pong {
 	// Start is called when gameplay starts for this script
 	void XCSAgent::OnStart()
 	{
+		glm::vec2 size = GetComponent<Sprite>()->GetLocalWorldSize();
+		size.y *= Pong::PlayerSizes[2 - Pong::Difficulty];
+		GetComponent<Sprite>()->SetLocalWorldSize(size);
+
 		Player::OnStart();
 
 
@@ -32,8 +36,6 @@ namespace Pong {
 		std::stringstream ss;
 		ss << AIngine::Util::Project::GetResourceDirectory() << "xcs\\difficulty" << Pong::Difficulty << ".json";
 		supervisor->m_xcsr->loadPopulationCSV(std::filesystem::absolute(ss.str()).string(), false);
-		//supervisor->SwitchCondensationMode(true);
-		//supervisor->Exploration = false;
 #endif
 	}
 
@@ -44,19 +46,9 @@ namespace Pong {
 		scores.clear();
 	}
 
-	static int ticks = 0;
-
 	// Update is called once per frame
 	void XCSAgent::Update(float delta)
 	{
-		static AIngine::XCSAgentSupervisor* supervisor = AIngine::World::GetGameObject("AgentSupervisor")->GetComponent<AIngine::XCSAgentSupervisor>();
-		if (supervisor->Exploration) {
-			ticks++;
-			if (ticks >= 3600) {
-				supervisor->Exploration = false;
-			}
-		}
-
 		Player::Update(delta);
 		// Fire the ball immediately
 		if (m_HasBall) {
@@ -221,9 +213,6 @@ namespace Pong {
 	void XCSAgent::Reset()
 	{
 		Player* other = Role == PlayerRole::One ? m_experiment->PlayerTwo : m_experiment->PlayerOne;
-#ifdef EDITOR
-		other->ReceiveBall();
-#endif
 	}
 
 	void XCSAgent::OnMaxStepsReached()
