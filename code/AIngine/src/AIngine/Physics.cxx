@@ -25,14 +25,6 @@ namespace AIngine::Physics {
 					return;
 				}
 			}
-			if (m_wantsActivation) {
-				if (!m_body->GetWorld()->IsLocked()) {
-					Component::SetEnabled(true);
-					m_body->SetActive(true);
-					m_wantsActivation = false;
-					return;
-				}
-			}
 			if (m_body->GetType() != b2_staticBody) {
 				b2Vec2 pos = m_body->GetPosition();
 				float rot = std::fmodf(m_body->GetAngle(), 2 * M_PI);
@@ -50,11 +42,10 @@ namespace AIngine::Physics {
 			if (!m_body->GetWorld()->IsLocked()) {
 				m_body->SetActive(active);
 				Component::SetEnabled(active);
+				m_body->SetAwake(active);
 			}
 			else
-				if (!active)	m_wantsDeactivation = true;
-				else m_wantsActivation = true;
-			//m_body->SetAwake(active);
+				if (!active) m_wantsDeactivation = true;
 			m_bIsTouching = false;
 		}
 	}
