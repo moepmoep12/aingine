@@ -30,6 +30,9 @@ namespace Pong {
 		PlayerSizes[1] = 200.0 / 200.0;
 		PlayerSizes[2] = 130.0 / 200.0;
 		PlayerSizes[3] = 75.0 / 200.0;
+
+		Pong::FIXED_TIMESTEP = 1.0 / 120.0;
+		Pong::UseFixedTimeStep(true);
 	}
 
 	// StartUp is called after the scene and engine subsystems have been initialized
