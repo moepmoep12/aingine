@@ -211,6 +211,12 @@ namespace AIngine {
 		}
 		return nullptr;
 	}
+	GameObject * GameObject::GetChildAt(int index)
+	{
+		if (index < m_children.size())
+			return m_children[index];
+		return nullptr;
+	}
 	bool GameObject::Accept(Traverser & traverser)
 	{
 		if (m_children.size() == 0)

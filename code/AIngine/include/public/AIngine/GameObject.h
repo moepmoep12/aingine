@@ -151,6 +151,8 @@ namespace AIngine {
 		void RemoveChild(GameObject* obj);
 		/* Retrieves a child by name */
 		GameObject* GetChild(const std::string& name);
+		/* Retrieves child by index*/
+		GameObject* GetChildAt(int index);
 
 		/* Visitor Pattern for traversal */
 		virtual bool Accept(Traverser& traverser);
