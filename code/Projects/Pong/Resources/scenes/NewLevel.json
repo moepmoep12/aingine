@@ -67,7 +67,7 @@
 "a_scaleY": 1.0,
 "b_components": {
 "script": [
-4
+3
 ]
 }
 }
@@ -153,7 +153,7 @@
 "c_children": [
 {
 "ScoreText": {
-"a_active": true,
+"a_active": false,
 "a_name": "ScoreText",
 "a_posX": 0.0,
 "a_posY": 0.0,
@@ -192,6 +192,48 @@
 }
 }
 }
+},
+{
+"TrainingText": {
+"a_active": true,
+"a_name": "TrainingText",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"script": null,
+"text": {
+"active": true,
+"anchor": 5,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Rabbid-Highway-Sign-Bold-Caps.ttf",
+"fontsize": 150,
+"horizontalAlign": 0,
+"isdisabled": false,
+"rectangle": {
+"height": 2,
+"width": 5,
+"x": -512,
+"y": 100
+},
+"text": "Training 100%",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 0
+}
+}
+}
 }
 ]
 }
@@ -207,7 +249,7 @@
 "a_scaleY": 1.0,
 "b_components": {
 "script": [
-7
+6
 ],
 "soundComponent": {
 "active": true,
@@ -609,16 +651,97 @@
 "y": -0.5
 },
 {
+"x": 0.125,
+"y": -0.5
+},
+{
+"x": 0.125,
+"y": 0.5
+},
+{
 "x": -0.125,
 "y": 0.5
 },
 {
-"x": 0.125,
-"y": 0.5
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+},
+{
+"x": 0.0,
+"y": 0.0
+}
+],
+"width": 0.25
+},
+"script": [
+4
+],
+"sprite": {
+"active": true,
+"alpha": 1.0,
+"colorB": 1.0,
+"colorG": 1.0,
+"colorR": 1.0,
+"parallaxX": 1.0,
+"parallaxY": 1.0,
+"sizeX": 0.25,
+"sizeY": 1.0,
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "textures\\glasspaddle2.png",
+"wrapS": 10497,
+"wrapT": 10497
+}
+}
+}
+}
+},
+{
+"PlayerOneHuman": {
+"a_active": false,
+"a_name": "PlayerOneHuman",
+"a_posX": 0.5,
+"a_posY": 4.502389430999756,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"physics": {
+"active": true,
+"bodyType": 0,
+"density": 1.0,
+"friction": 0.0,
+"height": 1.0,
+"isTrigger": false,
+"restitution": 1.0,
+"shape": 1,
+"vertexcount": 4,
+"vertices": [
+{
+"x": -0.125,
+"y": -0.5
 },
 {
 "x": 0.125,
 "y": -0.5
+},
+{
+"x": 0.125,
+"y": 0.5
+},
+{
+"x": -0.125,
+"y": 0.5
 },
 {
 "x": 0.0,
@@ -725,7 +848,7 @@
 "width": 0.25
 },
 "script": [
-6
+5
 ],
 "sprite": {
 "active": true,

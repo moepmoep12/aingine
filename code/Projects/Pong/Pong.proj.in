@@ -6,7 +6,6 @@
 "Player",
 "Ball",
 "HumanPlayer",
-"AgentPlayer",
 "GameManager",
 "RandomAgent",
 "XCSAgent",
