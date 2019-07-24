@@ -180,7 +180,7 @@ namespace AIngine::Editor::Widget::Component {
 
 					if (result == AIngine::Util::Filesystem::Result::OKAY)
 					{
-						supervisor->m_xcsr->loadPopulationCSV(path, true);
+						supervisor->m_xcsr->loadPopulationCSV(path, false);
 						supervisor->PopulationPath = path;
 					}
 				}

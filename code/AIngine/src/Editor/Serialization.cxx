@@ -662,7 +662,7 @@ namespace AIngine::Editor::Serialization {
 		std::string path = AIngine::Util::Project::GetResourceDirectory() + supervisor->PopulationPath;
 
 		if (std::filesystem::exists(path)) {
-			supervisor->m_xcsr->loadPopulationCSV(path, true);
+			supervisor->m_xcsr->loadPopulationCSV(path, false);
 		}
 
 
