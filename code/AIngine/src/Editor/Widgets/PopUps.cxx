@@ -117,9 +117,11 @@ namespace AIngine::Editor::PopUps {
 
 				for (auto& scene : *scenes)
 				{
-					if (ImGui::Selectable(scene.Name.c_str())) {
+					bool isSelected = s_selectedScene == &scene;
+					if (ImGui::Selectable(scene.Name.c_str(),&isSelected)) {
 						s_selectedScene = &scene;
 					}
+
 				}
 
 				ImGui::NewLine();
