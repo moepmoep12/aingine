@@ -381,7 +381,7 @@ namespace AIngine::Editor::Serialization {
 		for (auto& scene : scenes) {
 			nlohmann::json j;
 			j[AttributeNames::SCENE_NAME] = scene.Name;
-			j[AttributeNames::SCENE_PATH] = std::filesystem::canonical(scene.Path).string();
+			j[AttributeNames::SCENE_PATH] = std::filesystem::relative(scene.Path,AIngine::Util::Project::GetResourceDirectory()).string();
 			outer.push_back(j);
 		}
 

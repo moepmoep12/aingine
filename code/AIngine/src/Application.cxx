@@ -294,7 +294,7 @@ namespace AIngine {
 					}
 					AIngine::Editor::Editor::ResetSceneGraph(s_instance);
 					s_instance->OnLoadLevelStart(index);
-					AIngine::Editor::Editor::LoadScene(scenes[index].Path);
+					AIngine::Editor::Editor::LoadScene(AIngine::Util::Project::GetResourceDirectory() + scenes[index].Path);
 					if (IsRunning()) s_instance->PropagateEventData(AIngine::Events::EnterPlayModeEventData());
 					s_instance->OnLoadLevelFinished(index);
 				}
