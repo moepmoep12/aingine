@@ -50,7 +50,7 @@ namespace AIngine {
 			m_assetRegistry.m_engineInstallPath = AIngine::Util::Project::GetEngineInstallDirectory();
 #else
 			// If we have a built binary, the engine resources are within the resource folder
-			if (std::filesystem::exists(AIngine::Util::Project::GetProjectDir() + "\\Resources\\AIngine"))
+			if (std::filesystem::exists(actualpath.string() + "\\Resources\\AIngine"))
 				m_assetRegistry.m_engineInstallPath = AIngine::Util::Project::GetProjectDir() + "\\";
 			else
 				m_assetRegistry.m_engineInstallPath = AIngine::Util::Project::GetEngineInstallDirectory();
