@@ -101,6 +101,7 @@ namespace CrappyBird {
 		const glm::vec2 m_spawnPosition = glm::vec2(1, 2.5);
 
 		AIngine::UI::Button* retryButton = nullptr;
+		AIngine::UI::Button* menuButton = nullptr;
 		AIngine::UI::UIText* retryText = nullptr;
 		AIngine::UI::UIText* gameOverText = nullptr;
 		AIngine::UI::Button::OnClickedEventHandler OnRetryClickedHandler;

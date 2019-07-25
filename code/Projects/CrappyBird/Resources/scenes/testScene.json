@@ -7404,7 +7404,7 @@
 "rectangle": {
 "height": 120,
 "width": 400,
-"x": 760,
+"x": 500,
 "y": 850
 },
 "text": "",
@@ -7454,7 +7454,7 @@
 "rectangle": {
 "height": 120,
 "width": 400,
-"x": 760,
+"x": 500,
 "y": 850
 },
 "text": "Retry?",
@@ -7891,6 +7891,106 @@
 }
 }
 ]
+}
+},
+{
+"BackButton": {
+"a_active": false,
+"a_name": "BackButton",
+"a_posX": 0.0,
+"a_posY": 0.0,
+"a_rotation": 0.0,
+"a_scaleX": 1.0,
+"a_scaleY": 1.0,
+"b_components": {
+"button": {
+"active": true,
+"anchor": 1,
+"colorClicked": {
+"w": 1.0,
+"x": 0.8382348418235779,
+"y": 0.8382352590560913,
+"z": 0.838226854801178
+},
+"colorHovered": {
+"w": 1.0,
+"x": 0.9031862616539001,
+"y": 0.911331295967102,
+"z": 0.9166666865348816
+},
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"isdisabled": false,
+"rectangle": {
+"height": 120,
+"width": 400,
+"x": 1000,
+"y": 850
+},
+"text": "",
+"textColor": {
+"w": 1.0,
+"x": 9.999999974752427e-07,
+"y": 9.999899930335232e-07,
+"z": 9.999899930335232e-07
+},
+"textOffset": {
+"x": 0.0,
+"y": 0.0
+},
+"textScale": {
+"x": 1.0,
+"y": 1.0
+},
+"texture": {
+"filterMax": 9729,
+"filterMin": 9729,
+"imageFormat": 6408,
+"path": "AIngine\\textures\\orange_button.png",
+"wrapS": 10497,
+"wrapT": 10497
+},
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+}
+},
+"script": null,
+"text": {
+"active": true,
+"anchor": 1,
+"disabledColor": {
+"w": 1.0,
+"x": 0.20000000298023224,
+"y": 0.20000000298023224,
+"z": 0.20000000298023224
+},
+"fontpath": "fonts\\Days.ttf",
+"fontsize": 60,
+"horizontalAlign": 1,
+"isdisabled": false,
+"rectangle": {
+"height": 120,
+"width": 400,
+"x": 1000,
+"y": 850
+},
+"text": "Mainmenu",
+"tintColor": {
+"w": 1.0,
+"x": 1.0,
+"y": 1.0,
+"z": 1.0
+},
+"verticalAlign": 1
+}
+}
 }
 }
 ]

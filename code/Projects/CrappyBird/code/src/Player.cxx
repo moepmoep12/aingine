@@ -72,6 +72,8 @@ namespace CrappyBird {
 		}
 
 		retryButton = AIngine::World::GetGameObject("RetryButton")->GetComponent<AIngine::UI::Button>();
+		menuButton = AIngine::World::GetGameObject("BackButton")->GetComponent<AIngine::UI::Button>();
+		menuButton->OnClickedEvent += []() {CrappyBird::LoadScene(0); };
 		OnRetryClickedHandler = AIngine::UI::Button::OnClickedEventHandler(BIND_FN_0(Player::ResetGame));
 		retryButton->OnClickedEvent += OnRetryClickedHandler;
 		retryText = retryButton->GetComponent<AIngine::UI::UIText>();
@@ -97,7 +99,7 @@ namespace CrappyBird {
 		m_collisionEmitter->UpdateParticleEvent -= OnUpdateCollisionParticleHandler;
 		OnGameOverEvent -= OnGameOverHandler;
 		retryButton->OnClickedEvent -= OnRetryClickedHandler;
-
+		menuButton->OnClickedEvent = AIngine::Events::Event<void>();
 		m_activeEffects.clear();
 		m_effectDisplays.clear();
 	}
@@ -321,6 +323,7 @@ namespace CrappyBird {
 		IsGameOver = true;
 		m_physBody->SetEnabled(false);
 		retryButton->GetOwner()->SetActive(true);
+		menuButton->GetOwner()->SetActive(true);
 		gameOverText->GetOwner()->SetActive(true);
 
 		static const std::vector<std::string> buttonTexts = { "Retry!", "One more time...", "This is unfair", "Ugh...", "Gimme cheats", "Again!" };
@@ -328,7 +331,8 @@ namespace CrappyBird {
 		const std::string chosenText = buttonTexts[AIngine::Util::Random::RandomInt(0, buttonTexts.size() - 1)];
 		retryText->Text = chosenText;
 		float xsize = Graphics::GetTextSize(chosenText, glm::vec2(1), &retryText->GetFont()).x;
-		float scale = ((float)retryButton->GetRectangleNative().width * 0.9f) / xsize;
+		float rectWidth = (float)retryButton->GetRectangle().width;
+		float scale = (rectWidth* 0.9f) / xsize;
 		retryText->ChangeFontSize(std::roundl(scale * retryText->GetFontSize()));
 	}
 
@@ -336,6 +340,7 @@ namespace CrappyBird {
 	{
 		retryButton->GetOwner()->SetActive(false);
 		gameOverText->GetOwner()->SetActive(false);
+		menuButton->GetOwner()->SetActive(false);
 		m_distanceTraveled = 0;
 		IsGameOver = false;
 		m_physBody->SetEnabled(true);
