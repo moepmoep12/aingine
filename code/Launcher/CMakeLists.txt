@@ -55,7 +55,7 @@ set_target_properties(Launcher PROPERTIES FOLDER AIngine)
 install(TARGETS Launcher DESTINATION "launcher" COMPONENT launcher)
 
 # imgui.ini
-install(FILES  ${CMAKE_SOURCE_DIR}/Resources/Launcher/imgui.ini DESTINATION "launcher")
+install(FILES  ${CMAKE_SOURCE_DIR}/Resources/Launcher/imgui.ini DESTINATION "launcher" COMPONENT launcher)
 
 #configure file
 set(InstallPath "${CMAKE_INSTALL_PREFIX}//")
@@ -65,4 +65,4 @@ file(TO_CMAKE_PATH ${projectDir} projectDir)
 set(InstallPath "${InstallPath}/")
 set(projectDir "${projectDir}/")
 configure_file(${CMAKE_SOURCE_DIR}/Resources/Launcher/project.proj.in ${CMAKE_SOURCE_DIR}/Resources/Launcher/project.proj @ONLY)
-install(FILES ${CMAKE_SOURCE_DIR}/Resources/Launcher/project.proj DESTINATION ${CMAKE_INSTALL_PREFIX}/launcher)
+install(FILES ${CMAKE_SOURCE_DIR}/Resources/Launcher/project.proj DESTINATION "launcher" COMPONENT launcher)
