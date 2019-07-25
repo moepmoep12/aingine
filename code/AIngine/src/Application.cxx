@@ -35,6 +35,14 @@ namespace AIngine {
 		m_imGuiLayer = new AIngine::UI::ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
 
+#ifndef EDITOR
+		// if the exe was moved after building we need to update the project dir
+		std::filesystem::path actualpath = std::filesystem::canonical(AIngine::Util::Project::ExePath()).parent_path();
+		std::filesystem::path p = std::filesystem::canonical(AIngine::Util::Project::GetProjectDir());
+		if (p != actualpath)
+			AIngine::Util::Project::SetProjectDir(actualpath.string());
+#endif
+
 		// create asset factories
 		{
 			m_assetRegistry.m_resourceFolderPath = AIngine::Util::Project::GetResourceDirectory();

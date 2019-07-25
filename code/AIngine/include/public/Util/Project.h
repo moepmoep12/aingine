@@ -1,10 +1,12 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
 #include <vector>
 
 namespace AIngine::Util::Project {
 
+	std::filesystem::path ExePath();
 	std::string GetProjectDir();
 	std::string GetProjectName();
 	std::string GetResourceDirectory();

@@ -1,14 +1,22 @@
 #include "Util/Project.h"
 #include "Util/SystemCommand.h"
 
-#include <filesystem>
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <sstream>
+#include <Windows.h>
 
 namespace AIngine::Util::Project {
 
 	static const char* PROJECTFILEPATH = "project.proj";
+
+	std::filesystem::path ExePath() {
+		char buffer[MAX_PATH];
+		GetModuleFileName(NULL, buffer, MAX_PATH);
+		std::string::size_type pos = std::string(buffer).find_last_of("\\/");
+		return std::filesystem::path(std::string(buffer).substr(0, pos));
+	}
+
 
 	std::string GetProjectDir()
 	{
