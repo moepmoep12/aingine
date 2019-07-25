@@ -82,6 +82,10 @@ namespace CrappyBird {
 		m_effectDisplays.push_back(AIngine::World::GetGameObject("SpeedEffect")->GetComponent<EffectDurationDisplay>());
 		m_effectDisplays.push_back(AIngine::World::GetGameObject("SlowEffect")->GetComponent<EffectDurationDisplay>());
 		m_effectDisplays.push_back(AIngine::World::GetGameObject("ShrinkEffect")->GetComponent<EffectDurationDisplay>());
+
+#ifndef EDITOR
+		CrappyBird::Get().GetWindow().SetMouseVisible(false);
+#endif
 	}
 
 	// End is called when gameplay ends for this script
@@ -320,6 +324,9 @@ namespace CrappyBird {
 
 	void Player::OnGameOver()
 	{
+#ifndef EDITOR
+		CrappyBird::Get().GetWindow().SetMouseVisible(true);
+#endif
 		IsGameOver = true;
 		m_physBody->SetEnabled(false);
 		retryButton->GetOwner()->SetActive(true);
@@ -338,6 +345,9 @@ namespace CrappyBird {
 
 	void Player::ResetGame()
 	{
+#ifndef EDITOR
+		CrappyBird::Get().GetWindow().SetMouseVisible(false);
+#endif
 		retryButton->GetOwner()->SetActive(false);
 		gameOverText->GetOwner()->SetActive(false);
 		menuButton->GetOwner()->SetActive(false);
