@@ -4,21 +4,15 @@
 
 |  General Info  | |
 | ---|---|
-| Working Title |  |
-| Final Title |  |
-| Participant 1 | Name, E-Mail, sNumber |
-| Participant 2 | Name, E-Mail, sNumber |
-| Participant N (if applicable) | Name, E-Mail, sNumber |
-|Engine (version) | Unity 20XX.X.XfX / Unreal 4.2X.X |
-|Start-Date| XX.XX.20XX |
+| Working Title | AIngine |
+| Final Title | AIngine |
+| Participant 1 | Schmidt Andreas, andreas.schmidt1@uni-wuerzburg.de, s341981 |
+|Start-Date| 15.10.2018 |
 |Study Program | Games Engineering B.Sc.|
 
 ### Abstract
 
-`Describe your Project in a few sentences.
-Be precise.`
-
-`--- 8< --- REPLACE WITH CUSTOM CONTENT BELOW HERE --- 8< ---`
+Die 2D Game Engine AIngine bietet Entwicklern einen umfangreichen Editor und ein AI Modul um lernende Agenten für ihre Spiele zu entwickeln.
 
 ## Repository Usage Guides
 
