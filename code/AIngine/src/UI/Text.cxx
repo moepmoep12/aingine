@@ -41,6 +41,7 @@ namespace AIngine::UI {
 		{
 			std::string path = AIngine::Assets::GetFontPath(m_currentFont->Path, size);
 			m_fonts[size] = &AIngine::Assets::AssetRegistry::Load<AIngine::Assets::FontAsset>(path)->GetFont();
+			m_currentFont = m_fonts[size];
 		}
 
 		FontSize = size;
