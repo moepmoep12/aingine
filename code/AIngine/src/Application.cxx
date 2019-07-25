@@ -46,7 +46,15 @@ namespace AIngine {
 		// create asset factories
 		{
 			m_assetRegistry.m_resourceFolderPath = AIngine::Util::Project::GetResourceDirectory();
+#ifdef EDITOR
 			m_assetRegistry.m_engineInstallPath = AIngine::Util::Project::GetEngineInstallDirectory();
+#else
+			// If we have a built binary, the engine resources are within the resource folder
+			if (std::filesystem::exists(AIngine::Util::Project::GetProjectDir() + "\\Resources\\AIngine"))
+				m_assetRegistry.m_engineInstallPath = AIngine::Util::Project::GetProjectDir() + "\\";
+			else
+				m_assetRegistry.m_engineInstallPath = AIngine::Util::Project::GetEngineInstallDirectory();
+#endif
 			using namespace AIngine::Assets;
 
 			m_assetRegistry.RegisterFactory<ShaderAsset>(
@@ -129,7 +137,7 @@ namespace AIngine {
 		};
 		m_editor->OnLeavePlayModeEvent += [=]() {
 			this->OnLeavePlayMode();
-		};
+	};
 
 #else
 		m_window->SetFullScreen(m_windowConfig.startFullScreen);
@@ -224,7 +232,7 @@ namespace AIngine {
 		delete m_viewport;
 		delete m_particleRenderer;
 		delete m_uiRenderer;
-	}
+}
 
 	void Application::PropagateEventData(AIngine::Events::EventData & e)
 	{

@@ -650,17 +650,6 @@ namespace AIngine::Editor {
 		if (s_instance) {
 			if (s_instance->m_BuildScenes.size() == 0) return;
 
-			//std::vector<std::string> Result;
-
-			//for (auto& scene : s_instance->m_BuildScenes) {
-
-			//	auto result = AIngine::Editor::Serialization::ExtractPathsFromScene(scene.Path);
-			//	for (auto& path : result) {
-			//		if (std::find(Result.begin(), Result.end(), path) == Result.end())
-			//			Result.push_back(path);
-			//	}
-			//}
-
 			std::string projectDir = AIngine::Util::Project::GetProjectDir();
 			std::string path;
 			AIngine::Util::Filesystem::Result result = AIngine::Util::Filesystem::PickFolder(&path, nullptr);
@@ -687,10 +676,12 @@ namespace AIngine::Editor {
 
 				// Copy the file with the built scenes
 				static const std::filesystem::copy_options copyoptions = std::filesystem::copy_options::update_existing | std::filesystem::copy_options::recursive;
-				std::filesystem::copy_file("Editor\\ScenesBuild.json", outputDir + "\\" + config + "\\Editor\\ScenesBuild.json", copyoptions);
+				std::filesystem::copy_file("Editor/ScenesBuild.json", outputDir + "/" + config + "/Editor/ScenesBuild.json", copyoptions);
 				// Copy Resources
-				std::filesystem::copy(AIngine::Util::Project::GetResourceDirectory(), outputDir + "\\Resources", copyoptions);
-				AIngine::Util::Project::SetProjectDir(outputDir, outputDir + "\\" + config + "\\project.proj");
+				std::filesystem::copy(AIngine::Util::Project::GetResourceDirectory(), outputDir + "/Resources", copyoptions);
+				AIngine::Util::Project::SetProjectDir(outputDir, outputDir + "/" + config + "/project.proj");
+				// Copy engine resources
+				std::filesystem::copy(AIngine::Util::Project::GetEngineInstallDirectory() + "/Resources/AIngine", outputDir + "/Resources/AIngine", copyoptions);
 			}
 		}
 	}
