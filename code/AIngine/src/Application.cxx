@@ -38,7 +38,9 @@ namespace AIngine {
 #ifndef EDITOR
 		// if the exe was moved after building we need to update the project dir
 		std::filesystem::path actualpath = std::filesystem::canonical(AIngine::Util::Project::ExePath()).parent_path();
-		std::filesystem::path p = std::filesystem::canonical(AIngine::Util::Project::GetProjectDir());
+		std::filesystem::path p;
+		if (std::filesystem::exists(AIngine::Util::Project::GetProjectDir()))
+			p = std::filesystem::canonical(AIngine::Util::Project::GetProjectDir());
 		if (p != actualpath)
 			AIngine::Util::Project::SetProjectDir(actualpath.string());
 #endif
@@ -137,7 +139,7 @@ namespace AIngine {
 		};
 		m_editor->OnLeavePlayModeEvent += [=]() {
 			this->OnLeavePlayMode();
-	};
+		};
 
 #else
 		m_window->SetFullScreen(m_windowConfig.startFullScreen);
@@ -232,7 +234,7 @@ namespace AIngine {
 		delete m_viewport;
 		delete m_particleRenderer;
 		delete m_uiRenderer;
-}
+	}
 
 	void Application::PropagateEventData(AIngine::Events::EventData & e)
 	{
