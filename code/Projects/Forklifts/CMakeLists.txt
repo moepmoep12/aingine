@@ -92,6 +92,10 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT $
 set(OUTPUT_PATH $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 set(InstallPath "${CMAKE_INSTALL_PREFIX}//")
 set(projectDir "${CMAKE_CURRENT_SOURCE_DIR}//")
+file(TO_CMAKE_PATH ${InstallPath} InstallPath)
+file(TO_CMAKE_PATH ${projectDir} projectDir)
+set(InstallPath "${InstallPath}/")
+set(projectDir "${projectDir}/")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj.in ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.proj @ONLY)
 	add_custom_command(
 		TARGET ${PROJECT_NAME} POST_BUILD
