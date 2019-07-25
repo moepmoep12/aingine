@@ -10,6 +10,8 @@ namespace Pong {
 
 	int Pong::Difficulty = 1;
 	std::map<int, float> Pong::PlayerSizes;
+	std::map<int, float> Pong::PlayerTwoSizes;
+	std::map<int, float> Pong::DifficultiesSpeed;
 
 	// Constructor
 	Pong::Pong()
@@ -30,6 +32,16 @@ namespace Pong {
 		PlayerSizes[1] = 200.0 / 200.0;
 		PlayerSizes[2] = 130.0 / 200.0;
 		PlayerSizes[3] = 75.0 / 200.0;
+
+		PlayerTwoSizes[0] = 150.0 / 200.0;
+		PlayerTwoSizes[1] = 200.0 / 200.0;
+		PlayerTwoSizes[2] = 250.0 / 200.0;
+		PlayerTwoSizes[3] = 300.0 / 200.0;
+
+		DifficultiesSpeed[0] = 1;
+		DifficultiesSpeed[1] = 1.25f;
+		DifficultiesSpeed[2] = 1.5f;
+		DifficultiesSpeed[3] = 2.0f;
 
 		Pong::FIXED_TIMESTEP = 1.0 / 120.0;
 		Pong::UseFixedTimeStep(true);

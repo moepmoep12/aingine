@@ -21,5 +21,7 @@ namespace Pong {
 		static int Difficulty;
 
 		static std::map<int, float> PlayerSizes;
+		static std::map<int, float> PlayerTwoSizes;
+		static std::map<int, float> DifficultiesSpeed;
 	};
 }

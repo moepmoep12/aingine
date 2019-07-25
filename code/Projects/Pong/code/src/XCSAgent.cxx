@@ -24,8 +24,13 @@ namespace Pong {
 	void XCSAgent::OnStart()
 	{
 		glm::vec2 size = GetComponent<Sprite>()->GetLocalWorldSize();
-		size.y *= Pong::PlayerSizes[2 - Pong::Difficulty];
+		size.y *= Pong::PlayerTwoSizes[Pong::Difficulty];
 		GetComponent<Sprite>()->SetLocalWorldSize(size);
+
+		float height = GetComponent<PhysicsComponent>()->GetBodyInformation().height;
+		float width = GetComponent<PhysicsComponent>()->GetBodyInformation().width;
+		height *= Pong::PlayerTwoSizes[Pong::Difficulty];
+		GetComponent<PhysicsComponent>()->AdjustBoxShape(width, height);
 
 		Player::OnStart();
 

@@ -17,6 +17,12 @@ namespace Pong {
 		glm::vec2 size = GetComponent<Sprite>()->GetLocalWorldSize();
 		size.y *= Pong::PlayerSizes[Pong::Difficulty];
 		GetComponent<Sprite>()->SetLocalWorldSize(size);
+
+		float height = GetComponent<PhysicsComponent>()->GetBodyInformation().height;
+		float width = GetComponent<PhysicsComponent>()->GetBodyInformation().width;
+		height *= Pong::PlayerSizes[Pong::Difficulty];
+		GetComponent<PhysicsComponent>()->AdjustBoxShape(width, height);
+
 		Player::OnStart();
 
 		glm::vec2 screenPos = AIngine::Rendering::Camera::Get().WorldToScreenPoint(GetOwner()->GetWorldPosition());

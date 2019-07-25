@@ -49,7 +49,7 @@ namespace Pong {
 		m_sizeDiff = TargetSize - m_originalHeight;
 		m_playerOne->SetHeight(m_originalHeight + m_sizeDiff);
 
-		TargetSize = 200 * Pong::PlayerSizes[2 - Pong::Difficulty];
+		TargetSize = 200 * Pong::PlayerTwoSizes[Pong::Difficulty];
 		m_sizeDiffTwo = TargetSize - m_originalHeightTwo;
 		m_playerTwo->SetHeight(m_originalHeightTwo + m_sizeDiffTwo);
 	}
@@ -105,12 +105,14 @@ namespace Pong {
 		m_DifficultyButtons[Pong::Difficulty]->TintColor = SelectedTintColor;
 		m_DifficultyButtons[Pong::Difficulty]->HoverColor = glm::vec4(0.6, 0.6, 0.6, 1);
 
+		Pong::Get().AppSpeedMulitplier = Pong::DifficultiesSpeed[Pong::Difficulty];
+
 		m_originalHeight = m_playerOne->GetRectangleNative().height;
 		m_originalHeightTwo = m_playerTwo->GetRectangleNative().height;
 		float TargetSize = 200 * Pong::PlayerSizes[Pong::Difficulty];
 		m_sizeDiff = TargetSize - m_originalHeight;
 
-		TargetSize = 200 * Pong::PlayerSizes[2 - Pong::Difficulty];
+		TargetSize = 200 * Pong::PlayerTwoSizes[Pong::Difficulty];
 		m_sizeDiffTwo = TargetSize - m_originalHeightTwo;
 	}
 
