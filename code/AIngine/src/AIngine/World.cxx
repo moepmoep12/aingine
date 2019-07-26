@@ -209,18 +209,23 @@ namespace AIngine {
 
 	void World::OnUpdate(float delta)
 	{
-		if ((AIngine::Application::IsRunning()))
+		bool appRunning = AIngine::Application::IsRunning();
+		if (appRunning)
 			m_physicsWorld->Step(Application::FIXED_TIMESTEP * Application::Get().AppSpeedMulitplier, 8, 3);
 
 		/* Events are fired AFTER the physics step
 		* because during simulation the physics world would be locked */
 
-		for (auto& pair : s_collisionsBegin)
-			if (pair.first) pair.first->OnCollisionBegin(pair.second);
+		if (appRunning) {
+			for (auto& pair : s_collisionsBegin)
+				if (pair.first) pair.first->OnCollisionBegin(pair.second);
+		}
 		s_collisionsBegin.clear();
 
-		for (auto& pair : s_collisionsEnd)
-			if (pair.first)pair.first->OnCollisionEnd(pair.second);
+		if (appRunning) {
+			for (auto& pair : s_collisionsEnd)
+				if (pair.first)pair.first->OnCollisionEnd(pair.second);
+		}
 		s_collisionsEnd.clear();
 
 		m_sceneGraph->OnUpdate(delta);
