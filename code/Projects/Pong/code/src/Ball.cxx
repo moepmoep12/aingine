@@ -28,6 +28,8 @@ namespace Pong {
 		m_emitter->SpawnParticlesEvent += OnSpawnParticlesHandler;
 		m_emitter->UpdateParticleEvent += OnUpdateParticleHandler;
 		m_physBody->OnCollisionBegin += OnCollisionEventHandler;
+
+		m_experiment = AIngine::World::GetGameObject("Experiment")->GetComponent<Experiment>();
 	}
 
 	// End is called when gameplay ends for this script
@@ -95,6 +97,7 @@ namespace Pong {
 	void Ball::OnCollision(AIngine::Physics::Contact contact)
 	{
 		if (!contact.Other) return;
+		if (m_experiment->m_training) return;
 		m_emitter->Update(Pong::Get().GetDeltaTime(), spawnCount);
 		m_sound->Play(AIngine::Util::Random::RandomInt(0, m_sound->GetSounds().size() - 1));
 	}

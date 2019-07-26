@@ -18,6 +18,7 @@ namespace Pong {
 		m_populationDifficulties[0] = 2500;
 		m_populationDifficulties[1] = 2500;
 		m_populationDifficulties[2] = 2500;
+		m_populationDifficulties[3] = 2500;
 	}
 
 	// Start is called when gameplay starts for this script
@@ -108,7 +109,7 @@ namespace Pong {
 
 	std::vector<double, std::allocator<double>> XCSAgent::Observe()
 	{
-		static auto rect = m_experiment->ArenaRect;
+		auto const rect = m_experiment->ArenaRect;
 		Player* other = Role == PlayerRole::One ? m_experiment->PlayerTwo : m_experiment->PlayerOne;
 
 		glm::vec2 relativePos = GetOwner()->GetLocalPosition();

@@ -17,6 +17,7 @@ namespace Pong {
 		virtual void OnAppShutDown() override;
 		virtual void OnAppUpdate() override;
 		virtual void OnAppEvent(AIngine::Events::EventData& e) override;
+		void SetVsync(bool active);
 
 		static int Difficulty;
 

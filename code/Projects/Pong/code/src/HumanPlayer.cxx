@@ -31,6 +31,10 @@ namespace Pong {
 
 		AIngine::World::GetGameObject("BackGround")->GetComponent<SoundComponent>()->Play(0);
 
+		#ifndef EDITOR
+		Pong::Get().GetWindow().SetMouseVisible(false);
+		#endif
+
 	}
 
 	// End is called when gameplay ends for this script
@@ -48,9 +52,7 @@ namespace Pong {
 	{
 		Player::Update(delta);
 
-#ifndef EDITOR
-		Pong::Get().GetWindow().SetMouseVisible(false);
-#endif
+
 	}
 
 	// Callback for events
@@ -67,9 +69,11 @@ namespace Pong {
 
 		if (typeid(e) == typeid(AIngine::Events::MouseMovedEvent::MouseMovedEventData)) {
 			glm::vec2 currentMousePos = glm::vec2(Input::GetMouseX(), Input::GetMouseY());
+			glm::vec2 resolution = Pong::Get().GetWindow().GetMonitorResolution();
+			currentMousePos.y = std::clamp(currentMousePos.y, 0.0f, resolution.y);
 			glm::vec2 mouseWorldPos = AIngine::Rendering::Camera::Get().ScreenToWorldPoint(currentMousePos);
+			mouseWorldPos.y = std::clamp(mouseWorldPos.y, 0.0f, 10.0f * (9.0f / 16.0f));
 			glm::vec2 currentPos = GetOwner()->GetWorldPosition();
-
 			float delta = (mouseWorldPos.y - currentPos.y);
 			float currentHeight = GetOwner()->GetWorldPosition().y;
 
@@ -80,7 +84,7 @@ namespace Pong {
 				delta = minY - currentHeight;
 			}
 
-			m_rigidBody->GetOwner()->SetWorldPosition(glm::vec2(currentPos.x, currentPos.y + delta));
+			m_rigidBody->GetOwner()->SetWorldPosition(glm::vec2(currentPos.x, std::clamp(currentPos.y + delta, minY, maxY)));
 		}
 
 		// key pressed

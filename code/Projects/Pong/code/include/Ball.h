@@ -2,6 +2,7 @@
 #include "AIngine/Core.h"
 #include "Player.h"
 #include "UI/Text.h"
+#include "Experiment.h"
 
 namespace Pong {
 	class Ball : public AIngine::Script {
@@ -28,7 +29,7 @@ namespace Pong {
 		glm::vec4 finalColor = glm::vec4(0);
 		glm::vec2 particleSize = glm::vec2(0.06);
 		glm::vec4 startColor = glm::vec4(1.0, 0.66, 0.1, 1.0);
-
+		Experiment* m_experiment;
 
 	};
 }

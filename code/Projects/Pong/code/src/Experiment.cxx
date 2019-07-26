@@ -86,7 +86,7 @@ namespace Pong {
 
 				ScorePlayerOne = 0;
 				ScorePlayerTwo = 0;
-
+				((Pong&)Pong::Get()).SetVsync(true);
 				
 			}
 			else {

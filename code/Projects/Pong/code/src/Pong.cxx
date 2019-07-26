@@ -41,10 +41,11 @@ namespace Pong {
 		DifficultiesSpeed[0] = 1;
 		DifficultiesSpeed[1] = 1.25f;
 		DifficultiesSpeed[2] = 1.5f;
-		DifficultiesSpeed[3] = 2.0f;
+		DifficultiesSpeed[3] = 1.6f;
 
 		Pong::FIXED_TIMESTEP = 1.0 / 120.0;
 		Pong::UseFixedTimeStep(true);
+
 	}
 
 	// StartUp is called after the scene and engine subsystems have been initialized
@@ -74,5 +75,9 @@ namespace Pong {
 				bRender = !bRender;
 			}
 		}
+	}
+	void Pong::SetVsync(bool active)
+	{
+		m_window->SetVSync(active);
 	}
 }
