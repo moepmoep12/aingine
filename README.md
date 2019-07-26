@@ -19,9 +19,15 @@ Also set the the `CMAKE_INSTALL_PREFIX` to your desired install directory.
 
 ## Installing AIngine
 
-The windows installer is currently not working, instead follow these steps:
-- Make sure cmake has been added to PATH (User PATH seems not be sufficient)
+Make sure cmake has been added to PATH (User PATH seems not be sufficient)
+
+Either use the installer provided inside the binaries.zip or install manually:
+(automatic execution of launcher after installation may fail, bug)
+
 - Inside the AIngine solution build the target `INSTALL`
+
+After installing:
+
 - Execute launcher/Launcher.exe inside your install dir
 - Click "Add existing project" inside the project launcher
 - Select a .project.in file (one can be found at /code/Projects/CrappyBird)
