@@ -91,6 +91,10 @@ namespace CrappyBird {
 	// End is called when gameplay ends for this script
 	void Player::OnEnd()
 	{
+
+#ifndef EDITOR
+		CrappyBird::Get().GetWindow().SetMouseVisible(true);
+#endif
 		// restore original gamespeed
 		CrappyBird::s_GameSpeed = m_originalGameSpeed;
 
