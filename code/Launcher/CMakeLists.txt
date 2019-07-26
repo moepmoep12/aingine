@@ -66,3 +66,42 @@ set(InstallPath "${InstallPath}/")
 set(projectDir "${projectDir}/")
 configure_file(${CMAKE_SOURCE_DIR}/Resources/Launcher/project.proj.in ${CMAKE_SOURCE_DIR}/Resources/Launcher/project.proj @ONLY)
 install(FILES ${CMAKE_SOURCE_DIR}/Resources/Launcher/project.proj DESTINATION "launcher" COMPONENT launcher)
+
+
+#
+# CPACK for creating an Installer
+#
+set (CPACK_PACKAGE_NAME "AIngine")
+set (CPACK_PACKAGE_VENDOR "Andreas Schmidt")
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "AIngine - a 2D GameEngine")
+set (CPACK_PACKAGE_VERSION "1.0.0")
+set (CPACK_PACKAGE_VERSION_MAJOR "1")
+set (CPACK_PACKAGE_VERSION_MINOR "0")
+set (CPACK_PACKAGE_VERSION_PATCH "0")
+set (CPACK_PACKAGE_INSTALL_DIRECTORY "AIngine")
+
+#set (CPACK_COMPONENTS_ALL editor aingine launcher resources)
+#list(APPEND CPACK_COMPONENTS_ALL " launcher" )
+#cpack_add_component(launcher)
+set (CPACK_COMPONENT_EDITOR_DISPLAY_NAME "AIngine Editor")
+set (CPACK_COMPONENT_EDITOR_REQUIRED "TRUE")
+set (CPACK_COMPONENT_AINGINE_DISPLAY_NAME "AIngine Library")
+set (CPACK_COMPONENT_AINGINE_REQUIRED "TRUE")
+set (CPACK_COMPONENT_LAUNCHER_DISPLAY_NAME "AIngine project launcher")
+set (CPACK_COMPONENT_LAUNCHER_REQUIRED "TRUE")
+set (CPACK_COMPONENT_RESOURCES_DISPLAY_NAME "Resources")
+set (CPACK_COMPONENT_RESOURCES_REQUIRED "TRUE")
+
+set (CPACK_COMPONENT_EDITOR_DESCRIPTION
+		"The AIngine Editor")
+set (CPACK_COMPONENT_AINGINE_DESCRIPTION
+		"The static C++ Library")
+
+set (CPACK_COMPONENT_EDITOR_DEPENDS aingine)
+set (CPACK_COMPONENT_LAUNCHER_DEPENDS aingine)
+set(CPACK_NSIS_EXECUTABLES_DIRECTORY "launcher")
+set (CPACK_NSIS_MUI_FINISHPAGE_RUN "Launcher.exe")
+ #set (CPACK_PACKAGE_ICON "${CMake_SOURCE_DIR}/Resources/AIngine/textures\\\\icon.bmp")
+ 
+# Must be after the last CPACK macros
+include(CPack)
