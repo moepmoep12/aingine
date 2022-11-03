@@ -3,7 +3,7 @@
 The 2D Game Engine AIngine offers developers an extensive editor and an AI module based on the eXtended Classifier System (XCS).
 The game engine was developed as a project at the University of Würzburg in the Games Engineering Bsc. program.
 
-![Poster](documentation/AIngine Poster.png)
+![Poster](documentation/AInginePoster.png)
 
 ## Building with CMake
 
